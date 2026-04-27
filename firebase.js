@@ -1,5 +1,3 @@
-// ADD ONLY - CONNECT EXISTING BUTTONS
-
 document.addEventListener("DOMContentLoaded", () => {
   const signinBtn = document.querySelector(".btn-signin");
   const signupBtn = document.querySelector(".btn-signup");
@@ -28,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!email || !password) return;
 
       try {
-        await window.signInWithEmailAndPassword(auth, email, password);
+        await signInWithEmailAndPassword(auth, email, password);
         alert("Logged in");
       } catch (e) {
         alert(e.message);
