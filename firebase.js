@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!email || !password) return;
 
       try {
-        await signInWithEmailAndPassword(auth, email, password);
+        await window.signInWithEmailAndPassword(auth, email, password);
         alert("Logged in");
       } catch (e) {
         alert(e.message);
