@@ -115,78 +115,84 @@
                 </div>
             </div>
         </section>
+<!-- IMAGINE VIEW -->
+<section id="imagine" class="home-view hidden">
 
-        <!-- IMAGINE VIEW -->
-        <section id="imagine" class="home-view hidden">
-            <h2 style="margin:20px;">Imagine Videos</h2>
+    <!-- FEATURED -->
+    <div style="padding:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+            <h3>Featured Templates</h3>
+            <span style="opacity:0.7;cursor:pointer;">View All</span>
+        </div>
 
-            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;padding:20px;">
-                
-                <video src="./video1.mp4" controls autoplay muted loop style="width:100%;border-radius:12px;"></video>
-                
-                <video src="./video2.mp4" controls autoplay muted loop style="width:100%;border-radius:12px;"></video>
-                
-                <video src="./video3.mp4" controls autoplay muted loop style="width:100%;border-radius:12px;"></video>
-                
-                <video src="./video4.mp4" controls autoplay muted loop style="width:100%;border-radius:12px;"></video>
+        <div style="display:flex;gap:12px;overflow-x:auto;">
 
+            <div style="min-width:180px;position:relative;border-radius:12px;overflow:hidden;">
+                <video src="./video1.mp4" autoplay muted loop playsinline style="width:100%;height:250px;object-fit:cover;"></video>
+                <span style="position:absolute;bottom:8px;left:10px;color:white;">Funky Dance</span>
             </div>
-        </section>
 
-    </main>
+            <div style="min-width:180px;position:relative;border-radius:12px;overflow:hidden;">
+                <video src="./video2.mp4" autoplay muted loop playsinline style="width:100%;height:250px;object-fit:cover;"></video>
+                <span style="position:absolute;bottom:8px;left:10px;color:white;">Chibi</span>
+            </div>
 
-    <script src="ControleAi.js"></script>
-    <script>
-        lucide.createIcons();
-        AI.init("messages", "https://my-webxyu.vercel.app/api/chat");
+            <div style="min-width:180px;position:relative;border-radius:12px;overflow:hidden;">
+                <video src="./video3.mp4" autoplay muted loop playsinline style="width:100%;height:250px;object-fit:cover;"></video>
+                <span style="position:absolute;bottom:8px;left:10px;color:white;">Pulp Cover</span>
+            </div>
 
-        const homeView = document.getElementById("home");
-        const chatView = document.getElementById("chat");
-        const imagineView = document.getElementById("imagine");
+            <div style="min-width:180px;position:relative;border-radius:12px;overflow:hidden;">
+                <video src="./video4.mp4" autoplay muted loop playsinline style="width:100%;height:250px;object-fit:cover;"></video>
+                <span style="position:absolute;bottom:8px;left:10px;color:white;">Street Style</span>
+            </div>
 
-        function autoResize(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
-        }
+        </div>
+    </div>
 
-        function handleKeydown(event, type) {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                if (type === 'home') startChat();
-                else send();
-            }
-        }
+    <!-- DISCOVER -->
+    <div style="padding:20px;">
+        <h3 style="margin-bottom:15px;">Discover</h3>
 
-        function startChat() {
-            const input = document.getElementById("homeInput");
-            const text = input.value.trim();
-            if (!text) return;
-            
-            homeView.classList.add("hidden");
-            chatView.classList.remove("hidden");
-            imagineView.classList.add("hidden");
+        <div style="
+            display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+            gap:12px;
+        ">
 
-            AI.user(text);
-            input.value = "";
-            input.style.height = 'auto';
-            AI.ask(text);
-        }
+            <video src="./video1.mp4" autoplay muted loop playsinline style="width:100%;height:220px;object-fit:cover;border-radius:12px;"></video>
+            <video src="./video2.mp4" autoplay muted loop playsinline style="width:100%;height:220px;object-fit:cover;border-radius:12px;"></video>
+            <video src="./video3.mp4" autoplay muted loop playsinline style="width:100%;height:220px;object-fit:cover;border-radius:12px;"></video>
+            <video src="./video4.mp4" autoplay muted loop playsinline style="width:100%;height:220px;object-fit:cover;border-radius:12px;"></video>
 
-        function send() {
-            const input = document.getElementById("chatInput");
-            const text = input.value.trim();
-            if (!text) return;
-            AI.user(text);
-            input.value = "";
-            input.style.height = 'auto';
-            AI.ask(text);
-        }
+        </div>
+    </div>
 
-        function openImagine() {
-            homeView.classList.add("hidden");
-            chatView.classList.add("hidden");
-            imagineView.classList.remove("hidden");
-        }
-    </script>
-</body>
-</html>
+    <!-- INPUT LIKE GROK -->
+    <div style="
+        position:fixed;
+        bottom:20px;
+        left:50%;
+        transform:translateX(-50%);
+        width:600px;
+        max-width:90%;
+        background:#1a1a1a;
+        border-radius:30px;
+        padding:10px 15px;
+        display:flex;
+        align-items:center;
+        gap:10px;
+    ">
+        <span style="font-size:20px;">＋</span>
+        <input type="text" placeholder="Type to imagine" style="
+            flex:1;
+            background:transparent;
+            border:none;
+            outline:none;
+            color:white;
+        ">
+        <span style="opacity:0.7;">Image</span>
+        <span style="opacity:0.7;">Video</span>
+    </div>
+
+</section>
