@@ -61,17 +61,19 @@
             
             <div class="search-container">
                 <div class="search-box">
+                    <div class="file-preview-area" id="homeFilePreview"></div>
                     <div class="input-area">
-                        <button class="input-icon">
+                        <button class="input-icon" onclick="document.getElementById('homeFileInput').click()">
                             <i data-lucide="paperclip"></i>
                         </button>
+                        <input type="file" id="homeFileInput" class="hidden-input" multiple>
                         <textarea id="homeInput" placeholder="How can I help you today?" rows="1" oninput="autoResize(this)" onkeydown="handleKeydown(event, 'home')"></textarea>
                         <div class="input-controls">
                             <div class="mode-selector">
                                 <span>Auto</span>
                                 <i data-lucide="chevron-down"></i>
                             </div>
-                            <button class="control-btn">
+                            <button class="control-btn" id="homeMicBtn" onclick="toggleMic('home')">
                                 <i data-lucide="mic"></i>
                             </button>
                             <button class="control-btn send-btn" onclick="startChat()">
@@ -93,17 +95,19 @@
 
             <div class="chat-input-container">
                 <div class="search-box">
+                    <div class="file-preview-area" id="chatFilePreview"></div>
                     <div class="input-area">
-                        <button class="input-icon">
+                        <button class="input-icon" onclick="document.getElementById('chatFileInput').click()">
                             <i data-lucide="paperclip"></i>
                         </button>
+                        <input type="file" id="chatFileInput" class="hidden-input" multiple>
                         <textarea id="chatInput" placeholder="Send a message..." rows="1" oninput="autoResize(this)" onkeydown="handleKeydown(event, 'chat')"></textarea>
                         <div class="input-controls">
                             <div class="mode-selector">
                                 <span>Auto</span>
                                 <i data-lucide="chevron-down"></i>
                             </div>
-                            <button class="control-btn">
+                            <button class="control-btn" id="chatMicBtn" onclick="toggleMic('chat')">
                                 <i data-lucide="mic"></i>
                             </button>
                             <button class="control-btn send-btn" onclick="send()">
@@ -116,10 +120,61 @@
         </section>
     </main>
 
+    <!-- 🔥 ADD ONLY (NO CHANGE ABOVE) -->
+    <div id="authBox" style="position:fixed;bottom:20px;right:20px;background:#111;padding:15px;border-radius:10px;">
+        <input id="email" placeholder="email"><br><br>
+        <input id="password" type="password" placeholder="password"><br><br>
+        <button onclick="signup()">Sign up</button>
+        <button onclick="login()">Login</button>
+        <button onclick="logout()">Logout</button>
+    </div>
+
     <script src="ControleAi.js"></script>
+    <script src="features.js"></script>
+
+    <!-- 🔥 ADD ONLY -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDWch9gK12sGD7awxmRibU6jBspd-tjr6E",
+            authDomain: "my-website-17f99.firebaseapp.com",
+            projectId: "my-website-17f99",
+            storageBucket: "my-website-17f99.firebasestorage.app",
+            messagingSenderId: "799668604107",
+            appId: "1:799668604107:web:adc03ea5fd66c58af09f4e",
+            measurementId: "G-H1SLRSEBTF"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        window.signup = async () => {
+            await createUserWithEmailAndPassword(auth, email.value, password.value);
+            alert("created");
+        };
+
+        window.login = async () => {
+            await signInWithEmailAndPassword(auth, email.value, password.value);
+            alert("logged in");
+        };
+
+        window.logout = async () => {
+            await signOut(auth);
+            alert("logout");
+        };
+    </script>
+
     <script>
-        lucide.createIcons();
-        AI.init("messages", "https://my-webxyu.vercel.app/api/chat");
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            AI.init("messages", "https://my-webxyu.vercel.app/api/chat");
+            setupFileUpload('homeFileInput', 'homeFilePreview');
+            setupFileUpload('chatFileInput', 'chatFilePreview');
+        });
 
         const homeView = document.getElementById("home");
         const chatView = document.getElementById("chat");
@@ -127,6 +182,7 @@
         function autoResize(textarea) {
             textarea.style.height = 'auto';
             textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
+            textarea.style.transition = 'height 0.2s ease';
         }
 
         function handleKeydown(event, type) {
@@ -142,23 +198,46 @@
             const text = input.value.trim();
             if (!text) return;
             
-            homeView.classList.add("hidden");
-            chatView.classList.remove("hidden");
-            AI.user(text);
-            input.value = "";
-            input.style.height = 'auto';
-            AI.ask(text);
+            homeView.style.animation = 'slideOut 0.4s ease-out forwards';
+            setTimeout(() => {
+                homeView.classList.add("hidden");
+                chatView.classList.remove("hidden");
+                chatView.style.animation = 'slideIn 0.4s ease-out';
+                AI.user(text);
+                input.value = "";
+                input.style.height = 'auto';
+                document.getElementById("homeFilePreview").innerHTML = '';
+                document.getElementById("homeFileInput").value = '';
+                AI.ask(text);
+            }, 400);
         }
 
         function send() {
             const input = document.getElementById("chatInput");
             const text = input.value.trim();
             if (!text) return;
+            
+            input.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                input.style.transform = 'scale(1)';
+            }, 100);
+            
             AI.user(text);
             input.value = "";
             input.style.height = 'auto';
+            document.getElementById("chatFilePreview").innerHTML = '';
+            document.getElementById("chatFileInput").value = '';
             AI.ask(text);
         }
+        
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideOut {
+                from { opacity: 1; transform: scale(1); }
+                to { opacity: 0; transform: scale(0.95) translateY(-20px); }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
