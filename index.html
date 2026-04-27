@@ -29,7 +29,7 @@
         </div>
         
         <div class="nav-right">
-            <button class="nav-btn">
+            <button class="nav-btn" onclick="openImagine()">
                 <i data-lucide="sparkles"></i>
                 <span>Imagine</span>
             </button>
@@ -114,6 +114,24 @@
                 </div>
             </div>
         </section>
+
+        <!-- IMAGINE VIEW (ADDED ONLY) -->
+        <section id="imagine" class="home-view hidden">
+            <h2 style="margin:20px;">Imagine Videos</h2>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;padding:20px;">
+                
+                <video src="video1.mp4" controls autoplay muted loop style="width:100%;border-radius:12px;"></video>
+                
+                <video src="video2.mp4" controls autoplay muted loop style="width:100%;border-radius:12px;"></video>
+                
+                <video src="video3.mp4" controls autoplay muted loop style="width:100%;border-radius:12px;"></video>
+                
+                <video src="video4.mp4" controls autoplay muted loop style="width:100%;border-radius:12px;"></video>
+
+            </div>
+        </section>
+
     </main>
 
     <script src="ControleAi.js"></script>
@@ -123,6 +141,7 @@
 
         const homeView = document.getElementById("home");
         const chatView = document.getElementById("chat");
+        const imagineView = document.getElementById("imagine");
 
         function autoResize(textarea) {
             textarea.style.height = 'auto';
@@ -144,6 +163,8 @@
             
             homeView.classList.add("hidden");
             chatView.classList.remove("hidden");
+            imagineView.classList.add("hidden");
+
             AI.user(text);
             input.value = "";
             input.style.height = 'auto';
@@ -158,6 +179,12 @@
             input.value = "";
             input.style.height = 'auto';
             AI.ask(text);
+        }
+
+        function openImagine() {
+            homeView.classList.add("hidden");
+            chatView.classList.add("hidden");
+            imagineView.classList.remove("hidden");
         }
     </script>
 </body>
