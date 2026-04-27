@@ -120,55 +120,11 @@
         </section>
     </main>
 
-    <!-- 🔥 ADD ONLY (NO CHANGE ABOVE) -->
-    <div id="authBox" style="position:fixed;bottom:20px;right:20px;background:#111;padding:15px;border-radius:10px;">
-        <input id="email" placeholder="email"><br><br>
-        <input id="password" type="password" placeholder="password"><br><br>
-        <button onclick="signup()">Sign up</button>
-        <button onclick="login()">Login</button>
-        <button onclick="logout()">Logout</button>
-    </div>
-
     <script src="ControleAi.js"></script>
     <script src="features.js"></script>
-<script type="module" src="firebase.js"></script>
+    <script type="module" src="firebase.js"></script>
 
     
-    <!-- 🔥 ADD ONLY -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut }
-        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDWch9gK12sGD7awxmRibU6jBspd-tjr6E",
-            authDomain: "my-website-17f99.firebaseapp.com",
-            projectId: "my-website-17f99",
-            storageBucket: "my-website-17f99.firebasestorage.app",
-            messagingSenderId: "799668604107",
-            appId: "1:799668604107:web:adc03ea5fd66c58af09f4e",
-            measurementId: "G-H1SLRSEBTF"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        window.signup = async () => {
-            await createUserWithEmailAndPassword(auth, email.value, password.value);
-            alert("created");
-        };
-
-        window.login = async () => {
-            await signInWithEmailAndPassword(auth, email.value, password.value);
-            alert("logged in");
-        };
-
-        window.logout = async () => {
-            await signOut(auth);
-            alert("logout");
-        };
-    </script>
-
     <script>
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', () => {
@@ -219,6 +175,7 @@
             const text = input.value.trim();
             if (!text) return;
             
+            // Add a subtle feedback animation
             input.style.transform = 'scale(0.98)';
             setTimeout(() => {
                 input.style.transform = 'scale(1)';
@@ -232,6 +189,7 @@
             AI.ask(text);
         }
         
+        // Add CSS animation for slideOut
         const style = document.createElement('style');
         style.textContent = `
             @keyframes slideOut {
