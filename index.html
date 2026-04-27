@@ -29,7 +29,7 @@
         </div>
         
         <div class="nav-right">
-            <button class="nav-btn">
+            <button class="nav-btn" onclick="openImagine()">
                 <i data-lucide="sparkles"></i>
                 <span>Imagine</span>
             </button>
@@ -114,16 +114,34 @@
                 </div>
             </div>
         </section>
+
+        <!-- IMAGINE VIEW (ADDED ONLY) -->
+        <section id="imagine" class="home-view hidden">
+            <h2 style="margin:20px;">Imagine Videos</h2>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;padding:20px;">
+                
+                <video src="video1.mp4" controls autoplay muted loop style="width:100%;border-radius:12px;"></video>
+                
+                <video src="video2.mp4" controls autoplay muted loop style="width:100%;border-radius:12px;"></video>
+                
+                <video src="video3.mp4" controls autoplay muted loop style="width:100%;border-radius:12px;"></video>
+                
+                <video src="video4.mp4" controls autoplay muted loop style="width:100%;border-radius:12px;"></video>
+
+            </div>
+        </section>
+
     </main>
 
     <script src="ControleAi.js"></script>
-
     <script>
         lucide.createIcons();
         AI.init("messages", "https://my-webxyu.vercel.app/api/chat");
 
         const homeView = document.getElementById("home");
         const chatView = document.getElementById("chat");
+        const imagineView = document.getElementById("imagine");
 
         function autoResize(textarea) {
             textarea.style.height = 'auto';
@@ -145,6 +163,8 @@
             
             homeView.classList.add("hidden");
             chatView.classList.remove("hidden");
+            imagineView.classList.add("hidden");
+
             AI.user(text);
             input.value = "";
             input.style.height = 'auto';
@@ -155,122 +175,17 @@
             const input = document.getElementById("chatInput");
             const text = input.value.trim();
             if (!text) return;
-
-            // 🔥 IMAGINE DETECT FIX
-            if (
-                text.toLowerCase().includes("image") ||
-                text.toLowerCase().includes("imagine") ||
-                text.toLowerCase().includes("generate image")
-            ) {
-                triggerImagineSafe();
-                input.value = "";
-                input.style.height = 'auto';
-                return;
-            }
-
             AI.user(text);
             input.value = "";
             input.style.height = 'auto';
             AI.ask(text);
         }
+
+        function openImagine() {
+            homeView.classList.add("hidden");
+            chatView.classList.add("hidden");
+            imagineView.classList.remove("hidden");
+        }
     </script>
-
-    <!-- 🔥 IMAGINE MODAL (ADDED SAFE) -->
-    <div id="imagineModal" class="modal hidden">
-        <div class="modal-box">
-            <h2>✨ AI Image Generation</h2>
-            <p>This feature uses external AI tools.</p>
-
-            <div style="display:flex;justify-content:space-between;margin-top:20px;">
-                <button onclick="closeImagineSafe()" style="background:#333;color:white;padding:10px;border-radius:10px;">Cancel</button>
-                <button onclick="acceptImagineSafe()" style="background:#00ff99;color:black;padding:10px;border-radius:10px;font-weight:bold;">Try Now</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // ===============================
-        // 🔥 IMAGINE SAFE PATCH (ADDED)
-        // ===============================
-
-        let IMAGINE_LOCK = false;
-        let pendingImagineLink = "https://runwayml.com";
-
-        function triggerImagineSafe() {
-            if (IMAGINE_LOCK) return;
-
-            try {
-                IMAGINE_LOCK = true;
-
-                const modal = document.getElementById("imagineModal");
-                if (modal) modal.classList.remove("hidden");
-
-                setTimeout(() => IMAGINE_LOCK = false, 2000);
-
-            } catch (e) {
-                IMAGINE_LOCK = false;
-            }
-        }
-
-        function closeImagineSafe() {
-            const modal = document.getElementById("imagineModal");
-            if (modal) modal.classList.add("hidden");
-        }
-
-        function acceptImagineSafe() {
-            try {
-                if (pendingImagineLink) {
-                    window.open(pendingImagineLink, "_blank");
-                }
-            } catch (e) {}
-
-            closeImagineSafe();
-        }
-
-        // ===============================
-        // 🔥 AI PROTECTION LAYER
-        // ===============================
-
-        const originalAsk = AI.ask;
-
-        AI.ask = function(text) {
-            try {
-                if (typeof text === "string") {
-                    const t = text.toLowerCase();
-
-                    if (
-                        t.includes("image") ||
-                        t.includes("imagine") ||
-                        t.includes("generate image")
-                    ) {
-                        triggerImagineSafe();
-                        return;
-                    }
-                }
-
-                return originalAsk.call(this, text);
-
-            } catch (e) {}
-        };
-
-        // ===============================
-        // 🔥 VIDEO SAFE FIX
-        // ===============================
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const videos = document.querySelectorAll("video");
-
-            videos.forEach(v => {
-                v.addEventListener("error", () => {
-                    v.style.display = "none";
-                });
-
-                v.addEventListener("stalled", () => {
-                    v.load();
-                });
-            });
-        });
-    </script>
-
 </body>
 </html>
