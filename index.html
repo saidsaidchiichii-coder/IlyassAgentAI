@@ -1,410 +1,343 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grok</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<script src="https://unpkg.com/lucide@latest"></script>
-<script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
-
-<style>
-
-/* ==== UI UPGRADE ==== */
-
-#tsparticles{
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-}
-
-/* glass */
-.search-box{
-    backdrop-filter: blur(20px);
-    background: rgba(20,20,20,0.6);
-    border: 1px solid rgba(255,255,255,0.08);
-}
-
-.search-box:focus-within{
-    box-shadow: 0 0 20px rgba(255,255,255,0.1);
-}
-
-.hero-logo h1{
-    letter-spacing: -2px;
-}
-
-.send-btn{
-    box-shadow: 0 0 10px rgba(255,255,255,0.2);
-}
-
-/* NEW: hero text */
-.hero-text{
-    text-align:center;
-    margin-top:20px;
-}
-.hero-text h2{
-    font-size:28px;
-    font-weight:700;
-}
-.hero-text p{
-    opacity:0.6;
-}
-
-/* NEW: suggestions */
-.suggestions{
-    margin-top:20px;
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    justify-content:center;
-}
-.suggestion{
-    background:#111;
-    border:1px solid #2f3336;
-    padding:10px 14px;
-    border-radius:12px;
-    cursor:pointer;
-    font-size:14px;
-}
-.suggestion:hover{
-    background:#1a1a1a;
-}
-
-/* NEW: features */
-.features{
-    margin-top:60px;
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    gap:20px;
-    padding:20px;
-}
-.feature-card{
-    background:#111;
-    border:1px solid #2f3336;
-    padding:20px;
-    border-radius:16px;
-    text-align:center;
-}
-.feature-card i{
-    margin-bottom:10px;
-}
-.feature-card h4{
-    margin-bottom:6px;
-}
-
-/* modal */
-.modal{
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:999;
-}
-
-.modal-box{
-    background:#111;
-    border:1px solid #2f3336;
-    padding:20px;
-    border-radius:16px;
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-    min-width:260px;
-}
-
-.modal select{
-    background:#000;
-    color:#fff;
-    border:1px solid #333;
-    padding:8px;
-    border-radius:8px;
-}
-
-.modal button{
-    background:white;
-    color:black;
-    border:none;
-    padding:8px;
-    border-radius:8px;
-    cursor:pointer;
-}
-
-button:hover{
-    transform: scale(1.05);
-}
-
-textarea{
-    transition: all .2s ease;
-}
-
-.msg-wrapper{
-    animation: fadeUp .3s ease;
-}
-@keyframes fadeUp{
-    from{opacity:0; transform:translateY(15px);}
-    to{opacity:1; transform:translateY(0);}
-}
-
-/* footer */
-.footer{
-    text-align:center;
-    opacity:0.5;
-    margin-top:60px;
-    font-size:12px;
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroFlow - منصة الذكاء الاصطناعي المتكاملة</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+    <div id="app">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <span class="brain-icon">🧠</span>
+                    <span>NeuroFlow</span>
+                </div>
+                <div class="nav-links">
+                    <button id="navLogin" class="btn btn-outline">تسجيل الدخول</button>
+                    <button id="navSignup" class="btn btn-primary">ابدأ الآن</button>
+                </div>
+            </div>
+        </nav>
 
-<div id="tsparticles"></div>
+        <!-- Main Content -->
+        <main id="mainContent">
+            <!-- Landing Page -->
+            <section id="landingPage" class="page active">
+                <!-- Hero Section -->
+                <section class="hero">
+                    <div class="container">
+                        <div class="hero-content">
+                            <h1>نظام التشغيل الخاص بك للذكاء الاصطناعي</h1>
+                            <p>جميع أدوات الذكاء الاصطناعي في منصة واحدة أنيقة. تحدث، أنشئ، حلل، وابنِ باستخدام قوة الذكاء الاصطناعي.</p>
+                            <div class="hero-buttons">
+                                <button class="btn btn-primary btn-lg" onclick="showPage('authPage')">ابدأ مجاناً</button>
+                                <button class="btn btn-outline btn-lg">اعرف المزيد</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-<header class="top-nav">
-<div class="nav-left">
-    <div class="logo-container" onclick="location.reload()">
-        <svg class="grok-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-        </svg>
+                <!-- Features Section -->
+                <section class="features">
+                    <div class="container">
+                        <h2>الميزات القوية</h2>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">💬</div>
+                                <h3>دردشة ذكية</h3>
+                                <p>محادثات ذكية مع ذاكرة السياق والتاريخ المستمر</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">🎨</div>
+                                <h3>مولد الصور</h3>
+                                <p>إنشاء صور مذهلة باستخدام نماذج الذكاء الاصطناعي المتقدمة</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">📝</div>
+                                <h3>كاتب المحتوى</h3>
+                                <p>توليد مقالات واحترافية والمحتوى بسهولة</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">💻</div>
+                                <h3>مساعد الكود</h3>
+                                <p>كتابة وتصحيح وتحسين الكود باستخدام الذكاء الاصطناعي</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">🤖</div>
+                                <h3>وكلاء ذكية</h3>
+                                <p>إنشاء وكلاء مستقلة لتنفيذ المهام المعقدة</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">📂</div>
+                                <h3>تحليل الملفات</h3>
+                                <p>رفع المستندات والحصول على رؤى مدعومة بالذكاء الاصطناعي</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CTA Section -->
+                <section class="cta">
+                    <div class="container">
+                        <h2>هل أنت مستعد لتحويل سير عملك؟</h2>
+                        <p>انضم إلى آلاف المستخدمين الذين يستخدمون بالفعل NeuroFlow لتعزيز إنتاجيتهم وإبداعهم.</p>
+                        <button class="btn btn-primary btn-lg" onclick="showPage('authPage')">ابدأ مجاناً الآن</button>
+                    </div>
+                </section>
+
+                <!-- Footer -->
+                <footer class="footer">
+                    <div class="container">
+                        <div class="footer-content">
+                            <div class="footer-section">
+                                <h4>المنتج</h4>
+                                <ul>
+                                    <li><a href="#">الميزات</a></li>
+                                    <li><a href="#">التسعير</a></li>
+                                    <li><a href="#">API</a></li>
+                                </ul>
+                            </div>
+                            <div class="footer-section">
+                                <h4>الشركة</h4>
+                                <ul>
+                                    <li><a href="#">عن</a></li>
+                                    <li><a href="#">المدونة</a></li>
+                                    <li><a href="#">اتصل</a></li>
+                                </ul>
+                            </div>
+                            <div class="footer-section">
+                                <h4>قانوني</h4>
+                                <ul>
+                                    <li><a href="#">الخصوصية</a></li>
+                                    <li><a href="#">الشروط</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="footer-bottom">
+                            <p>&copy; 2026 NeuroFlow. جميع الحقوق محفوظة.</p>
+                        </div>
+                    </div>
+                </footer>
+            </section>
+
+            <!-- Auth Page -->
+            <section id="authPage" class="page">
+                <div class="auth-container">
+                    <div class="auth-card">
+                        <h2>تسجيل الدخول</h2>
+                        <form id="loginForm" onsubmit="handleLogin(event)">
+                            <div class="form-group">
+                                <label>البريد الإلكتروني</label>
+                                <input type="email" required placeholder="your@email.com">
+                            </div>
+                            <div class="form-group">
+                                <label>كلمة المرور</label>
+                                <input type="password" required placeholder="••••••••">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">دخول</button>
+                        </form>
+                        <p class="auth-link">ليس لديك حساب؟ <a href="#" onclick="showPage('signupPage')">إنشاء حساب</a></p>
+                        <button class="btn btn-outline btn-block" onclick="showPage('landingPage')">العودة</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Signup Page -->
+            <section id="signupPage" class="page">
+                <div class="auth-container">
+                    <div class="auth-card">
+                        <h2>إنشاء حساب جديد</h2>
+                        <form id="signupForm" onsubmit="handleSignup(event)">
+                            <div class="form-group">
+                                <label>الاسم</label>
+                                <input type="text" required placeholder="اسمك الكامل">
+                            </div>
+                            <div class="form-group">
+                                <label>البريد الإلكتروني</label>
+                                <input type="email" required placeholder="your@email.com">
+                            </div>
+                            <div class="form-group">
+                                <label>كلمة المرور</label>
+                                <input type="password" required placeholder="••••••••">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">إنشاء حساب</button>
+                        </form>
+                        <p class="auth-link">لديك حساب بالفعل؟ <a href="#" onclick="showPage('authPage')">تسجيل الدخول</a></p>
+                        <button class="btn btn-outline btn-block" onclick="showPage('landingPage')">العودة</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dashboard Page -->
+            <section id="dashboardPage" class="page">
+                <div class="dashboard-layout">
+                    <!-- Sidebar -->
+                    <aside class="sidebar">
+                        <div class="sidebar-header">
+                            <span class="brain-icon">🧠</span>
+                            <span>NeuroFlow</span>
+                        </div>
+                        <nav class="sidebar-nav">
+                            <button class="nav-item active" onclick="showDashboardSection('overview')">📊 نظرة عامة</button>
+                            <button class="nav-item" onclick="showDashboardSection('chat')">💬 الدردشة</button>
+                            <button class="nav-item" onclick="showDashboardSection('image')">🎨 مولد الصور</button>
+                            <button class="nav-item" onclick="showDashboardSection('content')">📝 كاتب المحتوى</button>
+                            <button class="nav-item" onclick="showDashboardSection('code')">💻 مساعد الكود</button>
+                            <button class="nav-item" onclick="showDashboardSection('agents')">🤖 الوكلاء</button>
+                            <button class="nav-item" onclick="showDashboardSection('files')">📂 تحليل الملفات</button>
+                            <button class="nav-item" onclick="showDashboardSection('settings')">⚙️ الإعدادات</button>
+                        </nav>
+                        <button class="btn btn-outline btn-block" onclick="logout()">تسجيل الخروج</button>
+                    </aside>
+
+                    <!-- Main Content -->
+                    <div class="dashboard-content">
+                        <!-- Overview Section -->
+                        <section id="overviewSection" class="dashboard-section active">
+                            <h1>مرحباً بك في NeuroFlow</h1>
+                            <p class="subtitle">لوحة التحكم الخاصة بك</p>
+                            
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-value">0</div>
+                                    <div class="stat-label">رسائل الدردشة</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value">0</div>
+                                    <div class="stat-label">صور تم إنشاؤها</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value">0</div>
+                                    <div class="stat-label">مقالات</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-value">0</div>
+                                    <div class="stat-label">ملفات تم تحليلها</div>
+                                </div>
+                            </div>
+
+                            <div class="quick-actions">
+                                <h2>إجراءات سريعة</h2>
+                                <div class="actions-grid">
+                                    <button class="action-card" onclick="showDashboardSection('chat')">
+                                        <div class="action-icon">💬</div>
+                                        <h3>ابدأ دردشة</h3>
+                                        <p>محادثات ذكية</p>
+                                    </button>
+                                    <button class="action-card" onclick="showDashboardSection('image')">
+                                        <div class="action-icon">🎨</div>
+                                        <h3>إنشاء صورة</h3>
+                                        <p>صور مدهشة</p>
+                                    </button>
+                                    <button class="action-card" onclick="showDashboardSection('content')">
+                                        <div class="action-icon">📝</div>
+                                        <h3>كتابة محتوى</h3>
+                                        <p>مقالات احترافية</p>
+                                    </button>
+                                    <button class="action-card" onclick="showDashboardSection('code')">
+                                        <div class="action-icon">💻</div>
+                                        <h3>مساعد الكود</h3>
+                                        <p>برمجة ذكية</p>
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Chat Section -->
+                        <section id="chatSection" class="dashboard-section">
+                            <h1>الدردشة الذكية</h1>
+                            <div class="chat-container">
+                                <div class="chat-messages" id="chatMessages">
+                                    <div class="message assistant">
+                                        <p>مرحباً! أنا مساعدك الذكي. كيف يمكنني مساعدتك اليوم؟</p>
+                                    </div>
+                                </div>
+                                <div class="chat-input">
+                                    <input type="text" id="chatInput" placeholder="اكتب رسالتك..." onkeypress="handleChatKeypress(event)">
+                                    <button onclick="sendChatMessage()">إرسال</button>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Image Generator Section -->
+                        <section id="imageSection" class="dashboard-section">
+                            <h1>مولد الصور</h1>
+                            <div class="form-group">
+                                <label>وصف الصورة</label>
+                                <textarea id="imagePrompt" placeholder="صف الصورة التي تريد إنشاءها..." rows="4"></textarea>
+                            </div>
+                            <button class="btn btn-primary" onclick="generateImage()">إنشاء صورة</button>
+                            <div id="generatedImage" style="margin-top: 20px;"></div>
+                        </section>
+
+                        <!-- Content Writer Section -->
+                        <section id="contentSection" class="dashboard-section">
+                            <h1>كاتب المحتوى</h1>
+                            <div class="form-group">
+                                <label>عنوان المقالة</label>
+                                <input type="text" id="contentTitle" placeholder="عنوان المقالة">
+                            </div>
+                            <div class="form-group">
+                                <label>موضوع المقالة</label>
+                                <textarea id="contentPrompt" placeholder="اكتب موضوع المقالة..." rows="4"></textarea>
+                            </div>
+                            <button class="btn btn-primary" onclick="generateContent()">إنشاء مقالة</button>
+                            <div id="generatedContent" style="margin-top: 20px;"></div>
+                        </section>
+
+                        <!-- Code Assistant Section -->
+                        <section id="codeSection" class="dashboard-section">
+                            <h1>مساعد الكود</h1>
+                            <div class="form-group">
+                                <label>وصف الكود</label>
+                                <textarea id="codePrompt" placeholder="اكتب وصف الكود الذي تريده..." rows="4"></textarea>
+                            </div>
+                            <button class="btn btn-primary" onclick="generateCode()">إنشاء كود</button>
+                            <div id="generatedCode" style="margin-top: 20px;">
+                                <pre><code id="codeOutput"></code></pre>
+                            </div>
+                        </section>
+
+                        <!-- Agents Section -->
+                        <section id="agentsSection" class="dashboard-section">
+                            <h1>الوكلاء الذكية</h1>
+                            <button class="btn btn-primary" onclick="showCreateAgent()">إنشاء وكيل جديد</button>
+                            <div id="agentsList" style="margin-top: 20px;"></div>
+                        </section>
+
+                        <!-- Files Section -->
+                        <section id="filesSection" class="dashboard-section">
+                            <h1>تحليل الملفات</h1>
+                            <div class="file-upload">
+                                <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt">
+                                <button class="btn btn-primary" onclick="uploadFile()">رفع ملف</button>
+                            </div>
+                            <div id="filesList" style="margin-top: 20px;"></div>
+                        </section>
+
+                        <!-- Settings Section -->
+                        <section id="settingsSection" class="dashboard-section">
+                            <h1>الإعدادات</h1>
+                            <div class="settings-card">
+                                <h3>معلومات الحساب</h3>
+                                <p><strong>الاسم:</strong> <span id="userName">مستخدم</span></p>
+                                <p><strong>البريد الإلكتروني:</strong> <span id="userEmail">user@example.com</span></p>
+                            </div>
+                            <div class="settings-card">
+                                <h3>مفاتيح API</h3>
+                                <button class="btn btn-primary" onclick="generateAPIKey()">إنشاء مفتاح API</button>
+                                <div id="apiKeysList" style="margin-top: 10px;"></div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
-</div>
 
-<div class="nav-right">
-    <button class="nav-btn" id="imagineBtn">
-        <i data-lucide="sparkles"></i>
-        <span>Imagine</span>
-    </button>
-
-    <button class="nav-btn" id="settingsBtn">
-        <i data-lucide="settings"></i>
-    </button>
-
-    <button class="btn-signin" id="signinBtn">Sign in</button>
-    <button class="btn-signup" id="signupBtn">Sign up</button>
-</div>
-</header>
-
-<main class="container">
-
-<section id="home" class="home-view">
-
-<div class="hero-section">
-    <div class="hero-logo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <circle cx="12" cy="12" r="10"></circle>
-        </svg>
-        <h1>Grok</h1>
-    </div>
-
-    <!-- NEW -->
-    <div class="hero-text">
-        <h2>Your AI Assistant</h2>
-        <p>Ask anything. Get instant smart answers.</p>
-    </div>
-</div>
-
-<div class="search-container">
-<div class="search-box">
-<div class="input-area">
-
-<button class="input-icon" id="uploadBtn">
-    <i data-lucide="paperclip"></i>
-</button>
-
-<textarea id="homeInput" rows="1" placeholder="What do you want to know?"></textarea>
-
-<div class="input-controls">
-    <button class="control-btn" id="micBtn">
-        <i data-lucide="mic"></i>
-    </button>
-
-    <button class="control-btn send-btn" onclick="startChat()">
-        <i data-lucide="arrow-up"></i>
-    </button>
-</div>
-
-</div>
-</div>
-</div>
-
-<!-- NEW: suggestions -->
-<div class="suggestions">
-    <div class="suggestion" onclick="homeInput.value='Explain AI simply'">Explain AI</div>
-    <div class="suggestion" onclick="homeInput.value='Write a story'">Write a story</div>
-    <div class="suggestion" onclick="homeInput.value='Help me code'">Help me code</div>
-</div>
-
-<!-- NEW: features -->
-<div class="features">
-    <div class="feature-card">
-        <i data-lucide="message-circle"></i>
-        <h4>Chat AI</h4>
-        <p>Talk naturally with AI</p>
-    </div>
-
-    <div class="feature-card">
-        <i data-lucide="zap"></i>
-        <h4>Fast</h4>
-        <p>Instant responses</p>
-    </div>
-
-    <div class="feature-card">
-        <i data-lucide="brain"></i>
-        <h4>Smart</h4>
-        <p>Accurate answers</p>
-    </div>
-
-    <div class="feature-card">
-        <i data-lucide="globe"></i>
-        <h4>Multi-language</h4>
-        <p>Speak any language</p>
-    </div>
-</div>
-
-<div class="footer">
-    © 2026 Grok — AI Experience
-</div>
-
-</section>
-
-<section id="chat" class="chat-view hidden">
-<div id="messages" class="messages-list"></div>
-
-<div class="chat-input-container">
-<div class="search-box">
-<div class="input-area">
-
-<button class="input-icon" id="uploadBtn2">
-    <i data-lucide="paperclip"></i>
-</button>
-
-<textarea id="chatInput" rows="1" placeholder="Send a message..."></textarea>
-
-<div class="input-controls">
-    <button class="control-btn send-btn" onclick="send()">
-        <i data-lucide="arrow-up"></i>
-    </button>
-</div>
-
-</div>
-</div>
-</div>
-</section>
-
-</main>
-
-<div class="modal hidden" id="settingsModal">
-<div class="modal-box">
-    <h3>Settings</h3>
-
-    <select id="langSelect">
-        <option>English</option>
-        <option>Arabic</option>
-        <option>French</option>
-    </select>
-
-    <button onclick="closeSettings()">Close</button>
-</div>
-</div>
-
-<script src="ControleAi.js"></script>
-
-<script>
-lucide.createIcons();
-AI.init("messages", "https://my-webxyu.vercel.app/api/chat");
-
-tsParticles.load("tsparticles", {
-    particles: {
-        number: { value: 80 },
-        size: { value: 2 },
-        move: { enable: true, speed: 1 },
-        opacity: { value: 0.4 },
-        links: { enable: true, opacity: 0.1 }
-    }
-});
-
-const homeView = document.getElementById("home");
-const chatView = document.getElementById("chat");
-
-document.getElementById("homeInput").addEventListener("keydown", e=>{
-    if(e.key==="Enter" && !e.shiftKey){
-        e.preventDefault();
-        startChat();
-    }
-});
-
-document.getElementById("chatInput").addEventListener("keydown", e=>{
-    if(e.key==="Enter" && !e.shiftKey){
-        e.preventDefault();
-        send();
-    }
-});
-
-function autoResize(t){
-    t.style.height="auto";
-    t.style.height=Math.min(t.scrollHeight,180)+"px";
-}
-
-homeInput.oninput=()=>autoResize(homeInput);
-chatInput.oninput=()=>autoResize(chatInput);
-
-function startChat(){
-    const input = document.getElementById("homeInput");
-    const text = input.value.trim();
-    if(!text) return;
-
-    homeView.classList.add("hidden");
-    chatView.classList.remove("hidden");
-
-    AI.user(text);
-    AI.ask(text);
-
-    input.value="";
-}
-
-function send(){
-    const input = document.getElementById("chatInput");
-    const text = input.value.trim();
-    if(!text) return;
-
-    AI.user(text);
-    AI.ask(text);
-
-    input.value="";
-}
-
-document.getElementById("settingsBtn").onclick = () => {
-    document.getElementById("settingsModal").classList.remove("hidden");
-};
-function closeSettings(){
-    document.getElementById("settingsModal").classList.add("hidden");
-}
-
-document.getElementById("imagineBtn").onclick = () => {
-    const homeInput = document.getElementById("homeInput");
-    if(homeInput.value.trim()){
-        startChat();
-    }else{
-        alert("Write something first");
-    }
-};
-
-document.getElementById("uploadBtn").onclick =
-document.getElementById("uploadBtn2").onclick = () => {
-    const input = document.createElement("input");
-    input.type="file";
-    input.click();
-};
-
-document.getElementById("signinBtn").onclick =
-document.getElementById("signupBtn").onclick = () => {
-    alert("Auth UI ready");
-};
-</script>
-
+    <script src="script.js"></script>
 </body>
 </html>
