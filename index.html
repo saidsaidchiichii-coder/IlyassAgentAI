@@ -61,19 +61,17 @@
             
             <div class="search-container">
                 <div class="search-box">
-                    <div class="file-preview-area" id="homeFilePreview"></div>
                     <div class="input-area">
-                        <button class="input-icon" onclick="document.getElementById('homeFileInput').click()">
+                        <button class="input-icon">
                             <i data-lucide="paperclip"></i>
                         </button>
-                        <input type="file" id="homeFileInput" class="hidden-input" multiple>
                         <textarea id="homeInput" placeholder="How can I help you today?" rows="1" oninput="autoResize(this)" onkeydown="handleKeydown(event, 'home')"></textarea>
                         <div class="input-controls">
                             <div class="mode-selector">
                                 <span>Auto</span>
                                 <i data-lucide="chevron-down"></i>
                             </div>
-                            <button class="control-btn" id="homeMicBtn" onclick="toggleMic('home')">
+                            <button class="control-btn">
                                 <i data-lucide="mic"></i>
                             </button>
                             <button class="control-btn send-btn" onclick="startChat()">
@@ -95,19 +93,17 @@
 
             <div class="chat-input-container">
                 <div class="search-box">
-                    <div class="file-preview-area" id="chatFilePreview"></div>
                     <div class="input-area">
-                        <button class="input-icon" onclick="document.getElementById('chatFileInput').click()">
+                        <button class="input-icon">
                             <i data-lucide="paperclip"></i>
                         </button>
-                        <input type="file" id="chatFileInput" class="hidden-input" multiple>
                         <textarea id="chatInput" placeholder="Send a message..." rows="1" oninput="autoResize(this)" onkeydown="handleKeydown(event, 'chat')"></textarea>
                         <div class="input-controls">
                             <div class="mode-selector">
                                 <span>Auto</span>
                                 <i data-lucide="chevron-down"></i>
                             </div>
-                            <button class="control-btn" id="chatMicBtn" onclick="toggleMic('chat')">
+                            <button class="control-btn">
                                 <i data-lucide="mic"></i>
                             </button>
                             <button class="control-btn send-btn" onclick="send()">
@@ -121,15 +117,9 @@
     </main>
 
     <script src="ControleAi.js"></script>
-    <script src="features.js"></script>
     <script>
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-            AI.init("messages", "https://my-webxyu.vercel.app/api/chat");
-            setupFileUpload('homeFileInput', 'homeFilePreview');
-            setupFileUpload('chatFileInput', 'chatFilePreview');
-        });
+        lucide.createIcons();
+        AI.init("messages", "https://my-webxyu.vercel.app/api/chat");
 
         const homeView = document.getElementById("home");
         const chatView = document.getElementById("chat");
@@ -137,7 +127,6 @@
         function autoResize(textarea) {
             textarea.style.height = 'auto';
             textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
-            textarea.style.transition = 'height 0.2s ease';
         }
 
         function handleKeydown(event, type) {
@@ -153,48 +142,23 @@
             const text = input.value.trim();
             if (!text) return;
             
-            homeView.style.animation = 'slideOut 0.4s ease-out forwards';
-            setTimeout(() => {
-                homeView.classList.add("hidden");
-                chatView.classList.remove("hidden");
-                chatView.style.animation = 'slideIn 0.4s ease-out';
-                AI.user(text);
-                input.value = "";
-                input.style.height = 'auto';
-                document.getElementById("homeFilePreview").innerHTML = '';
-                document.getElementById("homeFileInput").value = '';
-                AI.ask(text);
-            }, 400);
+            homeView.classList.add("hidden");
+            chatView.classList.remove("hidden");
+            AI.user(text);
+            input.value = "";
+            input.style.height = 'auto';
+            AI.ask(text);
         }
 
         function send() {
             const input = document.getElementById("chatInput");
             const text = input.value.trim();
             if (!text) return;
-            
-            // Add a subtle feedback animation
-            input.style.transform = 'scale(0.98)';
-            setTimeout(() => {
-                input.style.transform = 'scale(1)';
-            }, 100);
-            
             AI.user(text);
             input.value = "";
             input.style.height = 'auto';
-            document.getElementById("chatFilePreview").innerHTML = '';
-            document.getElementById("chatFileInput").value = '';
             AI.ask(text);
         }
-        
-        // Add CSS animation for slideOut
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideOut {
-                from { opacity: 1; transform: scale(1); }
-                to { opacity: 0; transform: scale(0.95) translateY(-20px); }
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
