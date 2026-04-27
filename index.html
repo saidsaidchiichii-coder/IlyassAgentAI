@@ -29,102 +29,115 @@
         </div>
         
         <div class="nav-right">
-            <button class="nav-btn" onclick="openImagine()">
+            <button class="nav-btn">
                 <i data-lucide="sparkles"></i>
                 <span>Imagine</span>
             </button>
             <button class="nav-btn" id="settingsTrigger">
                 <i data-lucide="settings"></i>
             </button>
-            <button class="btn-signin" onclick="openLogin()">Sign in</button>
-            <button class="btn-signup" onclick="openSignup()">Sign up</button>
+            <button class="btn-signin">Sign in</button>
+            <button class="btn-signup">Sign up</button>
         </div>
     </header>
 
     <main class="container">
-        <!-- (كل الكود ديالك بقى كيف هو بلا تغيير) -->
+        <!-- HOME VIEW -->
+        <section id="home" class="home-view">
+            <div class="hero-section">
+                <div class="hero-logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="14.31" y1="8" x2="20.05" y2="17.94"></line>
+                        <line x1="9.69" y1="8" x2="21.17" y2="8"></line>
+                        <line x1="7.38" y1="12" x2="13.12" y2="2.06"></line>
+                        <line x1="9.69" y1="16" x2="3.95" y2="6.06"></line>
+                        <line x1="14.31" y1="16" x2="2.83" y2="16"></line>
+                        <line x1="16.62" y1="12" x2="10.88" y2="21.94"></line>
+                    </svg>
+                    <h1>Grok</h1>
+                </div>
+            </div>
+            
+            <div class="search-container">
+                <div class="search-box">
+                    <div class="file-preview-area" id="homeFilePreview"></div>
+                    <div class="input-area">
+                        <button class="input-icon" onclick="document.getElementById('homeFileInput').click()">
+                            <i data-lucide="paperclip"></i>
+                        </button>
+                        <input type="file" id="homeFileInput" class="hidden-input" multiple>
+                        <textarea id="homeInput" placeholder="How can I help you today?" rows="1" oninput="autoResize(this)" onkeydown="handleKeydown(event, 'home')"></textarea>
+                        <div class="input-controls">
+                            <div class="mode-selector">
+                                <span>Auto</span>
+                                <i data-lucide="chevron-down"></i>
+                            </div>
+                            <button class="control-btn" id="homeMicBtn" onclick="toggleMic('home')">
+                                <i data-lucide="mic"></i>
+                            </button>
+                            <button class="control-btn send-btn" onclick="startChat()">
+                                <i data-lucide="arrow-up"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="search-hint">
+                    <i data-lucide="sparkles"></i>
+                    <span>New · Hold Ctrl+D to dictate</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHAT VIEW -->
+        <section id="chat" class="chat-view hidden">
+            <div id="messages" class="messages-list"></div>
+
+            <div class="chat-input-container">
+                <div class="search-box">
+                    <div class="file-preview-area" id="chatFilePreview"></div>
+                    <div class="input-area">
+                        <button class="input-icon" onclick="document.getElementById('chatFileInput').click()">
+                            <i data-lucide="paperclip"></i>
+                        </button>
+                        <input type="file" id="chatFileInput" class="hidden-input" multiple>
+                        <textarea id="chatInput" placeholder="Send a message..." rows="1" oninput="autoResize(this)" onkeydown="handleKeydown(event, 'chat')"></textarea>
+                        <div class="input-controls">
+                            <div class="mode-selector">
+                                <span>Auto</span>
+                                <i data-lucide="chevron-down"></i>
+                            </div>
+                            <button class="control-btn" id="chatMicBtn" onclick="toggleMic('chat')">
+                                <i data-lucide="mic"></i>
+                            </button>
+                            <button class="control-btn send-btn" onclick="send()">
+                                <i data-lucide="arrow-up"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <!-- 🔥 LOGIN / SIGNUP MODAL -->
-    <div id="authModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#00000088;justify-content:center;align-items:center;">
-        <div style="background:#111;padding:20px;border-radius:10px;width:300px;">
-            <h3 id="authTitle">Login</h3>
-            <input id="authEmail" type="email" placeholder="Email" style="width:100%;margin:10px 0;padding:10px;">
-            <input id="authPassword" type="password" placeholder="Password" style="width:100%;margin:10px 0;padding:10px;">
-            <button onclick="submitAuth()" style="width:100%;padding:10px;">Continue</button>
-            <button onclick="closeAuth()" style="width:100%;margin-top:10px;">Close</button>
-        </div>
-    </div>
-
     <script src="ControleAi.js"></script>
-
-    <!-- 🔥 FIREBASE + AUTH -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } 
-        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDWch9gK12sGD7awxmRibU6jBspd-tjr6E",
-            authDomain: "my-website-17f99.firebaseapp.com",
-            projectId: "my-website-17f99",
-            storageBucket: "my-website-17f99.firebasestorage.app",
-            messagingSenderId: "799668604107",
-            appId: "1:799668604107:web:adc03ea5fd66c58af09f4e",
-            measurementId: "G-H1SLRSEBTF"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        let mode = "login";
-
-        window.openLogin = () => {
-            mode = "login";
-            document.getElementById("authTitle").innerText = "Login";
-            document.getElementById("authModal").style.display = "flex";
-        };
-
-        window.openSignup = () => {
-            mode = "signup";
-            document.getElementById("authTitle").innerText = "Sign Up";
-            document.getElementById("authModal").style.display = "flex";
-        };
-
-        window.closeAuth = () => {
-            document.getElementById("authModal").style.display = "none";
-        };
-
-        window.submitAuth = async () => {
-            const email = document.getElementById("authEmail").value;
-            const password = document.getElementById("authPassword").value;
-
-            try {
-                if (mode === "signup") {
-                    await createUserWithEmailAndPassword(auth, email, password);
-                    alert("Account created");
-                } else {
-                    await signInWithEmailAndPassword(auth, email, password);
-                    alert("Logged in");
-                }
-                closeAuth();
-            } catch (e) {
-                alert(e.message);
-            }
-        };
-    </script>
-
+    <script src="features.js"></script>
     <script>
-        lucide.createIcons();
-        AI.init("messages", "https://my-webxyu.vercel.app/api/chat");
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            AI.init("messages", "https://my-webxyu.vercel.app/api/chat");
+            setupFileUpload('homeFileInput', 'homeFilePreview');
+            setupFileUpload('chatFileInput', 'chatFilePreview');
+        });
 
         const homeView = document.getElementById("home");
         const chatView = document.getElementById("chat");
-        const imagineView = document.getElementById("imagine");
 
         function autoResize(textarea) {
             textarea.style.height = 'auto';
             textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
+            textarea.style.transition = 'height 0.2s ease';
         }
 
         function handleKeydown(event, type) {
@@ -140,31 +153,48 @@
             const text = input.value.trim();
             if (!text) return;
             
-            homeView.classList.add("hidden");
-            chatView.classList.remove("hidden");
-            imagineView.classList.add("hidden");
-
-            AI.user(text);
-            input.value = "";
-            input.style.height = 'auto';
-            AI.ask(text);
+            homeView.style.animation = 'slideOut 0.4s ease-out forwards';
+            setTimeout(() => {
+                homeView.classList.add("hidden");
+                chatView.classList.remove("hidden");
+                chatView.style.animation = 'slideIn 0.4s ease-out';
+                AI.user(text);
+                input.value = "";
+                input.style.height = 'auto';
+                document.getElementById("homeFilePreview").innerHTML = '';
+                document.getElementById("homeFileInput").value = '';
+                AI.ask(text);
+            }, 400);
         }
 
         function send() {
             const input = document.getElementById("chatInput");
             const text = input.value.trim();
             if (!text) return;
+            
+            // Add a subtle feedback animation
+            input.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                input.style.transform = 'scale(1)';
+            }, 100);
+            
             AI.user(text);
             input.value = "";
             input.style.height = 'auto';
+            document.getElementById("chatFilePreview").innerHTML = '';
+            document.getElementById("chatFileInput").value = '';
             AI.ask(text);
         }
-
-        function openImagine() {
-            homeView.classList.add("hidden");
-            chatView.classList.add("hidden");
-            imagineView.classList.remove("hidden");
-        }
+        
+        // Add CSS animation for slideOut
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideOut {
+                from { opacity: 1; transform: scale(1); }
+                to { opacity: 0; transform: scale(0.95) translateY(-20px); }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
