@@ -960,17 +960,7 @@ body {
     padding-left: 22px;
 }
 
-const steps = [
-  "Connecting to search...",
-  "Scanning web sources...",
-  "Reading documents (1/8)",
-  "Reading documents (4/8)",
-  "Extracting key data...",
-  "Cross-checking information...",
-  "Filtering noise...",
-  "Structuring response...",
-  "Finalizing answer..."
-];
+ 
 
 let i = 0;
 
