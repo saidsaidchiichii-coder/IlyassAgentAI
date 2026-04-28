@@ -125,6 +125,28 @@
     </header>
 
     <main class="container">
+
+        <!-- 🔥 AUTH FULL PAGE (ADD ONLY) -->
+<section id="authPage" class="home-view hidden">
+  <div id="particles"></div>
+
+  <div style="display:flex;justify-content:center;align-items:center;height:80vh;">
+    
+    <div class="auth-card">
+      <h2 id="authPageTitle">Sign in</h2>
+
+      <input id="authEmailPage" type="email" placeholder="Email">
+      <input id="authPasswordPage" type="password" placeholder="Password">
+
+      <button id="authPageSubmit">Continue</button>
+
+      <p id="switchAuth" style="margin-top:15px;cursor:pointer;opacity:0.7;">
+        Don't have an account? Sign up
+      </p>
+    </div>
+
+  </div>
+</section>
         <!-- HOME VIEW -->
         <section id="home" class="home-view">
             <div class="hero-section">
@@ -217,6 +239,7 @@
 
         const homeView = document.getElementById("home");
         const chatView = document.getElementById("chat");
+        const imagineView = document.getElementById("imagine");
 
         function autoResize(textarea) {
             textarea.style.height = 'auto';
@@ -304,6 +327,8 @@
 
   </div>
 </div>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+    
 </body>
     
 </html>
