@@ -101,7 +101,7 @@ const AI = {
         <div class="loader-dots">
             <span></span><span></span><span></span>
         </div>
-        <span class="thinking-text">Thinking...</span>
+    <span id="thinkingText" class="thinking-text">🔍 Searching the web 1</span>
     `;
     
     wrapper.appendChild(thinkingDiv);
