@@ -887,8 +887,67 @@ code {
   cursor: pointer;
 }
 
+.login-wrapper {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: black;
+  perspective: 1000px;
+  z-index: 9999;
+}
+
+.login-card {
+  width: 360px;
+  padding: 40px;
+  border-radius: 20px;
+  background: rgba(20,20,20,0.9);
+  border: 1px solid #2f3336;
+  text-align: center;
+
+  transform: rotateX(10deg);
+  animation: pop 0.8s ease;
+}
+
+.login-card input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 10px;
+  border: none;
+  background: #16181c;
+  color: white;
+}
+
+.login-card button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 999px;
+  background: #1d9bf0;
+  color: black;
+  font-weight: bold;
+  border: none;
+  margin-top: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(40px) rotateX(30deg);
+  }
+  to {
+    opacity: 1;
+    transform: rotateX(10deg);
+  }
+}
 
 /* ==================== RESPONSIVE ==================== */
+
 @media (max-width: 640px) {
     .top-nav {
         padding: 0 12px;
