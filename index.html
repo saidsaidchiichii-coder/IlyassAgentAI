@@ -295,12 +295,12 @@
         
         // Add CSS animation for slideOut
         const style = document.createElement('style');
-        style.textContent = 
+        style.textContent = `
             @keyframes slideOut {
                 from { opacity: 1; transform: scale(1); }
                 to { opacity: 0; transform: scale(0.95) translateY(-20px); }
             }
-        ;
+        `;
         document.head.appendChild(style);
     </script>
     <!-- AUTH MODAL (ADD ONLY) -->
