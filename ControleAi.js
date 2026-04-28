@@ -91,24 +91,49 @@ const AI = {
   /* =========================
      🧠 ADVANCED THINKING EFFECT
   ========================= */
-  thinking() {
-    const wrapper = document.createElement("div");
-    wrapper.className = "msg-wrapper ai";
-    
-    const thinkingDiv = document.createElement("div");
-    thinkingDiv.className = "thinking-container";
-    thinkingDiv.innerHTML = `
-        <div class="loader-dots">
-            <span></span><span></span><span></span>
-        </div>
-        <span class="thinking-text">Thinking...</span>
-    `;
-    
-    wrapper.appendChild(thinkingDiv);
-    this.messagesBox.appendChild(wrapper);
-    this.scroll();
-    return wrapper;
-  },
+ function startGrokSearching() {
+  const el = document.getElementById("thinkingText");
+  if (!el) return;
+
+  let i = 1;
+  let running = true;
+
+  el.style.color = "#ff6b35";
+  el.style.fontWeight = "600";
+  el.style.letterSpacing = "0.3px";
+  el.style.transition = "opacity 0.08s ease, transform 0.08s ease, filter 0.08s ease";
+  el.style.textShadow = "0 0 12px rgba(255,107,53,0.25)";
+
+  function loop() {
+    if (!running) return;
+
+    // FADE OUT + slight shrink
+    el.style.opacity = "0.2";
+    el.style.transform = "translateY(2px) scale(0.98)";
+    el.style.filter = "blur(1px)";
+
+    setTimeout(() => {
+      el.textContent = `🔍 Searching the web ${i++}`;
+
+      // FADE IN + glow pop
+      el.style.opacity = "1";
+      el.style.transform = "translateY(0px) scale(1)";
+      el.style.filter = "blur(0px)";
+    }, 70);
+
+    setTimeout(loop, 160); // fast cycle (~1s full feel)
+  }
+
+  loop();
+
+  return () => {
+    running = false;
+    el.textContent = "🔍 Searching the web";
+    el.style.opacity = "1";
+    el.style.transform = "none";
+    el.style.filter = "none";
+  };
+}
 
   /* =========================
      📸 IMAGE ANALYSIS HELPER
