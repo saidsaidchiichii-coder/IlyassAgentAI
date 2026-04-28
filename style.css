@@ -206,30 +206,56 @@ body::before {
     transform: translateY(-1px);
     box-shadow: 0 6px 20px rgba(255, 107, 53, 0.35);
 }
+/* ==================== AUTH MODAL FIXED ==================== */
 
-/* ==================== AUTH MODAL ==================== */
 #authModal {
     position: fixed;
     inset: 0;
-    display: none;
+    display: none; /* default hidden */
     align-items: center;
     justify-content: center;
-    background: rgba(0,0,0,0.88);
-    backdrop-filter: blur(16px);
-    z-index: 9999;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(14px);
+    z-index: 99999;
+
+    /* FIX: prevent interaction bugs */
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
 }
 
+/* 🔥 ACTIVE STATE (IMPORTANT) */
+#authModal.active {
+    display: flex;
+    pointer-events: auto;
+    opacity: 1;
+}
+
+/* ================= BOX ================= */
 #authModal .box {
     width: 380px;
     padding: 36px 32px;
     border-radius: var(--radius-xl);
     background: #050507;
     border: 1px solid var(--border-color);
-    box-shadow: 0 40px 100px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03);
+    box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+
     color: var(--text-color);
     text-align: center;
+
+    /* FIX animation */
+    transform: translateY(10px) scale(0.96);
+    opacity: 0;
+    transition: all 0.25s ease;
 }
 
+/* box animation when modal active */
+#authModal.active .box {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+/* ================= TITLE ================= */
 #authTitle {
     font-size: 22px;
     font-weight: 700;
@@ -243,6 +269,7 @@ body::before {
     margin-bottom: 24px;
 }
 
+/* ================= INPUTS ================= */
 #authEmail,
 #authPassword {
     width: 100%;
@@ -252,10 +279,9 @@ body::before {
     border: 1px solid var(--border-color);
     background: var(--input-bg);
     color: var(--text-color);
-    font-family: inherit;
     font-size: 14px;
     outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: 0.2s;
 }
 
 #authEmail:focus,
@@ -264,6 +290,7 @@ body::before {
     box-shadow: 0 0 0 3px var(--grok-orange-dim);
 }
 
+/* ================= BUTTON ================= */
 #authSubmit {
     width: 100%;
     margin-top: 16px;
@@ -280,10 +307,11 @@ body::before {
 
 #authSubmit:hover {
     background: var(--accent-2);
-    box-shadow: 0 6px 24px rgba(255, 107, 53, 0.4);
     transform: translateY(-1px);
+    box-shadow: 0 6px 24px rgba(255, 107, 53, 0.4);
 }
 
+/* ================= CANCEL ================= */
 .cancel {
     width: 100%;
     margin-top: 10px;
@@ -294,16 +322,13 @@ body::before {
     color: var(--secondary-text);
     font-size: 14px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: 0.2s;
 }
 
 .cancel:hover {
     border-color: var(--secondary-text);
     color: var(--text-color);
 }
-
-
-
 
 
 
