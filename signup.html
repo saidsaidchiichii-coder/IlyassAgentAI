@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - Grok</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="login-design.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(-45deg, #000000, #0a0a0a, #050505, #000000);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            font-family: 'Inter', system-ui, sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e7e9ea;
+            overflow: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .signup-container {
+            width: 380px;
+            padding: 40px 32px;
+            background: #000000;
+            border: 1px solid #2f3336;
+            border-radius: 20px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85);
+            text-align: center;
+            animation: fadeUp 0.6s ease;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .grok-logo {
+            width: 42px;
+            height: 42px;
+            margin: 0 auto 20px;
+            fill: #1d9bf0;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #71767b;
+            margin-bottom: 32px;
+            font-size: 15px;
+        }
+
+        .signup-input {
+            width: 100%;
+            padding: 14px 16px;
+            margin: 10px 0;
+            background: #16181c;
+            border: 1px solid #2f3336;
+            border-radius: 10px;
+            color: #e7e9ea;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.25s;
+        }
+
+        .signup-input:focus {
+            border-color: #1d9bf0;
+            box-shadow: 0 0 0 3px rgba(29, 155, 240, 0.25);
+            background: #1d1f23;
+        }
+
+        .signup-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 24px;
+            background: #1d9bf0;
+            color: #000000;
+            border: none;
+            border-radius: 9999px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .signup-btn:hover {
+            background: #1a8cd8;
+            transform: translateY(-1px);
+        }
+
+        .switch-text {
+            margin-top: 28px;
+            color: #1d9bf0;
+            font-size: 14.5px;
+            cursor: pointer;
+        }
+
+        .switch-text:hover {
+            text-decoration: underline;
+        }
+
+        .terms {
+            font-size: 12px;
+            color: #71767b;
+            margin-top: 20px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="signup-container">
+        <!-- Grok Logo -->
+        <svg class="grok-logo" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="14.31" y1="8" x2="20.05" y2="17.94"></line>
+            <line x1="9.69" y1="8" x2="21.17" y2="8"></line>
+            <line x1="7.38" y1="12" x2="13.12" y2="2.06"></line>
+            <line x1="9.69" y1="16" x2="3.95" y2="6.06"></line>
+            <line x1="14.31" y1="16" x2="2.83" y2="16"></line>
+            <line x1="16.62" y1="12" x2="10.88" y2="21.94"></line>
+        </svg>
+
+        <h1>Create Account</h1>
+        <p class="subtitle">Join Grok today</p>
+
+        <input type="text" id="fullName" class="signup-input" placeholder="Full name" autocomplete="name">
+        <input type="email" id="email" class="signup-input" placeholder="Email address" autocomplete="email">
+        <input type="password" id="password" class="signup-input" placeholder="Password" autocomplete="new-password">
+        <input type="password" id="confirmPassword" class="signup-input" placeholder="Confirm password">
+
+        <button id="signupButton" class="signup-btn">Create Account</button>
+
+        <p class="switch-text" onclick="goToLogin()">Already have an account? <strong>Sign in</strong></p>
+
+        <div class="terms">
+            By signing up, you agree to our <strong>Terms of Service</strong> and <strong>Privacy Policy</strong>.
+        </div>
+    </div>
+
+    <script>
+        const signupBtn = document.getElementById('signupButton');
+
+        signupBtn.addEventListener('click', async () => {
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+            if (!fullName || !email || !password || !confirmPassword) {
+                alert("يرجى ملء جميع الحقول");
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert("كلمات المرور غير متطابقة");
+                return;
+            }
+
+            if (password.length < 6) {
+                alert("كلمة المرور يجب أن تكون 6 أحرف على الأقل");
+                return;
+            }
+
+            signupBtn.textContent = "Creating account...";
+            signupBtn.disabled = true;
+
+            try {
+                // هنا ستضع كود Firebase لإنشاء الحساب لاحقاً
+                await new Promise(resolve => setTimeout(resolve, 1500)); // محاكاة
+
+                alert("✅ تم إنشاء الحساب بنجاح!");
+                window.location.href = "login.html";   // أو "index.html" حسب رغبتك
+            } catch (error) {
+                alert("❌ حدث خطأ أثناء إنشاء الحساب");
+            } finally {
+                signupBtn.textContent = "Create Account";
+                signupBtn.disabled = false;
+            }
+        });
+
+        // دعم زر Enter
+        document.addEventListener('keypress', (e) => {
+            if (e.key === "Enter") {
+                signupBtn.click();
+            }
+        });
+
+        function goToLogin() {
+            window.location.href = "login.html";
+        }
+    </script>
+
+</body>
+</html>
