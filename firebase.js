@@ -108,15 +108,86 @@
         </p>
     </div>
 
-    <!-- 🔥 Important: Load firebase.js -->
-    <script type="module" src="firebase.js"></script>
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+        import {
+          getAuth,
+          createUserWithEmailAndPassword
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    <script>
-        // ننتظر تحميل firebase.js ثم نفعل الـ mode
-        setTimeout(() => {
-            window.authMode = "signup";
-            console.log("✅ Signup mode activated");
-        }, 300);
+        const firebaseConfig = {
+          apiKey: "AIzaSyDWch9gK12sGD7awxmRibU6jBspd-tjr6E",
+          authDomain: "my-website-17f99.firebaseapp.com",
+          projectId: "my-website-17f99",
+          storageBucket: "my-website-17f99.firebasestorage.app",
+          messagingSenderId: "799668604107",
+          appId: "1:799668604107:web:adc03ea5fd66c58af09f4e",
+          measurementId: "G-H1SLRSEBTF"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        function showMsg(text, isError = false) {
+          const box = document.createElement("div");
+          box.innerText = text;
+          box.style.position = "fixed";
+          box.style.bottom = "20px";
+          box.style.right = "20px";
+          box.style.background = isError ? "#c42b1c" : "#111";
+          box.style.color = "white";
+          box.style.padding = "14px 18px";
+          box.style.borderRadius = "12px";
+          box.style.boxShadow = "0 10px 35px rgba(0,0,0,0.7)";
+          box.style.zIndex = "99999";
+          box.style.opacity = "0";
+          box.style.transform = "translateY(20px)";
+          box.style.transition = "all 0.3s ease";
+          document.body.appendChild(box);
+
+          setTimeout(() => { box.style.opacity = "1"; box.style.transform = "translateY(0)"; }, 10);
+          setTimeout(() => { 
+            box.style.opacity = "0"; 
+            box.style.transform = "translateY(20px)";
+            setTimeout(() => box.remove(), 400);
+          }, 3200);
+        }
+
+        // تعيين الوضع
+        window.authMode = "signup";
+
+        // ربط الزر
+        document.getElementById("authSubmit").addEventListener("click", async () => {
+          const email = document.getElementById("authEmail").value.trim();
+          const password = document.getElementById("authPassword").value.trim();
+
+          if (!email || !password) {
+            showMsg("❌ يرجى ملء الإيميل وكلمة المرور", true);
+            return;
+          }
+
+          const btn = document.getElementById("authSubmit");
+          btn.disabled = true;
+          btn.textContent = "جاري إنشاء الحساب...";
+
+          try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            showMsg("✅ تم إنشاء الحساب بنجاح!");
+            
+            setTimeout(() => {
+              window.location.href = "login.html";
+            }, 1500);
+
+          } catch (error) {
+            console.error(error);
+            showMsg("❌ " + error.message, true);
+          } finally {
+            btn.disabled = false;
+            btn.textContent = "Create Account";
+          }
+        });
     </script>
 
 </body>
