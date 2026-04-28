@@ -108,15 +108,12 @@
         </p>
     </div>
 
-    <!-- Firebase -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import {
-          getAuth,
-          createUserWithEmailAndPassword
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    <!-- Firebase Script - بدون type="module" داخل الصفحة -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
+    <script>
+        // Firebase Config
         const firebaseConfig = {
           apiKey: "AIzaSyDWch9gK12sGD7awxmRibU6jBspd-tjr6E",
           authDomain: "my-website-17f99.firebaseapp.com",
@@ -127,8 +124,8 @@
           measurementId: "G-H1SLRSEBTF"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
 
         function showMsg(text, isError = false) {
           const box = document.createElement("div");
@@ -147,16 +144,17 @@
           box.style.transition = "all 0.3s ease";
           document.body.appendChild(box);
 
-          setTimeout(() => { box.style.opacity = "1"; box.style.transform = "translateY(0)"; }, 10);
-          setTimeout(() => { 
-            box.style.opacity = "0"; 
+          setTimeout(() => {
+            box.style.opacity = "1";
+            box.style.transform = "translateY(0)";
+          }, 10);
+
+          setTimeout(() => {
+            box.style.opacity = "0";
             box.style.transform = "translateY(20px)";
             setTimeout(() => box.remove(), 400);
           }, 3200);
         }
-
-        // تعيين الوضع
-        window.authMode = "signup";
 
         // ربط الزر
         document.getElementById("authSubmit").addEventListener("click", async () => {
@@ -173,8 +171,8 @@
           btn.textContent = "جاري إنشاء الحساب...";
 
           try {
-            await createUserWithEmailAndPassword(auth, email, password);
-            showMsg("✅ تم إنشاء الحساب بنجاح!");
+            await auth.createUserWithEmailAndPassword(email, password);
+            showMsg("✅ تم إنشاء الحساب بنجاح!", false);
             
             setTimeout(() => {
               window.location.href = "login.html";
