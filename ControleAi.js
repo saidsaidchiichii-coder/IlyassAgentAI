@@ -24,70 +24,104 @@ const AI = {
     this.setupModeSelector();
   },
 
+
+
   /* =========================
-     🔄 MODE SELECTOR SETUP
-  ========================= */
-  setupModeSelector() {
-    const modeSelectors = document.querySelectorAll('.mode-selector');
-    modeSelectors.forEach(selector => {
-      selector.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this.showModeMenu(selector);
-      });
+   🔄 MODE SELECTOR SETUP
+========================= */
+setupModeSelector() {
+  const modeSelectors = document.querySelectorAll('.mode-selector');
+
+  modeSelectors.forEach(selector => {
+    selector.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.showModeMenu(selector);
     });
-  },
+  });
 
-  showModeMenu(selector) {
-    // Remove existing menu if any
-    const existingMenu = document.querySelector('.mode-menu');
-    if (existingMenu) existingMenu.remove();
+  // close menu when clicking outside
+  document.addEventListener("click", () => {
+    const menu = document.querySelector('.mode-menu');
+    if (menu) menu.remove();
+  });
+},
 
-    const menu = document.createElement('div');
-    menu.className = 'mode-menu';
-    menu.innerHTML = `
-      <div class="mode-option ${this.currentMode === 'auto' ? 'active' : ''}" data-mode="auto">
-        <span class="mode-name">Auto</span>
-        <span class="mode-desc">Smart selection</span>
-      </div>
-      <div class="mode-option ${this.currentMode === 'fast' ? 'active' : ''}" data-mode="fast">
-        <span class="mode-name">Faster AI 5.2</span>
-        <span class="mode-desc">Quick responses</span>
-      </div>
-      <div class="mode-option ${this.currentMode === 'thinking' ? 'active' : ''}" data-mode="thinking">
-        <span class="mode-name">Thinking Longer</span>
-        <span class="mode-desc">Deep analysis (~3s)</span>
-      </div>
-    `;
+/* =========================
+   📌 MODE MENU UI
+========================= */
+showModeMenu(selector) {
 
-    menu.querySelectorAll('.mode-option').forEach(option => {
-      option.addEventListener('click', () => {
-        this.currentMode = option.dataset.mode;
-        selector.querySelector('span').textContent = option.querySelector('.mode-name').textContent;
-        menu.remove();
-      });
+  // remove old menu
+  const existingMenu = document.querySelector('.mode-menu');
+  if (existingMenu) existingMenu.remove();
+
+  const menu = document.createElement('div');
+  menu.className = 'mode-menu';
+
+  menu.innerHTML = `
+    <div class="mode-option ${this.currentMode === 'auto' ? 'active' : ''}" data-mode="auto">
+      <div class="mode-name">Auto</div>
+      <div class="mode-desc">Smart selection</div>
+    </div>
+
+    <div class="mode-option ${this.currentMode === 'fast' ? 'active' : ''}" data-mode="fast">
+      <div class="mode-name">Fast</div>
+      <div class="mode-desc">Quick responses</div>
+    </div>
+
+    <div class="mode-option ${this.currentMode === 'thinking' ? 'active' : ''}" data-mode="thinking">
+      <div class="mode-name">Thinking</div>
+      <div class="mode-desc">Deep analysis</div>
+    </div>
+  `;
+
+  // handle click
+  menu.querySelectorAll('.mode-option').forEach(option => {
+    option.addEventListener('click', () => {
+
+      // set mode
+      this.currentMode = option.dataset.mode;
+
+      // update UI text
+      const label = selector.querySelector('span');
+      if (label) {
+        label.textContent = option.querySelector('.mode-name').textContent;
+      }
+
+      // remove menu
+      menu.remove();
     });
+  });
 
-    document.body.appendChild(menu);
-    
-    // Position menu near selector
-    const rect = selector.getBoundingClientRect();
-    menu.style.top = (rect.bottom + 8) + 'px';
-    menu.style.left = (rect.left - 50) + 'px';
-  },
+  document.body.appendChild(menu);
 
-  user(text) {
-    const wrapper = document.createElement("div");
-    wrapper.className = "msg-wrapper";
-    
-    const div = document.createElement("div");
-    div.className = "msg user";
-    div.textContent = text;
-    
-    wrapper.appendChild(div);
-    this.messagesBox.appendChild(wrapper);
-    this.scroll();
-  },
+  // position menu
+  const rect = selector.getBoundingClientRect();
 
+  menu.style.position = "fixed";
+  menu.style.top = `${rect.bottom + 8}px`;
+  menu.style.left = `${rect.left}px`;
+  menu.style.zIndex = "99999";
+},
+
+/* =========================
+   👤 USER MESSAGE
+========================= */
+user(text) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "msg-wrapper";
+
+  const div = document.createElement("div");
+  div.className = "msg user";
+
+  // safe text (no HTML injection)
+  div.textContent = text;
+
+  wrapper.appendChild(div);
+  this.messagesBox.appendChild(wrapper);
+
+  this.scroll();
+},
   /* =========================
      🧠 ADVANCED THINKING EFFECT
   ========================= */
