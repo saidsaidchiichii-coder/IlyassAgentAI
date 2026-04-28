@@ -1,159 +1,142 @@
-// ================= FIREBASE IMPORTS =================
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-// ================= FIREBASE CONFIG =================
-const firebaseConfig = {
-  apiKey: "AIzaSyDWch9gK12sGD7awxmRibU6jBspd-tjr6E",
-  authDomain: "my-website-17f99.firebaseapp.com",
-  projectId: "my-website-17f99",
-  storageBucket: "my-website-17f99.firebasestorage.app",
-  messagingSenderId: "799668604107",
-  appId: "1:799668604107:web:adc03ea5fd66c58af09f4e",
-  measurementId: "G-H1SLRSEBTF"
-};
-
-// ================= INITIALIZE FIREBASE =================
-const app = initializeApp(firebaseConfig);
-getAnalytics(app);
-const auth = getAuth(app);
-
-// ================= TOAST NOTIFICATION =================
-function showMsg(text, isError = false) {
-  const box = document.createElement("div");
-  box.innerText = text;
-  box.style.position = "fixed";
-  box.style.bottom = "20px";
-  box.style.right = "20px";
-  box.style.background = isError ? "#c42b1c" : "#1f1f1f";
-  box.style.color = "white";
-  box.style.padding = "14px 18px";
-  box.style.borderRadius = "12px";
-  box.style.boxShadow = "0 10px 35px rgba(0,0,0,0.7)";
-  box.style.zIndex = "99999";
-  box.style.opacity = "0";
-  box.style.transform = "translateY(20px)";
-  box.style.transition = "all 0.3s ease";
-  document.body.appendChild(box);
-
-  setTimeout(() => {
-    box.style.opacity = "1";
-    box.style.transform = "translateY(0)";
-  }, 10);
-
-  setTimeout(() => {
-    box.style.opacity = "0";
-    box.style.transform = "translateY(20px)";
-    setTimeout(() => box.remove(), 400);
-  }, 3200);
-}
-
-// ================= OPEN & CLOSE AUTH MODAL =================
-window.openAuth = (mode) => {
-  const modal = document.getElementById("authModal");
-  const title = document.getElementById("authTitle");
-
-  if (!modal || !title) return;
-
-  window.authMode = mode;
-  title.textContent = mode === "signup" ? "Create Account" : "Sign in";
-  modal.style.display = "flex";
-};
-
-window.closeAuth = () => {
-  const modal = document.getElementById("authModal");
-  if (modal) modal.style.display = "none";
-};
-
-// ================= HANDLE LOGIN / SIGNUP =================
-document.addEventListener("DOMContentLoaded", () => {
-  const submitBtn = document.getElementById("authSubmit");
-
-  if (submitBtn) {
-    submitBtn.addEventListener("click", async () => {
-      const email = document.getElementById("authEmail")?.value.trim();
-      const password = document.getElementById("authPassword")?.value.trim();
-
-      if (!email || !password) {
-        showMsg("❌ Please fill all fields", true);
-        return;
-      }
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = window.authMode === "signup" ? "Creating Account..." : "Signing in...";
-
-      try {
-        if (window.authMode === "signup") {
-          await createUserWithEmailAndPassword(auth, email, password);
-          showMsg("✅ Account created successfully!");
-          setTimeout(() => {
-            closeAuth();
-            window.location.href = "login.html";
-          }, 1400);
-        } else {
-          await signInWithEmailAndPassword(auth, email, password);
-          showMsg("🔥 Login successful!");
-          closeAuth();
-          // Redirect to your main page
-          window.location.href = "index.html"; 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - Grok</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="login-design.css">
+    
+    <style>
+        body {
+            background: linear-gradient(-45deg, #000000, #0a0a0a, #050505, #000000);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e7e9ea;
+            margin: 0;
         }
-      } catch (error) {
-        console.error("Firebase Auth Error:", error.code, error.message);
 
-        switch (error.code) {
-          case "auth/user-not-found":
-            showMsg("❌ This email is not registered. Please sign up first.", true);
-            break;
-          case "auth/wrong-password":
-            showMsg("❌ Incorrect password.", true);
-            break;
-          case "auth/invalid-credential":
-            showMsg("❌ Invalid email or password.", true);
-            break;
-          case "auth/email-already-in-use":
-            showMsg("❌ This email is already registered. Please sign in.", true);
-            break;
-          case "auth/weak-password":
-            showMsg("❌ Password should be at least 6 characters.", true);
-            break;
-          case "auth/invalid-email":
-            showMsg("❌ Invalid email format.", true);
-            break;
-          default:
-            showMsg("❌ " + error.message, true);
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Continue";
-      }
-    });
-  }
-});
 
-// ================= AUTH STATE LISTENER =================
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    console.log("✅ User logged in:", user.email);
-    // يمكنك هنا إخفاء أزرار التسجيل وإظهار اسم المستخدم
-  } else {
-    console.log("No user is signed in");
-  }
-});
+        .signup-container {
+            width: 380px;
+            padding: 40px 32px;
+            background: #000000;
+            border: 1px solid #2f3336;
+            border-radius: 20px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.85);
+            text-align: center;
+        }
 
-// ================= LOGOUT FUNCTION =================
-window.logout = async () => {
-  try {
-    await signOut(auth);
-    showMsg("👋 You have been logged out successfully");
-    setTimeout(() => window.location.reload(), 800);
-  } catch (e) {
-    showMsg("Error during logout", true);
-  }
-};
+        .grok-logo {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 20px;
+            fill: #1d9bf0;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #71767b;
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 16px;
+            margin: 10px 0;
+            background: #16181c;
+            border: 1px solid #2f3336;
+            border-radius: 10px;
+            color: white;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-color: #1d9bf0;
+            box-shadow: 0 0 0 3px rgba(29, 155, 240, 0.25);
+        }
+
+        .signup-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            background: #1d9bf0;
+            color: #000;
+            border: none;
+            border-radius: 9999px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .signup-btn:hover {
+            background: #1a8cd8;
+        }
+
+        .switch-text {
+            margin-top: 25px;
+            color: #1d9bf0;
+            cursor: pointer;
+            font-size: 14.5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="signup-container">
+        <svg class="grok-logo" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="14.31" y1="8" x2="20.05" y2="17.94"></line>
+            <line x1="9.69" y1="8" x2="21.17" y2="8"></line>
+            <line x1="7.38" y1="12" x2="13.12" y2="2.06"></line>
+            <line x1="9.69" y1="16" x2="3.95" y2="6.06"></line>
+            <line x1="14.31" y1="16" x2="2.83" y2="16"></line>
+            <line x1="16.62" y1="12" x2="10.88" y2="21.94"></line>
+        </svg>
+
+        <h1>Create Account</h1>
+        <p class="subtitle">Join Grok</p>
+
+        <input type="text" id="fullName" class="input-field" placeholder="Full name">
+        <input type="email" id="authEmail" class="input-field" placeholder="Email address">
+        <input type="password" id="authPassword" class="input-field" placeholder="Password">
+
+        <button id="authSubmit" class="signup-btn">Create Account</button>
+
+        <p class="switch-text" onclick="window.location.href='login.html'">
+            Already have an account? <strong>Sign in</strong>
+        </p>
+    </div>
+
+    <script type="module" src="firebase.js"></script>
+
+    <script>
+        // تعيين وضع التسجيل
+        window.authMode = "signup";
+        
+        // فتح المودال تلقائياً (اختياري)
+        // window.openAuth("signup");
+    </script>
+
+</body>
+</html>
