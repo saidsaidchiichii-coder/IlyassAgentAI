@@ -108,15 +108,15 @@
         </p>
     </div>
 
-    <!-- Firebase Script -->
+    <!-- 🔥 Important: Load firebase.js -->
     <script type="module" src="firebase.js"></script>
 
     <script>
-        // ننتظر تحميل الصفحة كاملة ثم نحدد وضع التسجيل
-        document.addEventListener("DOMContentLoaded", () => {
+        // ننتظر تحميل firebase.js ثم نفعل الـ mode
+        setTimeout(() => {
             window.authMode = "signup";
-            console.log("✅ Signup mode activated successfully");
-        });
+            console.log("✅ Signup mode activated");
+        }, 300);
     </script>
 
 </body>
