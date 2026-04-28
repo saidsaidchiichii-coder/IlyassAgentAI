@@ -11,12 +11,11 @@
     <link rel="stylesheet" href="login-design.css">
     <style>
 /* 🔥 AUTH MODAL PRO DESIGN */
-
 #authModal {
   backdrop-filter: blur(10px);
   animation: fadeIn 0.3s ease;
+  display: none; /* Controlled by JS */
 }
-
 #authModal > div {
   background: rgba(20,20,20,0.9);
   border: 1px solid rgba(255,255,255,0.08);
@@ -27,14 +26,12 @@
   transform: scale(0.95);
   animation: pop 0.25s ease forwards;
 }
-
 /* Title */
 #authTitle {
   font-size: 22px;
   font-weight: 600;
   text-align: center;
 }
-
 /* Inputs */
 #authEmail, #authPassword {
   width: 100%;
@@ -47,13 +44,11 @@
   outline: none;
   transition: 0.2s;
 }
-
 #authEmail:focus, #authPassword:focus {
   border: 1px solid #6366f1;
   background: rgba(99,102,241,0.08);
   box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
 }
-
 /* Button */
 #authSubmit {
   margin-top: 20px;
@@ -64,38 +59,34 @@
   font-weight: 600;
   cursor: pointer;
   transition: 0.2s;
+  width: 100%;
 }
-
 #authSubmit:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 25px rgba(99,102,241,0.4);
 }
-
 /* Cancel */
 #authModal button:last-child {
   background: transparent;
   border: 1px solid rgba(255,255,255,0.1);
   margin-top: 10px;
+  width: 100%;
 }
-
 #authModal button:last-child:hover {
   background: rgba(255,255,255,0.05);
 }
-
 /* Animations */
 @keyframes fadeIn {
   from { opacity: 0 }
   to { opacity: 1 }
 }
-
 @keyframes pop {
   to { transform: scale(1) }
 }
-</style>
+    </style>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-
     <!-- NAVIGATION -->
     <header class="top-nav">
         <div class="nav-left">
@@ -111,7 +102,7 @@
                 </svg>
             </div>
         </div>
-        
+       
         <div class="nav-right">
             <button class="nav-btn">
                 <i data-lucide="sparkles"></i>
@@ -120,36 +111,31 @@
             <button class="nav-btn" id="settingsTrigger">
                 <i data-lucide="settings"></i>
             </button>
-            <button class="btn-signin">Sign in</button>
-            <button class="btn-signup">Sign up</button>
+            <button class="btn-signin" onclick="openAuthModal('login')">Sign in</button>
+            <button class="btn-signup" onclick="openAuthModal('signup')">Sign up</button>
         </div>
     </header>
 
     <main class="container">
+        <!-- 🔥 AUTH FULL PAGE -->
+        <section id="authPage" class="home-view hidden">
+          <div id="particles"></div>
+          <div style="display:flex;justify-content:center;align-items:center;height:80vh;">
+            <div class="auth-card">
+              <h2 id="authPageTitle">Sign in</h2>
+              <input id="authEmailPage" type="email" placeholder="Email">
+              <input id="authPasswordPage" type="password" placeholder="Password">
+              <button id="authPageSubmit">Continue</button>
+              <p id="switchAuth" style="margin-top:15px;cursor:pointer;opacity:0.7;">
+                Don't have an account? Sign up
+              </p>
+            </div>
+          </div>
+        </section>
 
-        <!-- 🔥 AUTH FULL PAGE (ADD ONLY) -->
-<section id="authPage" class="home-view hidden">
-  <div id="particles"></div>
-
-  <div style="display:flex;justify-content:center;align-items:center;height:80vh;">
-    
-    <div class="auth-card">
-      <h2 id="authPageTitle">Sign in</h2>
-
-      <input id="authEmailPage" type="email" placeholder="Email">
-      <input id="authPasswordPage" type="password" placeholder="Password">
-
-      <button id="authPageSubmit">Continue</button>
-
-      <p id="switchAuth" style="margin-top:15px;cursor:pointer;opacity:0.7;">
-        Don't have an account? Sign up
-      </p>
-    </div>
-
-  </div>
-</section>
         <!-- HOME VIEW -->
         <section id="home" class="home-view">
+            <!-- ... your existing home content (kept unchanged) ... -->
             <div class="hero-section">
                 <div class="hero-logo">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -164,7 +150,7 @@
                     <h1>Grok</h1>
                 </div>
             </div>
-            
+           
             <div class="search-container">
                 <div class="search-box">
                     <div class="file-preview-area" id="homeFilePreview"></div>
@@ -198,7 +184,6 @@
         <!-- CHAT VIEW -->
         <section id="chat" class="chat-view hidden">
             <div id="messages" class="messages-list"></div>
-
             <div class="chat-input-container">
                 <div class="search-box">
                     <div class="file-preview-area" id="chatFilePreview"></div>
@@ -226,9 +211,24 @@
         </section>
     </main>
 
+    <!-- AUTH MODAL -->
+    <div id="authModal">
+      <div>
+        <h2 id="authTitle">Login</h2>
+       
+        <input id="authEmail" type="email" placeholder="Email">
+       
+        <input id="authPassword" type="password" placeholder="Password">
+       
+        <button id="authSubmit">Continue</button>
+        <button onclick="closeAuthModal()">Cancel</button>
+      </div>
+    </div>
+
     <script src="ControleAi.js"></script>
     <script src="features.js"></script>
     <script type="module" src="firebase.js"></script>
+
     <script>
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', () => {
@@ -236,11 +236,62 @@
             AI.init("messages", "https://my-webxyu.vercel.app/api/chat");
             setupFileUpload('homeFileInput', 'homeFilePreview');
             setupFileUpload('chatFileInput', 'chatFilePreview');
+
+            // Login button functionality
+            document.getElementById('authSubmit').addEventListener('click', handleLogin);
         });
 
+        // ====================== AUTH MODAL FUNCTIONS ======================
+        function openAuthModal(mode) {
+            const modal = document.getElementById('authModal');
+            const title = document.getElementById('authTitle');
+            
+            if (mode === 'signup') {
+                title.textContent = 'Create Account';
+            } else {
+                title.textContent = 'Login';
+            }
+            
+            modal.style.display = 'flex';
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').style.display = 'none';
+        }
+
+        async function handleLogin() {
+            const email = document.getElementById('authEmail').value.trim();
+            const password = document.getElementById('authPassword').value.trim();
+            
+            if (!email || !password) {
+                alert("Please enter email and password");
+                return;
+            }
+
+            try {
+                // Replace with your actual Firebase auth call from firebase.js
+                // Example:
+                // await firebaseAuth.signInWithEmailAndPassword(email, password);
+                
+                alert("Login successful!"); // Temporary feedback
+                closeAuthModal();
+                // Optionally hide sign in/up buttons and show user info here
+            } catch (error) {
+                console.error(error);
+                alert("Login failed: " + error.message);
+            }
+        }
+
+        // Close modal when clicking outside the content
+        document.getElementById('authModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAuthModal();
+            }
+        });
+
+        // Rest of your existing scripts...
         const homeView = document.getElementById("home");
         const chatView = document.getElementById("chat");
-        const imagineView = document.getElementById("imagine");
 
         function autoResize(textarea) {
             textarea.style.height = 'auto';
@@ -260,7 +311,7 @@
             const input = document.getElementById("homeInput");
             const text = input.value.trim();
             if (!text) return;
-            
+           
             homeView.style.animation = 'slideOut 0.4s ease-out forwards';
             setTimeout(() => {
                 homeView.classList.add("hidden");
@@ -279,13 +330,12 @@
             const input = document.getElementById("chatInput");
             const text = input.value.trim();
             if (!text) return;
-            
-            // Add a subtle feedback animation
+           
             input.style.transform = 'scale(0.98)';
             setTimeout(() => {
                 input.style.transform = 'scale(1)';
             }, 100);
-            
+           
             AI.user(text);
             input.value = "";
             input.style.height = 'auto';
@@ -293,43 +343,22 @@
             document.getElementById("chatFileInput").value = '';
             AI.ask(text);
         }
-        
-        // Add CSS animation for slideOut
+
+        // Slide animation
         const style = document.createElement('style');
         style.textContent = `
             @keyframes slideOut {
                 from { opacity: 1; transform: scale(1); }
                 to { opacity: 0; transform: scale(0.95) translateY(-20px); }
             }
+            @keyframes slideIn {
+                from { opacity: 0; transform: scale(0.95) translateY(20px); }
+                to { opacity: 1; transform: scale(1); }
+            }
         `;
         document.head.appendChild(style);
     </script>
-    <!-- AUTH MODAL (ADD ONLY) -->
-<div id="authModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:9999;">
-  <div style="background:#111;padding:30px;border-radius:16px;width:320px;color:white;">
-    
-    <h2 id="authTitle" style="margin-bottom:20px;">Login</h2>
-    
-    <input id="authEmail" type="email" placeholder="Email"
-      style="width:100%;padding:10px;margin-bottom:10px;border-radius:8px;border:none;background:#222;color:white;">
-    
-    <input id="authPassword" type="password" placeholder="Password"
-      style="width:100%;padding:10px;margin-bottom:20px;border-radius:8px;border:none;background:#222;color:white;">
-    
-    <button id="authSubmit"
-      style="width:100%;padding:10px;background:#4f46e5;border:none;border-radius:8px;color:white;font-weight:bold;">
-      Continue
-    </button>
 
-    <button onclick="closeAuth()"
-      style="margin-top:10px;width:100%;padding:8px;background:#333;border:none;border-radius:8px;color:white;">
-      Cancel
-    </button>
-
-  </div>
-</div>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
-    
 </body>
-    
 </html>
