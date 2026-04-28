@@ -237,59 +237,10 @@
             document.getElementById('authSubmit').addEventListener('click', handleLogin);
         });
 
-
-
-   function startGrokSearching() {
-  const el = document.getElementById("thinkingText");
-
-  if (!el) {
-    console.error("thinkingText not found");
-    return;
-  }
-
-  let i = 1;
-  let running = true;
-  let timeout;
-
-  function loop() {
-    if (!running) return;
-
-    // FADE OUT + motion
-    el.style.opacity = "0.2";
-    el.style.transform = "translateY(2px) scale(0.98)";
-    el.style.filter = "blur(1px)";
-
-    timeout = setTimeout(() => {
-      i++;
-      el.textContent = `🔍 Searching the web ${i}`;
-
-      // FADE IN
-      el.style.opacity = "1";
-      el.style.transform = "translateY(0px) scale(1)";
-      el.style.filter = "blur(0px)";
-    }, 60);
-
-    // smoother timing (avoid stack drift)
-    setTimeout(loop, 170);
-  }
-
-  // initial text
-  el.textContent = "🔍 Searching the web 1";
-  el.style.opacity = "1";
-
-  loop();
-
-  // STOP function (clean fix)
-  return () => {
-    running = false;
-    clearTimeout(timeout);
-    el.textContent = "";
-    el.style.opacity = "1";
-    el.style.transform = "none";
-    el.style.filter = "none";
-  };
-}
-        
+<span id="thinkingText" class="thinking-text"></span>
+    
+ <span id="thinkingText" class="thinking-text"></span>
+         
         // ====================== AUTH FUNCTIONS (Cleaned) ======================
         function openAuthModal(mode) {
             const modal = document.getElementById('authModal');
