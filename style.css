@@ -867,28 +867,7 @@ body {
   0%, 100% { transform: scale(0.8); opacity: 0.3; }
   50% { transform: scale(1.2); opacity: 1; }
 }
-
-.thinking-text {
-  font-size: 13px;
-  color: #ececec;
-  opacity: 0.8;
-}
-/* ✨ text subtle fade */
-.thinking-text span {
-  animation: textFade 1.2s infinite ease-in-out;
-}
-
-@keyframes thinkingPulse {
-  0% { transform: scale(0.8); opacity: 0.3; }
-  50% { transform: scale(1.2); opacity: 1; }
-  100% { transform: scale(0.8); opacity: 0.3; }
-}
-
-@keyframes textFade {
-  0% { opacity: 0.4; }
-  50% { opacity: 1; }
-  100% { opacity: 0.4; }
-}
+ 
 /* ==================== CONTROL BUTTONS ==================== */
 .control-btn {
     background: transparent;
