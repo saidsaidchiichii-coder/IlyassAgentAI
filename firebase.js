@@ -1,42 +1,36 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const signinBtn = document.querySelector(".btn-signin");
-  const signupBtn = document.querySelector(".btn-signup");
+// 🔔 TOAST بدل alert
+function showMsg(text) {
+  const box = document.createElement("div");
+  box.innerText = text;
 
-  if (signupBtn) {
-    signupBtn.addEventListener("click", async () => {
-      const email = prompt("Enter email");
-      const password = prompt("Enter password");
+  box.style.position = "fixed";
+  box.style.bottom = "20px";
+  box.style.right = "20px";
+  box.style.background = "#111";
+  box.style.color = "white";
+  box.style.padding = "12px 16px";
+  box.style.borderRadius = "10px";
+  box.style.boxShadow = "0 10px 30px rgba(0,0,0,0.5)";
+  box.style.zIndex = "9999";
+  box.style.opacity = "0";
+  box.style.transform = "translateY(20px)";
+  box.style.transition = "0.3s";
 
-      if (!email || !password) return;
+  document.body.appendChild(box);
 
-      try {
-        await createUserWithEmailAndPassword(auth, email, password);
-        alert("Account created");
-      } catch (e) {
-        alert(e.message);
-      }
-    });
-  }
+  setTimeout(() => {
+    box.style.opacity = "1";
+    box.style.transform = "translateY(0)";
+  }, 10);
 
-  if (signinBtn) {
-    signinBtn.addEventListener("click", async () => {
-      const email = prompt("Enter email");
-      const password = prompt("Enter password");
+  setTimeout(() => {
+    box.style.opacity = "0";
+    box.style.transform = "translateY(20px)";
+    setTimeout(() => box.remove(), 300);
+  }, 3000);
+}
 
-      if (!email || !password) return;
-
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        alert("Logged in");
-      } catch (e) {
-        alert(e.message);
-      }
-    });
-  }
-});
-
-// ADD ONLY - AUTH UI
-
+// 🔥 AUTH UI
 let authMode = "login";
 
 window.openAuth = (mode) => {
@@ -50,18 +44,21 @@ window.closeAuth = () => {
   document.getElementById("authModal").style.display = "none";
 };
 
+// 🔗 CONNECT BUTTONS + FIREBASE
 document.addEventListener("DOMContentLoaded", () => {
   const signinBtn = document.querySelector(".btn-signin");
   const signupBtn = document.querySelector(".btn-signup");
 
-  signinBtn.onclick = () => openAuth("login");
-  signupBtn.onclick = () => openAuth("signup");
+  // فتح popup
+  if (signinBtn) signinBtn.onclick = () => openAuth("login");
+  if (signupBtn) signupBtn.onclick = () => openAuth("signup");
 
+  // submit
   document.getElementById("authSubmit").onclick = async () => {
     const email = document.getElementById("authEmail").value;
     const password = document.getElementById("authPassword").value;
 
-    if (!email || !password) return alert("Fill all fields");
+    if (!email || !password) return showMsg("Fill all fields");
 
     try {
       const { createUserWithEmailAndPassword, signInWithEmailAndPassword }
@@ -69,15 +66,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (authMode === "signup") {
         await createUserWithEmailAndPassword(auth, email, password);
-        alert("Account created");
+        showMsg("Account created ✅");
       } else {
         await signInWithEmailAndPassword(auth, email, password);
-        alert("Logged in");
+        showMsg("Logged in 🔥");
       }
 
       closeAuth();
     } catch (e) {
-      alert(e.message);
+      showMsg(e.message);
     }
   };
 });
