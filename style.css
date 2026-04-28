@@ -823,6 +823,70 @@ code {
     color: var(--secondary-text);
     white-space: nowrap;
 }
+#authModal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(12px);
+  z-index: 9999;
+}
+
+#authModal .box {
+  width: 360px;
+  padding: 30px;
+  border-radius: 18px;
+  background: #000;
+  border: 1px solid #2f3336;
+  color: #fff;
+  text-align: center;
+}
+
+#authTitle {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #71767b;
+  margin-bottom: 20px;
+}
+
+#authEmail,
+#authPassword {
+  width: 100%;
+  padding: 12px;
+  margin: 6px 0;
+  border-radius: 10px;
+  border: 1px solid #2f3336;
+  background: #16181c;
+  color: white;
+}
+
+#authSubmit {
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  border: none;
+  border-radius: 999px;
+  background: #1d9bf0;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.cancel {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid #2f3336;
+  color: white;
+  cursor: pointer;
+}
+
 
 /* ==================== RESPONSIVE ==================== */
 @media (max-width: 640px) {
