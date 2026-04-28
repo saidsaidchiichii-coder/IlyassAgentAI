@@ -86,7 +86,40 @@
     </style>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+    <script>
+function openLogin() {
+  document.getElementById("authModal").style.display = "flex";
+}
+
+function closeLogin() {
+  document.getElementById("authModal").style.display = "none";
+}
+</script>
+    
 <body>
+    <!-- 🔥 LOGIN BUTTON -->
+<button onclick="openLogin()" style="position:fixed;top:80px;right:20px;z-index:999;">
+  Sign in
+</button>
+
+<!-- 🔥 LOGIN MODAL -->
+<div id="authModal">
+
+  <div class="box">
+
+    <h2 id="authTitle">Login</h2>
+    <p class="subtitle">Welcome back</p>
+
+    <input id="authEmail" type="email" placeholder="Email">
+    <input id="authPassword" type="password" placeholder="Password">
+
+    <button id="authSubmit">Continue</button>
+    <button class="cancel" onclick="closeLogin()">Cancel</button>
+
+  </div>
+
+</div>
+    
     <!-- NAVIGATION -->
     <header class="top-nav">
         <div class="nav-left">
