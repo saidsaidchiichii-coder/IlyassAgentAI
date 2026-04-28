@@ -287,69 +287,143 @@ body::before {
     color: var(--text-color);
 }
 
-/* ==================== LOGIN WRAPPER ==================== */
+
+
+
+
+
+/* ==================== FULL LOGIN PAGE (GROK STYLE) ==================== */
+
 .login-wrapper {
     position: fixed;
     inset: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: black;
-    perspective: 1000px;
+    background: radial-gradient(circle at 20% 20%, #0a0a0a, #000);
+    overflow: hidden;
     z-index: 9999;
 }
 
-.login-card {
-    width: 380px;
-    padding: 44px 40px;
-    border-radius: var(--radius-xl);
-    background: rgba(10,10,12,0.95);
-    border: 1px solid var(--border-color);
-    box-shadow: 0 60px 120px rgba(0,0,0,0.9), 0 0 80px rgba(255,107,53,0.04);
-    text-align: center;
-    transform: rotateX(10deg);
-    animation: pop 0.8s ease;
+/* 🔥 Animated Background Glow */
+.login-wrapper::before {
+    content: "";
+    position: absolute;
+    width: 1200px;
+    height: 1200px;
+    background: radial-gradient(circle, rgba(255,107,53,0.08), transparent 60%);
+    animation: moveGlow 10s linear infinite;
 }
 
+@keyframes moveGlow {
+    0% { transform: translate(-20%, -20%) }
+    50% { transform: translate(20%, 20%) }
+    100% { transform: translate(-20%, -20%) }
+}
+
+/* 🔥 CARD */
+.login-card {
+    width: 420px;
+    padding: 50px 40px;
+    border-radius: 24px;
+    background: rgba(10,10,12,0.85);
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 80px 160px rgba(0,0,0,0.95);
+    text-align: center;
+
+    transform: perspective(1200px) rotateX(12deg) scale(0.95);
+    animation: enter 0.8s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+
+/* 🔥 دخول animation */
+@keyframes enter {
+    from {
+        opacity: 0;
+        transform: perspective(1200px) rotateX(25deg) scale(0.85) translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: perspective(1200px) rotateX(0deg) scale(1) translateY(0);
+    }
+}
+
+/* 🔥 LOGO */
+.login-logo {
+    width: 50px;
+    margin: 0 auto 20px;
+    opacity: 0.9;
+}
+
+/* 🔥 TITLE */
+.login-card h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.login-sub {
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+/* 🔥 INPUT */
 .login-card input {
     width: 100%;
-    padding: 13px 16px;
-    margin: 8px 0;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    background: var(--input-bg);
-    color: var(--text-color);
-    font-family: inherit;
+    padding: 14px 16px;
+    margin: 10px 0;
+    border-radius: 12px;
+    border: 1px solid #2f3336;
+    background: #16181c;
+    color: #fff;
     font-size: 14px;
     outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: 0.2s;
 }
 
 .login-card input:focus {
-    border-color: var(--grok-orange);
-    box-shadow: 0 0 0 3px var(--grok-orange-dim);
+    border-color: #ff6b35;
+    box-shadow: 0 0 0 3px rgba(255,107,53,0.2);
 }
 
+/* 🔥 BUTTON */
 .login-card button {
     width: 100%;
-    padding: 13px;
-    border-radius: var(--radius-full);
-    background: var(--grok-orange);
+    padding: 14px;
+    margin-top: 16px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ff6b35, #ff8c42);
     color: white;
     font-weight: 700;
-    font-size: 15px;
     border: none;
-    margin-top: 12px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: 0.25s;
 }
 
 .login-card button:hover {
-    background: var(--accent-2);
-    box-shadow: 0 6px 24px rgba(255,107,53,0.4);
-    transform: translateY(-1px);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(255,107,53,0.4);
 }
 
+/* 🔥 GOOGLE BUTTON */
+.google-btn {
+    margin-top: 12px;
+    background: transparent;
+    border: 1px solid #2f3336;
+}
+
+.google-btn:hover {
+    background: #111;
+}
+
+/* 🔥 FOOTER */
+.login-footer {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #888;
+    cursor: pointer;
+}
 /* ==================== SCENE / HERO CARD ==================== */
 body {
     background: radial-gradient(circle at top, #0a0a0a, #000);
