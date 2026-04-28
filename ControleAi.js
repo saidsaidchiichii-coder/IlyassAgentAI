@@ -1,7 +1,7 @@
 const AI = {
   messagesBox: null,
   API_URL: null,
-  currentMode: 'auto', // 'auto', 'fast', 'thinking'
+  currentMode: 'fast', // 'auto', 'fast', 'thinking'
 
   /* =========================
      🎨 SYNTAX HIGHLIGHT
