@@ -783,6 +783,17 @@ body {
     height: 16px;
 }
 
+.thinking-text {
+  color: #ff6b35;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: Inter, sans-serif;
+  letter-spacing: 0.3px;
+  text-shadow: 0 0 12px rgba(255, 107, 53, 0.25);
+  display: inline-block;
+
+  transition: opacity 0.08s ease, transform 0.08s ease, filter 0.08s ease;
+}
 /* ==================== MODE MENU ==================== */
 .mode-menu {
     position: fixed;
