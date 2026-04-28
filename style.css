@@ -974,42 +974,45 @@ body {
     padding-left: 22px;
 }
 
-/* ==================== THINKING ==================== */
-.thinking-container {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    background: var(--grok-orange-dim);
-    border-radius: var(--radius-md);
-    width: fit-content;
-    border: 1px solid var(--grok-orange-border);
-    box-shadow: 0 0 20px rgba(255, 107, 53, 0.1);
-    animation: thinkingPulse 2s infinite, slideIn 0.3s ease-out;
+const steps = [
+  "Connecting to search...",
+  "Scanning web sources...",
+  "Reading documents (1/8)",
+  "Reading documents (4/8)",
+  "Extracting key data...",
+  "Cross-checking information...",
+  "Filtering noise...",
+  "Structuring response...",
+  "Finalizing answer..."
+];
+
+let i = 0;
+
+function startFakeLiveSearch() {
+  const el = document.getElementById("thinkingText");
+
+  function nextStep() {
+    if (i >= steps.length) return;
+
+    el.style.opacity = 0;
+    el.style.transform = "translateY(5px)";
+
+    setTimeout(() => {
+      el.innerText = steps[i];
+      el.style.opacity = 1;
+      el.style.transform = "translateY(0)";
+      i++;
+
+      // random delay (important for realism)
+      setTimeout(nextStep, 600 + Math.random() * 900);
+
+    }, 180);
+  }
+
+  nextStep();
 }
 
-.loader-dots {
-    display: flex;
-    gap: 4px;
-}
-
-.loader-dots span {
-    width: 6px;
-    height: 6px;
-    background: var(--grok-orange);
-    border-radius: 50%;
-    animation: pulse 1.4s infinite;
-}
-
-.loader-dots span:nth-child(1) { animation-delay: 0s; }
-.loader-dots span:nth-child(2) { animation-delay: 0.2s; }
-.loader-dots span:nth-child(3) { animation-delay: 0.4s; }
-
-.thinking-text {
-    font-size: 14px;
-    color: var(--secondary-text);
-}
-
+startFakeLiveSearch();
 /* ==================== CODE BLOCKS ==================== */
 .code-box {
     background: var(--input-bg);
