@@ -105,8 +105,26 @@ function showLogin() {
   document.getElementById("loginPage").classList.remove("hidden");
 }
 </script>
-    
+    <script>
+function goAuth() {
+  window.location.href = "auth.html";
+}
+</script>
 <body>
+    <!-- 3D LANDING WRAPPER -->
+<div class="scene">
+
+  <div class="hero-card">
+
+    <h1>Next Gen Platform</h1>
+    <p>Secure AI Login System</p>
+
+    <button onclick="goAuth()">Login</button>
+
+  </div>
+
+</div>
+    
     <!-- 🔥 LOGIN PAGE -->
 <div id="loginPage" class="login-wrapper hidden">
 
