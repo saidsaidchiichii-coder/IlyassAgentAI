@@ -1,94 +1,146 @@
-/* ================= LOGIN DESIGN FILE ================= */
-/* safe: no JS, no HTML, فقط design */
+/* ================= LOGIN DESIGN FILE - GROK STYLE ================= */
 
-#authModal{
-  position:fixed;
-  inset:0;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  background:rgba(0,0,0,0.7);
-  backdrop-filter:blur(12px);
-  z-index:9999;
+#authModal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(16px);
+  z-index: 9999;
 }
 
-/* login box */
-#authModal .box{
-  width:340px;
-  padding:28px;
-  border-radius:18px;
-  background:rgba(18,18,18,0.95);
-  border:1px solid rgba(255,255,255,0.08);
-  box-shadow:0 25px 70px rgba(0,0,0,0.6);
-  animation:pop .25s ease;
-  color:white;
+/* Login Box - Grok Style */
+#authModal .box {
+  width: 380px;
+  padding: 40px 32px;
+  border-radius: 20px;
+  background: #000000;
+  border: 1px solid #2f3336;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.85);
+  animation: pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  color: #e7e9ea;
+  position: relative;
 }
 
-/* title */
-#authTitle{
-  font-size:22px;
-  font-weight:600;
-  text-align:center;
-  margin-bottom:10px;
+/* Title */
+#authTitle {
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
 }
 
-/* inputs */
+#authModal .subtitle {
+  text-align: center;
+  color: #71767b;
+  font-size: 15px;
+  margin-bottom: 32px;
+}
+
+/* Inputs */
 #authEmail,
-#authPassword{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.08);
-  background:rgba(255,255,255,0.03);
-  color:white;
-  outline:none;
-  transition:.2s;
+#authPassword {
+  width: 100%;
+  padding: 14px 16px;
+  margin-top: 8px;
+  border-radius: 10px;
+  border: 1px solid #2f3336;
+  background: #16181c;
+  color: #e7e9ea;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.2s ease;
 }
 
 #authEmail:focus,
-#authPassword:focus{
-  border-color:#6366f1;
-  box-shadow:0 0 0 3px rgba(99,102,241,0.2);
+#authPassword:focus {
+  border-color: #1d9bf0;
+  box-shadow: 0 0 0 3px rgba(29, 155, 240, 0.15);
+  background: #1d1f23;
 }
 
-/* button */
-#authSubmit{
-  width:100%;
-  margin-top:18px;
-  padding:12px;
-  border:none;
-  border-radius:10px;
-  background:linear-gradient(135deg,#6366f1,#4f46e5);
-  color:white;
-  font-weight:600;
-  cursor:pointer;
-  transition:.2s;
+/* Main Button (Continue) */
+#authSubmit {
+  width: 100%;
+  margin-top: 24px;
+  padding: 14px;
+  border: none;
+  border-radius: 9999px;
+  background: #1d9bf0;
+  color: #000;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-#authSubmit:hover{
-  transform:translateY(-2px);
-  box-shadow:0 12px 30px rgba(99,102,241,0.35);
+#authSubmit:hover {
+  background: #1a8cd8;
+  transform: translateY(-1px);
 }
 
-/* cancel button */
-#authModal .cancel{
-  width:100%;
-  margin-top:10px;
-  padding:10px;
-  border-radius:10px;
-  background:transparent;
-  border:1px solid rgba(255,255,255,0.1);
-  color:white;
-  cursor:pointer;
+/* Cancel Button */
+#authModal .cancel {
+  width: 100%;
+  margin-top: 12px;
+  padding: 13px;
+  border-radius: 9999px;
+  background: transparent;
+  border: 1px solid #2f3336;
+  color: #e7e9ea;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-#authModal .cancel:hover{
-  background:rgba(255,255,255,0.05);
+#authModal .cancel:hover {
+  background: #1d1f23;
+  border-color: #71767b;
 }
 
-/* animation */
-@keyframes pop{
-  from{transform:scale(0.9);opacity:0}
-  to{transform:scale(1);opacity:1}
+/* Animation */
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Optional: Divider for "or" */
+.divider {
+  margin: 28px 0;
+  position: relative;
+  text-align: center;
+  color: #71767b;
+  font-size: 13px;
+}
+
+.divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #2f3336;
+}
+
+.divider span {
+  background: #000;
+  padding: 0 16px;
+}
+
+/* Extra touch - X logo style (optional) */
+.grok-x-logo {
+  width: 32px;
+  height: 32px;
+  margin: 0 auto 20px;
+  display: block;
 }
