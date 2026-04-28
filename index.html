@@ -95,8 +95,35 @@ function closeLogin() {
   document.getElementById("authModal").style.display = "none";
 }
 </script>
+
+    <script>
+function login() {
+  alert("Login clicked!");
+}
+
+function showLogin() {
+  document.getElementById("loginPage").classList.remove("hidden");
+}
+</script>
     
 <body>
+    <!-- 🔥 LOGIN PAGE -->
+<div id="loginPage" class="login-wrapper hidden">
+
+  <div class="login-card">
+
+    <h1>Welcome Back</h1>
+    <p>Login to continue</p>
+
+    <input type="email" placeholder="Email">
+    <input type="password" placeholder="Password">
+
+    <button onclick="login()">Login</button>
+
+  </div>
+
+</div>
+    
     <!-- 🔥 LOGIN BUTTON -->
 <button onclick="openLogin()" style="position:fixed;top:80px;right:20px;z-index:999;">
   Sign in
