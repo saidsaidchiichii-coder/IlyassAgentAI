@@ -6,24 +6,22 @@ const AI = {
   /* =========================
      🎨 SYNTAX HIGHLIGHT
   ========================= */
-  ========================= */
-  thinking() {
-    const wrapper = document.createElement("div");
-    wrapper.className = "msg-wrapper ai";
-    
-    const thinkingDiv = document.createElement("div");
-    thinkingDiv.className = "thinking-container";
-    thinkingDiv.innerHTML = `
-        <div class="loader-dots">
-            <span></span><span></span><span></span>
-        </div>
-    <span id="thinkingText" class="thinking-text">🔍 Searching the web 1</span>
-    `;
-    
-    wrapper.appendChild(thinkingDiv);
-    this.messagesBox.appendChild(wrapper);
-    this.scroll();
-    return wrapper;
+  highlight(code) {
+    return code
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/(\/\/.*)/g, '<span class="cmt">$1</span>')
+      .replace(/(["\'`].*?["\'`])/g, '<span class="str">$1</span>')
+      .replace(/\b(\d+)\b/g, '<span class="num">$1</span>')
+      .replace(/\b(int|bool|return|if|else|for|while|function|const|let|var|class|new|async|await|try|catch|fetch|throw)\b/g, '<span class="kw">$1</span>')
+      .replace(/\b([a-zA-Z_][a-zA-Z0-9_]*)\(/g, '<span class="fn">$1</span>(');
+  },
+
+  init(box, api) {
+    this.messagesBox = document.getElementById(box);
+    this.API_URL = api;
+    this.setupModeSelector();
   },
 
   /* =========================
@@ -96,23 +94,21 @@ const AI = {
   thinking() {
     const wrapper = document.createElement("div");
     wrapper.className = "msg-wrapper ai";
-
+    
     const thinkingDiv = document.createElement("div");
     thinkingDiv.className = "thinking-container";
-
     thinkingDiv.innerHTML = `
-        <div class="thinking-row">
-            <div class="thinking-dot"></div>
-            <span class="thinking-text">Thinking...</span>
+        <div class="loader-dots">
+            <span></span><span></span><span></span>
         </div>
+        <span class="thinking-text">Thinking...</span>
     `;
-
+    
     wrapper.appendChild(thinkingDiv);
     this.messagesBox.appendChild(wrapper);
     this.scroll();
-
     return wrapper;
-}
+  },
 
   /* =========================
      📸 IMAGE ANALYSIS HELPER
