@@ -49,11 +49,12 @@ setupModeSelector() {
 /* =========================
    📌 MODE MENU UI
 ========================= */
-showModeMenu(selector) {
+
+
+  showModeMenu(selector) {
 
   // remove old menu
-  const existingMenu = document.querySelector('.mode-menu');
-  if (existingMenu) existingMenu.remove();
+  document.querySelectorAll('.mode-menu').forEach(m => m.remove());
 
   const menu = document.createElement('div');
   menu.className = 'mode-menu';
@@ -75,34 +76,47 @@ showModeMenu(selector) {
     </div>
   `;
 
-  // handle click
-  menu.querySelectorAll('.mode-option').forEach(option => {
-    option.addEventListener('click', () => {
+  document.body.appendChild(menu);
 
-      // set mode
+  const rect = selector.getBoundingClientRect();
+
+  // FIX: prevent menu going off screen
+  const top = rect.bottom + 10;
+  let left = rect.left;
+
+  if (left + 220 > window.innerWidth) {
+    left = window.innerWidth - 240;
+  }
+
+  menu.style.position = "fixed";
+  menu.style.top = `${top}px`;
+  menu.style.left = `${left}px`;
+  menu.style.zIndex = "999999";
+
+  // FIX: click outside closes
+  const close = (e) => {
+    if (!menu.contains(e.target) && !selector.contains(e.target)) {
+      menu.remove();
+      document.removeEventListener("click", close);
+    }
+  };
+
+  setTimeout(() => document.addEventListener("click", close), 0);
+
+  // handle options
+  menu.querySelectorAll(".mode-option").forEach(option => {
+    option.addEventListener("click", () => {
       this.currentMode = option.dataset.mode;
 
-      // update UI text
-      const label = selector.querySelector('span');
+      const label = selector.querySelector("span");
       if (label) {
-        label.textContent = option.querySelector('.mode-name').textContent;
+        label.textContent = option.querySelector(".mode-name").textContent;
       }
 
-      // remove menu
       menu.remove();
     });
   });
-
-  document.body.appendChild(menu);
-
-  // position menu
-  const rect = selector.getBoundingClientRect();
-
-  menu.style.position = "fixed";
-  menu.style.top = `${rect.bottom + 8}px`;
-  menu.style.left = `${rect.left}px`;
-  menu.style.zIndex = "99999";
-},
+}
 
 /* =========================
    👤 USER MESSAGE
