@@ -47,17 +47,8 @@
             fill: #1d9bf0;
         }
 
-        h1 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .subtitle {
-            color: #71767b;
-            margin-bottom: 30px;
-            font-size: 15px;
-        }
+        h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+        .subtitle { color: #71767b; margin-bottom: 30px; font-size: 15px; }
 
         .input-field {
             width: 100%;
@@ -88,17 +79,6 @@
             font-weight: 700;
             cursor: pointer;
         }
-
-        .signup-btn:hover {
-            background: #1a8cd8;
-        }
-
-        .switch-text {
-            margin-top: 25px;
-            color: #1d9bf0;
-            cursor: pointer;
-            font-size: 14.5px;
-        }
     </style>
 </head>
 <body>
@@ -128,14 +108,15 @@
         </p>
     </div>
 
+    <!-- Load firebase.js FIRST -->
     <script type="module" src="firebase.js"></script>
 
     <script>
-        // تعيين وضع التسجيل
-        window.authMode = "signup";
-        
-        // فتح المودال تلقائياً (اختياري)
-        // window.openAuth("signup");
+        // انتظر حتى يتحمل firebase.js ثم نحدد الوضع
+        window.addEventListener('load', () => {
+            window.authMode = "signup";
+            console.log("✅ Signup mode activated");
+        });
     </script>
 
 </body>
