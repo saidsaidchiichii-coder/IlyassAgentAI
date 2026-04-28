@@ -6,25 +6,51 @@ const AI = {
   /* =========================
      🎨 SYNTAX HIGHLIGHT
   ========================= */
-  ========================= 
-  thinking() {
+thinking() {
     const wrapper = document.createElement("div");
     wrapper.className = "msg-wrapper ai";
     
     const thinkingDiv = document.createElement("div");
     thinkingDiv.className = "thinking-container";
+
+    const uniqueId = "thinkingText_" + Date.now();
+
     thinkingDiv.innerHTML = `
         <div class="loader-dots">
             <span></span><span></span><span></span>
         </div>
-    <span id="thinkingText" class="thinking-text">🔍 Searching the web 1</span>
+
+        <span class="thinking-text" data-id="${uniqueId}">
+            Thinking...
+        </span>
     `;
     
     wrapper.appendChild(thinkingDiv);
     this.messagesBox.appendChild(wrapper);
     this.scroll();
+
+    // 🔥 ChatGPT-style subtle animation text
+    const el = thinkingDiv.querySelector(`[data-id="${uniqueId}"]`);
+
+    let dots = 0;
+    const messages = [
+        "Thinking",
+        "Thinking.",
+        "Thinking..",
+        "Thinking..."
+    ];
+
+    const interval = setInterval(() => {
+        if (!el) return clearInterval(interval);
+        el.textContent = messages[dots % messages.length];
+        dots++;
+    }, 400);
+
+    // stop function (important for AI response replace)
+    wrapper.stopThinking = () => clearInterval(interval);
+
     return wrapper;
-  },
+}
 
   /* =========================
      🔄 MODE SELECTOR SETUP
