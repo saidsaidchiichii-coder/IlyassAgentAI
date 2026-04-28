@@ -237,6 +237,48 @@
             document.getElementById('authSubmit').addEventListener('click', handleLogin);
         });
 
+
+
+        function startGrokSearching() {
+  const el = document.getElementById("thinkingText");
+
+  if (!el) {
+    console.error("thinkingText not found");
+    return;
+  }
+
+  let i = 1;
+  let running = true;
+
+  function loop() {
+    if (!running) return;
+
+    el.style.opacity = "0.2";
+    el.style.transform = "translateY(2px) scale(0.98)";
+    el.style.filter = "blur(1px)";
+
+    setTimeout(() => {
+      el.textContent = `🔍 Searching the web ${i++}`;
+
+      el.style.opacity = "1";
+      el.style.transform = "translateY(0px) scale(1)";
+      el.style.filter = "blur(0px)";
+    }, 60);
+
+    setTimeout(loop, 150);
+  }
+
+  // مهم: نبدأ النص مباشرة
+  el.textContent = "🔍 Searching the web 1";
+
+  loop();
+
+  return () => {
+    running = false;
+    el.textContent = "";
+  };
+}
+        
         // ====================== AUTH FUNCTIONS (Cleaned) ======================
         function openAuthModal(mode) {
             const modal = document.getElementById('authModal');
