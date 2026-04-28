@@ -310,39 +310,10 @@
                 else send();
             }
         }
-
-        function copyText() {
-    const text = document.getElementById("aiText").innerText;
-    navigator.clipboard.writeText(text);
+ 
 }
 
-function regenerate() {
-    const responses = [
-        "إجابة جديدة...",
-        "تحسين الإجابة...",
-        "إعادة صياغة احترافية..."
-    ];
-
-    document.getElementById("aiText").innerText =
-        responses[Math.floor(Math.random() * responses.length)];
-}
-
-function like() {
-    console.log("like");
-}
-
-function dislike() {
-    console.log("dislike");
-}
-
-function shareText() {
-    const text = document.getElementById("aiText").innerText;
-    if (navigator.share) {
-        navigator.share({ text });
-    } else {
-        navigator.clipboard.writeText(text);
-    }
-}
+ 
         
         function startChat() {
             const input = document.getElementById("homeInput");
