@@ -102,27 +102,7 @@
     50% { box-shadow: 0 0 0 7px rgba(255, 107, 53, 0.08); }
 }
 
-function thinkingPulse(element) {
-    let active = true;
-
-    const interval = setInterval(() => {
-        if (!active) return;
-
-        element.style.boxShadow = "0 0 20px 4px rgba(255, 107, 53, 0.12)";
-
-        setTimeout(() => {
-            element.style.boxShadow = "0 0 0 0 rgba(255, 107, 53, 0.12)";
-        }, 250);
-
-    }, 600);
-
-    return () => {
-        active = false;
-        clearInterval(interval);
-        element.style.boxShadow = "none";
-    };
-}
-
+ 
 /* ==================== RESET ==================== */
 * {
     margin: 0;
