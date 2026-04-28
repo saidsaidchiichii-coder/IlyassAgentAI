@@ -1,11 +1,16 @@
+// ================= FIREBASE IMPORTS =================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
 import {
   getAuth,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+
+// ================= FIREBASE CONFIG =================
 const firebaseConfig = {
   apiKey: "AIzaSyDWch9gK12sGD7awxmRibU6jBspd-tjr6E",
   authDomain: "my-website-17f99.firebaseapp.com",
@@ -16,19 +21,18 @@ const firebaseConfig = {
   measurementId: "G-H1SLRSEBTF"
 };
 
-// init firebase
+
+// ================= INIT FIREBASE =================
 const app = initializeApp(firebaseConfig);
 getAnalytics(app);
-
-// 🔥 IMPORTANT: auth missing before
 const auth = getAuth(app);
 
 
-// ================= TOAST =================
+// ================= TOAST NOTIFICATION =================
 function showMsg(text) {
   const box = document.createElement("div");
-  box.innerText = text;
 
+  box.innerText = text;
   box.style.position = "fixed";
   box.style.bottom = "20px";
   box.style.right = "20px";
@@ -36,20 +40,28 @@ function showMsg(text) {
   box.style.color = "white";
   box.style.padding = "12px 16px";
   box.style.borderRadius = "10px";
+  box.style.boxShadow = "0 10px 30px rgba(0,0,0,0.5)";
   box.style.zIndex = "9999";
+  box.style.opacity = "0";
+  box.style.transform = "translateY(20px)";
   box.style.transition = "0.3s";
 
   document.body.appendChild(box);
 
-  setTimeout(() => box.style.opacity = "1", 10);
+  setTimeout(() => {
+    box.style.opacity = "1";
+    box.style.transform = "translateY(0)";
+  }, 10);
 
   setTimeout(() => {
-    box.remove();
+    box.style.opacity = "0";
+    box.style.transform = "translateY(20px)";
+    setTimeout(() => box.remove(), 300);
   }, 3000);
 }
 
 
-// ================= AUTH =================
+// ================= AUTH MODE =================
 let authMode = "login";
 
 window.openAuth = (mode) => {
@@ -66,27 +78,48 @@ window.closeAuth = () => {
 
 // ================= LOGIN / SIGNUP =================
 document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("authSubmit").onclick = async () => {
-    const email = document.getElementById("authEmail").value.trim();
-    const password = document.getElementById("authPassword").value.trim();
+  const btn = document.getElementById("authSubmit");
 
-    if (!email || !password) {
-      showMsg("Fill all fields ❌");
-      return;
-    }
+  if (btn) {
+    btn.onclick = async () => {
+      const email = document.getElementById("authEmail").value.trim();
+      const password = document.getElementById("authPassword").value.trim();
 
-    try {
-      if (authMode === "signup") {
-        await createUserWithEmailAndPassword(auth, email, password);
-        showMsg("Account created ✅");
-      } else {
-        await signInWithEmailAndPassword(auth, email, password);
-        showMsg("Logged in 🔥");
+      if (!email || !password) {
+        showMsg("❌ Fill all fields");
+        return;
       }
 
-      closeAuth();
-    } catch (e) {
-      showMsg(e.message);
-    }
-  };
+      try {
+        if (authMode === "signup") {
+          await createUserWithEmailAndPassword(auth, email, password);
+          showMsg("✅ Account created");
+        } else {
+          await signInWithEmailAndPassword(auth, email, password);
+          showMsg("🔥 Logged in");
+        }
+
+        closeAuth();
+      } catch (e) {
+        showMsg(e.message);
+      }
+    };
+  }
 });
+
+
+// ================= AUTO LOGIN CHECK =================
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("User logged in:", user.email);
+  } else {
+    console.log("No user");
+  }
+});
+
+
+// ================= LOGOUT (optional) =================
+window.logout = async () => {
+  await signOut(auth);
+  showMsg("👋 Logged out");
+};
