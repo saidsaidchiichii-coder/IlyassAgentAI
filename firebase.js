@@ -108,14 +108,14 @@
         </p>
     </div>
 
-    <!-- Load firebase.js FIRST -->
+    <!-- Firebase Script -->
     <script type="module" src="firebase.js"></script>
 
     <script>
-        // انتظر حتى يتحمل firebase.js ثم نحدد الوضع
-        window.addEventListener('load', () => {
+        // ننتظر تحميل الصفحة كاملة ثم نحدد وضع التسجيل
+        document.addEventListener("DOMContentLoaded", () => {
             window.authMode = "signup";
-            console.log("✅ Signup mode activated");
+            console.log("✅ Signup mode activated successfully");
         });
     </script>
 
