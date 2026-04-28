@@ -91,6 +91,41 @@ const AI = {
   /* =========================
  
 
+
+function startSearchingAnimation() {
+  const el = document.getElementById("thinkingText");
+
+  if (!el) return;
+
+  let i = 1;
+  let running = true;
+
+  function update() {
+    if (!running) return;
+
+    // fade out
+    el.style.opacity = "0.3";
+
+    setTimeout(() => {
+      el.textContent = `🔍 Searching the web${i++}`;
+
+      // fade in
+      el.style.opacity = "1";
+    }, 80);
+
+    // speed (fast updates ~1s total cycle)
+    setTimeout(update, 180);
+  }
+
+  update();
+
+  // return stop function
+  return () => {
+    running = false;
+    el.textContent = "🔍 Searching the web";
+    el.style.opacity = "1";
+  };
+}
   /* =========================
      📸 IMAGE ANALYSIS HELPER
   ========================= */
