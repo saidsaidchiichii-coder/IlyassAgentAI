@@ -94,21 +94,23 @@ const AI = {
   thinking() {
     const wrapper = document.createElement("div");
     wrapper.className = "msg-wrapper ai";
-    
+
     const thinkingDiv = document.createElement("div");
     thinkingDiv.className = "thinking-container";
+
     thinkingDiv.innerHTML = `
-        <div class="loader-dots">
-            <span></span><span></span><span></span>
+        <div class="thinking-row">
+            <div class="thinking-dot"></div>
+            <span class="thinking-text">Thinking...</span>
         </div>
-    <span id="thinkingText" class="thinking-text">🔍 Searching the web 1</span>
     `;
-    
+
     wrapper.appendChild(thinkingDiv);
     this.messagesBox.appendChild(wrapper);
     this.scroll();
+
     return wrapper;
-  },
+}
 
   /* =========================
      📸 IMAGE ANALYSIS HELPER
