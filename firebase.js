@@ -1,4 +1,27 @@
-// 🔔 TOAST بدل alert
+// ================= FIREBASE INIT =================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+// 🔥 حط config ديالك هنا
+const firebaseConfig = {
+  apiKey: "XXXX",
+  authDomain: "XXXX",
+  projectId: "XXXX",
+  appId: "XXXX"
+};
+
+// init app
+const app = initializeApp(firebaseConfig);
+
+// ✅ THIS IS THE FIX (auth was missing)
+const auth = getAuth(app);
+
+
+// ================= TOAST MESSAGE =================
 function showMsg(text) {
   const box = document.createElement("div");
   box.innerText = text;
@@ -30,7 +53,8 @@ function showMsg(text) {
   }, 3000);
 }
 
-// 🔥 AUTH UI
+
+// ================= AUTH SYSTEM =================
 let authMode = "login";
 
 window.openAuth = (mode) => {
@@ -44,26 +68,27 @@ window.closeAuth = () => {
   document.getElementById("authModal").style.display = "none";
 };
 
-// 🔗 CONNECT BUTTONS + FIREBASE
+
+// ================= LOGIN / SIGNUP =================
 document.addEventListener("DOMContentLoaded", () => {
   const signinBtn = document.querySelector(".btn-signin");
   const signupBtn = document.querySelector(".btn-signup");
 
-  // فتح popup
   if (signinBtn) signinBtn.onclick = () => openAuth("login");
   if (signupBtn) signupBtn.onclick = () => openAuth("signup");
 
-  // submit
-  document.getElementById("authSubmit").onclick = async () => {
-    const email = document.getElementById("authEmail").value;
-    const password = document.getElementById("authPassword").value;
+  const submitBtn = document.getElementById("authSubmit");
 
-    if (!email || !password) return showMsg("Fill all fields");
+  submitBtn.onclick = async () => {
+    const email = document.getElementById("authEmail").value.trim();
+    const password = document.getElementById("authPassword").value.trim();
+
+    if (!email || !password) {
+      showMsg("Fill all fields ❌");
+      return;
+    }
 
     try {
-      const { createUserWithEmailAndPassword, signInWithEmailAndPassword }
-        = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
-
       if (authMode === "signup") {
         await createUserWithEmailAndPassword(auth, email, password);
         showMsg("Account created ✅");
