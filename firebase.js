@@ -32,11 +32,11 @@ function showMsg(text, isError = false) {
   box.style.position = "fixed";
   box.style.bottom = "20px";
   box.style.right = "20px";
-  box.style.background = isError ? "#c42b1c" : "#111";
+  box.style.background = isError ? "#c42b1c" : "#1f1f1f";
   box.style.color = "white";
   box.style.padding = "14px 18px";
-  box.style.borderRadius = "10px";
-  box.style.boxShadow = "0 10px 30px rgba(0,0,0,0.6)";
+  box.style.borderRadius = "12px";
+  box.style.boxShadow = "0 10px 35px rgba(0,0,0,0.7)";
   box.style.zIndex = "99999";
   box.style.opacity = "0";
   box.style.transform = "translateY(20px)";
@@ -62,7 +62,7 @@ window.openAuth = (mode) => {
 
   if (!modal || !title) return;
 
-  window.authMode = mode; // حفظ الوضع (login أو signup)
+  window.authMode = mode;
   title.textContent = mode === "signup" ? "Create Account" : "Sign in";
   modal.style.display = "flex";
 };
@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       submitBtn.disabled = true;
-      submitBtn.textContent = window.authMode === "signup" ? "Creating..." : "Signing in...";
+      submitBtn.textContent = window.authMode === "signup" ? "Creating Account..." : "Signing in...";
 
       try {
         if (window.authMode === "signup") {
@@ -95,17 +95,40 @@ document.addEventListener("DOMContentLoaded", () => {
           showMsg("✅ Account created successfully!");
           setTimeout(() => {
             closeAuth();
-            window.location.href = "login.html"; // أو index.html
-          }, 1500);
+            window.location.href = "login.html";
+          }, 1400);
         } else {
           await signInWithEmailAndPassword(auth, email, password);
           showMsg("🔥 Login successful!");
           closeAuth();
-          window.location.href = "index.html"; // غيرها لاسم صفحتك الرئيسية
+          // Redirect to your main page
+          window.location.href = "index.html"; 
         }
       } catch (error) {
-        console.error(error);
-        showMsg("❌ " + error.message, true);
+        console.error("Firebase Auth Error:", error.code, error.message);
+
+        switch (error.code) {
+          case "auth/user-not-found":
+            showMsg("❌ This email is not registered. Please sign up first.", true);
+            break;
+          case "auth/wrong-password":
+            showMsg("❌ Incorrect password.", true);
+            break;
+          case "auth/invalid-credential":
+            showMsg("❌ Invalid email or password.", true);
+            break;
+          case "auth/email-already-in-use":
+            showMsg("❌ This email is already registered. Please sign in.", true);
+            break;
+          case "auth/weak-password":
+            showMsg("❌ Password should be at least 6 characters.", true);
+            break;
+          case "auth/invalid-email":
+            showMsg("❌ Invalid email format.", true);
+            break;
+          default:
+            showMsg("❌ " + error.message, true);
+        }
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = "Continue";
@@ -117,10 +140,10 @@ document.addEventListener("DOMContentLoaded", () => {
 // ================= AUTH STATE LISTENER =================
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    console.log("✅ User is logged in:", user.email);
-    // يمكنك هنا إخفاء أزرار Sign in / Sign up وإظهار معلومات المستخدم
+    console.log("✅ User logged in:", user.email);
+    // يمكنك هنا إخفاء أزرار التسجيل وإظهار اسم المستخدم
   } else {
-    console.log("No user logged in");
+    console.log("No user is signed in");
   }
 });
 
@@ -128,11 +151,9 @@ onAuthStateChanged(auth, (user) => {
 window.logout = async () => {
   try {
     await signOut(auth);
-    showMsg("👋 You have been logged out");
-    setTimeout(() => {
-      window.location.reload();
-    }, 800);
+    showMsg("👋 You have been logged out successfully");
+    setTimeout(() => window.location.reload(), 800);
   } catch (e) {
-    showMsg("Error logging out", true);
+    showMsg("Error during logout", true);
   }
 };
