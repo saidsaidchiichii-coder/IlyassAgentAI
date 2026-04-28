@@ -9,7 +9,6 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-
 // ================= FIREBASE CONFIG =================
 const firebaseConfig = {
   apiKey: "AIzaSyDWch9gK12sGD7awxmRibU6jBspd-tjr6E",
@@ -21,31 +20,27 @@ const firebaseConfig = {
   measurementId: "G-H1SLRSEBTF"
 };
 
-
-// ================= INIT FIREBASE =================
+// ================= INITIALIZE FIREBASE =================
 const app = initializeApp(firebaseConfig);
 getAnalytics(app);
 const auth = getAuth(app);
 
-
 // ================= TOAST NOTIFICATION =================
-function showMsg(text) {
+function showMsg(text, isError = false) {
   const box = document.createElement("div");
-
   box.innerText = text;
   box.style.position = "fixed";
   box.style.bottom = "20px";
   box.style.right = "20px";
-  box.style.background = "#111";
+  box.style.background = isError ? "#c42b1c" : "#111";
   box.style.color = "white";
-  box.style.padding = "12px 16px";
+  box.style.padding = "14px 18px";
   box.style.borderRadius = "10px";
-  box.style.boxShadow = "0 10px 30px rgba(0,0,0,0.5)";
-  box.style.zIndex = "9999";
+  box.style.boxShadow = "0 10px 30px rgba(0,0,0,0.6)";
+  box.style.zIndex = "99999";
   box.style.opacity = "0";
   box.style.transform = "translateY(20px)";
-  box.style.transition = "0.3s";
-
+  box.style.transition = "all 0.3s ease";
   document.body.appendChild(box);
 
   setTimeout(() => {
@@ -56,70 +51,88 @@ function showMsg(text) {
   setTimeout(() => {
     box.style.opacity = "0";
     box.style.transform = "translateY(20px)";
-    setTimeout(() => box.remove(), 300);
-  }, 3000);
+    setTimeout(() => box.remove(), 400);
+  }, 3200);
 }
 
-
-// ================= AUTH MODE =================
-let authMode = "login";
-
+// ================= OPEN & CLOSE AUTH MODAL =================
 window.openAuth = (mode) => {
-  authMode = mode;
-  document.getElementById("authModal").style.display = "flex";
-  document.getElementById("authTitle").innerText =
-    mode === "login" ? "Sign in" : "Sign up";
+  const modal = document.getElementById("authModal");
+  const title = document.getElementById("authTitle");
+
+  if (!modal || !title) return;
+
+  window.authMode = mode; // حفظ الوضع (login أو signup)
+  title.textContent = mode === "signup" ? "Create Account" : "Sign in";
+  modal.style.display = "flex";
 };
 
 window.closeAuth = () => {
-  document.getElementById("authModal").style.display = "none";
+  const modal = document.getElementById("authModal");
+  if (modal) modal.style.display = "none";
 };
 
-
-// ================= LOGIN / SIGNUP =================
+// ================= HANDLE LOGIN / SIGNUP =================
 document.addEventListener("DOMContentLoaded", () => {
-  const btn = document.getElementById("authSubmit");
+  const submitBtn = document.getElementById("authSubmit");
 
-  if (btn) {
-    btn.onclick = async () => {
-      const email = document.getElementById("authEmail").value.trim();
-      const password = document.getElementById("authPassword").value.trim();
+  if (submitBtn) {
+    submitBtn.addEventListener("click", async () => {
+      const email = document.getElementById("authEmail")?.value.trim();
+      const password = document.getElementById("authPassword")?.value.trim();
 
       if (!email || !password) {
-        showMsg("❌ Fill all fields");
+        showMsg("❌ Please fill all fields", true);
         return;
       }
 
+      submitBtn.disabled = true;
+      submitBtn.textContent = window.authMode === "signup" ? "Creating..." : "Signing in...";
+
       try {
-        if (authMode === "signup") {
+        if (window.authMode === "signup") {
           await createUserWithEmailAndPassword(auth, email, password);
-          showMsg("✅ Account created");
+          showMsg("✅ Account created successfully!");
+          setTimeout(() => {
+            closeAuth();
+            window.location.href = "login.html"; // أو index.html
+          }, 1500);
         } else {
           await signInWithEmailAndPassword(auth, email, password);
-          showMsg("🔥 Logged in");
+          showMsg("🔥 Login successful!");
+          closeAuth();
+          window.location.href = "index.html"; // غيرها لاسم صفحتك الرئيسية
         }
-
-        closeAuth();
-      } catch (e) {
-        showMsg(e.message);
+      } catch (error) {
+        console.error(error);
+        showMsg("❌ " + error.message, true);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Continue";
       }
-    };
+    });
   }
 });
 
-
-// ================= AUTO LOGIN CHECK =================
+// ================= AUTH STATE LISTENER =================
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    console.log("User logged in:", user.email);
+    console.log("✅ User is logged in:", user.email);
+    // يمكنك هنا إخفاء أزرار Sign in / Sign up وإظهار معلومات المستخدم
   } else {
-    console.log("No user");
+    console.log("No user logged in");
   }
 });
 
-
-// ================= LOGOUT (optional) =================
+// ================= LOGOUT FUNCTION =================
 window.logout = async () => {
-  await signOut(auth);
-  showMsg("👋 Logged out");
+  try {
+    await signOut(auth);
+    showMsg("👋 You have been logged out");
+    setTimeout(() => {
+      window.location.reload();
+    }, 800);
+  } catch (e) {
+    showMsg("Error logging out", true);
+  }
 };
