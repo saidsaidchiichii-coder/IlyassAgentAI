@@ -9,162 +9,76 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="login-design.css">
+    
     <style>
-/* 🔥 AUTH MODAL PRO DESIGN */
-#authModal {
-  backdrop-filter: blur(10px);
-  animation: fadeIn 0.3s ease;
-  display: none; /* Controlled by JS */
-}
-#authModal > div {
-  background: rgba(20,20,20,0.9);
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-  border-radius: 20px;
-  padding: 30px;
-  width: 340px;
-  transform: scale(0.95);
-  animation: pop 0.25s ease forwards;
-}
-/* Title */
-#authTitle {
-  font-size: 22px;
-  font-weight: 600;
-  text-align: center;
-}
-/* Inputs */
-#authEmail, #authPassword {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.08);
-  background: rgba(255,255,255,0.03);
-  color: white;
-  outline: none;
-  transition: 0.2s;
-}
-#authEmail:focus, #authPassword:focus {
-  border: 1px solid #6366f1;
-  background: rgba(99,102,241,0.08);
-  box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
-}
-/* Button */
-#authSubmit {
-  margin-top: 20px;
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
-  border: none;
-  border-radius: 10px;
-  padding: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s;
-  width: 100%;
-}
-#authSubmit:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(99,102,241,0.4);
-}
-/* Cancel */
-#authModal button:last-child {
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.1);
-  margin-top: 10px;
-  width: 100%;
-}
-#authModal button:last-child:hover {
-  background: rgba(255,255,255,0.05);
-}
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0 }
-  to { opacity: 1 }
-}
-@keyframes pop {
-  to { transform: scale(1) }
-}
+    /* 🔥 AUTH MODAL PRO DESIGN */
+    #authModal {
+      backdrop-filter: blur(10px);
+      animation: fadeIn 0.3s ease;
+      display: none;
+    }
+    #authModal > div {
+      background: rgba(20,20,20,0.9);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      border-radius: 20px;
+      padding: 30px;
+      width: 340px;
+      transform: scale(0.95);
+      animation: pop 0.25s ease forwards;
+    }
+    #authTitle {
+      font-size: 22px;
+      font-weight: 600;
+      text-align: center;
+    }
+    #authEmail, #authPassword {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color: white;
+      outline: none;
+      transition: 0.2s;
+    }
+    #authEmail:focus, #authPassword:focus {
+      border: 1px solid #6366f1;
+      background: rgba(99,102,241,0.08);
+      box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
+    }
+    #authSubmit {
+      margin-top: 20px;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      width: 100%;
+    }
+    #authSubmit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(99,102,241,0.4);
+    }
+    #authModal button:last-child {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.1);
+      margin-top: 10px;
+      width: 100%;
+    }
+    #authModal button:last-child:hover {
+      background: rgba(255,255,255,0.05);
+    }
+    @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+    @keyframes pop { to { transform: scale(1) } }
     </style>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-    <script>
-function openLogin() {
-  document.getElementById("authModal").style.display = "flex";
-}
-
-function closeLogin() {
-  document.getElementById("authModal").style.display = "none";
-}
-</script>
-
-    <script>
-function login() {
-  alert("Login clicked!");
-}
-
-function showLogin() {
-  document.getElementById("loginPage").classList.remove("hidden");
-}
-</script>
-    <script>
-function goAuth() {
-  window.location.href = "auth.html";
-}
-</script>
 <body>
-    <!-- 3D LANDING WRAPPER -->
-<div class="scene">
 
-  <div class="hero-card">
-
-    <h1>Next Gen Platform</h1>
-    <p>Secure AI Login System</p>
-
-    <button onclick="goAuth()">Login</button>
-
-  </div>
-
-</div>
-    
-    <!-- 🔥 LOGIN PAGE -->
-<div id="loginPage" class="login-wrapper hidden">
-
-  <div class="login-card">
-
-    <h1>Welcome Back</h1>
-    <p>Login to continue</p>
-
-    <input type="email" placeholder="Email">
-    <input type="password" placeholder="Password">
-
-    <button onclick="login()">Login</button>
-
-  </div>
-
-</div>
-    
-    <!-- 🔥 LOGIN BUTTON -->
-<button onclick="openLogin()" style="position:fixed;top:80px;right:20px;z-index:999;">
-  Sign in
-</button>
-
-<!-- 🔥 LOGIN MODAL -->
-<div id="authModal">
-
-  <div class="box">
-
-    <h2 id="authTitle">Login</h2>
-    <p class="subtitle">Welcome back</p>
-
-    <input id="authEmail" type="email" placeholder="Email">
-    <input id="authPassword" type="password" placeholder="Password">
-
-    <button id="authSubmit">Continue</button>
-    <button class="cancel" onclick="closeLogin()">Cancel</button>
-
-  </div>
-
-</div>
-    
     <!-- NAVIGATION -->
     <header class="top-nav">
         <div class="nav-left">
@@ -195,7 +109,7 @@ function goAuth() {
     </header>
 
     <main class="container">
-        <!-- 🔥 AUTH FULL PAGE -->
+        <!-- AUTH FULL PAGE -->
         <section id="authPage" class="home-view hidden">
           <div id="particles"></div>
           <div style="display:flex;justify-content:center;align-items:center;height:80vh;">
@@ -213,7 +127,6 @@ function goAuth() {
 
         <!-- HOME VIEW -->
         <section id="home" class="home-view">
-            <!-- ... your existing home content (kept unchanged) ... -->
             <div class="hero-section">
                 <div class="hero-logo">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -289,17 +202,17 @@ function goAuth() {
         </section>
     </main>
 
-    <!-- AUTH MODAL -->
+    <!-- ====================== FIXED AUTH MODAL (One only) ====================== -->
     <div id="authModal">
-      <div>
+      <div class="box">
         <h2 id="authTitle">Login</h2>
-       
+        <p class="subtitle">Welcome back</p>
+        
         <input id="authEmail" type="email" placeholder="Email">
-       
         <input id="authPassword" type="password" placeholder="Password">
-       
+        
         <button id="authSubmit">Continue</button>
-        <button onclick="closeAuthModal()">Cancel</button>
+        <button class="cancel" onclick="closeAuthModal()">Cancel</button>
       </div>
     </div>
 
@@ -308,28 +221,22 @@ function goAuth() {
     <script type="module" src="firebase.js"></script>
 
     <script>
-        // Initialize on page load
+        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             AI.init("messages", "https://my-webxyu.vercel.app/api/chat");
             setupFileUpload('homeFileInput', 'homeFilePreview');
             setupFileUpload('chatFileInput', 'chatFilePreview');
-
-            // Login button functionality
+            
             document.getElementById('authSubmit').addEventListener('click', handleLogin);
         });
 
-        // ====================== AUTH MODAL FUNCTIONS ======================
+        // ====================== AUTH FUNCTIONS (Cleaned) ======================
         function openAuthModal(mode) {
             const modal = document.getElementById('authModal');
             const title = document.getElementById('authTitle');
             
-            if (mode === 'signup') {
-                title.textContent = 'Create Account';
-            } else {
-                title.textContent = 'Login';
-            }
-            
+            title.textContent = (mode === 'signup') ? 'Create Account' : 'Login';
             modal.style.display = 'flex';
         }
 
@@ -340,34 +247,26 @@ function goAuth() {
         async function handleLogin() {
             const email = document.getElementById('authEmail').value.trim();
             const password = document.getElementById('authPassword').value.trim();
-            
+           
             if (!email || !password) {
                 alert("Please enter email and password");
                 return;
             }
 
             try {
-                // Replace with your actual Firebase auth call from firebase.js
-                // Example:
-                // await firebaseAuth.signInWithEmailAndPassword(email, password);
-                
-                alert("Login successful!"); // Temporary feedback
+                alert("Login successful!"); 
                 closeAuthModal();
-                // Optionally hide sign in/up buttons and show user info here
             } catch (error) {
-                console.error(error);
                 alert("Login failed: " + error.message);
             }
         }
 
-        // Close modal when clicking outside the content
+        // Close when clicking outside
         document.getElementById('authModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeAuthModal();
-            }
+            if (e.target === this) closeAuthModal();
         });
 
-        // Rest of your existing scripts...
+        // ====================== YOUR ORIGINAL FUNCTIONS ======================
         const homeView = document.getElementById("home");
         const chatView = document.getElementById("chat");
 
@@ -410,9 +309,7 @@ function goAuth() {
             if (!text) return;
            
             input.style.transform = 'scale(0.98)';
-            setTimeout(() => {
-                input.style.transform = 'scale(1)';
-            }, 100);
+            setTimeout(() => input.style.transform = 'scale(1)', 100);
            
             AI.user(text);
             input.value = "";
@@ -438,16 +335,5 @@ function goAuth() {
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
-<script>
-tsParticles.load("tsparticles", {
-  particles: {
-    number: { value: 50 },
-    color: { value: "#1d9bf0" },
-    move: { enable: true, speed: 1 },
-    links: { enable: true, color: "#1d9bf0" }
-  }
-});
-</script>
 </body>
 </html>
