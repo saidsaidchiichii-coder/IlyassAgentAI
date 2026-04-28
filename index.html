@@ -239,7 +239,7 @@
 
 
 
-        function startGrokSearching() {
+   function startGrokSearching() {
   const el = document.getElementById("thinkingText");
 
   if (!el) {
@@ -249,33 +249,44 @@
 
   let i = 1;
   let running = true;
+  let timeout;
 
   function loop() {
     if (!running) return;
 
+    // FADE OUT + motion
     el.style.opacity = "0.2";
     el.style.transform = "translateY(2px) scale(0.98)";
     el.style.filter = "blur(1px)";
 
-    setTimeout(() => {
-      el.textContent = `🔍 Searching the web ${i++}`;
+    timeout = setTimeout(() => {
+      i++;
+      el.textContent = `🔍 Searching the web ${i}`;
 
+      // FADE IN
       el.style.opacity = "1";
       el.style.transform = "translateY(0px) scale(1)";
       el.style.filter = "blur(0px)";
     }, 60);
 
-    setTimeout(loop, 150);
+    // smoother timing (avoid stack drift)
+    setTimeout(loop, 170);
   }
 
-  // مهم: نبدأ النص مباشرة
+  // initial text
   el.textContent = "🔍 Searching the web 1";
+  el.style.opacity = "1";
 
   loop();
 
+  // STOP function (clean fix)
   return () => {
     running = false;
+    clearTimeout(timeout);
     el.textContent = "";
+    el.style.opacity = "1";
+    el.style.transform = "none";
+    el.style.filter = "none";
   };
 }
         
