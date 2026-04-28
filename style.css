@@ -945,6 +945,56 @@ code {
     transform: rotateX(10deg);
   }
 }
+body {
+  background: radial-gradient(circle at top, #111, #000);
+  overflow: hidden;
+}
+
+.scene {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1200px;
+}
+
+.hero-card {
+  width: 400px;
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  background: rgba(20,20,20,0.8);
+  border: 1px solid #2f3336;
+
+  transform: rotateX(10deg) rotateY(-10deg);
+  animation: float3d 6s infinite ease-in-out;
+  box-shadow: 0 40px 120px rgba(0,0,0,0.8);
+}
+
+.hero-card h1 {
+  color: white;
+}
+
+.hero-card p {
+  color: #71767b;
+}
+
+.hero-card button {
+  margin-top: 20px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: #1d9bf0;
+  border: none;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+@keyframes float3d {
+  0%,100% { transform: rotateX(10deg) rotateY(-10deg); }
+  50% { transform: rotateX(15deg) rotateY(15deg); }
+}
+
 
 /* ==================== RESPONSIVE ==================== */
 
