@@ -993,6 +993,7 @@ let i = 0;
 
 
 
+============= Thinking =====================
 
 function startSearchingAnimation() {
   const el = document.getElementById("thinkingText");
@@ -1023,6 +1024,9 @@ function startSearchingAnimation() {
 }
 
 startSearchingAnimation();
+
+
+
 /* ==================== CODE BLOCKS ==================== */
 .code-box {
     background: var(--input-bg);
