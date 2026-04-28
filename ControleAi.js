@@ -1,7 +1,7 @@
 const AI = {
   messagesBox: null,
   API_URL: null,
-  currentMode: 'fast', // 'auto', 'fast', 'thinking'
+  currentMode: 'auto', // 'auto', 'fast', 'thinking'
 
   /* =========================
      🎨 SYNTAX HIGHLIGHT
@@ -24,110 +24,70 @@ const AI = {
     this.setupModeSelector();
   },
 
-
-
   /* =========================
-   🔄 MODE SELECTOR SETUP
-========================= */
-/* =========================
-   🔄 MODE SELECTOR SETUP
-========================= */
-setupModeSelector() {
-  const modeSelectors = document.querySelectorAll('.mode-selector');
-
-  modeSelectors.forEach(selector => {
-    selector.addEventListener('click', (e) => {
-      e.stopPropagation();
-      this.showModeMenu(selector);
+     🔄 MODE SELECTOR SETUP
+  ========================= */
+  setupModeSelector() {
+    const modeSelectors = document.querySelectorAll('.mode-selector');
+    modeSelectors.forEach(selector => {
+      selector.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.showModeMenu(selector);
+      });
     });
-  });
+  },
 
-  // close menu when clicking outside
-  document.addEventListener("click", () => {
-    document.querySelectorAll('.mode-menu').forEach(m => m.remove());
-  });
-},
-
-/* =========================
-   📌 MODE MENU
-========================= */
-showModeMenu(selector) {
-    // remove old menu
+  showModeMenu(selector) {
+    // Remove existing menu if any
     const existingMenu = document.querySelector('.mode-menu');
     if (existingMenu) existingMenu.remove();
 
     const menu = document.createElement('div');
     menu.className = 'mode-menu';
-
     menu.innerHTML = `
-        <div class="mode-option ${this.currentMode === 'fast' ? 'active' : ''}" data-mode="fast">
-            <span class="mode-name">Auto</span>
-            <span class="mode-desc">Smart selection (recommended)</span>
-        </div>
-
-        <div class="mode-option ${this.currentMode === 'fast' ? 'active' : ''}" data-mode="fast">
-            <span class="mode-name">⚡ Fast</span>
-            <span class="mode-desc">Quick responses</span>
-        </div>
-
-        <div class="mode-option ${this.currentMode === 'thinking' ? 'active' : ''}" data-mode="thinking">
-            <span class="mode-name">🧠 Thinking</span>
-            <span class="mode-desc">Deep analysis</span>
-        </div>
+      <div class="mode-option ${this.currentMode === 'auto' ? 'active' : ''}" data-mode="auto">
+        <span class="mode-name">Auto</span>
+        <span class="mode-desc">Smart selection</span>
+      </div>
+      <div class="mode-option ${this.currentMode === 'fast' ? 'active' : ''}" data-mode="fast">
+        <span class="mode-name">Faster AI 5.2</span>
+        <span class="mode-desc">Quick responses</span>
+      </div>
+      <div class="mode-option ${this.currentMode === 'thinking' ? 'active' : ''}" data-mode="thinking">
+        <span class="mode-name">Thinking Longer</span>
+        <span class="mode-desc">Deep analysis (~3s)</span>
+      </div>
     `;
 
-    document.body.appendChild(menu);
-
-    // POSITION FIX (important)
-    const rect = selector.getBoundingClientRect();
-
-    menu.style.top = `${rect.bottom + 10}px`;
-    menu.style.left = `${rect.left}px`;
-
-    // click select mode
     menu.querySelectorAll('.mode-option').forEach(option => {
-        option.addEventListener('click', () => {
-            this.currentMode = option.dataset.mode;
-
-            selector.querySelector('span').textContent =
-                option.querySelector('.mode-name').textContent;
-
-            menu.remove();
-        });
+      option.addEventListener('click', () => {
+        this.currentMode = option.dataset.mode;
+        selector.querySelector('span').textContent = option.querySelector('.mode-name').textContent;
+        menu.remove();
+      });
     });
 
-    // close on outside click
-    const closeMenu = (e) => {
-        if (!menu.contains(e.target) && !selector.contains(e.target)) {
-            menu.remove();
-            document.removeEventListener('click', closeMenu);
-        }
-    };
+    document.body.appendChild(menu);
+    
+    // Position menu near selector
+    const rect = selector.getBoundingClientRect();
+    menu.style.top = (rect.bottom + 8) + 'px';
+    menu.style.left = (rect.left - 50) + 'px';
+  },
 
-    setTimeout(() => {
-        document.addEventListener('click', closeMenu);
-    }, 50);
-}
-  
+  user(text) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "msg-wrapper";
+    
+    const div = document.createElement("div");
+    div.className = "msg user";
+    div.textContent = text;
+    
+    wrapper.appendChild(div);
+    this.messagesBox.appendChild(wrapper);
+    this.scroll();
+  },
 
-/* =========================
-   👤 USER MESSAGE
-========================= */
-user(text) {
-  const wrapper = document.createElement("div");
-  wrapper.className = "msg-wrapper";
-
-  const div = document.createElement("div");
-  div.className = "msg user";
-
-  // safe text (no HTML injection)
-  div.textContent = text;
-
-  wrapper.appendChild(div);
-  this.messagesBox.appendChild(wrapper);
-
-  this.scroll();
-},
   /* =========================
      🧠 ADVANCED THINKING EFFECT
   ========================= */
