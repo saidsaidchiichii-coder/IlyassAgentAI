@@ -60,7 +60,7 @@ showModeMenu(selector) {
     menu.className = 'mode-menu';
 
     menu.innerHTML = `
-        <div class="mode-option ${this.currentMode === 'auto' ? 'active' : ''}" data-mode="auto">
+        <div class="mode-option ${this.currentMode === 'fast' ? 'active' : ''}" data-mode="fast">
             <span class="mode-name">Auto</span>
             <span class="mode-desc">Smart selection (recommended)</span>
         </div>
