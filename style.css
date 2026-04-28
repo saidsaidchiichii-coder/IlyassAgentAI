@@ -989,88 +989,40 @@ const steps = [
 let i = 0;
 
 
-const steps = [
-  "Thinking...",
-  "Searching web...",
-  "Analyzing data...",
-  "Structuring response...",
-  "Finalizing..."
-];
 
-const results = [
-  "Result 1", "Result 2", "Result 3", "Result 4",
-  "Result 5", "Result 6", "Result 7", "Result 8",
-  "Result 9", "Result 10"
-];
 
-let i = 0;
 
-function startFakeLiveSearch() {
+
+
+function startSearchingAnimation() {
   const el = document.getElementById("thinkingText");
-  const box = document.getElementById("searchResults");
 
-  i = 0;
-  box.innerHTML = "";
+  let count = 1;
+  const max = 20; // عدد التكرارات
 
-  function nextStep() {
-    if (i >= steps.length) {
-      showResults();
-      return;
-    }
-
-    // fade out
+  function loop() {
     el.style.opacity = 0;
-    el.style.transform = "translateY(5px)";
 
     setTimeout(() => {
-      el.innerText = steps[i];
+      el.innerText = "🔍 Searching the web" + count;
 
-      // fade in
       el.style.opacity = 1;
-      el.style.transform = "translateY(0)";
 
-      i++;
+      count++;
 
-      // random Grok-like speed
-      setTimeout(nextStep, 300 + Math.random() * 500);
-
-    }, 120);
-  }
-
-  function showResults() {
-    el.innerText = "Results found";
-
-    let j = 0;
-
-    function streamResults() {
-      if (j >= results.length) {
-        setTimeout(() => {
-          el.innerText = "Done";
-        }, 300);
-        return;
+      if (count <= max) {
+        setTimeout(loop, 50); // سرعة خفيفة (≈1 ثانية كامل)
+      } else {
+        el.innerText = "Done";
       }
 
-      const chip = document.createElement("div");
-      chip.className = "result-chip";
-      chip.innerText = results[j];
-
-      box.appendChild(chip);
-
-      setTimeout(() => chip.classList.add("show"), 50);
-
-      j++;
-
-      // FAST streaming (Grok style)
-      setTimeout(streamResults, 60 + Math.random() * 120);
-    }
-
-    streamResults();
+    }, 80);
   }
 
-  nextStep();
+  loop();
 }
 
-startFakeLiveSearch();
+startSearchingAnimation();
 /* ==================== CODE BLOCKS ==================== */
 .code-box {
     background: var(--input-bg);
