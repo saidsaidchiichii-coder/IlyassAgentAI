@@ -29,7 +29,97 @@ const AI = {
   /* =========================
    🔄 MODE SELECTOR SETUP
 ========================= */
+/* =========================
+   🔄 MODE SELECTOR SETUP
+========================= */
+setupModeSelector() {
+  const modeSelectors = document.querySelectorAll('.mode-selector');
 
+  modeSelectors.forEach(selector => {
+    selector.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.showModeMenu(selector);
+    });
+  });
+
+  // close menu when clicking outside
+  document.addEventListener("click", () => {
+    document.querySelectorAll('.mode-menu').forEach(m => m.remove());
+  });
+},
+
+/* =========================
+   📌 MODE MENU
+========================= */
+showModeMenu(selector) {
+
+  // remove old menus
+  document.querySelectorAll('.mode-menu').forEach(m => m.remove());
+
+  const menu = document.createElement('div');
+  menu.className = 'mode-menu';
+
+  menu.innerHTML = `
+    <div class="mode-option ${this.currentMode === 'auto' ? 'active' : ''}" data-mode="auto">
+      <div class="mode-name">Auto</div>
+      <div class="mode-desc">Smart selection</div>
+    </div>
+
+    <div class="mode-option ${this.currentMode === 'fast' ? 'active' : ''}" data-mode="fast">
+      <div class="mode-name">Fast</div>
+      <div class="mode-desc">Quick responses</div>
+    </div>
+
+    <div class="mode-option ${this.currentMode === 'thinking' ? 'active' : ''}" data-mode="thinking">
+      <div class="mode-name">Thinking</div>
+      <div class="mode-desc">Deep analysis</div>
+    </div>
+  `;
+
+  document.body.appendChild(menu);
+
+  const rect = selector.getBoundingClientRect();
+
+  // safe positioning (no overflow bug)
+  let top = rect.bottom + 8;
+  let left = rect.left;
+
+  if (left + 220 > window.innerWidth) {
+    left = window.innerWidth - 240;
+  }
+
+  menu.style.position = "fixed";
+  menu.style.top = `${top}px`;
+  menu.style.left = `${left}px`;
+  menu.style.zIndex = "999999";
+
+  // click option
+  menu.querySelectorAll('.mode-option').forEach(option => {
+    option.addEventListener('click', () => {
+
+      this.currentMode = option.dataset.mode;
+
+      const label = selector.querySelector('span');
+      if (label) {
+        label.textContent = option.querySelector('.mode-name').textContent;
+      }
+
+      menu.remove();
+    });
+  });
+
+  // close when clicking outside
+  const close = (e) => {
+    if (!menu.contains(e.target) && !selector.contains(e.target)) {
+      menu.remove();
+      document.removeEventListener("click", close);
+    }
+  };
+
+  setTimeout(() => {
+    document.addEventListener("click", close);
+  }, 0);
+},
 
   
 
