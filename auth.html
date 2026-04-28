@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="auth.css">
+<script src="auth.js"></script>
+</head>
+
+<body>
+
+<div class="auth-bg"></div>
+
+<div class="auth-panel">
+
+  <h1>Choose Login Method</h1>
+
+  <button onclick="googleLogin()">Continue with Google</button>
+  <button onclick="guestLogin()">Guest Mode</button>
+  <button onclick="showEmail()">Email Login</button>
+
+  <div id="emailBox" class="hidden">
+
+    <input id="email" placeholder="Gmail">
+    <input id="password" type="password" placeholder="Password">
+
+    <button onclick="loginEmail()">Login</button>
+    <button onclick="cancel()">Cancel</button>
+
+  </div>
+
+</div>
+
+</body>
+</html>
