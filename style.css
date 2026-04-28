@@ -992,38 +992,7 @@ let i = 0;
 
 
 
-
-============= Thinking =====================
-
-function startSearchingAnimation() {
-  const el = document.getElementById("thinkingText");
-
-  let count = 1;
-  const max = 20; // عدد التكرارات
-
-  function loop() {
-    el.style.opacity = 0;
-
-    setTimeout(() => {
-      el.innerText = "🔍 Searching the web" + count;
-
-      el.style.opacity = 1;
-
-      count++;
-
-      if (count <= max) {
-        setTimeout(loop, 50); // سرعة خفيفة (≈1 ثانية كامل)
-      } else {
-        el.innerText = "Done";
-      }
-
-    }, 80);
-  }
-
-  loop();
-}
-
-startSearchingAnimation();
+ 
 
 
 
