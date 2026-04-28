@@ -91,160 +91,45 @@ const AI = {
   /* =========================
      🧠 ADVANCED THINKING EFFECT
   ========================= */
-  thinking() {
-    const wrapper = document.createElement("div");
-    wrapper.className = "msg-wrapper ai";
-    
-    const thinkingDiv = document.createElement("div");
-    thinkingDiv.className = "thinking-container";
-    thinkingDiv.innerHTML = `
-        <div class="loader-dots">
-            <span></span><span></span><span></span>
-        </div>
-        <span class="thinking-text">Thinking...</span>
-    `;
-    
-    wrapper.appendChild(thinkingDiv);
-    this.messagesBox.appendChild(wrapper);
-    this.scroll();
-    return wrapper;
-  },
+   thinking() {
+  const wrapper = document.createElement("div");
+  wrapper.className = "msg-wrapper ai";
 
-  /* =========================
-     📸 IMAGE ANALYSIS HELPER
-  ========================= */
-  async analyzeImages(files) {
-    const imageDescriptions = [];
-    
-    for (let file of files) {
-      if (file.type.startsWith('image/')) {
-        try {
-          const reader = new FileReader();
-          const imageData = await new Promise((resolve) => {
-            reader.onload = (e) => resolve(e.target.result);
-            reader.readAsDataURL(file);
-          });
-          
-          imageDescriptions.push({
-            name: file.name,
-            type: file.type,
-            data: imageData,
-            size: file.size
-          });
-        } catch (err) {
-          console.error('Error reading image:', err);
-        }
-      }
-    }
-    
-    return imageDescriptions;
-  },
+  const thinkingDiv = document.createElement("div");
+  thinkingDiv.className = "thinking-container";
 
-  /* =========================
-     🤖 SMART MODE SELECTOR
-  ========================= */
-  selectMode(message, hasImages) {
-    if (this.currentMode === 'fast') {
-      return 'fast';
-    } else if (this.currentMode === 'thinking') {
-      return 'thinking';
-    } else {
-      // Auto mode: intelligent selection
-      const messageLength = message.length;
-      const isComplex = /how|why|explain|analyze|compare|summarize|complex/i.test(message);
-      const isImage = hasImages;
-      
-      // Use thinking mode for complex queries or image analysis
-      if (isComplex || isImage || messageLength > 100) {
-        return 'thinking';
-      }
-      return 'fast';
-    }
-  },
+  thinkingDiv.innerHTML = `
+    <div class="thinking-bubble">
+      <div class="loader-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <span class="thinking-text">Thinking...</span>
+    </div>
+  `;
 
-  async ask(message) {
-    const load = this.thinking();
+  wrapper.appendChild(thinkingDiv);
+  this.messagesBox.appendChild(wrapper);
+  this.scroll();
 
-    try {
-      // Prepare data with files as Base64
-      const payload = {
-        message: message,
-        files: [],
-        mode: this.currentMode,
-        timestamp: new Date().toISOString()
-      };
+  // return full wrapper (so load.remove() works)
+  return wrapper;
+},
+  
 
-      // Get files from input
-      const fileInput = document.getElementById('chatFileInput') || document.getElementById('homeFileInput');
-      if (fileInput && fileInput.files.length > 0) {
-        // Analyze images
-        const images = await this.analyzeImages(Array.from(fileInput.files));
-        
-        for (let file of fileInput.files) {
-          const reader = new FileReader();
-          await new Promise((resolve) => {
-            reader.onload = (e) => {
-              payload.files.push({
-                name: file.name,
-                type: file.type,
-                data: e.target.result,
-                isImage: file.type.startsWith('image/')
-              });
-              resolve();
-            };
-            reader.readAsDataURL(file);
-          });
-        }
 
-        // Add image analysis context to message if images exist
-        if (images.length > 0) {
-          payload.hasImages = true;
-          payload.imageCount = images.length;
-          payload.imageInfo = images.map(img => ({
-            name: img.name,
-            type: img.type,
-            size: img.size
-          }));
-        }
-      }
 
-      // Select appropriate mode
-      const selectedMode = this.selectMode(message, payload.hasImages);
-      payload.selectedMode = selectedMode;
 
-      // Adjust timeout based on mode
-      const timeout = selectedMode === 'thinking' ? 30000 : 10000;
 
-      const res = await fetch(this.API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-        signal: AbortSignal.timeout(timeout)
-      });
 
-      const data = await res.json();
-      load.remove();
-      
-      let reply = data?.reply || "I'm sorry, I couldn't process that.";
 
-      this.streamRender(reply);
 
-    } catch (e) {
-      load.remove();
-      const wrapper = document.createElement("div");
-      wrapper.className = "msg-wrapper ai";
-      
-      const err = document.createElement("div");
-      err.className = "msg ai";
-      err.textContent = e.name === 'AbortError' 
-        ? "Request timeout. Please try again." 
-        : "System Error: API Connection Failed.";
-      
-      wrapper.appendChild(err);
-      this.messagesBox.appendChild(wrapper);
-    }
-  },
 
+
+
+
+  
   /* =========================
      🌊 PIXEL-PERFECT STREAMING
   ========================= */
