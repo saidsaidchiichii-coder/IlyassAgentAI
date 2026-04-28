@@ -89,26 +89,7 @@ const AI = {
   },
 
   /* =========================
-     🧠 ADVANCED THINKING EFFECT
-  ========================= */
-  thinking() {
-    const wrapper = document.createElement("div");
-    wrapper.className = "msg-wrapper ai";
-    
-    const thinkingDiv = document.createElement("div");
-    thinkingDiv.className = "thinking-container";
-    thinkingDiv.innerHTML = `
-        <div class="loader-dots">
-            <span></span><span></span><span></span>
-        </div>
-        <span class="thinking-text">Thinking...</span>
-    `;
-    
-    wrapper.appendChild(thinkingDiv);
-    this.messagesBox.appendChild(wrapper);
-    this.scroll();
-    return wrapper;
-  },
+ 
 
   /* =========================
      📸 IMAGE ANALYSIS HELPER
