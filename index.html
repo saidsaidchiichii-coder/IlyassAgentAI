@@ -1,253 +1,334 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grok</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grok</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+/* 🔥 AUTH MODAL PRO DESIGN */
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<script src="https://unpkg.com/lucide@latest"></script>
-
-<style>
-
-/* ================= ROOT ================= */
-:root{
-  --bg:#000;
-  --text:#e7e9ea;
-  --accent:#1d9bf0;
-  --border:#2f3336;
+#authModal {
+  backdrop-filter: blur(10px);
+  animation: fadeIn 0.3s ease;
 }
 
-/* ================= GLOBAL ================= */
-*{margin:0;padding:0;box-sizing:border-box}
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:Inter;
-  overflow:hidden;
+#authModal > div {
+  background: rgba(20,20,20,0.9);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  border-radius: 20px;
+  padding: 30px;
+  width: 340px;
+  transform: scale(0.95);
+  animation: pop 0.25s ease forwards;
 }
 
-/* ================= AUTH MODAL ================= */
-#authModal{
-  position:fixed;
-  inset:0;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  background:rgba(0,0,0,.7);
-  backdrop-filter:blur(10px);
-  z-index:9999;
+/* Title */
+#authTitle {
+  font-size: 22px;
+  font-weight: 600;
+  text-align: center;
 }
 
-#authModal .box{
-  width:340px;
-  padding:25px;
-  border-radius:16px;
-  background:rgba(20,20,20,.95);
-  border:1px solid rgba(255,255,255,.08);
+/* Inputs */
+#authEmail, #authPassword {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  color: white;
+  outline: none;
+  transition: 0.2s;
 }
 
-#authModal input{
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-  border-radius:8px;
-  border:none;
-  background:#222;
-  color:white;
+#authEmail:focus, #authPassword:focus {
+  border: 1px solid #6366f1;
+  background: rgba(99,102,241,0.08);
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
 }
 
-#authModal button{
-  width:100%;
-  margin-top:15px;
-  padding:10px;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
+/* Button */
+#authSubmit {
+  margin-top: 20px;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-#authSubmit{
-  background:#4f46e5;
-  color:white;
-  font-weight:bold;
+#authSubmit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(99,102,241,0.4);
 }
 
-/* ================= NAV ================= */
-.top-nav{
-  height:56px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:0 16px;
-  border-bottom:1px solid var(--border);
+/* Cancel */
+#authModal button:last-child {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  margin-top: 10px;
 }
 
-/* ================= HOME ================= */
-.home-view{
-  height:calc(100vh - 56px);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
+#authModal button:last-child:hover {
+  background: rgba(255,255,255,0.05);
 }
 
-.hero-logo h1{
-  font-size:50px;
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to { opacity: 1 }
 }
 
-/* ================= CHAT ================= */
-.chat-view{
-  height:calc(100vh - 56px);
-  display:flex;
-  flex-direction:column;
+@keyframes pop {
+  to { transform: scale(1) }
 }
-
-.messages-list{
-  flex:1;
-  overflow:auto;
-  padding:20px;
-}
-
-.msg{
-  padding:10px;
-  margin:5px 0;
-  border-radius:10px;
-}
-
-.user{background:var(--accent);color:white;align-self:flex-end}
-.ai{border-left:2px solid var(--accent)}
-
-/* ================= INPUT ================= */
-.chat-input-container{
-  padding:15px;
-  border-top:1px solid var(--border);
-}
-
-textarea{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:none;
-  background:#16181c;
-  color:white;
-}
-
-/* ================= UTIL ================= */
-.hidden{display:none}
-
-button{
-  cursor:pointer;
-}
-
 </style>
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-
 <body>
 
-<!-- ================= NAV ================= -->
-<header class="top-nav">
-  <div onclick="location.reload()">GROK</div>
+    <!-- NAVIGATION -->
+    <header class="top-nav">
+        <div class="nav-left">
+            <div class="logo-container" onclick="location.reload()">
+                <svg class="grok-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="14.31" y1="8" x2="20.05" y2="17.94"></line>
+                    <line x1="9.69" y1="8" x2="21.17" y2="8"></line>
+                    <line x1="7.38" y1="12" x2="13.12" y2="2.06"></line>
+                    <line x1="9.69" y1="16" x2="3.95" y2="6.06"></line>
+                    <line x1="14.31" y1="16" x2="2.83" y2="16"></line>
+                    <line x1="16.62" y1="12" x2="10.88" y2="21.94"></line>
+                </svg>
+            </div>
+        </div>
+        
+        <div class="nav-right">
+            <button class="nav-btn">
+                <i data-lucide="sparkles"></i>
+                <span>Imagine</span>
+            </button>
+            <button class="nav-btn" id="settingsTrigger">
+                <i data-lucide="settings"></i>
+            </button>
+            <button class="btn-signin">Sign in</button>
+            <button class="btn-signup">Sign up</button>
+        </div>
+    </header>
 
-  <div>
-    <button onclick="openAuth()">Sign in</button>
-    <button onclick="openAuth()">Sign up</button>
+    <main class="container">
+
+        <!-- 🔥 AUTH FULL PAGE (ADD ONLY) -->
+<section id="authPage" class="home-view hidden">
+  <div id="particles"></div>
+
+  <div style="display:flex;justify-content:center;align-items:center;height:80vh;">
+    
+    <div class="auth-card">
+      <h2 id="authPageTitle">Sign in</h2>
+
+      <input id="authEmailPage" type="email" placeholder="Email">
+      <input id="authPasswordPage" type="password" placeholder="Password">
+
+      <button id="authPageSubmit">Continue</button>
+
+      <p id="switchAuth" style="margin-top:15px;cursor:pointer;opacity:0.7;">
+        Don't have an account? Sign up
+      </p>
+    </div>
+
   </div>
-</header>
+</section>
+        <!-- HOME VIEW -->
+        <section id="home" class="home-view">
+            <div class="hero-section">
+                <div class="hero-logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="14.31" y1="8" x2="20.05" y2="17.94"></line>
+                        <line x1="9.69" y1="8" x2="21.17" y2="8"></line>
+                        <line x1="7.38" y1="12" x2="13.12" y2="2.06"></line>
+                        <line x1="9.69" y1="16" x2="3.95" y2="6.06"></line>
+                        <line x1="14.31" y1="16" x2="2.83" y2="16"></line>
+                        <line x1="16.62" y1="12" x2="10.88" y2="21.94"></line>
+                    </svg>
+                    <h1>Grok</h1>
+                </div>
+            </div>
+            
+            <div class="search-container">
+                <div class="search-box">
+                    <div class="file-preview-area" id="homeFilePreview"></div>
+                    <div class="input-area">
+                        <button class="input-icon" onclick="document.getElementById('homeFileInput').click()">
+                            <i data-lucide="paperclip"></i>
+                        </button>
+                        <input type="file" id="homeFileInput" class="hidden-input" multiple>
+                        <textarea id="homeInput" placeholder="How can I help you today?" rows="1" oninput="autoResize(this)" onkeydown="handleKeydown(event, 'home')"></textarea>
+                        <div class="input-controls">
+                            <div class="mode-selector">
+                                <span>Auto</span>
+                                <i data-lucide="chevron-down"></i>
+                            </div>
+                            <button class="control-btn" id="homeMicBtn" onclick="toggleMic('home')">
+                                <i data-lucide="mic"></i>
+                            </button>
+                            <button class="control-btn send-btn" onclick="startChat()">
+                                <i data-lucide="arrow-up"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="search-hint">
+                    <i data-lucide="sparkles"></i>
+                    <span>New · Hold Ctrl+D to dictate</span>
+                </div>
+            </div>
+        </section>
 
-<!-- ================= AUTH ================= -->
-<div id="authModal">
-  <div class="box">
-    <h2 id="authTitle">Login</h2>
+        <!-- CHAT VIEW -->
+        <section id="chat" class="chat-view hidden">
+            <div id="messages" class="messages-list"></div>
 
-    <input id="authEmail" type="email" placeholder="Email">
-    <input id="authPassword" type="password" placeholder="Password">
+            <div class="chat-input-container">
+                <div class="search-box">
+                    <div class="file-preview-area" id="chatFilePreview"></div>
+                    <div class="input-area">
+                        <button class="input-icon" onclick="document.getElementById('chatFileInput').click()">
+                            <i data-lucide="paperclip"></i>
+                        </button>
+                        <input type="file" id="chatFileInput" class="hidden-input" multiple>
+                        <textarea id="chatInput" placeholder="Send a message..." rows="1" oninput="autoResize(this)" onkeydown="handleKeydown(event, 'chat')"></textarea>
+                        <div class="input-controls">
+                            <div class="mode-selector">
+                                <span>Auto</span>
+                                <i data-lucide="chevron-down"></i>
+                            </div>
+                            <button class="control-btn" id="chatMicBtn" onclick="toggleMic('chat')">
+                                <i data-lucide="mic"></i>
+                            </button>
+                            <button class="control-btn send-btn" onclick="send()">
+                                <i data-lucide="arrow-up"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-    <button id="authSubmit" onclick="login()">Continue</button>
-    <button onclick="closeAuth()" style="background:#333;color:white;">Cancel</button>
+    <script src="ControleAi.js"></script>
+    <script src="features.js"></script>
+    <script type="module" src="firebase.js"></script>
+    <script>
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            AI.init("messages", "https://my-webxyu.vercel.app/api/chat");
+            setupFileUpload('homeFileInput', 'homeFilePreview');
+            setupFileUpload('chatFileInput', 'chatFilePreview');
+        });
+
+        const homeView = document.getElementById("home");
+        const chatView = document.getElementById("chat");
+        const imagineView = document.getElementById("imagine");
+
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
+            textarea.style.transition = 'height 0.2s ease';
+        }
+
+        function handleKeydown(event, type) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                if (type === 'home') startChat();
+                else send();
+            }
+        }
+
+        function startChat() {
+            const input = document.getElementById("homeInput");
+            const text = input.value.trim();
+            if (!text) return;
+            
+            homeView.style.animation = 'slideOut 0.4s ease-out forwards';
+            setTimeout(() => {
+                homeView.classList.add("hidden");
+                chatView.classList.remove("hidden");
+                chatView.style.animation = 'slideIn 0.4s ease-out';
+                AI.user(text);
+                input.value = "";
+                input.style.height = 'auto';
+                document.getElementById("homeFilePreview").innerHTML = '';
+                document.getElementById("homeFileInput").value = '';
+                AI.ask(text);
+            }, 400);
+        }
+
+        function send() {
+            const input = document.getElementById("chatInput");
+            const text = input.value.trim();
+            if (!text) return;
+            
+            // Add a subtle feedback animation
+            input.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                input.style.transform = 'scale(1)';
+            }, 100);
+            
+            AI.user(text);
+            input.value = "";
+            input.style.height = 'auto';
+            document.getElementById("chatFilePreview").innerHTML = '';
+            document.getElementById("chatFileInput").value = '';
+            AI.ask(text);
+        }
+        
+        // Add CSS animation for slideOut
+        const style = document.createElement('style');
+        style.textContent = 
+            @keyframes slideOut {
+                from { opacity: 1; transform: scale(1); }
+                to { opacity: 0; transform: scale(0.95) translateY(-20px); }
+            }
+        ;
+        document.head.appendChild(style);
+    </script>
+    <!-- AUTH MODAL (ADD ONLY) -->
+<div id="authModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:9999;">
+  <div style="background:#111;padding:30px;border-radius:16px;width:320px;color:white;">
+    
+    <h2 id="authTitle" style="margin-bottom:20px;">Login</h2>
+    
+    <input id="authEmail" type="email" placeholder="Email"
+      style="width:100%;padding:10px;margin-bottom:10px;border-radius:8px;border:none;background:#222;color:white;">
+    
+    <input id="authPassword" type="password" placeholder="Password"
+      style="width:100%;padding:10px;margin-bottom:20px;border-radius:8px;border:none;background:#222;color:white;">
+    
+    <button id="authSubmit"
+      style="width:100%;padding:10px;background:#4f46e5;border:none;border-radius:8px;color:white;font-weight:bold;">
+      Continue
+    </button>
+
+    <button onclick="closeAuth()"
+      style="margin-top:10px;width:100%;padding:8px;background:#333;border:none;border-radius:8px;color:white;">
+      Cancel
+    </button>
+
   </div>
 </div>
-
-<!-- ================= HOME ================= -->
-<section id="home" class="home-view">
-
-  <div class="hero-logo">
-    <h1>Grok</h1>
-  </div>
-
-  <textarea id="homeInput" placeholder="Ask anything..."></textarea>
-  <button onclick="startChat()">Send</button>
-
-</section>
-
-<!-- ================= CHAT ================= -->
-<section id="chat" class="chat-view hidden">
-
-  <div id="messages" class="messages-list"></div>
-
-  <div class="chat-input-container">
-    <textarea id="chatInput" placeholder="Message..."></textarea>
-    <button onclick="send()">Send</button>
-  </div>
-
-</section>
-
-<!-- ================= SCRIPT ================= -->
-<script>
-
-const home=document.getElementById("home");
-const chat=document.getElementById("chat");
-const modal=document.getElementById("authModal");
-const messages=document.getElementById("messages");
-
-/* ========= AUTH ========= */
-function openAuth(){modal.style.display="flex"}
-function closeAuth(){modal.style.display="none"}
-
-function login(){
-  const e=document.getElementById("authEmail").value;
-  const p=document.getElementById("authPassword").value;
-
-  if(!e||!p)return alert("Fill all fields");
-
-  localStorage.setItem("user",e);
-  closeAuth();
-}
-
-/* ========= CHAT ========= */
-function startChat(){
-  const t=document.getElementById("homeInput").value;
-  if(!t)return;
-
-  home.classList.add("hidden");
-  chat.classList.remove("hidden");
-
-  add("user",t);
-  fakeAI(t);
-}
-
-function send(){
-  const t=document.getElementById("chatInput").value;
-  if(!t)return;
-
-  add("user",t);
-  document.getElementById("chatInput").value="";
-  fakeAI(t);
-}
-
-function add(role,text){
-  const d=document.createElement("div");
-  d.className="msg "+role;
-  d.innerText=text;
-  messages.appendChild(d);
-  messages.scrollTop=messages.scrollHeight;
-}
-
-function fakeAI(t){
-  setTimeout(()=>add("ai","AI: "+t),500);
-}
-
-</script>
-
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+    
 </body>
+    
 </html>
