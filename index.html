@@ -1,1243 +1,349 @@
-/* ==================== GROK EXACT DESIGN SYSTEM ==================== */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-:root {
-    /* Grok exact colors */
-    --bg-color: #000000;
-    --text-color: #ececec;
-    --secondary-text: #8a8f98;
-    --border-color: #1e2025;
-    --input-bg: #0d0d0f;
-    --hover-bg: #16181c;
-    --accent: #ff6b35;           /* Grok orange accent */
-    --accent-2: #ff4500;
-    --surface: #0a0a0c;
-    --surface-2: #111115;
-    --surface-3: #16181c;
-    --grok-orange: #ff6b35;
-    --grok-orange-dim: rgba(255, 107, 53, 0.12);
-    --grok-orange-border: rgba(255, 107, 53, 0.25);
-    --white-10: rgba(255,255,255,0.06);
-    --white-5: rgba(255,255,255,0.03);
-    --radius-sm: 8px;
-    --radius-md: 14px;
-    --radius-lg: 20px;
-    --radius-xl: 28px;
-    --radius-full: 9999px;
-}
-
-#particles {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-}
-
-/* particle */
-.particle {
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 50%;
-    animation: floatParticle linear infinite;
-}
-
-/* animation */
-@keyframes floatParticle {
-    from {
-        transform: translateY(100vh) scale(0.5);
-        opacity: 0;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grok</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="login-design.css">
+    
+    <style>
+    /* 🔥 AUTH MODAL PRO DESIGN */
+    #authModal {
+      backdrop-filter: blur(10px);
+      animation: fadeIn 0.3s ease;
+      display: none;
     }
-    10% { opacity: 1; }
-    to {
-        transform: translateY(-10vh) scale(1.2);
-        opacity: 0;
+    #authModal > div {
+      background: rgba(20,20,20,0.9);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      border-radius: 20px;
+      padding: 30px;
+      width: 340px;
+      transform: scale(0.95);
+      animation: pop 0.25s ease forwards;
     }
-}
-/* ==================== ANIMATIONS ==================== */
-@keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
+    #authTitle {
+      font-size: 22px;
+      font-weight: 600;
+      text-align: center;
+    }
+    #authEmail, #authPassword {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color: white;
+      outline: none;
+      transition: 0.2s;
+    }
+    #authEmail:focus, #authPassword:focus {
+      border: 1px solid #6366f1;
+      background: rgba(99,102,241,0.08);
+      box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
+    }
+    #authSubmit {
+      margin-top: 20px;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      width: 100%;
+    }
+    #authSubmit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(99,102,241,0.4);
+    }
+    #authModal button:last-child {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.1);
+      margin-top: 10px;
+      width: 100%;
+    }
+    #authModal button:last-child:hover {
+      background: rgba(255,255,255,0.05);
+    }
+    @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+    @keyframes pop { to { transform: scale(1) } }
+    </style>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
 
-@keyframes floatGlow {
-    0%, 100% { opacity: 0.2; transform: translate(0, 0) scale(1); }
-    50% { opacity: 0.45; transform: translate(30px, -30px) scale(1.1); }
-}
+    <!-- NAVIGATION -->
+    <header class="top-nav">
+        <div class="nav-left">
+            <div class="logo-container" onclick="location.reload()">
+                <svg class="grok-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="14.31" y1="8" x2="20.05" y2="17.94"></line>
+                    <line x1="9.69" y1="8" x2="21.17" y2="8"></line>
+                    <line x1="7.38" y1="12" x2="13.12" y2="2.06"></line>
+                    <line x1="9.69" y1="16" x2="3.95" y2="6.06"></line>
+                    <line x1="14.31" y1="16" x2="2.83" y2="16"></line>
+                    <line x1="16.62" y1="12" x2="10.88" y2="21.94"></line>
+                </svg>
+            </div>
+        </div>
+       
+        <div class="nav-right">
+            <button class="nav-btn">
+                <i data-lucide="sparkles"></i>
+                <span>Imagine</span>
+            </button>
+            <button class="nav-btn" id="settingsTrigger">
+                <i data-lucide="settings"></i>
+            </button>
+            <button class="btn-signin" onclick="openAuthModal('login')">Sign in</button>
+            <button class="btn-signup" onclick="openAuthModal('signup')">Sign up</button>
+        </div>
+    </header>
 
-@keyframes shimmer {
-    0% { background-position: -1000px 0; }
-    100% { background-position: 1000px 0; }
-}
+    <main class="container">
+        <section id="signupPage" class="home-view hidden">
+  <h2>Sign up page</h2>
+</section>
+        <!-- AUTH FULL PAGE -->
+        <section id="authPage" class="home-view hidden">
 
-@keyframes pageLoadFadeIn {
-    from { opacity: 0; filter: blur(8px); }
-    to { opacity: 1; filter: blur(0); }
-}
 
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-12px); }
-}
+            
+          <div id="particles"></div>
+          <div style="display:flex;justify-content:center;align-items:center;height:80vh;">
+            <div class="auth-card">
+              <h2 id="authPageTitle">Sign in</h2>
+              <input id="authEmailPage" type="email" placeholder="Email">
+              <input id="authPasswordPage" type="password" placeholder="Password">
+              <button id="authPageSubmit">Continue</button>
+              <p id="switchAuth" style="margin-top:15px;cursor:pointer;opacity:0.7;">
+                Don't have an account? Sign up
+              </p>
+            </div>
+          </div>
+        </section>
 
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+        <!-- HOME VIEW -->
+        <section id="home" class="home-view">
+            <div class="hero-section">
+                <div class="hero-logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="14.31" y1="8" x2="20.05" y2="17.94"></line>
+                        <line x1="9.69" y1="8" x2="21.17" y2="8"></line>
+                        <line x1="7.38" y1="12" x2="13.12" y2="2.06"></line>
+                        <line x1="9.69" y1="16" x2="3.95" y2="6.06"></line>
+                        <line x1="14.31" y1="16" x2="2.83" y2="16"></line>
+                        <line x1="16.62" y1="12" x2="10.88" y2="21.94"></line>
+                    </svg>
+                    <h1>Grok</h1>
+                </div>
+            </div>
+           
+            <div class="search-container">
+                <div class="search-box">
+                    <div class="file-preview-area" id="homeFilePreview"></div>
+                    <div class="input-area">
+                        <button class="input-icon" onclick="document.getElementById('homeFileInput').click()">
+                            <i data-lucide="paperclip"></i>
+                        </button>
+                        <input type="file" id="homeFileInput" class="hidden-input" multiple>
+                        <textarea id="homeInput" placeholder="How can I help you today?" rows="1" oninput="autoResize(this)" onkeydown="handleKeydown(event, 'home')"></textarea>
+                        <div class="input-controls">
+                            <div class="mode-selector">
+                                <span>Auto</span>
+                                <i data-lucide="chevron-down"></i>
+                            </div>
+                            <button class="control-btn" id="homeMicBtn" onclick="toggleMic('home')">
+                                <i data-lucide="mic"></i>
+                            </button>
+                            <button class="control-btn send-btn" onclick="startChat()">
+                                <i data-lucide="arrow-up"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="search-hint">
+                    <i data-lucide="sparkles"></i>
+                    <span>New · Hold Ctrl+D to dictate</span>
+                </div>
+            </div>
+        </section>
 
-@keyframes slideIn {
-    from { opacity: 0; transform: translateY(8px) scale(0.97); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-}
+        <!-- CHAT VIEW -->
+        <section id="chat" class="chat-view hidden">
+            <div id="messages" class="messages-list"></div>
+            <div class="chat-input-container">
+                <div class="search-box">
+                    <div class="file-preview-area" id="chatFilePreview"></div>
+                    <div class="input-area">
+                        <button class="input-icon" onclick="document.getElementById('chatFileInput').click()">
+                            <i data-lucide="paperclip"></i>
+                        </button>
+                        <input type="file" id="chatFileInput" class="hidden-input" multiple>
+                        <textarea id="chatInput" placeholder="Send a message..." rows="1" oninput="autoResize(this)" onkeydown="handleKeydown(event, 'chat')"></textarea>
+                        <div class="input-controls">
+                            <div class="mode-selector">
+                                <span>Auto</span>
+                                <i data-lucide="chevron-down"></i>
+                            </div>
+                            <button class="control-btn" id="chatMicBtn" onclick="toggleMic('chat')">
+                                <i data-lucide="mic"></i>
+                            </button>
+                            <button class="control-btn send-btn" onclick="send()">
+                                <i data-lucide="arrow-up"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-@keyframes pulse {
-    0%, 60%, 100% { opacity: 0.3; transform: scale(0.75); }
-    30% { opacity: 1; transform: scale(1); }
-}
+    <!-- ====================== FIXED AUTH MODAL (One only) ====================== -->
+    <div id="authModal">
+      <div class="box">
+        <h2 id="authTitle">Login</h2>
+        <p class="subtitle">Welcome back</p>
+        
+        <input id="authEmail" type="email" placeholder="Email">
+        <input id="authPassword" type="password" placeholder="Password">
+        
+        <button id="authSubmit">Continue</button>
+        <button class="cancel" onclick="closeAuthModal()">Cancel</button>
+      </div>
+    </div>
 
-@keyframes recordingPulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.4); }
-    50% { box-shadow: 0 0 0 7px rgba(255, 107, 53, 0.08); }
-}
+    <script src="ControleAi.js"></script>
+    <script src="features.js"></script>
+    <script type="module" src="firebase.js"></script>
+
+    <script>
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            AI.init("messages", "https://my-webxyu.vercel.app/api/chat");
+            setupFileUpload('homeFileInput', 'homeFilePreview');
+            setupFileUpload('chatFileInput', 'chatFilePreview');
+            
+            document.getElementById('authSubmit').addEventListener('click', handleLogin);
+        });
 
  
-/* ==================== RESET ==================== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html, body {
-    width: 100%;
-    height: 100%;
-}
-
-/* ==================== BODY ==================== */
-body {
-    background: #000000;
-    animation: pageLoadFadeIn 1s ease-out forwards;
-    color: var(--text-color);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: 15px;
-    line-height: 1.6;
-    overflow: hidden;
-    position: relative;
-    opacity: 0;
-}
-
-body::before {
-    content: '';
-    position: fixed;
-    top: -40%;
-    left: -40%;
-    width: 180%;
-    height: 180%;
-    background: radial-gradient(ellipse at 30% 20%, rgba(255, 107, 53, 0.04) 0%, transparent 60%),
-                radial-gradient(ellipse at 70% 80%, rgba(255, 69, 0, 0.03) 0%, transparent 60%);
-    pointer-events: none;
-    animation: floatGlow 25s ease-in-out infinite;
-    z-index: 0;
-}
-
-/* ==================== AUTH PAGE ==================== */
-#authPage {
-    position: relative;
-    overflow: hidden;
-}
-
-#particles {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-}
-
-.auth-card {
-    position: relative;
-    z-index: 1;
-    width: 350px;
-    padding: 32px;
-    border-radius: var(--radius-xl);
-    background: rgba(10, 10, 12, 0.92);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--border-color);
-    box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.03);
-    text-align: center;
-    color: var(--text-color);
-}
-
-.auth-card input {
-    width: 100%;
-    padding: 13px 16px;
-    margin-top: 10px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    background: var(--input-bg);
-    color: var(--text-color);
-    font-size: 14px;
-    font-family: inherit;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.auth-card input:focus {
-    border-color: var(--grok-orange);
-    box-shadow: 0 0 0 3px var(--grok-orange-dim);
-}
-
-.auth-card button {
-    margin-top: 20px;
-    width: 100%;
-    padding: 13px;
-    border-radius: var(--radius-full);
-    border: none;
-    background: var(--grok-orange);
-    color: white;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.auth-card button:hover {
-    background: var(--accent-2);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.35);
-}
-/* ==================== AUTH MODAL FIXED ==================== */
-
-#authModal {
-    position: fixed;
-    inset: 0;
-    display: none; /* default hidden */
-    align-items: center;
-    justify-content: center;
-    background: rgba(0,0,0,0.75);
-    backdrop-filter: blur(14px);
-    z-index: 99999;
-
-    /* FIX: prevent interaction bugs */
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-}
-
-/* 🔥 ACTIVE STATE (IMPORTANT) */
-#authModal.active {
-    display: flex;
-    pointer-events: auto;
-    opacity: 1;
-}
-
-/* ================= BOX ================= */
-#authModal .box {
-    width: 380px;
-    padding: 36px 32px;
-    border-radius: var(--radius-xl);
-    background: #050507;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-
-    color: var(--text-color);
-    text-align: center;
-
-    /* FIX animation */
-    transform: translateY(10px) scale(0.96);
-    opacity: 0;
-    transition: all 0.25s ease;
-}
-
-/* box animation when modal active */
-#authModal.active .box {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-}
-
-/* ================= TITLE ================= */
-#authTitle {
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    letter-spacing: -0.3px;
-}
-
-.subtitle {
-    color: var(--secondary-text);
-    font-size: 14px;
-    margin-bottom: 24px;
-}
-
-/* ================= INPUTS ================= */
-#authEmail,
-#authPassword {
-    width: 100%;
-    padding: 13px 16px;
-    margin: 6px 0;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    background: var(--input-bg);
-    color: var(--text-color);
-    font-size: 14px;
-    outline: none;
-    transition: 0.2s;
-}
-
-#authEmail:focus,
-#authPassword:focus {
-    border-color: var(--grok-orange);
-    box-shadow: 0 0 0 3px var(--grok-orange-dim);
-}
-
-/* ================= BUTTON ================= */
-#authSubmit {
-    width: 100%;
-    margin-top: 16px;
-    padding: 13px;
-    border: none;
-    border-radius: var(--radius-full);
-    background: var(--grok-orange);
-    color: white;
-    font-weight: 700;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-#authSubmit:hover {
-    background: var(--accent-2);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 24px rgba(255, 107, 53, 0.4);
-}
-
-/* ================= CANCEL ================= */
-.cancel {
-    width: 100%;
-    margin-top: 10px;
-    padding: 11px;
-    border-radius: var(--radius-full);
-    background: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--secondary-text);
-    font-size: 14px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.cancel:hover {
-    border-color: var(--secondary-text);
-    color: var(--text-color);
-}
-
-
-
-/* ==================== FULL LOGIN PAGE (GROK STYLE) ==================== */
-
-.login-wrapper {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: radial-gradient(circle at 20% 20%, #0a0a0a, #000);
-    overflow: hidden;
-    z-index: 9999;
-}
-
-/* 🔥 Animated Background Glow */
-.login-wrapper::before {
-    content: "";
-    position: absolute;
-    width: 1200px;
-    height: 1200px;
-    background: radial-gradient(circle, rgba(255,107,53,0.08), transparent 60%);
-    animation: moveGlow 10s linear infinite;
-}
-
-@keyframes moveGlow {
-    0% { transform: translate(-20%, -20%) }
-    50% { transform: translate(20%, 20%) }
-    100% { transform: translate(-20%, -20%) }
-}
-
-/* 🔥 CARD */
-.login-card {
-    width: 420px;
-    padding: 50px 40px;
-    border-radius: 24px;
-    background: rgba(10,10,12,0.85);
-    border: 1px solid rgba(255,255,255,0.08);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 80px 160px rgba(0,0,0,0.95);
-    text-align: center;
-
-    transform: perspective(1200px) rotateX(12deg) scale(0.95);
-    animation: enter 0.8s cubic-bezier(.34,1.56,.64,1) forwards;
-}
-
-/* 🔥 دخول animation */
-@keyframes enter {
-    from {
-        opacity: 0;
-        transform: perspective(1200px) rotateX(25deg) scale(0.85) translateY(40px);
-    }
-    to {
-        opacity: 1;
-        transform: perspective(1200px) rotateX(0deg) scale(1) translateY(0);
-    }
-}
-
-/* 🔥 LOGO */
-.login-logo {
-    width: 50px;
-    margin: 0 auto 20px;
-    opacity: 0.9;
-}
-
-/* 🔥 TITLE */
-.login-card h1 {
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 6px;
-}
-
-.login-sub {
-    color: #777;
-    font-size: 14px;
-    margin-bottom: 30px;
-}
-
-/* 🔥 INPUT */
-.login-card input {
-    width: 100%;
-    padding: 14px 16px;
-    margin: 10px 0;
-    border-radius: 12px;
-    border: 1px solid #2f3336;
-    background: #16181c;
-    color: #fff;
-    font-size: 14px;
-    outline: none;
-    transition: 0.2s;
-}
-
-.login-card input:focus {
-    border-color: #ff6b35;
-    box-shadow: 0 0 0 3px rgba(255,107,53,0.2);
-}
-
-/* 🔥 BUTTON */
-.login-card button {
-    width: 100%;
-    padding: 14px;
-    margin-top: 16px;
-    border-radius: 999px;
-    background: linear-gradient(135deg, #ff6b35, #ff8c42);
-    color: white;
-    font-weight: 700;
-    border: none;
-    cursor: pointer;
-    transition: 0.25s;
-}
-
-.login-card button:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 15px 40px rgba(255,107,53,0.4);
-}
-
-/* 🔥 GOOGLE BUTTON */
-.google-btn {
-    margin-top: 12px;
-    background: transparent;
-    border: 1px solid #2f3336;
-}
-
-.google-btn:hover {
-    background: #111;
-}
-
-/* 🔥 FOOTER */
-.login-footer {
-    margin-top: 20px;
-    font-size: 13px;
-    color: #888;
-    cursor: pointer;
-}
-/* ==================== SCENE / HERO CARD ==================== */
-body {
-    background: radial-gradient(circle at top, #0a0a0a, #000);
-    overflow: hidden;
-}
-
-.scene {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    perspective: 1200px;
-}
-
-.hero-card {
-    width: 420px;
-    padding: 44px 40px;
-    border-radius: var(--radius-xl);
-    text-align: center;
-    background: rgba(10,10,12,0.85);
-    border: 1px solid var(--border-color);
-    transform: rotateX(10deg) rotateY(-10deg);
-    animation: float3d 6s infinite ease-in-out;
-    box-shadow: 0 60px 140px rgba(0,0,0,0.85), 0 0 60px rgba(255,107,53,0.04);
-    backdrop-filter: blur(20px);
-}
-
-.hero-card h1 {
-    color: var(--text-color);
-    font-weight: 700;
-    letter-spacing: -0.5px;
-}
-
-.hero-card p {
-    color: var(--secondary-text);
-    margin-top: 8px;
-    font-size: 14px;
-}
-
-.hero-card button {
-    margin-top: 24px;
-    padding: 13px 28px;
-    border-radius: var(--radius-full);
-    background: var(--grok-orange);
-    border: none;
-    color: white;
-    font-weight: 700;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.hero-card button:hover {
-    background: var(--accent-2);
-    box-shadow: 0 8px 28px rgba(255,107,53,0.4);
-    transform: translateY(-2px);
-}
-
-/* ==================== NAVIGATION ==================== */
-.top-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 56px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(20px) saturate(1.5);
-    border-bottom: 1px solid var(--border-color);
-    z-index: 100;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.03);
-    transition: background 0.3s ease;
-}
-
-.nav-left {
-    display: flex;
-    align-items: center;
-}
-
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.logo-container {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: var(--radius-full);
-    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.logo-container:hover {
-    background: var(--hover-bg);
-    transform: scale(1.08) rotate(4deg);
-    box-shadow: 0 0 16px rgba(255, 107, 53, 0.15);
-}
-
-.grok-logo {
-    width: 24px;
-    height: 24px;
-    stroke: currentColor;
-}
-
-.nav-btn {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    background: transparent;
-    border: none;
-    color: var(--secondary-text);
-    cursor: pointer;
-    padding: 8px 12px;
-    border-radius: var(--radius-full);
-    font-size: 14px;
-    font-family: inherit;
-    font-weight: 500;
-    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-}
-
-.nav-btn:hover {
-    background: var(--grok-orange-dim);
-    color: var(--grok-orange);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.12);
-}
-
-.nav-btn i {
-    width: 18px;
-    height: 18px;
-}
-
-.btn-signin {
-    background: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-    padding: 8px 18px;
-    border-radius: var(--radius-full);
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    font-family: inherit;
-    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.btn-signin:hover {
-    background: var(--hover-bg);
-    border-color: var(--secondary-text);
-    transform: translateY(-1px);
-}
-
-.btn-signup {
-    background: var(--grok-orange);
-    color: white;
-    border: none;
-    padding: 8px 20px;
-    border-radius: var(--radius-full);
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 700;
-    font-family: inherit;
-    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: 0 4px 14px rgba(255, 107, 53, 0.25);
-}
-
-.btn-signup:hover {
-    background: var(--accent-2);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 22px rgba(255, 107, 53, 0.4);
-}
-
-/* ==================== CONTAINER ==================== */
-.container {
-    position: fixed;
-    top: 56px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-/* ==================== HOME VIEW ==================== */
-.home-view {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-    animation: fadeInUp 0.7s ease-out;
-}
-
-.hero-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 40px;
-}
-
-.hero-logo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 44px;
-}
-
-.hero-logo svg {
-    width: 112px;
-    height: 112px;
-    stroke: var(--text-color);
-    opacity: 0.9;
-    animation: float 4.5s ease-in-out infinite, fadeInUp 0.8s ease-out;
-    filter: drop-shadow(0 0 24px rgba(255,107,53,0.1));
-}
-
-.hero-logo h1 {
-    font-size: 54px;
-    font-weight: 800;
-    letter-spacing: -2px;
-    background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: fadeInUp 1s ease-out 0.2s both;
-}
-
-/* ==================== SEARCH BOX ==================== */
-.search-container {
-    width: 100%;
-    max-width: 640px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    animation: fadeInUp 1s ease-out 0.35s both;
-}
-
-.search-box {
-    background: var(--surface-2);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-xl);
-    padding: 14px 18px;
-    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    backdrop-filter: blur(12px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.03);
-}
-
-.search-box:focus-within {
-    border-color: var(--grok-orange);
-    box-shadow: 0 0 0 3px var(--grok-orange-dim), 0 0 24px rgba(255, 107, 53, 0.15);
-    transform: translateY(-2px);
-    background: var(--surface-3);
-}
-
-.input-area {
-    display: flex;
-    align-items: flex-end;
-    gap: 12px;
-}
-
-.input-icon {
-    background: transparent;
-    border: none;
-    color: var(--secondary-text);
-    cursor: pointer;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: color 0.2s;
-}
-
-.input-icon i {
-    width: 20px;
-    height: 20px;
-}
-
-.input-icon:hover {
-    color: var(--grok-orange);
-}
-
-#homeInput, #chatInput {
-    flex: 1;
-    background: transparent;
-    border: none;
-    color: var(--text-color);
-    font-family: inherit;
-    font-size: 15px;
-    resize: none;
-    outline: none;
-    max-height: 200px;
-    line-height: 1.6;
-}
-
-#homeInput::placeholder, #chatInput::placeholder {
-    color: var(--secondary-text);
-    opacity: 0.7;
-}
-
-.input-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-    position: relative;
-}
-
-/* ==================== MODE SELECTOR ==================== */
-.mode-selector {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    color: var(--secondary-text);
-    font-size: 13px;
-    font-weight: 500;
-    padding: 5px 10px;
-    border-radius: var(--radius-full);
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
-    z-index: 10;
-}
-
-.mode-selector:hover {
-    background: var(--hover-bg);
-    color: var(--text-color);
-}
-
-.mode-selector i {
-    width: 16px;
-    height: 16px;
-}
-
-.thinking-text {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  color: #ececec;
-  font-size: 14px;
-  font-family: Inter, sans-serif;
-  opacity: 0.85;
-}
-
-/* 🧠 dot واحد فقط (ChatGPT style minimal) */
-.thinking-dot {
-  width: 6px;
-  height: 6px;
-  background: #ff6b35;
-  border-radius: 50%;
-  animation: thinkingPulse 1.2s infinite ease-in-out;
-}
-
-.thinking-container {
-  display: flex;
-  align-items: center;
-}
-
-.thinking-bubble {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border-radius: 14px;
-
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.06);
-  backdrop-filter: blur(10px);
-}
-
-/* loader dots */
-.loader-dots {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-}
-
-.loader-dots span {
-  width: 6px;
-  height: 6px;
-  background: #ff6b35;
-  border-radius: 50%;
-  animation: blink 1.2s infinite ease-in-out;
-  opacity: 0.3;
-}
-
-.loader-dots span:nth-child(2) { animation-delay: 0.2s; }
-.loader-dots span:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes blink {
-  0%, 100% { transform: scale(0.8); opacity: 0.3; }
-  50% { transform: scale(1.2); opacity: 1; }
-}
+    
  
-/* ==================== CONTROL BUTTONS ==================== */
-.control-btn {
-    background: transparent;
-    border: none;
-    color: var(--secondary-text);
-    cursor: pointer;
-    padding: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--radius-full);
-    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
+         
+        // ====================== AUTH FUNCTIONS (Cleaned) ======================
+        function openAuthModal(mode) {
+            const modal = document.getElementById('authModal');
+            const title = document.getElementById('authTitle');
+            
+            title.textContent = (mode === 'signup') ? 'Create Account' : 'Login';
+            modal.style.display = 'flex';
+        }
 
-.control-btn i {
-    width: 20px;
-    height: 20px;
-}
+        function closeAuthModal() {
+            document.getElementById('authModal').style.display = 'none';
+        }
 
-.control-btn:hover {
-    background: var(--grok-orange-dim);
-    color: var(--grok-orange);
-    transform: scale(1.1) rotate(8deg);
-}
+        async function handleLogin() {
+            const email = document.getElementById('authEmail').value.trim();
+            const password = document.getElementById('authPassword').value.trim();
+           
+            if (!email || !password) {
+                alert("Please enter email and password");
+                return;
+            }
 
-.send-btn {
-    background: var(--grok-orange);
-    color: white;
-    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
-}
+            try {
+                alert("Login successful!"); 
+                closeAuthModal();
+            } catch (error) {
+                alert("Login failed: " + error.message);
+            }
+        }
 
-.send-btn:hover {
-    background: var(--accent-2);
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.45);
-    color: white;
-}
+        // Close when clicking outside
+        document.getElementById('authModal').addEventListener('click', function(e) {
+            if (e.target === this) closeAuthModal();
+        });
 
-.search-hint {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    color: var(--secondary-text);
-    font-size: 12px;
-    opacity: 0.7;
-}
+        // ====================== YOUR ORIGINAL FUNCTIONS ======================
+        const homeView = document.getElementById("home");
+        const chatView = document.getElementById("chat");
 
-.search-hint i {
-    width: 14px;
-    height: 14px;
-}
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
+            textarea.style.transition = 'height 0.2s ease';
+        }
 
-/* ==================== CHAT VIEW ==================== */
-.chat-view {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    overflow: hidden;
-    animation: fadeInUp 0.5s ease-out;
-}
+        function handleKeydown(event, type) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                if (type === 'home') startChat();
+                else send();
+            }
+        }
 
-.messages-list {
-    flex: 1;
-    overflow-y: auto;
-    padding: 24px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
+        function startChat() {
+            const input = document.getElementById("homeInput");
+            const text = input.value.trim();
+            if (!text) return;
+           
+            homeView.style.animation = 'slideOut 0.4s ease-out forwards';
+            setTimeout(() => {
+                homeView.classList.add("hidden");
+                chatView.classList.remove("hidden");
+                chatView.style.animation = 'slideIn 0.4s ease-out';
+                AI.user(text);
+                input.value = "";
+                input.style.height = 'auto';
+                document.getElementById("homeFilePreview").innerHTML = '';
+                document.getElementById("homeFileInput").value = '';
+                AI.ask(text);
+            }, 400);
+        }
 
-.messages-list::-webkit-scrollbar {
-    width: 6px;
-}
+        function send() {
+            const input = document.getElementById("chatInput");
+            const text = input.value.trim();
+            if (!text) return;
+           
+            input.style.transform = 'scale(0.98)';
+            setTimeout(() => input.style.transform = 'scale(1)', 100);
+           
+            AI.user(text);
+            input.value = "";
+            input.style.height = 'auto';
+            document.getElementById("chatFilePreview").innerHTML = '';
+            document.getElementById("chatFileInput").value = '';
+            AI.ask(text);
+        }
 
-.messages-list::-webkit-scrollbar-track {
-    background: transparent;
-}
+        // Slide animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideOut {
+                from { opacity: 1; transform: scale(1); }
+                to { opacity: 0; transform: scale(0.95) translateY(-20px); }
+            }
+            @keyframes slideIn {
+                from { opacity: 0; transform: scale(0.95) translateY(20px); }
+                to { opacity: 1; transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 
-.messages-list::-webkit-scrollbar-thumb {
-    background: var(--border-color);
-    border-radius: 3px;
-}
-
-.messages-list::-webkit-scrollbar-thumb:hover {
-    background: var(--secondary-text);
-}
-
-/* ==================== MESSAGES ==================== */
-.msg-wrapper {
-    display: flex;
-    animation: slideIn 0.28s ease-out;
-}
-
-.msg {
-    max-width: 78%;
-    padding: 13px 18px;
-    border-radius: var(--radius-lg);
-    word-wrap: break-word;
-    line-height: 1.6;
-    font-size: 15px;
-}
-
-.msg.user {
-    background: var(--grok-orange);
-    color: white;
-    align-self: flex-end;
-    border-radius: var(--radius-lg);
-    box-shadow: 0 4px 16px rgba(255, 107, 53, 0.28);
-    transition: all 0.2s ease;
-}
-
-.msg.user:hover {
-    box-shadow: 0 6px 24px rgba(255, 107, 53, 0.4);
-    transform: translateY(-1px);
-}
-
-.msg.ai {
-    background: transparent;
-    color: var(--text-color);
-    align-self: flex-start;
-    border-left: 2px solid var(--grok-orange);
-    padding-left: 18px;
-    border-radius: 0;
-    transition: all 0.2s ease;
-}
-
-.msg.ai:hover {
-    border-left-color: rgba(255, 107, 53, 0.5);
-    padding-left: 22px;
-}
-
- 
-
-let i = 0;
-
-
-
-
-
- 
-
-
-
-/* ==================== CODE BLOCKS ==================== */
-.code-box {
-    background: var(--input-bg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    margin: 10px 0;
-}
-
-.code-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 16px;
-    border-bottom: 1px solid var(--border-color);
-    background: rgba(255, 255, 255, 0.02);
-}
-
-.code-lang {
-    font-size: 12px;
-    color: var(--secondary-text);
-    font-family: 'Monaco', 'Courier New', monospace;
-    font-weight: 500;
-}
-
-.copy-btn {
-    background: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--secondary-text);
-    padding: 4px 12px;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    font-size: 12px;
-    font-family: inherit;
-    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.copy-btn:hover {
-    background: var(--grok-orange-dim);
-    color: var(--grok-orange);
-    border-color: var(--grok-orange-border);
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.15);
-}
-
-pre {
-    padding: 18px 16px;
-    overflow-x: auto;
-    font-family: 'Monaco', 'Courier New', monospace;
-    font-size: 13px;
-    line-height: 1.65;
-}
-
-code {
-    color: var(--text-color);
-}
-
-.cmt { color: #5c6370; }
-.str { color: #98c379; }
-.num { color: #e5c07b; }
-.kw  { color: #ff6b35; font-weight: 600; }
-.fn  { color: #61afef; }
-
-/* ==================== CHAT INPUT ==================== */
-.chat-input-container {
-    padding: 14px 20px 20px;
-    background: var(--bg-color);
-    border-top: 1px solid var(--border-color);
-}
-
-.chat-input-container .search-box {
-    max-width: 640px;
-    margin: 0 auto;
-}
-
-/* ==================== HIDDEN ==================== */
-.hidden {
-    display: none !important;
-}
-
-.hidden-input {
-    display: none;
-}
-
-/* ==================== FILE UPLOAD ==================== */
-.file-preview-area {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 10px;
-    min-height: 0;
-}
-
-.file-preview-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--grok-orange-dim);
-    border: 1px solid var(--grok-orange-border);
-    padding: 6px 12px;
-    border-radius: var(--radius-sm);
-    font-size: 12px;
-    color: var(--text-color);
-    animation: slideIn 0.25s ease-out;
-}
-
-.file-preview-item i {
-    width: 14px;
-    height: 14px;
-    flex-shrink: 0;
-    color: var(--grok-orange);
-}
-
-.file-preview-item .remove-file {
-    cursor: pointer;
-    color: var(--secondary-text);
-    transition: color 0.2s;
-    margin-left: 4px;
-}
-
-.file-preview-item .remove-file:hover {
-    color: var(--grok-orange);
-}
-
-/* ==================== VOICE ==================== */
-.control-btn.recording {
-    background: rgba(255, 107, 53, 0.15);
-    color: var(--grok-orange);
-    animation: recordingPulse 1s infinite;
-}
-
-.voice-message {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 14px;
-    background: var(--grok-orange-dim);
-    border-radius: var(--radius-md);
-    margin-top: 8px;
-    width: fit-content;
-    border: 1px solid var(--grok-orange-border);
-}
-
-.voice-btn-play {
-    background: transparent;
-    border: none;
-    color: var(--grok-orange);
-    cursor: pointer;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--radius-full);
-    transition: all 0.2s;
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
-}
-
-.voice-btn-play:hover {
-    color: var(--accent-2);
-    transform: scale(1.15);
-}
-
-.voice-btn-play i {
-    width: 16px;
-    height: 16px;
-}
-
-.voice-duration {
-    font-size: 12px;
-    color: var(--secondary-text);
-    white-space: nowrap;
-}
-
-/* ==================== RESPONSIVE ==================== */
-@media (max-width: 640px) {
-    .top-nav {
-        padding: 0 14px;
-    }
-
-    .nav-btn span {
-        display: none;
-    }
-
-    .btn-signin {
-        display: none;
-    }
-
-    .hero-logo h1 {
-        font-size: 38px;
-    }
-
-    .search-container {
-        max-width: 100%;
-    }
-
-    .msg {
-        max-width: 90%;
-    }
-
-    .search-hint {
-        font-size: 11px;
-    }
-
-    .file-preview-item {
-        font-size: 11px;
-        padding: 4px 8px;
-    }
-
-    .mode-menu {
-        min-width: 166px;
-    }
-
-    .hero-card {
-        width: 92%;
-        padding: 32px 24px;
-    }
-
-    .login-card {
-        width: 92%;
-        padding: 32px 24px;
-    }
-
-    #authModal .box {
-        width: 92%;
-        padding: 28px 20px;
-    }
-}
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+</body>
+</html>
