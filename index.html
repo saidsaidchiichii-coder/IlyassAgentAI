@@ -77,6 +77,33 @@
     </style>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+    <script>
+function showLoader() {
+    document.getElementById("loader").classList.add("active");
+}
+
+function hideLoader() {
+    document.getElementById("loader").classList.remove("active");
+}
+
+/* 🔄 Page switch مع loading */
+function goPage(pageId) {
+
+    showLoader();
+
+    setTimeout(() => {
+
+        document.querySelectorAll(".page").forEach(p => {
+            p.classList.remove("active");
+        });
+
+        document.getElementById(pageId).classList.add("active");
+
+        hideLoader();
+
+    }, 800); // ~1 ثانية
+}
+</script>
 <body>
 
     <div id="pages">
