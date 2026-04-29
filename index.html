@@ -86,47 +86,7 @@ function hideLoader() {
     document.getElementById("loader").classList.remove("active");
 }
 
-/* 🔄 Page switch مع loading */
-function goPage(pageId) {
-
-    showLoader();
-
-    setTimeout(() => {
-
-        document.querySelectorAll(".page").forEach(p => {
-            p.classList.remove("active");
-        });
-
-        document.getElementById(pageId).classList.add("active");
-
-        hideLoader();
-
-    }, 800); // ~1 ثانية
-}
-</script>
-<body>
-
-    <div id="pages">
-
-    <!-- HOME -->
-    <section class="page active" id="homePage">
-        <h1>Home</h1>
-        <p>مرحبا بك فالموقع ديالك 🔥</p>
-    </section>
-
-    <!-- ABOUT -->
-    <section class="page" id="aboutPage">
-        <h1>About</h1>
-        <p>هاد الموقع معمول بتصميم عصري وتجربة سلسة.</p>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="page" id="contactPage">
-        <h1>Contact</h1>
-        <p>تواصل معنا عبر الإيميل أو الفورم.</p>
-    </section>
-
-</div>
+ 
 
     <!-- NAVIGATION -->
     <header class="top-nav">
