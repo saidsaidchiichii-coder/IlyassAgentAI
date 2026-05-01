@@ -105,8 +105,6 @@
             </button>
             <button class="btn-signin" onclick="openAuthModal('login')">Sign in</button>
             <button class="btn-signup" onclick="openAuthModal('signup')">Sign up</button>
-            <button class="btn-signup" onclick="getApiKey()">Get API Key</button>
-
         </div>
     </header>
 
@@ -241,35 +239,7 @@
 
  
     
-   async function getApiKey() {
-    try {
-        console.log("🚀 Requesting API Key...");
-
-        const res = await fetch("/api/generate-key", {
-            method: "POST"
-        });
-
-        const data = await res.json();
-
-        console.log("📦 FULL RESPONSE:", data);
-
-        if (!res.ok) {
-            alert("HTTP Error: " + res.status);
-            return;
-        }
-
-        if (!data.apiKey) {
-            alert("❌ No API Key returned!");
-            return;
-        }
-
-        alert("Your API Key: " + data.apiKey);
-
-    } catch (err) {
-        console.error("🔥 ERROR:", err);
-        alert("Error generating key");
-    }
-}
+ 
          
         // ====================== AUTH FUNCTIONS (Cleaned) ======================
         function openAuthModal(mode) {
@@ -351,7 +321,8 @@
             input.style.transform = 'scale(0.98)';
             setTimeout(() => input.style.transform = 'scale(1)', 100);
            
-            AI.user(text);
+  
+           AI.user(text);
             input.value = "";
             input.style.height = 'auto';
             document.getElementById("chatFilePreview").innerHTML = '';
