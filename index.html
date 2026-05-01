@@ -228,21 +228,40 @@
     <script type="module" src="firebase.js"></script>
 
     <script>
-        async function getApiKey() {
+
+
+
+  async function getApiKey() {
     try {
+        console.log("🚀 Requesting API Key...");
+
         const res = await fetch("/api/generate-key", {
             method: "POST"
         });
 
         const data = await res.json();
 
+        console.log("📦 FULL RESPONSE:", data);
+
+        if (!res.ok) {
+            alert("HTTP Error: " + res.status);
+            return;
+        }
+
+        if (!data.apiKey) {
+            alert("❌ No API Key returned!");
+            return;
+        }
+
         alert("Your API Key: " + data.apiKey);
-        console.log("API KEY:", data.apiKey);
 
     } catch (err) {
+        console.error("🔥 ERROR:", err);
         alert("Error generating key");
     }
 }
+
+        
         
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
