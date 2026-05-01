@@ -127,6 +127,7 @@
             </button>
             <button class="btn-signin" onclick="openAuthModal('login')">Sign in</button>
             <button class="btn-signup" onclick="openAuthModal('signup')">Sign up</button>
+            <button class="btn-signup" onclick="getApiKey()">Get API Key</button>
         </div>
     </header>
 
@@ -227,6 +228,22 @@
     <script type="module" src="firebase.js"></script>
 
     <script>
+        async function getApiKey() {
+    try {
+        const res = await fetch("/api/generate-key", {
+            method: "POST"
+        });
+
+        const data = await res.json();
+
+        alert("Your API Key: " + data.apiKey);
+        console.log("API KEY:", data.apiKey);
+
+    } catch (err) {
+        alert("Error generating key");
+    }
+}
+        
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             if (window.lucide) lucide.createIcons();
