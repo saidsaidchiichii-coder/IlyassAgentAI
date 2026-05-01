@@ -276,15 +276,37 @@
                 setupFileUpload('chatFileInput', 'chatFilePreview');
             }
             
-            const authSubmit = document.getElementById('authSubmit');
-            if (authSubmit) {
-                authSubmit.addEventListener('click', () => {
-                    if (typeof window.handleAuth === 'function') {
-                        window.handleAuth();
-                    }
-                });
-            }
-        });
+       const authSubmit = document.getElementById('authSubmit');
+
+if (authSubmit) {
+  authSubmit.addEventListener('click', async () => {
+    
+    const email = document.getElementById('authEmail').value;
+    const password = document.getElementById('authPassword').value;
+
+    try {
+      let user;
+
+      // 🔐 check mode (login / signup)
+      const title = document.getElementById('authTitle').innerText;
+
+      if (title === "Login") {
+        user = await signInWithEmailAndPassword(auth, email, password);
+      } else {
+        user = await createUserWithEmailAndPassword(auth, email, password);
+      }
+
+      console.log("USER UID:", user.user.uid);
+      alert("Success ✔️ " + user.user.email);
+
+      // close modal
+      document.getElementById('authModal').style.display = 'none';
+
+    } catch (err) {
+      alert(err.message);
+    }
+  });
+}
 
         // ====================== AUTH FUNCTIONS ======================
         window.openAuthModal = function(mode) {
