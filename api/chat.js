@@ -36,6 +36,21 @@ export default async function handler(req, res) {
       return res.status(403).json({ error: "Invalid API key" });
     }
 
+    // ⛔ DAILY LIMIT (NEW PART ADDED)
+    const now = Date.now();
+    const data = keyDoc.data();
+
+    const ONE_DAY = 24 * 60 * 60 * 1000;
+
+    if (data.lastUsed && now - data.lastUsed < ONE_DAY) {
+      const remaining = ONE_DAY - (now - data.lastUsed);
+      const hours = Math.ceil(remaining / (1000 * 60 * 60));
+
+      return res.status(429).json({
+        error: `Try again after ${hours} hours`
+      });
+    }
+
     if (!message) {
       return res.status(400).json({ error: "Message required" });
     }
@@ -61,21 +76,24 @@ export default async function handler(req, res) {
       }
     );
 
-    const data = await response.json();
+    const dataRes = await response.json();
 
     if (!response.ok) {
       return res.status(500).json({
-        error: data.error?.message || "Groq API error"
+        error: dataRes.error?.message || "Groq API error"
       });
     }
 
     // 📊 usage++
     await db.collection("apiKeys").doc(apiKey).update({
-      usage: admin.firestore.FieldValue.increment(1)
+      usage: admin.firestore.FieldValue.increment(1),
+
+      // ⏱️ UPDATE LAST USED (IMPORTANT)
+      lastUsed: Date.now()
     });
 
     return res.status(200).json({
-      reply: data.choices?.[0]?.message?.content || "No response"
+      reply: dataRes.choices?.[0]?.message?.content || "No response"
     });
 
   } catch (err) {
