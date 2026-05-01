@@ -1,5 +1,4 @@
-import admin from "firebase-admin";
-import { v4 as uuidv4 } from "uuid";
+const admin = require("firebase-admin");
 
 function initFirebase() {
   if (!admin.apps.length) {
@@ -14,15 +13,16 @@ function initFirebase() {
   return admin.firestore();
 }
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   try {
     if (req.method !== "POST") {
       return res.status(405).json({ error: "Only POST allowed" });
     }
 
-    const db = initFirebase(); // 🔥 مهم
+    const db = initFirebase();
 
-    const apiKey = "key_" + uuidv4();
+    const apiKey =
+      "key_" + Math.random().toString(36).slice(2) + Date.now();
 
     await db.collection("apiKeys").doc(apiKey).set({
       key: apiKey,
@@ -37,9 +37,7 @@ export default async function handler(req, res) {
     });
 
   } catch (err) {
-    console.error("FIREBASE ERROR:", err);
-    return res.status(500).json({
-      error: err.message,
-    });
+    console.error(err);
+    return res.status(500).json({ error: err.message });
   }
-}
+};
