@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
 
-  // 🟢 GET TEST
+  // GET test
   if (req.method === "GET") {
     return res.status(200).json({
       ok: true,
@@ -8,36 +8,17 @@ export default async function handler(req, res) {
     });
   }
 
-  // 🔴 ONLY POST
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Only POST allowed" });
   }
 
   try {
 
-    // 📦 PARSE BODY
     const body = typeof req.body === "string"
       ? JSON.parse(req.body)
       : req.body;
 
     const message = body?.message;
-
-    // 🔐 API KEY
-    const apiKey = req.headers["x-api-key"];
-
-    if (!apiKey) {
-      return res.status(401).json({ error: "Missing API key" });
-    }
-
-    // 🔐 FIREBASE CHECK
-    const admin = await import("firebase-admin");
-    const db = admin.firestore();
-
-    const keyDoc = await db.collection("apiKeys").doc(apiKey).get();
-
-    if (!keyDoc.exists || !keyDoc.data().active) {
-      return res.status(403).json({ error: "Invalid API key" });
-    }
 
     if (!message) {
       return res.status(400).json({ error: "Message required" });
@@ -72,19 +53,14 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // ❌ ERROR HANDLING
+    // ❌ handle errors
     if (!response.ok) {
       return res.status(500).json({
         error: data.error?.message || "Groq API error"
       });
     }
 
-    // 📊 UPDATE USAGE
-    await db.collection("apiKeys").doc(apiKey).update({
-      usage: admin.firestore.FieldValue.increment(1)
-    });
-
-    // ✅ RESPONSE
+    // ✅ success
     return res.status(200).json({
       reply: data.choices?.[0]?.message?.content || "No response"
     });
