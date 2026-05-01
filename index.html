@@ -6,77 +6,10 @@
     <title>Grok</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="login-design.css">
-    
-    <style>
-    /* 🔥 AUTH MODAL PRO DESIGN */
-    #authModal {
-      backdrop-filter: blur(10px);
-      animation: fadeIn 0.3s ease;
-      display: none;
-    }
-    #authModal > div {
-      background: rgba(20,20,20,0.9);
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-      border-radius: 20px;
-      padding: 30px;
-      width: 340px;
-      transform: scale(0.95);
-      animation: pop 0.25s ease forwards;
-    }
-    #authTitle {
-      font-size: 22px;
-      font-weight: 600;
-      text-align: center;
-    }
-    #authEmail, #authPassword {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.03);
-      color: white;
-      outline: none;
-      transition: 0.2s;
-    }
-    #authEmail:focus, #authPassword:focus {
-      border: 1px solid #6366f1;
-      background: rgba(99,102,241,0.08);
-      box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
-    }
-    #authSubmit {
-      margin-top: 20px;
-      background: linear-gradient(135deg, #6366f1, #4f46e5);
-      border: none;
-      border-radius: 10px;
-      padding: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-      width: 100%;
-    }
-    #authSubmit:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(99,102,241,0.4);
-    }
-    #authModal button:last-child {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.1);
-      margin-top: 10px;
-      width: 100%;
-    }
-    #authModal button:last-child:hover {
-      background: rgba(255,255,255,0.05);
-    }
-    @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
-    @keyframes pop { to { transform: scale(1) } }
-    </style>
-    <script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <!-- NAVIGATION -->
@@ -105,32 +38,11 @@
             </button>
             <button class="btn-signin" onclick="openAuthModal('login')">Sign in</button>
             <button class="btn-signup" onclick="openAuthModal('signup')">Sign up</button>
+            <button class="btn-signup" onclick="getApiKey()">Get API Key</button>
         </div>
     </header>
 
     <main class="container">
-        <section id="signupPage" class="home-view hidden">
-  <h2>Sign up page</h2>
-</section>
-        <!-- AUTH FULL PAGE -->
-        <section id="authPage" class="home-view hidden">
-
-
-            
-          <div id="particles"></div>
-          <div style="display:flex;justify-content:center;align-items:center;height:80vh;">
-            <div class="auth-card">
-              <h2 id="authPageTitle">Sign in</h2>
-              <input id="authEmailPage" type="email" placeholder="Email">
-              <input id="authPasswordPage" type="password" placeholder="Password">
-              <button id="authPageSubmit">Continue</button>
-              <p id="switchAuth" style="margin-top:15px;cursor:pointer;opacity:0.7;">
-                Don't have an account? Sign up
-              </p>
-            </div>
-          </div>
-        </section>
-
         <!-- HOME VIEW -->
         <section id="home" class="home-view">
             <div class="hero-section">
@@ -208,11 +120,11 @@
         </section>
     </main>
 
-    <!-- ====================== FIXED AUTH MODAL (One only) ====================== -->
+    <!-- ====================== FIXED AUTH MODAL ====================== -->
     <div id="authModal">
       <div class="box">
         <h2 id="authTitle">Login</h2>
-        <p class="subtitle">Welcome back</p>
+        <p class="subtitle" id="authSubtitle">Welcome back</p>
         
         <input id="authEmail" type="email" placeholder="Email">
         <input id="authPassword" type="password" placeholder="Password">
@@ -227,63 +139,119 @@
     <script type="module" src="firebase.js"></script>
 
     <script>
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-            AI.init("messages", "https://my-webxyu.vercel.app/api/chat");
-            setupFileUpload('homeFileInput', 'homeFilePreview');
-            setupFileUpload('chatFileInput', 'chatFilePreview');
-            
-            document.getElementById('authSubmit').addEventListener('click', handleLogin);
+
+
+
+  async function getApiKey() {
+    try {
+        console.log("🚀 Requesting API Key...");
+
+        const res = await fetch("/api/generate-key", {
+            method: "POST"
         });
 
- 
-    
- 
-         
-        // ====================== AUTH FUNCTIONS (Cleaned) ======================
-        function openAuthModal(mode) {
-            const modal = document.getElementById('authModal');
-            const title = document.getElementById('authTitle');
-            
-            title.textContent = (mode === 'signup') ? 'Create Account' : 'Login';
-            modal.style.display = 'flex';
+        const data = await res.json();
+
+        console.log("📦 FULL RESPONSE:", data);
+
+        if (!res.ok) {
+            alert("HTTP Error: " + res.status);
+            return;
         }
 
-        function closeAuthModal() {
-            document.getElementById('authModal').style.display = 'none';
+        if (!data.apiKey) {
+            alert("❌ No API Key returned!");
+            return;
         }
 
-        async function handleLogin() {
-            const email = document.getElementById('authEmail').value.trim();
-            const password = document.getElementById('authPassword').value.trim();
-           
-            if (!email || !password) {
-                alert("Please enter email and password");
-                return;
-            }
+        alert("Your API Key: " + data.apiKey);
+
+    } catch (err) {
+        console.error("🔥 ERROR:", err);
+        alert("Error generating key");
+    }
+}
+
+        
+        
+      // ====================== INITIALIZE ======================
+document.addEventListener('DOMContentLoaded', () => {
+
+    const authModal = document.getElementById('authModal');
+
+    if (authModal) {
+        authModal.addEventListener('click', function (e) {
+            if (e.target === this) closeAuthModal();
+        });
+    }
+
+    const authSubmit = document.getElementById('authSubmit');
+
+    if (authSubmit) {
+        authSubmit.addEventListener('click', async () => {
+
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
 
             try {
-                alert("Login successful!"); 
-                closeAuthModal();
-            } catch (error) {
-                alert("Login failed: " + error.message);
+                let user;
+
+                const title = document.getElementById('authTitle').innerText;
+
+                if (title === "Login") {
+                    user = await signInWithEmailAndPassword(auth, email, password);
+                } else {
+                    user = await createUserWithEmailAndPassword(auth, email, password);
+                }
+
+                console.log("USER UID:", user.user.uid);
+                alert("Success ✔️ " + user.user.email);
+
+                authModal.style.display = 'none';
+
+            } catch (err) {
+                console.error(err);
+                alert(err.message);
             }
-        }
+        });
+    }
+});
+
+// ====================== AUTH FUNCTIONS ======================
+        window.openAuthModal = function(mode) {
+            const modal = document.getElementById('authModal');
+            const title = document.getElementById('authTitle');
+            const subtitle = document.getElementById('authSubtitle');
+            
+            if (mode === 'signup') {
+                title.textContent = 'Create Account';
+                subtitle.textContent = 'Join the community';
+                if (window.setAuthMode) window.setAuthMode('signup');
+            } else {
+                title.textContent = 'Login';
+                subtitle.textContent = 'Welcome back';
+                if (window.setAuthMode) window.setAuthMode('login');
+            }
+            
+            modal.style.display = 'flex';
+        };
+
+        window.closeAuthModal = function() {
+            document.getElementById('authModal').style.display = 'none';
+        };
 
         // Close when clicking outside
         document.getElementById('authModal').addEventListener('click', function(e) {
             if (e.target === this) closeAuthModal();
         });
 
-        // ====================== YOUR ORIGINAL FUNCTIONS ======================
+        // ====================== UI FUNCTIONS ======================
         const homeView = document.getElementById("home");
         const chatView = document.getElementById("chat");
 
         function autoResize(textarea) {
             textarea.style.height = 'auto';
             textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
-            textarea.style.transition = 'height 0.2s ease';
         }
 
         function handleKeydown(event, type) {
@@ -304,12 +272,14 @@
                 homeView.classList.add("hidden");
                 chatView.classList.remove("hidden");
                 chatView.style.animation = 'slideIn 0.4s ease-out';
-                AI.user(text);
+                if (typeof AI !== 'undefined') {
+                    AI.user(text);
+                    AI.ask(text);
+                }
                 input.value = "";
                 input.style.height = 'auto';
                 document.getElementById("homeFilePreview").innerHTML = '';
                 document.getElementById("homeFileInput").value = '';
-                AI.ask(text);
             }, 400);
         }
 
@@ -321,29 +291,50 @@
             input.style.transform = 'scale(0.98)';
             setTimeout(() => input.style.transform = 'scale(1)', 100);
            
-            AI.user(text);
+            if (typeof AI !== 'undefined') {
+                AI.user(text);
+                AI.ask(text);
+            }
             input.value = "";
             input.style.height = 'auto';
             document.getElementById("chatFilePreview").innerHTML = '';
             document.getElementById("chatFileInput").value = '';
-            AI.ask(text);
         }
 
-        // Slide animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideOut {
-                from { opacity: 1; transform: scale(1); }
-                to { opacity: 0; transform: scale(0.95) translateY(-20px); }
-            }
-            @keyframes slideIn {
-                from { opacity: 0; transform: scale(0.95) translateY(20px); }
-                to { opacity: 1; transform: scale(1); }
-            }
-        `;
-        document.head.appendChild(style);
-    </script>
+ 
+ 
+// Slide animation styles
+const style = document.createElement('style');
 
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+style.textContent = `
+@keyframes slideOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.95) translateY(-20px);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+`;
+
+document.head.appendChild(style);
+    </script>
+    <!-- your website content -->
+
+ 
+ 
 </body>
 </html>
