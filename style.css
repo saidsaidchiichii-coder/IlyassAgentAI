@@ -29,9 +29,8 @@
 #particles {
     position: fixed;
     inset: 0;
-    z-index: -1; /* FIX: Moved behind content */
+    z-index: 0;
     overflow: hidden;
-    pointer-events: none; /* FIX: Prevent blocking clicks */
 }
 
 /* particle */
@@ -140,13 +139,19 @@ body::before {
                 radial-gradient(ellipse at 70% 80%, rgba(255, 69, 0, 0.03) 0%, transparent 60%);
     pointer-events: none;
     animation: floatGlow 25s ease-in-out infinite;
-    z-index: -1; /* FIX: Ensure it doesn't block interactions */
+    z-index: 0;
 }
 
 /* ==================== AUTH PAGE ==================== */
 #authPage {
     position: relative;
     overflow: hidden;
+}
+
+#particles {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
 }
 
 .auth-card {
@@ -493,6 +498,7 @@ body {
 }
 
 .hero-card p {
+    color: var(--secondary-text);
     margin-top: 8px;
     font-size: 14px;
 }
@@ -530,7 +536,7 @@ body {
     background: rgba(0, 0, 0, 0.75);
     backdrop-filter: blur(20px) saturate(1.5);
     border-bottom: 1px solid var(--border-color);
-    z-index: 1000; /* FIX: Higher z-index */
+    z-index: 100;
     box-shadow: 0 1px 0 rgba(255,255,255,0.03);
     transition: background 0.3s ease;
 }
@@ -862,6 +868,7 @@ body {
   50% { transform: scale(1.2); opacity: 1; }
 }
  
+/* ==================== CONTROL BUTTONS ==================== */
 .control-btn {
     background: transparent;
     border: none;
@@ -926,11 +933,10 @@ body {
 .messages-list {
     flex: 1;
     overflow-y: auto;
-    padding: 24px 20px 120px; /* FIX: Added bottom padding for input area */
+    padding: 24px 20px;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    z-index: 1;
 }
 
 .messages-list::-webkit-scrollbar {
@@ -995,6 +1001,16 @@ body {
 }
 
  
+
+let i = 0;
+
+
+
+
+
+ 
+
+
 
 /* ==================== CODE BLOCKS ==================== */
 .code-box {
@@ -1064,8 +1080,6 @@ code {
     padding: 14px 20px 20px;
     background: var(--bg-color);
     border-top: 1px solid var(--border-color);
-    position: relative;
-    z-index: 100; /* FIX: Stay above messages */
 }
 
 .chat-input-container .search-box {
