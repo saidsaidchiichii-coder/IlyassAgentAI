@@ -1,5 +1,6 @@
 export default async function handler(req, res) {
 
+  // 🟢 GET TEST
   if (req.method === "GET") {
     return res.status(200).json({
       ok: true,
@@ -7,24 +8,28 @@ export default async function handler(req, res) {
     });
   }
 
+  // 🔴 ONLY POST
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Only POST allowed" });
   }
 
   try {
 
+    // 📦 PARSE BODY
     const body = typeof req.body === "string"
       ? JSON.parse(req.body)
       : req.body;
 
     const message = body?.message;
 
+    // 🔐 API KEY
     const apiKey = req.headers["x-api-key"];
 
     if (!apiKey) {
       return res.status(401).json({ error: "Missing API key" });
     }
 
+    // 🔐 FIREBASE CHECK
     const admin = await import("firebase-admin");
     const db = admin.firestore();
 
@@ -38,7 +43,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Message required" });
     }
 
-    // 🤖 GROQ CALL
+    // 🤖 GROQ API CALL
     const response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
       {
@@ -50,8 +55,14 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           model: "llama-3.3-70b-versatile",
           messages: [
-            { role: "system", content: "You are a helpful assistant." },
-            { role: "user", content: message }
+            {
+              role: "system",
+              content: "You are a helpful assistant."
+            },
+            {
+              role: "user",
+              content: message
+            }
           ],
           temperature: 0.7,
           max_tokens: 1024
@@ -61,16 +72,19 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
+    // ❌ ERROR HANDLING
     if (!response.ok) {
       return res.status(500).json({
         error: data.error?.message || "Groq API error"
       });
     }
 
+    // 📊 UPDATE USAGE
     await db.collection("apiKeys").doc(apiKey).update({
       usage: admin.firestore.FieldValue.increment(1)
     });
 
+    // ✅ RESPONSE
     return res.status(200).json({
       reply: data.choices?.[0]?.message?.content || "No response"
     });
