@@ -7,7 +7,7 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// 🔥 Firebase Config
+// ================= FIREBASE CONFIG =================
 const firebaseConfig = {
   apiKey: "AIzaSyDWch9gK12sGD7awxmRibU6jBspd-tjr6E",
   authDomain: "my-website-17f99.firebaseapp.com",
@@ -18,119 +18,156 @@ const firebaseConfig = {
   measurementId: "G-H1SLRSEBTF"
 };
 
-// Initialize Firebase
+// ================= INIT =================
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// ================= TOAST / NOTIFICATION =================
+// expose globally (IMPORTANT)
+window.auth = auth;
+window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+window.signOut = signOut;
+
+// ================= TOAST SYSTEM =================
 function showMsg(text, type = "info") {
   const box = document.createElement("div");
   box.innerText = text;
-  
-  const bgColor = type === "error" ? "#ff4b2b" : (type === "success" ? "#4caf50" : "#111");
-  
+
+  const colors = {
+    error: "#ff4b2b",
+    success: "#4caf50",
+    info: "#111"
+  };
+
   Object.assign(box.style, {
     position: "fixed",
     bottom: "20px",
     right: "20px",
-    background: bgColor,
+    background: colors[type] || "#111",
     color: "#fff",
-    padding: "12px 20px",
+    padding: "12px 18px",
     borderRadius: "12px",
     zIndex: 9999,
-    transition: "all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+    fontFamily: "Inter, sans-serif",
+    fontSize: "14px",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
     opacity: 0,
     transform: "translateY(20px)",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
-    fontFamily: "Inter, sans-serif",
-    fontSize: "14px"
+    transition: "0.25s"
   });
-  
+
   document.body.appendChild(box);
+
   setTimeout(() => {
     box.style.opacity = 1;
     box.style.transform = "translateY(0)";
   }, 10);
-  
+
   setTimeout(() => {
     box.style.opacity = 0;
     box.style.transform = "translateY(20px)";
     setTimeout(() => box.remove(), 300);
-  }, 4000);
+  }, 3500);
 }
 
 // ================= AUTH STATE =================
 onAuthStateChanged(auth, (user) => {
-    const signinBtn = document.querySelector('.btn-signin');
-    const signupBtn = document.querySelector('.btn-signup');
-    
-    if (user) {
-        console.log("User is logged in:", user.email);
-        if (signinBtn) signinBtn.style.display = 'none';
-        if (signupBtn) {
-            signupBtn.textContent = 'Sign out';
-            signupBtn.onclick = () => signOut(auth).then(() => location.reload());
-        }
-    } else {
-        console.log("No user logged in");
-        if (signinBtn) signinBtn.style.display = 'block';
-        if (signupBtn) {
-            signupBtn.textContent = 'Sign up';
-            signupBtn.onclick = () => window.openAuthModal('signup');
-        }
+  const signinBtn = document.querySelector('.btn-signin');
+  const signupBtn = document.querySelector('.btn-signup');
+
+  if (user) {
+    console.log("Logged in:", user.email);
+
+    if (signinBtn) signinBtn.style.display = "none";
+
+    if (signupBtn) {
+      signupBtn.textContent = "Sign out";
+      signupBtn.onclick = () => signOut(auth).then(() => location.reload());
     }
+
+  } else {
+    console.log("No user");
+
+    if (signinBtn) signinBtn.style.display = "block";
+
+    if (signupBtn) {
+      signupBtn.textContent = "Sign up";
+      signupBtn.onclick = () => window.openAuthModal("signup");
+    }
+  }
 });
 
-// ================= LOGIN / SIGNUP LOGIC =================
+// ================= AUTH MODE =================
 let currentAuthMode = "login";
 
 window.setAuthMode = (mode) => {
-    currentAuthMode = mode;
+  currentAuthMode = mode;
 };
 
+// ================= MAIN AUTH =================
 window.handleAuth = async () => {
-    const email = document.getElementById("authEmail").value.trim();
-    const password = document.getElementById("authPassword").value.trim();
-    const submitBtn = document.getElementById("authSubmit");
+  const email = document.getElementById("authEmail")?.value.trim();
+  const password = document.getElementById("authPassword")?.value.trim();
+  const submitBtn = document.getElementById("authSubmit");
 
-    if (!email || !password) {
-        showMsg("❌ Please fill in all fields", "error");
-        return;
+  if (!email || !password) {
+    showMsg("❌ Fill all fields", "error");
+    return;
+  }
+
+  if (password.length < 6) {
+    showMsg("❌ Password must be 6+ chars", "error");
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.innerText =
+    currentAuthMode === "signup" ? "Creating..." : "Logging in...";
+
+  try {
+    let user;
+
+    if (currentAuthMode === "signup") {
+      user = await createUserWithEmailAndPassword(auth, email, password);
+      showMsg("✅ Account created!", "success");
+    } else {
+      user = await signInWithEmailAndPassword(auth, email, password);
+      showMsg("🔥 Welcome back!", "success");
     }
 
-    if (password.length < 6) {
-        showMsg("❌ Password must be at least 6 characters", "error");
-        return;
+    console.log("USER:", user.user.email);
+
+    if (window.closeAuthModal) window.closeAuthModal();
+
+  } catch (e) {
+    console.error(e);
+
+    let msg = "❌ Error";
+
+    switch (e.code) {
+      case "auth/email-already-in-use":
+        msg = "Email already used";
+        break;
+      case "auth/invalid-email":
+        msg = "Invalid email";
+        break;
+      case "auth/user-not-found":
+        msg = "User not found";
+        break;
+      case "auth/wrong-password":
+        msg = "Wrong password";
+        break;
+      case "auth/invalid-credential":
+        msg = "Invalid credentials";
+        break;
+      default:
+        msg = e.message;
     }
 
-    submitBtn.disabled = true;
-    submitBtn.innerText = currentAuthMode === "signup" ? "Creating Account..." : "Signing in...";
+    showMsg("❌ " + msg, "error");
 
-    try {
-        if (currentAuthMode === "signup") {
-            await createUserWithEmailAndPassword(auth, email, password);
-            showMsg("✅ Account created successfully!", "success");
-        } else {
-            await signInWithEmailAndPassword(auth, email, password);
-            showMsg("🔥 Welcome back!", "success");
-        }
-        
-        if (window.closeAuthModal) window.closeAuthModal();
-    } catch (e) {
-        console.error("Auth error:", e.code, e.message);
-        let errorMsg = "❌ Authentication failed";
-        
-        switch (e.code) {
-            case 'auth/email-already-in-use': errorMsg = "❌ Email already in use"; break;
-            case 'auth/invalid-email': errorMsg = "❌ Invalid email address"; break;
-            case 'auth/user-not-found': errorMsg = "❌ User not found"; break;
-            case 'auth/wrong-password': errorMsg = "❌ Incorrect password"; break;
-            case 'auth/invalid-credential': errorMsg = "❌ Invalid credentials"; break;
-            default: errorMsg = "❌ " + e.message;
-        }
-        showMsg(errorMsg, "error");
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerText = "Continue";
-    }
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerText = "Continue";
+  }
 };
