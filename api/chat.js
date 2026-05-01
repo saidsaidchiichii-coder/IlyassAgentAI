@@ -1,10 +1,10 @@
 export default async function handler(req, res) {
 
-  // GET test
+  // 🟢 TEST
   if (req.method === "GET") {
     return res.status(200).json({
       ok: true,
-      message: "Groq API working ✔️ Use POST"
+      message: "API Key Generator ✔️ Use POST"
     });
   }
 
@@ -13,6 +13,23 @@ export default async function handler(req, res) {
   }
 
   try {
+
+    // 🌐 USER IP
+    const ip =
+      req.headers["x-forwarded-for"] ||
+      req.socket.remoteAddress;
+
+    // 🧠 store in memory
+    if (!global.oneKeyStore) {
+      global.oneKeyStore = {};
+    }
+
+    // ⛔ CHECK: already got key?
+    if (global.oneKeyStore[ip]) {
+      return res.status(403).json({
+        error: "You already got your API key (1 per user only)"
+      });
+    }
 
     const body = typeof req.body === "string"
       ? JSON.parse(req.body)
@@ -24,7 +41,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Message required" });
     }
 
-    // 🤖 GROQ API CALL
+    // 🤖 GROQ CALL (same as your system)
     const response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
       {
@@ -53,14 +70,15 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // ❌ handle errors
     if (!response.ok) {
       return res.status(500).json({
         error: data.error?.message || "Groq API error"
       });
     }
 
-    // ✅ success
+    // 💾 MARK USER AS USED
+    global.oneKeyStore[ip] = true;
+
     return res.status(200).json({
       reply: data.choices?.[0]?.message?.content || "No response"
     });
