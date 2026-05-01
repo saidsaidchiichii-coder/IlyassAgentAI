@@ -1,10 +1,10 @@
 export default async function handler(req, res) {
 
-  // GET test
+  // 🟢 GET test
   if (req.method === "GET") {
     return res.status(200).json({
       ok: true,
-      message: "Groq API working ✔️ Use POST"
+      message: "API Key Generator working ✔️ Use POST"
     });
   }
 
@@ -13,6 +13,31 @@ export default async function handler(req, res) {
   }
 
   try {
+
+    // 🌐 GET USER IP
+    const ip =
+      req.headers["x-forwarded-for"] ||
+      req.socket.remoteAddress;
+
+    // 🧠 simple memory store
+    if (!global.keyLimitStore) {
+      global.keyLimitStore = {};
+    }
+
+    const now = Date.now();
+    const ONE_DAY = 24 * 60 * 60 * 1000;
+
+    const last = global.keyLimitStore[ip];
+
+    // ⛔ LIMIT CHECK
+    if (last && now - last < ONE_DAY) {
+      const remaining = ONE_DAY - (now - last);
+      const hours = Math.ceil(remaining / (1000 * 60 * 60));
+
+      return res.status(429).json({
+        error: `Try again after ${hours} hours`
+      });
+    }
 
     const body = typeof req.body === "string"
       ? JSON.parse(req.body)
@@ -24,31 +49,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Message required" });
     }
 
-    // 🛑 LIMIT SYSTEM (24h per IP)
-    const ip =
-      req.headers["x-forwarded-for"] ||
-      req.socket.remoteAddress;
-
-    // in-memory simple store (basic version)
-    if (!global.rateLimitStore) {
-      global.rateLimitStore = {};
-    }
-
-    const now = Date.now();
-    const ONE_DAY = 24 * 60 * 60 * 1000;
-
-    const userData = global.rateLimitStore[ip];
-
-    if (userData && now - userData < ONE_DAY) {
-      const remaining = ONE_DAY - (now - userData);
-      const hours = Math.ceil(remaining / (1000 * 60 * 60));
-
-      return res.status(429).json({
-        error: `Try again after ${hours} hours`
-      });
-    }
-
-    // 🤖 GROQ API CALL
+    // 🤖 GROQ CALL
     const response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
       {
@@ -77,17 +78,15 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // ❌ handle errors
     if (!response.ok) {
       return res.status(500).json({
         error: data.error?.message || "Groq API error"
       });
     }
 
-    // 💾 SAVE LIMIT TIME
-    global.rateLimitStore[ip] = now;
+    // 💾 SAVE LIMIT TIME (IMPORTANT)
+    global.keyLimitStore[ip] = now;
 
-    // ✅ success
     return res.status(200).json({
       reply: data.choices?.[0]?.message?.content || "No response"
     });
