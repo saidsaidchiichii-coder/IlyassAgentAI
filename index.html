@@ -173,50 +173,7 @@
 }
 
         
-        
-      // ====================== INITIALIZE ======================
-document.addEventListener('DOMContentLoaded', () => {
-
-    const authModal = document.getElementById('authModal');
-
-    if (authModal) {
-        authModal.addEventListener('click', function (e) {
-            if (e.target === this) closeAuthModal();
-        });
-    }
-
-    const authSubmit = document.getElementById('authSubmit');
-
-    if (authSubmit) {
-        authSubmit.addEventListener('click', async () => {
-
-            const email = document.getElementById('authEmail').value;
-            const password = document.getElementById('authPassword').value;
-
-            try {
-                let user;
-
-                const title = document.getElementById('authTitle').innerText;
-
-                if (title === "Login") {
-                    user = await signInWithEmailAndPassword(auth, email, password);
-                } else {
-                    user = await createUserWithEmailAndPassword(auth, email, password);
-                }
-
-                console.log("USER UID:", user.user.uid);
-                alert("Success ✔️ " + user.user.email);
-
-                authModal.style.display = 'none';
-
-            } catch (err) {
-                console.error(err);
-                alert(err.message);
-            }
-        });
-    }
-});
-
+      
 // ====================== AUTH FUNCTIONS ======================
         window.openAuthModal = function(mode) {
             const modal = document.getElementById('authModal');
