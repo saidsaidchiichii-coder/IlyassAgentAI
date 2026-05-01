@@ -294,22 +294,23 @@ body::before {
 #authSubmit {
     width: 100%;
     margin-top: 16px;
-    padding: 14px;
+    padding: 13px;
     border: none;
     border-radius: var(--radius-full);
-    background: linear-gradient(135deg, #ff6b35, #ff8c42);
+    background: var(--grok-orange);
     color: white;
     font-weight: 700;
     font-size: 15px;
     cursor: pointer;
-    transition: all 0.25s ease;
-    box-shadow: 0 6px 18px rgba(255, 107, 53, 0.25);
+    transition: all 0.2s;
 }
 
 #authSubmit:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+    background: var(--accent-2);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px rgba(255, 107, 53, 0.4);
 }
+
 /* ================= CANCEL ================= */
 .cancel {
     width: 100%;
