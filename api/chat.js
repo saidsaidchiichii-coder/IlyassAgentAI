@@ -19,14 +19,12 @@ export default async function handler(req, res) {
 
     const message = body?.message;
 
-    // 🔐 API KEY
     const apiKey = req.headers["x-api-key"];
 
     if (!apiKey) {
       return res.status(401).json({ error: "Missing API key" });
     }
 
-    // 🔐 Firebase check
     const admin = await import("firebase-admin");
     const db = admin.firestore();
 
@@ -34,21 +32,6 @@ export default async function handler(req, res) {
 
     if (!keyDoc.exists || !keyDoc.data().active) {
       return res.status(403).json({ error: "Invalid API key" });
-    }
-
-    // ⛔ DAILY LIMIT (NEW PART ADDED)
-    const now = Date.now();
-    const data = keyDoc.data();
-
-    const ONE_DAY = 24 * 60 * 60 * 1000;
-
-    if (data.lastUsed && now - data.lastUsed < ONE_DAY) {
-      const remaining = ONE_DAY - (now - data.lastUsed);
-      const hours = Math.ceil(remaining / (1000 * 60 * 60));
-
-      return res.status(429).json({
-        error: `Try again after ${hours} hours`
-      });
     }
 
     if (!message) {
@@ -76,24 +59,20 @@ export default async function handler(req, res) {
       }
     );
 
-    const dataRes = await response.json();
+    const data = await response.json();
 
     if (!response.ok) {
       return res.status(500).json({
-        error: dataRes.error?.message || "Groq API error"
+        error: data.error?.message || "Groq API error"
       });
     }
 
-    // 📊 usage++
     await db.collection("apiKeys").doc(apiKey).update({
-      usage: admin.firestore.FieldValue.increment(1),
-
-      // ⏱️ UPDATE LAST USED (IMPORTANT)
-      lastUsed: Date.now()
+      usage: admin.firestore.FieldValue.increment(1)
     });
 
     return res.status(200).json({
-      reply: dataRes.choices?.[0]?.message?.content || "No response"
+      reply: data.choices?.[0]?.message?.content || "No response"
     });
 
   } catch (err) {
