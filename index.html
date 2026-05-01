@@ -265,15 +265,13 @@
         
       // ====================== INITIALIZE ======================
 document.addEventListener('DOMContentLoaded', () => {
-    if (window.lucide) lucide.createIcons();
 
-    if (typeof AI !== 'undefined') {
-        AI.init("messages", "https://my-webxyu.vercel.app/api/chat");
-    }
+    const authModal = document.getElementById('authModal');
 
-    if (typeof setupFileUpload === 'function') {
-        setupFileUpload('homeFileInput', 'homeFilePreview');
-        setupFileUpload('chatFileInput', 'chatFilePreview');
+    if (authModal) {
+        authModal.addEventListener('click', function (e) {
+            if (e.target === this) closeAuthModal();
+        });
     }
 
     const authSubmit = document.getElementById('authSubmit');
@@ -287,7 +285,6 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 let user;
 
-                // 🔐 check mode (login / signup)
                 const title = document.getElementById('authTitle').innerText;
 
                 if (title === "Login") {
@@ -299,16 +296,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log("USER UID:", user.user.uid);
                 alert("Success ✔️ " + user.user.email);
 
-                // close modal
-                document.getElementById('authModal').style.display = 'none';
+                authModal.style.display = 'none';
 
             } catch (err) {
+                console.error(err);
                 alert(err.message);
             }
         });
     }
 });
-
 
 // ====================== AUTH FUNCTIONS ======================
         window.openAuthModal = function(mode) {
