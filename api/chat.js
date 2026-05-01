@@ -1,6 +1,5 @@
 export default async function handler(req, res) {
 
-  // GET test
   if (req.method === "GET") {
     return res.status(200).json({
       ok: true,
@@ -20,11 +19,28 @@ export default async function handler(req, res) {
 
     const message = body?.message;
 
+    // 🔐 API KEY
+    const apiKey = req.headers["x-api-key"];
+
+    if (!apiKey) {
+      return res.status(401).json({ error: "Missing API key" });
+    }
+
+    // 🔐 Firebase check
+    const admin = await import("firebase-admin");
+    const db = admin.firestore();
+
+    const keyDoc = await db.collection("apiKeys").doc(apiKey).get();
+
+    if (!keyDoc.exists || !keyDoc.data().active) {
+      return res.status(403).json({ error: "Invalid API key" });
+    }
+
     if (!message) {
       return res.status(400).json({ error: "Message required" });
     }
 
-    // 🤖 GROQ API CALL
+    // 🤖 GROQ CALL
     const response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
       {
@@ -36,14 +52,8 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           model: "llama-3.3-70b-versatile",
           messages: [
-            {
-              role: "system",
-              content: "You are a helpful assistant."
-            },
-            {
-              role: "user",
-              content: message
-            }
+            { role: "system", content: "You are a helpful assistant." },
+            { role: "user", content: message }
           ],
           temperature: 0.7,
           max_tokens: 1024
@@ -53,14 +63,17 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // ❌ handle errors
     if (!response.ok) {
       return res.status(500).json({
         error: data.error?.message || "Groq API error"
       });
     }
 
-    // ✅ success
+    // 📊 usage++
+    await db.collection("apiKeys").doc(apiKey).update({
+      usage: admin.firestore.FieldValue.increment(1)
+    });
+
     return res.status(200).json({
       reply: data.choices?.[0]?.message?.content || "No response"
     });
