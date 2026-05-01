@@ -120,11 +120,11 @@
         </section>
     </main>
 
-    <!-- ====================== FIXED AUTH MODAL ====================== -->
+    <!-- ====================== FIXED AUTH MODAL (One only) ====================== -->
     <div id="authModal">
       <div class="box">
         <h2 id="authTitle">Login</h2>
-        <p class="subtitle" id="authSubtitle">Welcome back</p>
+        <p class="subtitle">Welcome back</p>
         
         <input id="authEmail" type="email" placeholder="Email">
         <input id="authPassword" type="password" placeholder="Password">
@@ -139,6 +139,17 @@
     <script type="module" src="firebase.js"></script>
 
     <script>
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            AI.init("messages", "https://my-webxyu.vercel.app/api/chat");
+            setupFileUpload('homeFileInput', 'homeFilePreview');
+            setupFileUpload('chatFileInput', 'chatFilePreview');
+            
+            document.getElementById('authSubmit').addEventListener('click', handleLogin);
+        });
+
+     
 
 
 
