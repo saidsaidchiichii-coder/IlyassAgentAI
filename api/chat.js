@@ -24,6 +24,30 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Message required" });
     }
 
+    // 🛑 LIMIT SYSTEM (24h per IP)
+    const ip =
+      req.headers["x-forwarded-for"] ||
+      req.socket.remoteAddress;
+
+    // in-memory simple store (basic version)
+    if (!global.rateLimitStore) {
+      global.rateLimitStore = {};
+    }
+
+    const now = Date.now();
+    const ONE_DAY = 24 * 60 * 60 * 1000;
+
+    const userData = global.rateLimitStore[ip];
+
+    if (userData && now - userData < ONE_DAY) {
+      const remaining = ONE_DAY - (now - userData);
+      const hours = Math.ceil(remaining / (1000 * 60 * 60));
+
+      return res.status(429).json({
+        error: `Try again after ${hours} hours`
+      });
+    }
+
     // 🤖 GROQ API CALL
     const response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
@@ -59,6 +83,9 @@ export default async function handler(req, res) {
         error: data.error?.message || "Groq API error"
       });
     }
+
+    // 💾 SAVE LIMIT TIME
+    global.rateLimitStore[ip] = now;
 
     // ✅ success
     return res.status(200).json({
