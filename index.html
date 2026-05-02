@@ -103,13 +103,36 @@
             <button class="nav-btn" id="settingsTrigger">
                 <i data-lucide="settings"></i>
             </button>
- 
+            <button class="btn-signin" onclick="openAuthModal('login')">Sign in</button>
+            <button class="btn-signup" onclick="openAuthModal('signup')">Sign up</button>
+            <button class="btn-signup" onclick="getApiKey()">Get API Key</button>
+
         </div>
     </header>
 
- 
+    <main class="container">
+        <section id="signupPage" class="home-view hidden">
+  <h2>Sign up page</h2>
+</section>
+        <!-- AUTH FULL PAGE -->
+        <section id="authPage" class="home-view hidden">
 
-      
+
+            
+          <div id="particles"></div>
+          <div style="display:flex;justify-content:center;align-items:center;height:80vh;">
+            <div class="auth-card">
+              <h2 id="authPageTitle">Sign in</h2>
+              <input id="authEmailPage" type="email" placeholder="Email">
+              <input id="authPasswordPage" type="password" placeholder="Password">
+              <button id="authPageSubmit">Continue</button>
+              <p id="switchAuth" style="margin-top:15px;cursor:pointer;opacity:0.7;">
+                Don't have an account? Sign up
+              </p>
+            </div>
+          </div>
+        </section>
+
         <!-- HOME VIEW -->
         <section id="home" class="home-view">
             <div class="hero-section">
