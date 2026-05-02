@@ -213,19 +213,33 @@
     </main>
 
     <!-- ====================== FIXED AUTH MODAL (One only) ====================== -->
-    <div id="authModal">
-      <div class="box">
-        <h2 id="authTitle">Login</h2>
-        <p class="subtitle">Welcome back</p>
-        
-        <input id="authEmail" type="email" placeholder="Email">
-        <input id="authPassword" type="password" placeholder="Password">
-        
-        <button id="authSubmit">Continue</button>
-        <button class="cancel" onclick="closeAuthModal()">Cancel</button>
-      </div>
-    </div>
+  <div id="authModal">
+  <div class="box">
+    <h2 id="authTitle">Login</h2>
+    <p class="subtitle">Welcome back</p>
 
+    <input id="authEmail" type="email" placeholder="Email">
+    <input id="authPassword" type="password" placeholder="Password">
+
+    <button id="authSubmit">Continue</button>
+
+    <!-- 🔵 GOOGLE LOGIN -->
+    <button onclick="loginWithGoogle()" style="
+      width:100%;
+      margin-top:10px;
+      padding:10px;
+      border-radius:10px;
+      background:white;
+      color:black;
+      cursor:pointer;
+      font-weight:600;
+    ">
+      Continue with Google
+    </button>
+
+    <button class="cancel" onclick="closeAuthModal()">Cancel</button>
+  </div>
+</div>
     <script src="ControleAi.js"></script>
     <script src="features.js"></script>
     <script type="module" src="firebase.js"></script>
