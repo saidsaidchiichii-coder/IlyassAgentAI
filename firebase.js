@@ -7,6 +7,15 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 // ================= FIREBASE CONFIG =================
 const firebaseConfig = {
   apiKey: "AIzaSyDWch9gK12sGD7awxmRibU6jBspd-tjr6E",
@@ -21,14 +30,16 @@ const firebaseConfig = {
 // ================= INIT =================
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
-// expose globally (IMPORTANT)
+// expose globally
 window.auth = auth;
+window.db = db;
 window.signInWithEmailAndPassword = signInWithEmailAndPassword;
 window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
 window.signOut = signOut;
 
-// ================= TOAST SYSTEM =================
+// ================= TOAST =================
 function showMsg(text, type = "info") {
   const box = document.createElement("div");
   box.innerText = text;
@@ -85,6 +96,8 @@ onAuthStateChanged(auth, (user) => {
       signupBtn.onclick = () => signOut(auth).then(() => location.reload());
     }
 
+    loadHistory(user.uid); // 🔥 LOAD CHAT HISTORY
+
   } else {
     console.log("No user");
 
@@ -115,11 +128,6 @@ window.handleAuth = async () => {
     return;
   }
 
-  if (password.length < 6) {
-    showMsg("❌ Password must be 6+ chars", "error");
-    return;
-  }
-
   submitBtn.disabled = true;
   submitBtn.innerText =
     currentAuthMode === "signup" ? "Creating..." : "Logging in...";
@@ -135,39 +143,46 @@ window.handleAuth = async () => {
       showMsg("🔥 Welcome back!", "success");
     }
 
-    console.log("USER:", user.user.email);
-
     if (window.closeAuthModal) window.closeAuthModal();
 
   } catch (e) {
-    console.error(e);
-
-    let msg = "❌ Error";
-
-    switch (e.code) {
-      case "auth/email-already-in-use":
-        msg = "Email already used";
-        break;
-      case "auth/invalid-email":
-        msg = "Invalid email";
-        break;
-      case "auth/user-not-found":
-        msg = "User not found";
-        break;
-      case "auth/wrong-password":
-        msg = "Wrong password";
-        break;
-      case "auth/invalid-credential":
-        msg = "Invalid credentials";
-        break;
-      default:
-        msg = e.message;
-    }
-
-    showMsg("❌ " + msg, "error");
-
+    showMsg("❌ " + e.message, "error");
   } finally {
     submitBtn.disabled = false;
     submitBtn.innerText = "Continue";
   }
 };
+
+// ================= HISTORY SAVE =================
+window.saveMessage = async (text, role) => {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  await addDoc(collection(db, "users", user.uid, "messages"), {
+    text,
+    role,
+    time: Date.now()
+  });
+};
+
+// ================= HISTORY LOAD =================
+async function loadHistory(uid) {
+  const q = query(
+    collection(db, "users", uid, "messages"),
+    orderBy("time", "asc")
+  );
+
+  const snap = await getDocs(q);
+
+  snap.forEach(doc => {
+    const msg = doc.data();
+
+    // 🔥 لازم يكون عندك AI renderer
+    if (window.AI?.renderMessage) {
+      window.AI.renderMessage({
+        role: msg.role,
+        content: msg.text
+      });
+    }
+  });
+}
