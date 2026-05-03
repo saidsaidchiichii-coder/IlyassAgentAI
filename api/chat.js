@@ -2,43 +2,55 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // ❌ route check
     if (url.pathname !== "/chat") {
       return new Response("Not Found", { status: 404 });
     }
 
+    // ❌ allow only POST
     if (request.method !== "POST") {
       return new Response("Only POST allowed", { status: 405 });
     }
 
     try {
-      const body = await request.json();
-      const message = body.message || "";
-      const mode = body.selectedMode || body.mode || "fast";
+      // ✅ safe JSON parsing
+      let body;
+      try {
+        body = await request.json();
+      } catch (e) {
+        return Response.json(
+          { error: "Invalid JSON body" },
+          { status: 400 }
+        );
+      }
 
-      if (!message.trim()) {
+      const message = body?.message?.trim();
+      const mode = body?.selectedMode || body?.mode || "fast";
+
+      if (!message) {
         return Response.json(
           { error: "message is required" },
           { status: 400 }
         );
       }
 
+      // 🧠 system prompts
       let systemPrompt = "You are a helpful assistant. Reply clearly and naturally.";
 
       if (mode === "thinking") {
         systemPrompt = `
 You are in HARD THINKING mode.
 
-Rules:
-- Think carefully before answering.
-- Give a deeper, more complete answer.
-- Break the explanation into clear steps if needed.
-- Be accurate, practical, and detailed.
-- Do not be overly short.
+- Think step by step
+- Give detailed explanation
+- Be accurate and structured
+- Avoid short answers
 `;
       } else if (mode === "fast") {
-        systemPrompt = "You are a helpful assistant. Give short and direct answers.";
+        systemPrompt = "Give short, direct answers.";
       }
 
+      // 🤖 AI CALL
       const result = await env.AI.run(
         "@cf/meta/llama-3.1-8b-instruct",
         {
@@ -49,16 +61,19 @@ Rules:
         }
       );
 
+      // 🔥 safe response extraction
       const reply =
         result?.response ||
         result?.result ||
         result?.text ||
-        "No response";
+        result?.output ||
+        "No response from AI";
 
       return Response.json({ reply });
+
     } catch (error) {
       return Response.json(
-        { error: error.message || "Server error" },
+        { error: error?.message || "Server error" },
         { status: 500 }
       );
     }
