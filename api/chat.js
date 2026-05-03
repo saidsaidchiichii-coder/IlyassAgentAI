@@ -1,55 +1,23 @@
-export default {
-  async fetch(request, env) {
-
-    // 🟢 CORS preflight
-    if (request.method === "OPTIONS") {
-      return new Response(null, {
+export default async function handler(req, res) {
+  try {
+    const response = await fetch(
+      "https://super-grass-93d7.saidsaidchiichii.workers.dev/chat",
+      {
+        method: "POST",
         headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type"
-        }
-      });
-    }
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(req.body)
+      }
+    );
 
-    const url = new URL(request.url);
+    const data = await response.json();
 
-    if (url.pathname !== "/chat") {
-      return new Response("Not Found", { status: 404 });
-    }
+    return res.status(200).json(data);
 
-    if (request.method === "GET") {
-      return new Response("Chat API OK ✔️ Use POST");
-    }
-
-    try {
-      const body = await request.json();
-
-      const result = await env.AI.run(
-        "@cf/meta/llama-3.1-8b-instruct",
-        {
-          messages: [
-            {
-              role: "user",
-              content: body.message
-            }
-          ]
-        }
-      );
-
-      return new Response(JSON.stringify({
-        reply: result.response
-      }), {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*"
-        }
-      });
-
-    } catch (err) {
-      return new Response(JSON.stringify({
-        error: err.message
-      }), { status: 500 });
-    }
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message
+    });
   }
-};
+}
