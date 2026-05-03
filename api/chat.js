@@ -15,6 +15,7 @@ export default {
       });
     }
 
+    // POST فقط
     if (request.method !== "POST") {
       return new Response("Only POST allowed", { status: 405 });
     }
@@ -29,6 +30,7 @@ export default {
         }), { status: 400 });
       }
 
+      // 🤖 AI CALL
       const result = await env.AI.run(
         "@cf/meta/llama-3.1-8b-instruct",
         {
