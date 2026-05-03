@@ -1,5 +1,16 @@
 export default async function handler(req, res) {
   try {
+    let body = req.body;
+
+    // 🔥 fix empty body issue
+    if (!body) {
+      const chunks = [];
+      for await (const chunk of req) {
+        chunks.push(chunk);
+      }
+      body = JSON.parse(Buffer.concat(chunks).toString());
+    }
+
     const response = await fetch(
       "https://super-grass-93d7.saidsaidchiichii.workers.dev/chat",
       {
@@ -7,7 +18,7 @@ export default async function handler(req, res) {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(req.body)
+        body: JSON.stringify(body)
       }
     );
 
