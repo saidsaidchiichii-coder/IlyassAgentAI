@@ -1,40 +1,37 @@
-export default async function handler(req, res) {
+export default {
+  async fetch(request, env) {
 
-  // GET test
-  if (req.method === "GET") {
-    return res.status(200).json({
-      ok: true,
-      message: "Groq API working ✔️ Use POST"
-    });
-  }
-
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Only POST allowed" });
-  }
-
-  try {
-
-    const body = typeof req.body === "string"
-      ? JSON.parse(req.body)
-      : req.body;
-
-    const message = body?.message;
-
-    if (!message) {
-      return res.status(400).json({ error: "Message required" });
+    // GET test
+    if (request.method === "GET") {
+      return new Response(JSON.stringify({
+        ok: true,
+        message: "Cloudflare AI working ✔️ Use POST"
+      }), {
+        headers: { "Content-Type": "application/json" }
+      });
     }
 
-    // 🤖 GROQ API CALL
-    const response = await fetch(
-      "https://api.groq.com/openai/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
-        },
-        body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",
+    if (request.method !== "POST") {
+      return new Response(JSON.stringify({
+        error: "Only POST allowed"
+      }), { status: 405 });
+    }
+
+    try {
+
+      const body = await request.json();
+      const message = body?.message;
+
+      if (!message) {
+        return new Response(JSON.stringify({
+          error: "Message required"
+        }), { status: 400 });
+      }
+
+      // 🤖 CLOUDFLARE AI CALL
+      const result = await env.AI.run(
+        "@cf/meta/llama-3.1-8b-instruct",
+        {
           messages: [
             {
               role: "system",
@@ -44,30 +41,20 @@ export default async function handler(req, res) {
               role: "user",
               content: message
             }
-          ],
-          temperature: 0.7,
-          max_tokens: 1024
-        })
-      }
-    );
+          ]
+        }
+      );
 
-    const data = await response.json();
-
-    // ❌ handle errors
-    if (!response.ok) {
-      return res.status(500).json({
-        error: data.error?.message || "Groq API error"
+      return new Response(JSON.stringify({
+        reply: result.response || "No response"
+      }), {
+        headers: { "Content-Type": "application/json" }
       });
+
+    } catch (err) {
+      return new Response(JSON.stringify({
+        error: err.message || "Server error"
+      }), { status: 500 });
     }
-
-    // ✅ success
-    return res.status(200).json({
-      reply: data.choices?.[0]?.message?.content || "No response"
-    });
-
-  } catch (err) {
-    return res.status(500).json({
-      error: err.message || "Server error"
-    });
   }
-}
+};
