@@ -6,17 +6,17 @@ export default async function handler(req, res) {
   try {
     const body = req.body;
 
-    // ❌ خاص message ولا prompt
-    if (!body?.message && !body?.prompt) {
+    // لازم type + content
+    if (!body?.type || !body?.content) {
       return res.status(400).json({
-        error: "message or prompt is required",
+        error: "type and content are required",
       });
     }
 
-    // =========================
+    // ======================
     // 💬 CHAT MODE
-    // =========================
-    if (body.message) {
+    // ======================
+    if (body.type === "chat") {
       const response = await fetch(
         "https://super-grass-93d7.saidsaidchiichii.workers.dev/chat",
         {
@@ -24,7 +24,9 @@ export default async function handler(req, res) {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ message: body.message }),
+          body: JSON.stringify({
+            message: body.content,
+          }),
         }
       );
 
@@ -36,10 +38,10 @@ export default async function handler(req, res) {
       });
     }
 
-    // =========================
+    // ======================
     // 🎨 IMAGE MODE
-    // =========================
-    if (body.prompt) {
+    // ======================
+    if (body.type === "image") {
       const response = await fetch("YOUR_IMAGE_API_URL", {
         method: "POST",
         headers: {
@@ -47,7 +49,7 @@ export default async function handler(req, res) {
           "Authorization": `Bearer YOUR_API_KEY`,
         },
         body: JSON.stringify({
-          prompt: body.prompt,
+          prompt: body.content,
         }),
       });
 
@@ -58,6 +60,10 @@ export default async function handler(req, res) {
         image: data.image || data.url,
       });
     }
+
+    return res.status(400).json({
+      error: "Invalid type (use chat or image)",
+    });
 
   } catch (error) {
     return res.status(500).json({
