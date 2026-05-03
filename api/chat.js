@@ -1,26 +1,27 @@
 export default {
   async fetch(request, env) {
 
+    const url = new URL(request.url);
+
+    // 🟢 route /chat فقط
+    if (url.pathname !== "/chat") {
+      return new Response("Not Found", { status: 404 });
+    }
+
     // GET test
     if (request.method === "GET") {
-      return new Response(JSON.stringify({
-        ok: true,
-        message: "Cloudflare AI working ✔️ Use POST"
-      }), {
-        headers: { "Content-Type": "application/json" }
+      return new Response("Chat API is working ✔️ Use POST", {
+        headers: { "Content-Type": "text/plain" }
       });
     }
 
     if (request.method !== "POST") {
-      return new Response(JSON.stringify({
-        error: "Only POST allowed"
-      }), { status: 405 });
+      return new Response("Only POST allowed", { status: 405 });
     }
 
     try {
-
       const body = await request.json();
-      const message = body?.message;
+      const message = body.message;
 
       if (!message) {
         return new Response(JSON.stringify({
@@ -28,15 +29,10 @@ export default {
         }), { status: 400 });
       }
 
-      // 🤖 CLOUDFLARE AI CALL
       const result = await env.AI.run(
         "@cf/meta/llama-3.1-8b-instruct",
         {
           messages: [
-            {
-              role: "system",
-              content: "You are a helpful assistant."
-            },
             {
               role: "user",
               content: message
@@ -46,14 +42,14 @@ export default {
       );
 
       return new Response(JSON.stringify({
-        reply: result.response || "No response"
+        reply: result.response
       }), {
         headers: { "Content-Type": "application/json" }
       });
 
     } catch (err) {
       return new Response(JSON.stringify({
-        error: err.message || "Server error"
+        error: err.message
       }), { status: 500 });
     }
   }
