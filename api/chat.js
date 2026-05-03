@@ -6,7 +6,6 @@ export default async function handler(req, res) {
   try {
     const body = req.body;
 
-    // لازم type + content
     if (!body?.type || !body?.content) {
       return res.status(400).json({
         error: "type and content are required",
@@ -14,42 +13,45 @@ export default async function handler(req, res) {
     }
 
     // ======================
-    // 💬 CHAT MODE
+    // 💬 CHAT
     // ======================
     if (body.type === "chat") {
-      const response = await fetch(
-        "https://super-grass-93d7.saidsaidchiichii.workers.dev/chat",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            message: body.content,
-          }),
-        }
-      );
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer YOUR_OPENAI_API_KEY`,
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [
+            { role: "user", content: body.content }
+          ],
+        }),
+      });
 
       const data = await response.json();
 
       return res.status(200).json({
         type: "chat",
-        data,
+        reply: data.choices?.[0]?.message?.content,
       });
     }
 
     // ======================
-    // 🎨 IMAGE MODE
+    // 🎨 IMAGE
     // ======================
     if (body.type === "image") {
-      const response = await fetch("YOUR_IMAGE_API_URL", {
+      const response = await fetch("https://api.openai.com/v1/images/generations", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer YOUR_API_KEY`,
+          "Authorization": `Bearer YOUR_OPENAI_API_KEY`,
         },
         body: JSON.stringify({
+          model: "gpt-image-1",
           prompt: body.content,
+          size: "1024x1024",
         }),
       });
 
@@ -57,12 +59,12 @@ export default async function handler(req, res) {
 
       return res.status(200).json({
         type: "image",
-        image: data.image || data.url,
+        image: data.data?.[0]?.url,
       });
     }
 
     return res.status(400).json({
-      error: "Invalid type (use chat or image)",
+      error: "Invalid type (chat or image only)",
     });
 
   } catch (error) {
