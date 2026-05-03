@@ -12,6 +12,12 @@ export default async function handler(req, res) {
       });
     }
 
+    const API_KEY = process.env.OPENAI_API_KEY; // مهم يكون فـ env
+
+    if (!API_KEY) {
+      return res.status(500).json({ error: "Missing API key" });
+    }
+
     // ======================
     // 💬 CHAT
     // ======================
@@ -20,21 +26,33 @@ export default async function handler(req, res) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer YOUR_OPENAI_API_KEY`,
+          "Authorization": `Bearer ${API_KEY}`,
         },
         body: JSON.stringify({
           model: "gpt-4o-mini",
-          messages: [
-            { role: "user", content: body.content }
-          ],
+          messages: [{ role: "user", content: body.content }],
         }),
       });
 
+      if (!response.ok) {
+        const err = await response.text();
+        return res.status(500).json({
+          error: "Chat API failed",
+          details: err,
+        });
+      }
+
       const data = await response.json();
+
+      const reply = data?.choices?.[0]?.message?.content;
+
+      if (!reply) {
+        return res.status(500).json({ error: "Empty chat response" });
+      }
 
       return res.status(200).json({
         type: "chat",
-        reply: data.choices?.[0]?.message?.content,
+        reply,
       });
     }
 
@@ -46,7 +64,7 @@ export default async function handler(req, res) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer YOUR_OPENAI_API_KEY`,
+          "Authorization": `Bearer ${API_KEY}`,
         },
         body: JSON.stringify({
           model: "gpt-image-1",
@@ -55,11 +73,25 @@ export default async function handler(req, res) {
         }),
       });
 
+      if (!response.ok) {
+        const err = await response.text();
+        return res.status(500).json({
+          error: "Image API failed",
+          details: err,
+        });
+      }
+
       const data = await response.json();
+
+      const image = data?.data?.[0]?.url;
+
+      if (!image) {
+        return res.status(500).json({ error: "No image returned" });
+      }
 
       return res.status(200).json({
         type: "image",
-        image: data.data?.[0]?.url,
+        image,
       });
     }
 
