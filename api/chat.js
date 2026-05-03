@@ -1,16 +1,32 @@
 export default async function handler(req, res) {
   try {
-    let body = req.body;
-
-    // 🔥 fix empty body issue
-    if (!body) {
-      const chunks = [];
-      for await (const chunk of req) {
-        chunks.push(chunk);
-      }
-      body = JSON.parse(Buffer.concat(chunks).toString());
+    // 🔥 Allow only POST
+    if (req.method !== "POST") {
+      return res.status(405).json({ error: "Only POST allowed" });
     }
 
+    // 🔥 Safely parse body (fix Vercel issues)
+    let body = req.body;
+
+    if (!body) {
+      body = {};
+    }
+
+    if (typeof body === "string") {
+      try {
+        body = JSON.parse(body);
+      } catch (e) {
+        return res.status(400).json({ error: "Invalid JSON body" });
+      }
+    }
+
+    if (!body.message) {
+      return res.status(400).json({
+        error: "message is required"
+      });
+    }
+
+    // 🔥 Call Cloudflare Worker
     const response = await fetch(
       "https://super-grass-93d7.saidsaidchiichii.workers.dev/chat",
       {
@@ -28,7 +44,7 @@ export default async function handler(req, res) {
 
   } catch (error) {
     return res.status(500).json({
-      error: error.message
+      error: error.message || "Server error"
     });
   }
 }
