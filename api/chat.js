@@ -1,46 +1,66 @@
-export default async function handler(req, res) {
-  try {
-    if (req.method !== "POST") {
-      return res.status(405).json({ error: "Only POST allowed" });
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+
+    if (url.pathname !== "/chat") {
+      return new Response("Not Found", { status: 404 });
     }
 
-    // 🔥 force read raw body (100% safe)
-    let body = {};
+    if (request.method !== "POST") {
+      return new Response("Only POST allowed", { status: 405 });
+    }
 
-    if (req.body) {
-      body = req.body;
-    } else {
-      const chunks = [];
-      for await (const chunk of req) chunks.push(chunk);
-      const raw = Buffer.concat(chunks).toString();
+    try {
+      const body = await request.json();
+      const message = body.message || "";
+      const mode = body.selectedMode || body.mode || "fast";
 
-      if (raw) {
-        body = JSON.parse(raw);
+      if (!message.trim()) {
+        return Response.json(
+          { error: "message is required" },
+          { status: 400 }
+        );
       }
-    }
 
-    if (!body.message) {
-      return res.status(400).json({ error: "message is required" });
-    }
+      let systemPrompt = "You are a helpful assistant. Reply clearly and naturally.";
 
-    const response = await fetch(
-      "https://super-grass-93d7.saidsaidchiichii.workers.dev/chat",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
+      if (mode === "thinking") {
+        systemPrompt = `
+You are in HARD THINKING mode.
+
+Rules:
+- Think carefully before answering.
+- Give a deeper, more complete answer.
+- Break the explanation into clear steps if needed.
+- Be accurate, practical, and detailed.
+- Do not be overly short.
+`;
+      } else if (mode === "fast") {
+        systemPrompt = "You are a helpful assistant. Give short and direct answers.";
       }
-    );
 
-    const data = await response.json();
+      const result = await env.AI.run(
+        "@cf/meta/llama-3.1-8b-instruct",
+        {
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: message }
+          ]
+        }
+      );
 
-    return res.status(200).json(data);
+      const reply =
+        result?.response ||
+        result?.result ||
+        result?.text ||
+        "No response";
 
-  } catch (error) {
-    return res.status(500).json({
-      error: error.message
-    });
+      return Response.json({ reply });
+    } catch (error) {
+      return Response.json(
+        { error: error.message || "Server error" },
+        { status: 500 }
+      );
+    }
   }
-}
+};
