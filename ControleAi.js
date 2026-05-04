@@ -25,13 +25,8 @@ const AI = {
     wrapper.className = "msg-wrapper";
     
     const thinkingDiv = document.createElement("div");
-    thinkingDiv.className = "msg ai thinking-container";
-    thinkingDiv.innerHTML = `
-        <div class="loader-dots">
-            <span></span><span></span><span></span>
-        </div>
-        <span class="thinking-text">Thinking...</span>
-    `;
+    thinkingDiv.className = "msg ai thinking";
+    thinkingDiv.innerHTML = `<span class="dot-loader">. . .</span>`;
     
     wrapper.appendChild(thinkingDiv);
     this.messagesBox.appendChild(wrapper);
@@ -78,8 +73,9 @@ const AI = {
     wrapper.appendChild(container);
     this.messagesBox.appendChild(wrapper);
     
-    // Simple typewriter effect
+    // Typewriter effect
     let i = 0;
+    const speed = 15;
     const interval = setInterval(() => {
         if (i < text.length) {
             container.textContent += text.charAt(i);
@@ -88,11 +84,11 @@ const AI = {
         } else {
             clearInterval(interval);
         }
-    }, 20);
+    }, speed);
   },
 
   scroll() {
-    const chatContainer = document.getElementById('chatContainer');
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+    const chatWrapper = document.getElementById('chatWrapper');
+    chatWrapper.scrollTop = chatWrapper.scrollHeight;
   }
 };
