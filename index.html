@@ -3,393 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grok</title>
+    <title>ChatGPT</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="login-design.css">
-    
-    <style>
-    /* 🔥 AUTH MODAL PRO DESIGN */
-    #authModal {
-      backdrop-filter: blur(10px);
-      animation: fadeIn 0.3s ease;
-      display: none;
-    }
-    #authModal > div {
-      background: rgba(20,20,20,0.9);
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-      border-radius: 20px;
-      padding: 30px;
-      width: 340px;
-      transform: scale(0.95);
-      animation: pop 0.25s ease forwards;
-    }
-    #authTitle {
-      font-size: 22px;
-      font-weight: 600;
-      text-align: center;
-    }
-    #authEmail, #authPassword {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.03);
-      color: white;
-      outline: none;
-      transition: 0.2s;
-    }
-    #authEmail:focus, #authPassword:focus {
-      border: 1px solid #6366f1;
-      background: rgba(99,102,241,0.08);
-      box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
-    }
-    #authSubmit {
-      margin-top: 20px;
-      background: linear-gradient(135deg, #6366f1, #4f46e5);
-      border: none;
-      border-radius: 10px;
-      padding: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-      width: 100%;
-    }
-    #authSubmit:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(99,102,241,0.4);
-    }
-    #authModal button:last-child {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.1);
-      margin-top: 10px;
-      width: 100%;
-    }
-    #authModal button:last-child:hover {
-      background: rgba(255,255,255,0.05);
-    }
-    @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
-    @keyframes pop { to { transform: scale(1) } }
-    </style>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-
-    <!-- NAVIGATION -->
-    <header class="top-nav">
-        <div class="nav-left">
-            <div class="logo-container" onclick="location.reload()">
-                <svg class="grok-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="14.31" y1="8" x2="20.05" y2="17.94"></line>
-                    <line x1="9.69" y1="8" x2="21.17" y2="8"></line>
-                    <line x1="7.38" y1="12" x2="13.12" y2="2.06"></line>
-                    <line x1="9.69" y1="16" x2="3.95" y2="6.06"></line>
-                    <line x1="14.31" y1="16" x2="2.83" y2="16"></line>
-                    <line x1="16.62" y1="12" x2="10.88" y2="21.94"></line>
-                </svg>
+    <div class="app-container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <button class="new-chat-btn" onclick="location.reload()">
+                    <i data-lucide="plus"></i>
+                    <span>New Chat</span>
+                </button>
             </div>
+            <div class="chat-history" id="chatHistory">
+                <!-- History items will be injected here -->
+                <div class="history-group">Yesterday</div>
+                <div class="history-item active">
+                    <i data-lucide="message-square"></i>
+                    <span>New Conversation</span>
+                </div>
+            </div>
+            <div class="sidebar-footer">
+                <button class="nav-btn" id="settingsTrigger">
+                    <i data-lucide="settings"></i>
+                    <span>Settings</span>
+                </button>
+                <div class="user-profile">
+                    <div class="user-avatar">U</div>
+                    <span>User</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- TOP NAV (Mobile) -->
+            <header class="mobile-nav">
+                <button id="menuToggle"><i data-lucide="menu"></i></button>
+                <span>ChatGPT</span>
+                <button onclick="location.reload()"><i data-lucide="plus"></i></button>
+            </header>
+
+            <!-- CHAT AREA -->
+            <div id="chatContainer" class="chat-container">
+                <!-- Initial Hero View -->
+                <section id="home" class="hero-view">
+                    <div class="hero-logo">
+                        <div class="chatgpt-logo">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                            </svg>
+                        </div>
+                        <h1>How can I help you today?</h1>
+                    </div>
+                </section>
+
+                <!-- Messages List -->
+                <section id="chat" class="chat-view hidden">
+                    <div id="messages" class="messages-list"></div>
+                </section>
+            </div>
+
+            <!-- INPUT AREA -->
+            <footer class="input-area-container">
+                <div class="input-wrapper">
+                    <div class="input-box">
+                        <button class="attach-btn" onclick="document.getElementById('fileInput').click()">
+                            <i data-lucide="paperclip"></i>
+                        </button>
+                        <input type="file" id="fileInput" class="hidden" multiple>
+                        <textarea id="userInput" placeholder="Message ChatGPT..." rows="1" oninput="autoResize(this)" onkeydown="handleKeydown(event)"></textarea>
+                        <button class="send-btn" id="sendBtn" onclick="handleSend()">
+                            <i data-lucide="arrow-up"></i>
+                        </button>
+                    </div>
+                    <p class="input-footer">ChatGPT can make mistakes. Check important info.</p>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- AUTH MODAL (Hidden by default) -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <h2 id="authTitle">Login</h2>
+            <input id="authEmail" type="email" placeholder="Email">
+            <input id="authPassword" type="password" placeholder="Password">
+            <button id="authSubmit">Continue</button>
+            <button class="secondary-btn" onclick="closeAuthModal()">Cancel</button>
         </div>
-       
-      <div class="nav-right">
-    <button class="nav-btn">
-        <i data-lucide="sparkles"></i>
-        <span>Imagine</span>
-    </button>
-    <button class="nav-btn" id="settingsTrigger">
-        <i data-lucide="settings"></i>
-    </button>
+    </div>
 
-          <button class="btn-api" onclick="getApiKey()">Get API Key</button>
-</div>
-    </header>
-
-    <main class="container">
-        <section id="signupPage" class="home-view hidden">
-  <h2>Sign up page</h2>
-</section>
-
-
-        
-        
-        <!-- AUTH FULL PAGE -->
-        <section id="authPage" class="home-view hidden">
-
-
-            
-          <div id="particles"></div>
-          <div style="display:flex;justify-content:center;align-items:center;height:80vh;">
-            <div class="auth-card">
-              <h2 id="authPageTitle">Sign in</h2>
-              <input id="authEmailPage" type="email" placeholder="Email">
-              <input id="authPasswordPage" type="password" placeholder="Password">
-              <button id="authPageSubmit">Continue</button>
-              <p id="switchAuth" style="margin-top:15px;cursor:pointer;opacity:0.7;">
-                Don't have an account? Sign up
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <!-- HOME VIEW -->
-        <section id="home" class="home-view">
-            <div class="hero-section">
-                <div class="hero-logo">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="14.31" y1="8" x2="20.05" y2="17.94"></line>
-                        <line x1="9.69" y1="8" x2="21.17" y2="8"></line>
-                        <line x1="7.38" y1="12" x2="13.12" y2="2.06"></line>
-                        <line x1="9.69" y1="16" x2="3.95" y2="6.06"></line>
-                        <line x1="14.31" y1="16" x2="2.83" y2="16"></line>
-                        <line x1="16.62" y1="12" x2="10.88" y2="21.94"></line>
-                    </svg>
-                    <h1>Grok</h1>
-                </div>
-            </div>
-           
-            <div class="search-container">
-                <div class="search-box">
-                    <div class="file-preview-area" id="homeFilePreview"></div>
-                    <div class="input-area">
-                        <button class="input-icon" onclick="document.getElementById('homeFileInput').click()">
-                            <i data-lucide="paperclip"></i>
-                        </button>
-                        <input type="file" id="homeFileInput" class="hidden-input" multiple>
-                        <textarea id="homeInput" placeholder="How can I help you today?" rows="1" oninput="autoResize(this)" onkeydown="handleKeydown(event, 'home')"></textarea>
-                        <div class="input-controls">
-                            <div class="mode-selector">
-                                <span>Auto</span>
-                                <i data-lucide="chevron-down"></i>
-                            </div>
-                            <button class="control-btn" id="homeMicBtn" onclick="toggleMic('home')">
-                                <i data-lucide="mic"></i>
-                            </button>
-                            <button class="control-btn send-btn" onclick="startChat()">
-                                <i data-lucide="arrow-up"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="search-hint">
-                    <i data-lucide="sparkles"></i>
-                    <span>New · Hold Ctrl+D to dictate</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- CHAT VIEW -->
-        <section id="chat" class="chat-view hidden">
-            <div id="messages" class="messages-list"></div>
-            <div class="chat-input-container">
-                <div class="search-box">
-                    <div class="file-preview-area" id="chatFilePreview"></div>
-                    <div class="input-area">
-                        <button class="input-icon" onclick="document.getElementById('chatFileInput').click()">
-                            <i data-lucide="paperclip"></i>
-                        </button>
-                        <input type="file" id="chatFileInput" class="hidden-input" multiple>
-                        <textarea id="chatInput" placeholder="Send a message..." rows="1" oninput="autoResize(this)" onkeydown="handleKeydown(event, 'chat')"></textarea>
-                        <div class="input-controls">
-                            <div class="mode-selector">
-                                <span>Auto</span>
-                                <i data-lucide="chevron-down"></i>
-                            </div>
-                            <button class="control-btn" id="chatMicBtn" onclick="toggleMic('chat')">
-                                <i data-lucide="mic"></i>
-                            </button>
-                            <button class="control-btn send-btn" onclick="send()">
-                                <i data-lucide="arrow-up"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- ====================== FIXED AUTH MODAL (One only) ====================== -->
-  <div id="authModal">
-  <div class="box">
-    <h2 id="authTitle">Login</h2>
-    <p class="subtitle">Welcome back</p>
-
-    <input id="authEmail" type="email" placeholder="Email">
-    <input id="authPassword" type="password" placeholder="Password">
-
-    <button id="authSubmit">Continue</button>
-
-    <!-- 🔵 GOOGLE LOGIN -->
-    <button onclick="loginWithGoogle()" style="
-      width:100%;
-      margin-top:10px;
-      padding:10px;
-      border-radius:10px;
-      background:white;
-      color:black;
-      cursor:pointer;
-      font-weight:600;
-    ">
-      Continue with Google
-    </button>
-
-    <button class="cancel" onclick="closeAuthModal()">Cancel</button>
-  </div>
-</div>
     <script src="ControleAi.js"></script>
     <script src="features.js"></script>
     <script type="module" src="firebase.js"></script>
 
     <script>
-        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
-         AI.init("messages", "/api/chat");
-            setupFileUpload('homeFileInput', 'homeFilePreview');
-            setupFileUpload('chatFileInput', 'chatFilePreview');
+            AI.init("messages", "/api/chat");
             
-            document.getElementById('authSubmit').addEventListener('click', handleLogin);
-        });
-
- 
-    
-   async function getApiKey() {
-    try {
-        console.log("🚀 Requesting API Key...");
-
-        const res = await fetch("/api/generate-key", {
-            method: "POST"
-        });
-
-        const data = await res.json();
-
-        console.log("📦 FULL RESPONSE:", data);
-
-        if (!res.ok) {
-            alert("HTTP Error: " + res.status);
-            return;
-        }
-
-        if (!data.apiKey) {
-            alert("❌ No API Key returned!");
-            return;
-        }
-
-        alert("Your API Key: " + data.apiKey);
-
-    } catch (err) {
-        console.error("🔥 ERROR:", err);
-        alert("Error generating key");
-    }
-}
-         
-        // ====================== AUTH FUNCTIONS (Cleaned) ======================
-        function openAuthModal(mode) {
-            const modal = document.getElementById('authModal');
-            const title = document.getElementById('authTitle');
-            
-            title.textContent = (mode === 'signup') ? 'Create Account' : 'Login';
-            modal.style.display = 'flex';
-        }
-
-        function closeAuthModal() {
-            document.getElementById('authModal').style.display = 'none';
-        }
-
-        async function handleLogin() {
-            const email = document.getElementById('authEmail').value.trim();
-            const password = document.getElementById('authPassword').value.trim();
-           
-            if (!email || !password) {
-                alert("Please enter email and password");
-                return;
+            // Mobile Menu Toggle
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            if(menuToggle) {
+                menuToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('open');
+                });
             }
-
-            try {
-                alert("Login successful!"); 
-                closeAuthModal();
-            } catch (error) {
-                alert("Login failed: " + error.message);
-            }
-        }
-
-        // Close when clicking outside
-        document.getElementById('authModal').addEventListener('click', function(e) {
-            if (e.target === this) closeAuthModal();
         });
-
-        // ====================== YOUR ORIGINAL FUNCTIONS ======================
-        const homeView = document.getElementById("home");
-        const chatView = document.getElementById("chat");
 
         function autoResize(textarea) {
             textarea.style.height = 'auto';
-            textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
-            textarea.style.transition = 'height 0.2s ease';
+            textarea.style.height = textarea.scrollHeight + 'px';
         }
 
-        function handleKeydown(event, type) {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                if (type === 'home') startChat();
-                else send();
+        function handleKeydown(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
             }
         }
 
-        function startChat() {
-            const input = document.getElementById("homeInput");
+        function handleSend() {
+            const input = document.getElementById('userInput');
             const text = input.value.trim();
             if (!text) return;
-           
-            homeView.style.animation = 'slideOut 0.4s ease-out forwards';
-            setTimeout(() => {
-                homeView.classList.add("hidden");
-                chatView.classList.remove("hidden");
-                chatView.style.animation = 'slideIn 0.4s ease-out';
-                AI.user(text);
-                input.value = "";
-                input.style.height = 'auto';
-                document.getElementById("homeFilePreview").innerHTML = '';
-                document.getElementById("homeFileInput").value = '';
-                AI.ask(text);
-            }, 400);
-        }
 
-        function send() {
-            const input = document.getElementById("chatInput");
-            const text = input.value.trim();
-            if (!text) return;
-           
-            input.style.transform = 'scale(0.98)';
-            setTimeout(() => input.style.transform = 'scale(1)', 100);
-           
+            // Switch view if first message
+            document.getElementById('home').classList.add('hidden');
+            document.getElementById('chat').classList.remove('hidden');
+
             AI.user(text);
-            input.value = "";
+            input.value = '';
             input.style.height = 'auto';
-            document.getElementById("chatFilePreview").innerHTML = '';
-            document.getElementById("chatFileInput").value = '';
             AI.ask(text);
         }
-
-        // Slide animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideOut {
-                from { opacity: 1; transform: scale(1); }
-                to { opacity: 0; transform: scale(0.95) translateY(-20px); }
-            }
-            @keyframes slideIn {
-                from { opacity: 0; transform: scale(0.95) translateY(20px); }
-                to { opacity: 1; transform: scale(1); }
-            }
-        `;
-        document.head.appendChild(style);
     </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
 </body>
 </html>
