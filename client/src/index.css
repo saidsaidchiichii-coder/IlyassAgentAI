@@ -43,94 +43,87 @@
 }
 
 :root {
-  /* Grok Dark Theme - Navy/Black Base with Cyan Accents */
-  --primary: oklch(0.50 0.28 200);
-  --primary-foreground: oklch(0.98 0.01 0);
-  --sidebar-primary: oklch(0.50 0.28 200);
-  --sidebar-primary-foreground: oklch(0.98 0.01 0);
+  /* Grok Theme - Pure black/dark gray matching grok.com */
+  --primary: oklch(0.95 0.01 0);
+  --primary-foreground: oklch(0.10 0.01 0);
+  --sidebar-primary: oklch(0.95 0.01 0);
+  --sidebar-primary-foreground: oklch(0.10 0.01 0);
   --chart-1: oklch(0.60 0.25 200);
   --chart-2: oklch(0.55 0.27 200);
   --chart-3: oklch(0.50 0.28 200);
   --chart-4: oklch(0.45 0.30 200);
   --chart-5: oklch(0.40 0.32 200);
   --radius: 0.75rem;
-  
-  /* Very dark navy background - Grok signature */
-  --background: oklch(0.065 0.008 262);
-  --foreground: oklch(0.97 0.01 0);
-  
-  /* Card background - slightly lighter */
-  --card: oklch(0.11 0.015 262);
-  --card-foreground: oklch(0.97 0.01 0);
-  
-  /* Popover styling */
-  --popover: oklch(0.11 0.015 262);
-  --popover-foreground: oklch(0.97 0.01 0);
-  
-  /* Secondary colors */
-  --secondary: oklch(0.14 0.018 262);
-  --secondary-foreground: oklch(0.88 0.015 0);
-  
-  /* Muted colors */
-  --muted: oklch(0.17 0.020 262);
-  --muted-foreground: oklch(0.62 0.018 0);
-  
-  /* Accent - Bright Cyan for Grok */
-  --accent: oklch(0.68 0.22 200);
-  --accent-foreground: oklch(0.065 0.008 262);
-  
-  /* Destructive */
+
+  /* Pure black background - Grok signature */
+  --background: oklch(0.05 0.005 0);
+  --foreground: oklch(0.95 0.01 0);
+
+  /* Card - very subtle lighter */
+  --card: oklch(0.10 0.005 0);
+  --card-foreground: oklch(0.95 0.01 0);
+
+  --popover: oklch(0.10 0.005 0);
+  --popover-foreground: oklch(0.95 0.01 0);
+
+  --secondary: oklch(0.14 0.005 0);
+  --secondary-foreground: oklch(0.88 0.01 0);
+
+  --muted: oklch(0.14 0.005 0);
+  --muted-foreground: oklch(0.55 0.01 0);
+
+  --accent: oklch(0.95 0.01 0);
+  --accent-foreground: oklch(0.05 0.005 0);
+
   --destructive: oklch(0.62 0.22 25);
   --destructive-foreground: oklch(0.98 0.01 0);
-  
-  /* Borders and inputs */
-  --border: oklch(0.18 0.020 262);
-  --input: oklch(0.14 0.018 262);
-  --ring: oklch(0.68 0.22 200);
-  
-  /* Sidebar */
-  --sidebar: oklch(0.095 0.012 262);
-  --sidebar-foreground: oklch(0.97 0.01 0);
-  --sidebar-accent: oklch(0.16 0.018 262);
-  --sidebar-accent-foreground: oklch(0.97 0.01 0);
-  --sidebar-border: oklch(0.14 0.016 262);
-  --sidebar-ring: oklch(0.68 0.22 200);
+
+  --border: oklch(0.16 0.005 0);
+  --input: oklch(0.14 0.005 0);
+  --ring: oklch(0.95 0.01 0);
+
+  /* Sidebar - slightly lighter than bg */
+  --sidebar: oklch(0.07 0.005 0);
+  --sidebar-foreground: oklch(0.95 0.01 0);
+  --sidebar-accent: oklch(0.14 0.005 0);
+  --sidebar-accent-foreground: oklch(0.95 0.01 0);
+  --sidebar-border: oklch(0.12 0.005 0);
+  --sidebar-ring: oklch(0.95 0.01 0);
 }
 
 .dark {
-  /* Dark theme is the default for Grok */
-  --primary: oklch(0.50 0.28 200);
-  --primary-foreground: oklch(0.98 0.01 0);
-  --sidebar-primary: oklch(0.50 0.28 200);
-  --sidebar-primary-foreground: oklch(0.98 0.01 0);
-  --background: oklch(0.065 0.008 262);
-  --foreground: oklch(0.97 0.01 0);
-  --card: oklch(0.11 0.015 262);
-  --card-foreground: oklch(0.97 0.01 0);
-  --popover: oklch(0.11 0.015 262);
-  --popover-foreground: oklch(0.97 0.01 0);
-  --secondary: oklch(0.14 0.018 262);
-  --secondary-foreground: oklch(0.88 0.015 0);
-  --muted: oklch(0.17 0.020 262);
-  --muted-foreground: oklch(0.62 0.018 0);
-  --accent: oklch(0.68 0.22 200);
-  --accent-foreground: oklch(0.065 0.008 262);
+  --primary: oklch(0.95 0.01 0);
+  --primary-foreground: oklch(0.10 0.01 0);
+  --sidebar-primary: oklch(0.95 0.01 0);
+  --sidebar-primary-foreground: oklch(0.10 0.01 0);
+  --background: oklch(0.05 0.005 0);
+  --foreground: oklch(0.95 0.01 0);
+  --card: oklch(0.10 0.005 0);
+  --card-foreground: oklch(0.95 0.01 0);
+  --popover: oklch(0.10 0.005 0);
+  --popover-foreground: oklch(0.95 0.01 0);
+  --secondary: oklch(0.14 0.005 0);
+  --secondary-foreground: oklch(0.88 0.01 0);
+  --muted: oklch(0.14 0.005 0);
+  --muted-foreground: oklch(0.55 0.01 0);
+  --accent: oklch(0.95 0.01 0);
+  --accent-foreground: oklch(0.05 0.005 0);
   --destructive: oklch(0.62 0.22 25);
   --destructive-foreground: oklch(0.98 0.01 0);
-  --border: oklch(0.18 0.020 262);
-  --input: oklch(0.14 0.018 262);
-  --ring: oklch(0.68 0.22 200);
+  --border: oklch(0.16 0.005 0);
+  --input: oklch(0.14 0.005 0);
+  --ring: oklch(0.95 0.01 0);
   --chart-1: oklch(0.60 0.25 200);
   --chart-2: oklch(0.55 0.27 200);
   --chart-3: oklch(0.50 0.28 200);
   --chart-4: oklch(0.45 0.30 200);
   --chart-5: oklch(0.40 0.32 200);
-  --sidebar: oklch(0.095 0.012 262);
-  --sidebar-foreground: oklch(0.97 0.01 0);
-  --sidebar-accent: oklch(0.16 0.018 262);
-  --sidebar-accent-foreground: oklch(0.97 0.01 0);
-  --sidebar-border: oklch(0.14 0.016 262);
-  --sidebar-ring: oklch(0.68 0.22 200);
+  --sidebar: oklch(0.07 0.005 0);
+  --sidebar-foreground: oklch(0.95 0.01 0);
+  --sidebar-accent: oklch(0.14 0.005 0);
+  --sidebar-accent-foreground: oklch(0.95 0.01 0);
+  --sidebar-border: oklch(0.12 0.005 0);
+  --sidebar-ring: oklch(0.95 0.01 0);
 }
 
 @layer base {
@@ -142,6 +135,7 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
   }
 
   /* RTL support for Arabic */
@@ -268,11 +262,11 @@
   /* Smooth scrollbar for chat area */
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: oklch(0.25 0.020 262) transparent;
+    scrollbar-color: oklch(0.20 0.005 0) transparent;
   }
 
   .scrollbar-thin::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
   }
 
   .scrollbar-thin::-webkit-scrollbar-track {
@@ -280,12 +274,12 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: oklch(0.25 0.020 262);
-    border-radius: 3px;
+    background-color: oklch(0.20 0.005 0);
+    border-radius: 2px;
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background-color: oklch(0.35 0.025 262);
+    background-color: oklch(0.30 0.005 0);
   }
 }
 

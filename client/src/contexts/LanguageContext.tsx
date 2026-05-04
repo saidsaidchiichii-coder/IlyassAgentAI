@@ -5,19 +5,13 @@ type Language = "en" | "ar";
 interface Translations {
   appName: string;
   newChat: string;
-  explore: string;
-  conversations: string;
-  voice: string;
-  discover: string;
-  recent: string;
+  today: string;
+  previous: string;
   settings: string;
-  signOut: string;
   welcomeTitle: string;
   welcomeSubtitle: string;
   messagePlaceholder: string;
   disclaimer: string;
-  grokResponse: string;
-  modelLabel: string;
   modeFast: string;
   modeFastDesc: string;
   modeThink: string;
@@ -27,64 +21,61 @@ interface Translations {
   thinkingLabel: string;
   searchLabel: string;
   fastThinkingLabel: string;
+  suggestions: string[];
 }
 
 const translations: Record<Language, Translations> = {
   en: {
     appName: "Grok",
     newChat: "New chat",
-    explore: "Explore",
-    conversations: "Conversations",
-    voice: "Voice",
-    discover: "Discover",
-    recent: "Recent",
+    today: "Today",
+    previous: "Previous",
     settings: "Settings",
-    signOut: "Sign out",
-    welcomeTitle: "What do you want to know?",
-    welcomeSubtitle:
-      "Ask Grok anything. Get instant, accurate answers powered by real-time information and advanced reasoning.",
-    messagePlaceholder: "Message Grok",
-    disclaimer: "Grok can make mistakes. Check important information.",
-    grokResponse:
-      "I'm here to help. This Grok clone interface is ready for your backend integration. You can now connect this to your actual AI API.",
-    modelLabel: "Model",
+    welcomeTitle: "Ask anything",
+    welcomeSubtitle: "Get answers, create images, write code, and search the web and X in real time.",
+    messagePlaceholder: "Ask anything",
+    disclaimer: "Grok can make mistakes. Verify important information.",
     modeFast: "Fast",
-    modeFastDesc: "Quick responses with minimal thinking. Best for simple questions and fast answers.",
+    modeFastDesc: "Quick responses",
     modeThink: "Think",
-    modeThinkDesc: "Deep reasoning with step-by-step thought chains. Best for complex problems in math, science, and coding.",
+    modeThinkDesc: "Deep reasoning",
     modeDeepSearch: "DeepSearch",
-    modeDeepSearchDesc: "Search the web deeply with source verification. Best for research and fact-checking.",
+    modeDeepSearchDesc: "Web research",
     thinkingLabel: "Thinking",
     searchLabel: "Searching",
     fastThinkingLabel: "Thinking...",
+    suggestions: [
+      "Explain quantum computing simply",
+      "Write a Python script to sort a list",
+      "What's happening in the news today?",
+      "Help me debug my React component",
+    ],
   },
   ar: {
     appName: "جروك",
     newChat: "محادثة جديدة",
-    explore: "استكشاف",
-    conversations: "المحادثات",
-    voice: "صوتي",
-    discover: "اكتشف",
-    recent: "الأخيرة",
+    today: "اليوم",
+    previous: "السابقة",
     settings: "الإعدادات",
-    signOut: "تسجيل الخروج",
-    welcomeTitle: "ماذا تريد أن تعرف؟",
-    welcomeSubtitle:
-      "اسأل جروك أي شيء. احصل على إجابات فورية ودقيقة مدعومة بالمعلومات في الوقت الفعلي والتفكير المتقدم.",
-    messagePlaceholder: "أرسل رسالة لجروك",
+    welcomeTitle: "اسأل أي شيء",
+    welcomeSubtitle: "احصل على إجابات، أنشئ صورًا، اكتب كودًا، وابحث في الويب وX في الوقت الفعلي.",
+    messagePlaceholder: "اسأل أي شيء",
     disclaimer: "قد يخطئ جروك. تحقق من المعلومات المهمة.",
-    grokResponse:
-      "أنا هنا للمساعدة. واجهة جروك جاهزة للتكامل مع الخادم الخاص بك. يمكنك الآن ربطها بواجهة برمجة التطبيقات الخاصة بك.",
-    modelLabel: "النموذج",
     modeFast: "سريع",
-    modeFastDesc: "إجابات سريعة مع تفكير بسيط. الأفضل للأسئلة البسيطة والإجابات الفورية.",
+    modeFastDesc: "إجابات سريعة",
     modeThink: "تفكير",
-    modeThinkDesc: "تفكير عميق مع سلسلة خطوات منطقية. الأفضل للمشاكل المعقدة في الرياضيات والعلوم والبرمجة.",
+    modeThinkDesc: "تفكير عميق",
     modeDeepSearch: "بحث عميق",
-    modeDeepSearchDesc: "بحث معمق في الويب مع التحقق من المصادر. الأفضل للبحث والتحقق من الحقائق.",
+    modeDeepSearchDesc: "بحث في الويب",
     thinkingLabel: "يفكر",
     searchLabel: "يبحث",
     fastThinkingLabel: "يفكر...",
+    suggestions: [
+      "اشرح الحوسبة الكمية ببساطة",
+      "اكتب سكربت بايثون لترتيب قائمة",
+      "ماذا يحدث في الأخبار اليوم؟",
+      "ساعدني في تصحيح مكون React الخاص بي",
+    ],
   },
 };
 
