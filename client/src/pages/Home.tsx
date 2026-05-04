@@ -1,10 +1,7 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useState, useRef, useEffect } from "react";
 import {
   Plus,
   Search,
-  Zap,
   Mic,
   Settings,
   LogOut,
@@ -13,23 +10,70 @@ import {
   Paperclip,
   MessageCircle,
   Clock,
-  ChevronRight,
+  ChevronDown,
   X,
-  MoreVertical,
+  Image,
+  Compass,
+  PanelLeftClose,
+  PanelLeft,
+  Sparkles,
+  UserPlus,
+  User,
+  Volume2,
 } from "lucide-react";
 
-/**
- * Grok Clone - High-fidelity recreation of Grok AI interface
- * Design Philosophy: Dark navy/black theme with cyan accents, minimalist navigation
- * Color Palette: #0a0e27 (bg), #1a1f3a (card), #00d9ff (accent), #ffffff (text)
- */
+function GrokLogo({ className = "w-8 h-8" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
+      <path
+        d="M50,8 C26.8,8 8,26.8 8,50 C8,73.2 26.8,92 50,92 C73.2,92 92,73.2 92,50 C92,26.8 73.2,8 50,8 Z M50,82 C32.3,82 18,67.7 18,50 C18,32.3 32.3,18 50,18 C67.7,18 82,32.3 82,50 C82,67.7 67.7,82 50,82 Z"
+      />
+      <polygon points="72,8 62,8 28,92 38,92" />
+    </svg>
+  );
+}
+
+function AudioWaveIcon({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
+      <rect x="4" y="9" width="2" height="6" rx="1" fill="currentColor" />
+      <rect x="8" y="6" width="2" height="12" rx="1" fill="currentColor" />
+      <rect x="12" y="4" width="2" height="16" rx="1" fill="currentColor" />
+      <rect x="16" y="7" width="2" height="10" rx="1" fill="currentColor" />
+      <rect x="20" y="9" width="2" height="6" rx="1" fill="currentColor" />
+    </svg>
+  );
+}
+
 export default function Home() {
   const [messages, setMessages] = useState<
-    Array<{ id: string; text: string; sender: "user" | "grok"; timestamp?: Date }>
+    Array<{
+      id: string;
+      text: string;
+      sender: "user" | "grok";
+      timestamp?: Date;
+    }>
   >([]);
   const [input, setInput] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [selectedMode, setSelectedMode] = useState<"auto" | "deepsearch" | "think">("auto");
+  const [selectedMode, setSelectedMode] = useState("Fast");
+  const [modeDropdownOpen, setModeDropdownOpen] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const handleSendMessage = () => {
     if (input.trim()) {
@@ -42,13 +86,12 @@ export default function Home() {
       setMessages([...messages, newMessage]);
       setInput("");
 
-      // Simulate Grok response with typing indicator
       setTimeout(() => {
         setMessages((prev) => [
           ...prev,
           {
             id: (Date.now() + 1).toString(),
-            text: "I'm here to help. This Grok clone interface is ready for your backend integration. You can now connect this to your actual AI API.",
+            text: "I'm Grok, made by xAI. I'm here to help you with anything you need. How can I assist you today?",
             sender: "grok",
             timestamp: new Date(),
           },
@@ -57,317 +100,374 @@ export default function Home() {
     }
   };
 
-  const handleDeleteMessage = (id: string) => {
-    setMessages(messages.filter((msg) => msg.id !== id));
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
   };
 
+  const modes = ["Fast", "Think", "DeepSearch"];
+
   return (
-    <div className="flex h-screen bg-background text-foreground overflow-hidden">
-      {/* Sidebar - Grok Navigation */}
+    <div className="flex h-screen bg-black text-white overflow-hidden">
+      {/* Sidebar */}
       <div
         className={`${
-          sidebarOpen ? "w-64" : "w-20"
-        } bg-sidebar border-r border-sidebar-border transition-all duration-300 flex flex-col shadow-2xl`}
+          sidebarOpen ? "w-[260px]" : "w-0 overflow-hidden"
+        } bg-[#171717] flex flex-col transition-all duration-300 border-r border-[#2a2a2a] flex-shrink-0`}
       >
-        {/* Logo Section */}
-        <div className="p-4 border-b border-sidebar-border/50 flex items-center justify-between">
-          {sidebarOpen && (
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-accent to-cyan-400 rounded-lg flex items-center justify-center shadow-lg">
-                <Zap className="w-5 h-5 text-sidebar font-bold" />
-              </div>
-              <span className="font-bold text-lg tracking-tight">Grok</span>
-            </div>
-          )}
+        {/* Sidebar Header */}
+        <div className="flex items-center justify-between p-3 h-[52px]">
+          <div className="flex items-center gap-2">
+            <GrokLogo className="w-6 h-6 text-white" />
+          </div>
           <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 hover:bg-sidebar-accent rounded-lg transition-colors duration-200"
+            onClick={() => setSidebarOpen(false)}
+            className="p-1.5 hover:bg-[#2a2a2a] rounded-lg transition-colors"
           >
-            <Menu className="w-5 h-5" />
+            <PanelLeftClose className="w-5 h-5 text-[#8e8e8e]" />
           </button>
         </div>
 
         {/* New Chat Button */}
-        <div className="p-4 space-y-2">
-          <Button
-            className="w-full bg-gradient-to-r from-accent to-cyan-400 hover:from-accent/90 hover:to-cyan-400/90 text-sidebar font-semibold rounded-lg flex items-center justify-center gap-2 shadow-lg transition-all duration-200"
+        <div className="px-3 pb-2">
+          <button
             onClick={() => {
               setMessages([]);
               setInput("");
             }}
+            className="w-full flex items-center gap-2 px-3 py-2.5 text-sm font-medium text-white bg-[#212121] hover:bg-[#2a2a2a] rounded-lg transition-colors"
           >
-            <Plus className="w-5 h-5" />
-            {sidebarOpen && "New chat"}
-          </Button>
+            <Plus className="w-4 h-4" />
+            <span>New chat</span>
+          </button>
         </div>
 
-        {/* Main Navigation */}
-        <nav className="flex-1 px-3 py-4 space-y-1">
-          <NavItem
-            icon={<Search className="w-5 h-5" />}
+        {/* Navigation */}
+        <nav className="flex-1 px-2 py-1 space-y-0.5 overflow-y-auto">
+          <SidebarItem
+            icon={<Compass className="w-5 h-5" />}
             label="Explore"
-            open={sidebarOpen}
-            active={false}
           />
-          <NavItem
+          <SidebarItem
             icon={<MessageCircle className="w-5 h-5" />}
             label="Conversations"
-            open={sidebarOpen}
-            active={false}
           />
-          <NavItem
-            icon={<Mic className="w-5 h-5" />}
+          <SidebarItem
+            icon={<Volume2 className="w-5 h-5" />}
             label="Voice"
-            open={sidebarOpen}
-            active={false}
           />
-          <NavItem
-            icon={<Zap className="w-5 h-5" />}
+          <SidebarItem
+            icon={<Sparkles className="w-5 h-5" />}
             label="Discover"
-            open={sidebarOpen}
-            active={false}
           />
+
+          {/* Chat History */}
+          {messages.length > 0 && (
+            <div className="mt-4 pt-4 border-t border-[#2a2a2a]">
+              <div className="px-3 pb-2 text-xs font-medium text-[#6e6e6e] uppercase tracking-wider">
+                Recent
+              </div>
+              <div className="space-y-0.5">
+                {messages
+                  .filter((m) => m.sender === "user")
+                  .slice(-5)
+                  .reverse()
+                  .map((msg) => (
+                    <button
+                      key={msg.id}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[#a0a0a0] hover:text-white hover:bg-[#2a2a2a] rounded-lg transition-colors truncate text-left"
+                    >
+                      <MessageCircle className="w-4 h-4 flex-shrink-0" />
+                      <span className="truncate">
+                        {msg.text.substring(0, 30)}
+                        {msg.text.length > 30 ? "..." : ""}
+                      </span>
+                    </button>
+                  ))}
+              </div>
+            </div>
+          )}
         </nav>
 
-        {/* History Section */}
-        {sidebarOpen && messages.length > 0 && (
-          <div className="px-4 py-4 border-t border-sidebar-border/50">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3 uppercase tracking-wider font-semibold">
-              <Clock className="w-3 h-3" />
-              <span>Recent</span>
-            </div>
-            <div className="space-y-2 text-sm max-h-32 overflow-y-auto">
-              {messages
-                .filter((m) => m.sender === "user")
-                .slice(-3)
-                .reverse()
-                .map((msg) => (
-                  <div
-                    key={msg.id}
-                    className="p-2 rounded hover:bg-sidebar-accent cursor-pointer transition-colors duration-200 truncate text-sidebar-foreground/80 hover:text-sidebar-foreground"
-                  >
-                    {msg.text.substring(0, 30)}...
-                  </div>
-                ))}
-            </div>
-          </div>
-        )}
-
-        {/* Bottom User Section */}
-        <div className="p-4 border-t border-sidebar-border/50 space-y-2">
-          <NavItem
+        {/* Bottom Section */}
+        <div className="p-2 border-t border-[#2a2a2a] space-y-0.5">
+          <SidebarItem
             icon={<Settings className="w-5 h-5" />}
             label="Settings"
-            open={sidebarOpen}
-            active={false}
           />
-          <NavItem
+          <SidebarItem
             icon={<LogOut className="w-5 h-5" />}
             label="Sign out"
-            open={sidebarOpen}
-            active={false}
           />
         </div>
       </div>
 
-      {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col bg-gradient-to-b from-background via-background to-background/95">
-        {/* Chat Messages Container */}
-        <div className="flex-1 overflow-y-auto px-4 py-8 md:px-8 flex flex-col">
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Top Bar */}
+        <div className="flex items-center justify-between px-4 h-[52px] flex-shrink-0">
+          <div className="flex items-center gap-2">
+            {!sidebarOpen && (
+              <button
+                onClick={() => setSidebarOpen(true)}
+                className="p-1.5 hover:bg-[#2a2a2a] rounded-lg transition-colors"
+              >
+                <PanelLeft className="w-5 h-5 text-[#8e8e8e]" />
+              </button>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-[#a0a0a0] hover:text-white hover:bg-[#2a2a2a] rounded-lg transition-colors">
+              <Image className="w-4 h-4" />
+              <span>Imagine</span>
+            </button>
+            <button className="p-2 text-[#a0a0a0] hover:text-white hover:bg-[#2a2a2a] rounded-lg transition-colors">
+              <Settings className="w-4 h-4" />
+            </button>
+            <button className="px-3 py-1.5 text-sm text-[#a0a0a0] hover:text-white hover:bg-[#2a2a2a] rounded-lg transition-colors">
+              Sign in
+            </button>
+            <button className="px-4 py-1.5 text-sm font-medium text-white border border-[#555] hover:bg-[#2a2a2a] rounded-full transition-colors">
+              Sign up
+            </button>
+          </div>
+        </div>
+
+        {/* Chat Area */}
+        <div className="flex-1 flex flex-col overflow-hidden">
           {messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full gap-8 animate-in fade-in duration-500">
-              {/* Grok Logo - Larger */}
-              <div className="w-20 h-20 bg-gradient-to-br from-accent via-cyan-400 to-accent rounded-2xl flex items-center justify-center shadow-2xl">
-                <Zap className="w-10 h-10 text-sidebar" />
+            /* Welcome Screen - Centered */
+            <div className="flex-1 flex flex-col items-center justify-center px-4">
+              <div className="flex flex-col items-center gap-6 w-full max-w-[680px]">
+                {/* Logo and Brand */}
+                <div className="flex items-center gap-3">
+                  <GrokLogo className="w-10 h-10 text-white" />
+                  <span className="text-[32px] font-semibold tracking-tight">
+                    Grok
+                  </span>
+                </div>
+
+                {/* Input Field */}
+                <div className="w-full relative">
+                  <div className="flex items-center bg-[#1a1a1a] border border-[#2a2a2a] rounded-full px-3 py-2 focus-within:border-[#444] transition-colors">
+                    {/* Plus/Attach button */}
+                    <button className="p-2 text-[#6e6e6e] hover:text-white rounded-full transition-colors flex-shrink-0">
+                      <Plus className="w-5 h-5" />
+                    </button>
+
+                    {/* Text Input */}
+                    <textarea
+                      ref={inputRef}
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      placeholder="How can I help you today?"
+                      rows={1}
+                      className="flex-1 bg-transparent border-0 outline-none resize-none text-white placeholder:text-[#6e6e6e] text-[15px] px-2 py-1.5 max-h-[200px] leading-normal"
+                    />
+
+                    {/* Right side buttons */}
+                    <div className="flex items-center gap-1 flex-shrink-0">
+                      {/* Mode Dropdown */}
+                      <div className="relative">
+                        <button
+                          onClick={() =>
+                            setModeDropdownOpen(!modeDropdownOpen)
+                          }
+                          className="flex items-center gap-1 px-2.5 py-1.5 text-sm text-[#a0a0a0] hover:text-white hover:bg-[#2a2a2a] rounded-lg transition-colors"
+                        >
+                          <span>{selectedMode}</span>
+                          <ChevronDown className="w-3.5 h-3.5" />
+                        </button>
+                        {modeDropdownOpen && (
+                          <div className="absolute bottom-full right-0 mb-1 bg-[#1a1a1a] border border-[#333] rounded-xl shadow-xl py-1 min-w-[140px] z-50">
+                            {modes.map((mode) => (
+                              <button
+                                key={mode}
+                                onClick={() => {
+                                  setSelectedMode(mode);
+                                  setModeDropdownOpen(false);
+                                }}
+                                className={`w-full text-left px-3 py-2 text-sm transition-colors ${
+                                  selectedMode === mode
+                                    ? "text-white bg-[#2a2a2a]"
+                                    : "text-[#a0a0a0] hover:text-white hover:bg-[#2a2a2a]"
+                                }`}
+                              >
+                                {mode}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Mic button */}
+                      <button className="p-2 text-[#8e8e8e] hover:text-white hover:bg-[#2a2a2a] rounded-lg transition-colors">
+                        <Mic className="w-5 h-5" />
+                      </button>
+
+                      {/* Send/Voice button */}
+                      <button
+                        onClick={handleSendMessage}
+                        className="p-2.5 rounded-full bg-white text-black hover:bg-gray-200 transition-colors"
+                      >
+                        <AudioWaveIcon className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              {/* Welcome Text */}
-              <div className="text-center max-w-2xl space-y-4">
-                <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
-                  What do you want to know?
-                </h1>
-                <p className="text-muted-foreground text-lg md:text-xl leading-relaxed">
-                  Ask Grok anything. Get instant, accurate answers powered by real-time information and advanced reasoning.
+              {/* Bottom disclaimer */}
+              <div className="absolute bottom-4 left-0 right-0 text-center">
+                <p className="text-xs text-[#6e6e6e]">
+                  By messaging Grok, you agree to our{" "}
+                  <span className="text-[#1d9bf0] hover:underline cursor-pointer">
+                    Terms
+                  </span>{" "}
+                  and{" "}
+                  <span className="text-[#1d9bf0] hover:underline cursor-pointer">
+                    Privacy Policy
+                  </span>
+                  .
                 </p>
-              </div>
-
-              {/* Mode Selector */}
-              <div className="flex gap-3 flex-wrap justify-center">
-                {["auto", "deepsearch", "think"].map((mode) => (
-                  <button
-                    key={mode}
-                    onClick={() => setSelectedMode(mode as any)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                      selectedMode === mode
-                        ? "bg-accent text-sidebar shadow-lg"
-                        : "bg-card border border-border hover:border-accent text-foreground"
-                    }`}
-                  >
-                    {mode === "auto" && "Auto"}
-                    {mode === "deepsearch" && "DeepSearch"}
-                    {mode === "think" && "Think"}
-                  </button>
-                ))}
-              </div>
-
-              {/* Action Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-4xl mt-4">
-                <ActionCard
-                  icon={<Search className="w-6 h-6" />}
-                  title="DeepSearch"
-                  description="Search deeply to deliver detailed, well-reasoned answers with sources"
-                />
-                <ActionCard
-                  icon={<Zap className="w-6 h-6" />}
-                  title="Think"
-                  description="Solve the hardest problems in math, science, and coding with reasoning"
-                />
-                <ActionCard
-                  icon={<Paperclip className="w-6 h-6" />}
-                  title="Image Analysis"
-                  description="Analyze and understand images with advanced vision capabilities"
-                />
               </div>
             </div>
           ) : (
-            <div className="space-y-6 pb-4">
-              {messages.map((msg, idx) => (
-                <div
-                  key={msg.id}
-                  className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"} animate-in fade-in slide-in-from-bottom-2 duration-300`}
-                  style={{ animationDelay: `${idx * 50}ms` }}
-                >
-                  <div className="max-w-2xl w-full group">
-                    <div
-                      className={`rounded-2xl px-5 py-4 transition-all duration-200 ${
-                        msg.sender === "user"
-                          ? "bg-gradient-to-r from-accent to-cyan-400 text-sidebar shadow-lg ml-12"
-                          : "bg-card text-foreground border border-border hover:border-accent/50 mr-12"
-                      }`}
-                    >
-                      <p className="text-sm md:text-base leading-relaxed">{msg.text}</p>
-                      {msg.timestamp && (
-                        <p className="text-xs mt-2 opacity-60">
-                          {msg.timestamp.toLocaleTimeString()}
-                        </p>
+            /* Chat Messages */
+            <div className="flex-1 overflow-y-auto">
+              <div className="max-w-[680px] mx-auto px-4 py-6 space-y-6">
+                {messages.map((msg) => (
+                  <div key={msg.id} className="flex gap-3">
+                    {/* Avatar */}
+                    <div className="flex-shrink-0 mt-0.5">
+                      {msg.sender === "grok" ? (
+                        <div className="w-8 h-8 rounded-full bg-[#1a1a1a] border border-[#333] flex items-center justify-center">
+                          <GrokLogo className="w-5 h-5 text-white" />
+                        </div>
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-[#1d9bf0] flex items-center justify-center">
+                          <User className="w-4 h-4 text-white" />
+                        </div>
                       )}
                     </div>
 
-                    {/* Message Actions */}
-                    {msg.sender === "user" && (
-                      <div className="flex items-center gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 justify-end pr-2">
-                        <button
-                          onClick={() => handleDeleteMessage(msg.id)}
-                          className="p-1 hover:bg-destructive/20 rounded transition-colors"
-                        >
-                          <X className="w-4 h-4 text-destructive" />
-                        </button>
+                    {/* Message Content */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm font-medium text-white">
+                          {msg.sender === "grok" ? "Grok" : "You"}
+                        </span>
+                        {msg.timestamp && (
+                          <span className="text-xs text-[#6e6e6e]">
+                            {msg.timestamp.toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </span>
+                        )}
                       </div>
-                    )}
+                      <p className="text-[15px] text-[#d4d4d4] leading-relaxed whitespace-pre-wrap">
+                        {msg.text}
+                      </p>
+                    </div>
                   </div>
+                ))}
+                <div ref={chatEndRef} />
+              </div>
+
+              {/* Input Area - Bottom when chatting */}
+              <div className="sticky bottom-0 bg-gradient-to-t from-black via-black to-transparent pt-6 pb-4 px-4">
+                <div className="max-w-[680px] mx-auto">
+                  <div className="flex items-center bg-[#1a1a1a] border border-[#2a2a2a] rounded-full px-3 py-2 focus-within:border-[#444] transition-colors">
+                    <button className="p-2 text-[#6e6e6e] hover:text-white rounded-full transition-colors flex-shrink-0">
+                      <Plus className="w-5 h-5" />
+                    </button>
+                    <textarea
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      placeholder="How can I help you today?"
+                      rows={1}
+                      className="flex-1 bg-transparent border-0 outline-none resize-none text-white placeholder:text-[#6e6e6e] text-[15px] px-2 py-1.5 max-h-[200px] leading-normal"
+                    />
+                    <div className="flex items-center gap-1 flex-shrink-0">
+                      <div className="relative">
+                        <button
+                          onClick={() =>
+                            setModeDropdownOpen(!modeDropdownOpen)
+                          }
+                          className="flex items-center gap-1 px-2.5 py-1.5 text-sm text-[#a0a0a0] hover:text-white hover:bg-[#2a2a2a] rounded-lg transition-colors"
+                        >
+                          <span>{selectedMode}</span>
+                          <ChevronDown className="w-3.5 h-3.5" />
+                        </button>
+                        {modeDropdownOpen && (
+                          <div className="absolute bottom-full right-0 mb-1 bg-[#1a1a1a] border border-[#333] rounded-xl shadow-xl py-1 min-w-[140px] z-50">
+                            {modes.map((mode) => (
+                              <button
+                                key={mode}
+                                onClick={() => {
+                                  setSelectedMode(mode);
+                                  setModeDropdownOpen(false);
+                                }}
+                                className={`w-full text-left px-3 py-2 text-sm transition-colors ${
+                                  selectedMode === mode
+                                    ? "text-white bg-[#2a2a2a]"
+                                    : "text-[#a0a0a0] hover:text-white hover:bg-[#2a2a2a]"
+                                }`}
+                              >
+                                {mode}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                      <button className="p-2 text-[#8e8e8e] hover:text-white hover:bg-[#2a2a2a] rounded-lg transition-colors">
+                        <Mic className="w-5 h-5" />
+                      </button>
+                      <button
+                        onClick={handleSendMessage}
+                        className="p-2.5 rounded-full bg-white text-black hover:bg-gray-200 transition-colors"
+                      >
+                        <AudioWaveIcon className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                  <p className="text-xs text-[#6e6e6e] text-center mt-2">
+                    Grok can make mistakes. Verify important information.
+                  </p>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Input Area - Bottom */}
-        <div className="border-t border-border/50 p-4 md:p-6 bg-gradient-to-t from-background to-background/80 backdrop-blur-sm">
-          <div className="max-w-4xl mx-auto space-y-3">
-            {/* Input Field */}
-            <div className="relative flex items-center gap-3 bg-card border border-border rounded-2xl px-4 py-3 focus-within:border-accent focus-within:shadow-lg focus-within:shadow-accent/20 transition-all duration-300 group">
-              <Paperclip className="w-5 h-5 text-muted-foreground group-hover:text-accent cursor-pointer transition-colors duration-200" />
-
-              <Input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSendMessage();
-                  }
-                }}
-                placeholder="Message Grok"
-                className="flex-1 bg-transparent border-0 focus:outline-none focus:ring-0 text-foreground placeholder:text-muted-foreground text-sm md:text-base"
-              />
-
-              <div className="flex items-center gap-2">
-                {input.trim() && (
-                  <button
-                    onClick={() => setInput("")}
-                    className="p-1 hover:bg-muted rounded transition-colors"
-                  >
-                    <X className="w-4 h-4 text-muted-foreground" />
-                  </button>
-                )}
-
-                <Button
-                  onClick={handleSendMessage}
-                  disabled={!input.trim()}
-                  className="bg-gradient-to-r from-accent to-cyan-400 hover:from-accent/90 hover:to-cyan-400/90 disabled:opacity-50 disabled:cursor-not-allowed text-sidebar rounded-full p-2 h-auto shadow-lg transition-all duration-200"
-                >
-                  <Send className="w-5 h-5" />
-                </Button>
               </div>
             </div>
-
-            {/* Info Text */}
-            <p className="text-xs text-muted-foreground text-center">
-              Grok can make mistakes. Check important information.
-            </p>
-          </div>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-function NavItem({
+function SidebarItem({
   icon,
   label,
-  open,
   active = false,
 }: {
   icon: React.ReactNode;
   label: string;
-  open: boolean;
   active?: boolean;
 }) {
   return (
     <button
-      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 ${
+      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-sm ${
         active
-          ? "bg-sidebar-accent text-accent"
-          : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-accent"
+          ? "bg-[#2a2a2a] text-white"
+          : "text-[#a0a0a0] hover:bg-[#212121] hover:text-white"
       }`}
     >
-      <div className="flex-shrink-0 flex items-center justify-center">{icon}</div>
-      {open && <span className="text-sm font-medium">{label}</span>}
-      {open && active && <ChevronRight className="w-4 h-4 ml-auto" />}
-    </button>
-  );
-}
-
-function ActionCard({
-  icon,
-  title,
-  description,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}) {
-  return (
-    <button className="p-5 rounded-xl border border-border hover:border-accent bg-card/50 hover:bg-card hover:shadow-lg transition-all duration-300 text-left group">
-      <div className="flex items-start gap-3 mb-3">
-        <div className="text-accent group-hover:scale-110 transition-transform duration-300 mt-1">
-          {icon}
-        </div>
-        <h3 className="font-semibold text-foreground text-sm md:text-base">{title}</h3>
-      </div>
-      <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
-        {description}
-      </p>
+      <div className="flex-shrink-0">{icon}</div>
+      <span>{label}</span>
     </button>
   );
 }
