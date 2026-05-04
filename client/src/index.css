@@ -143,6 +143,16 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  /* RTL support for Arabic */
+  [dir="rtl"] body {
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+  }
+
+  [dir="rtl"] input,
+  [dir="rtl"] textarea {
+    text-align: right;
+  }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
   [type="button"]:not(:disabled),
@@ -200,6 +210,59 @@
 
   .grok-pulse {
     animation: grok-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Streaming cursor blink */
+  @keyframes cursor-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .streaming-cursor {
+    animation: cursor-blink 0.8s ease-in-out infinite;
+  }
+
+  /* Fast mode blink */
+  @keyframes fast-blink {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.95); }
+  }
+
+  .fast-blink {
+    animation: fast-blink 0.6s ease-in-out infinite;
+  }
+
+  /* Think mode pulse ring */
+  @keyframes think-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+    70% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+  }
+
+  .think-pulse-ring {
+    animation: think-pulse 1.5s ease-in-out infinite;
+  }
+
+  /* Search mode pulse ring */
+  @keyframes search-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+    70% { box-shadow: 0 0 0 6px rgba(59, 130, 246, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+  }
+
+  .search-pulse-ring {
+    animation: search-pulse 1.5s ease-in-out infinite;
+  }
+
+  /* Search progress bar animation */
+  @keyframes search-progress {
+    0% { width: 0%; }
+    50% { width: 70%; }
+    100% { width: 100%; }
+  }
+
+  .search-progress-bar {
+    animation: search-progress 2s ease-in-out infinite;
   }
 
   /* Smooth scrollbar for chat area */
