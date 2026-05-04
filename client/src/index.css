@@ -259,6 +259,37 @@
     animation: search-progress 2s ease-in-out infinite;
   }
 
+  /* Auto mode - slow spin for sparkles icon */
+  @keyframes auto-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .auto-spin {
+    animation: auto-spin 3s linear infinite;
+  }
+
+  /* Auto mode - gentle pulse for eye/cpu icons */
+  @keyframes auto-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.9); }
+  }
+
+  .auto-pulse {
+    animation: auto-pulse 1.2s ease-in-out infinite;
+  }
+
+  /* Auto mode - progress bar */
+  @keyframes auto-progress {
+    0% { width: 0%; }
+    60% { width: 80%; }
+    100% { width: 100%; }
+  }
+
+  .auto-progress {
+    animation: auto-progress 1.5s ease-in-out infinite;
+  }
+
   /* Smooth scrollbar for chat area */
   .scrollbar-thin {
     scrollbar-width: thin;
