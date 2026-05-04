@@ -8,6 +8,7 @@ interface Translations {
   today: string;
   previous: string;
   settings: string;
+  signOut: string;
   welcomeTitle: string;
   welcomeSubtitle: string;
   messagePlaceholder: string;
@@ -28,6 +29,30 @@ interface Translations {
   autoProcessing: string;
   complexity: string;
   suggestions: string[];
+  signIn: string;
+  createAccount: string;
+  signInSubtitle: string;
+  createAccountSubtitle: string;
+  emailLabel: string;
+  passwordLabel: string;
+  displayName: string;
+  displayNamePlaceholder: string;
+  passwordPlaceholder: string;
+  noAccount: string;
+  hasAccount: string;
+  checkEmail: string;
+  profileSection: string;
+  preferencesSection: string;
+  accountSection: string;
+  languageSetting: string;
+  tapToChange: string;
+  notifications: string;
+  theme: string;
+  privacy: string;
+  deleteAccount: string;
+  comingSoon: string;
+  saveChanges: string;
+  saved: string;
 }
 
 const translations: Record<Language, Translations> = {
@@ -37,6 +62,7 @@ const translations: Record<Language, Translations> = {
     today: "Today",
     previous: "Previous",
     settings: "Settings",
+    signOut: "Sign out",
     welcomeTitle: "Ask anything",
     welcomeSubtitle: "Get answers, create images, write code, and search the web and X in real time.",
     messagePlaceholder: "Ask anything",
@@ -62,6 +88,30 @@ const translations: Record<Language, Translations> = {
       "What's happening in the news today?",
       "Help me debug my React component",
     ],
+    signIn: "Sign in",
+    createAccount: "Create account",
+    signInSubtitle: "Sign in to your Grok account",
+    createAccountSubtitle: "Create a new Grok account",
+    emailLabel: "Email",
+    passwordLabel: "Password",
+    displayName: "Display name",
+    displayNamePlaceholder: "Your name",
+    passwordPlaceholder: "At least 6 characters",
+    noAccount: "Don't have an account? Sign up",
+    hasAccount: "Already have an account? Sign in",
+    checkEmail: "Check your email for a confirmation link.",
+    profileSection: "Profile",
+    preferencesSection: "Preferences",
+    accountSection: "Account",
+    languageSetting: "Language",
+    tapToChange: "Tap to change",
+    notifications: "Notifications",
+    theme: "Theme",
+    privacy: "Privacy",
+    deleteAccount: "Delete account",
+    comingSoon: "Coming soon",
+    saveChanges: "Save changes",
+    saved: "Saved",
   },
   ar: {
     appName: "جروك",
@@ -69,6 +119,7 @@ const translations: Record<Language, Translations> = {
     today: "اليوم",
     previous: "السابقة",
     settings: "الإعدادات",
+    signOut: "تسجيل الخروج",
     welcomeTitle: "اسأل أي شيء",
     welcomeSubtitle: "احصل على إجابات، أنشئ صورًا، اكتب كودًا، وابحث في الويب وX في الوقت الفعلي.",
     messagePlaceholder: "اسأل أي شيء",
@@ -94,6 +145,30 @@ const translations: Record<Language, Translations> = {
       "ماذا يحدث في الأخبار اليوم؟",
       "ساعدني في تصحيح مكون React الخاص بي",
     ],
+    signIn: "تسجيل الدخول",
+    createAccount: "إنشاء حساب",
+    signInSubtitle: "سجّل الدخول إلى حساب جروك الخاص بك",
+    createAccountSubtitle: "أنشئ حساب جروك جديد",
+    emailLabel: "البريد الإلكتروني",
+    passwordLabel: "كلمة المرور",
+    displayName: "الاسم المعروض",
+    displayNamePlaceholder: "اسمك",
+    passwordPlaceholder: "6 أحرف على الأقل",
+    noAccount: "ليس لديك حساب؟ سجّل الآن",
+    hasAccount: "لديك حساب بالفعل؟ سجّل الدخول",
+    checkEmail: "تحقق من بريدك الإلكتروني للحصول على رابط التأكيد.",
+    profileSection: "الملف الشخصي",
+    preferencesSection: "التفضيلات",
+    accountSection: "الحساب",
+    languageSetting: "اللغة",
+    tapToChange: "اضغط للتغيير",
+    notifications: "الإشعارات",
+    theme: "المظهر",
+    privacy: "الخصوصية",
+    deleteAccount: "حذف الحساب",
+    comingSoon: "قريبًا",
+    saveChanges: "حفظ التغييرات",
+    saved: "تم الحفظ",
   },
 };
 
@@ -136,8 +211,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
 export function useLanguage() {
   const context = useContext(LanguageContext);
-  if (!context) {
-    throw new Error("useLanguage must be used within LanguageProvider");
-  }
+  if (!context) throw new Error("useLanguage must be used within LanguageProvider");
   return context;
 }

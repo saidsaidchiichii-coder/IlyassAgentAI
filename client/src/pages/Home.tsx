@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   Plus,
   Search,
@@ -26,6 +27,8 @@ import {
   Eye,
   Lightbulb,
   ArrowRight,
+  User,
+  LogOut,
 } from "lucide-react";
 
 type ModelMode = "auto" | "fast" | "think" | "deepsearch";
@@ -104,6 +107,7 @@ const AUTO_COMPLEXITY_MAP: Record<string, { complexity: string; mode: string; re
 
 export default function Home() {
   const { t, isRTL, toggleLanguage, language } = useLanguage();
+  const { user, profile, signOut } = useAuth();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConvId, setActiveConvId] = useState<string | null>(null);
   const [input, setInput] = useState("");
@@ -411,11 +415,31 @@ export default function Home() {
         </div>
 
         <div className="p-3 border-t border-sidebar-border/50 space-y-0.5 flex-shrink-0">
+          {/* User Info */}
+          <div className="flex items-center gap-3 px-3 py-2 mb-1">
+            <div className="w-8 h-8 rounded-full bg-foreground/10 flex items-center justify-center flex-shrink-0">
+              {profile?.avatar_url ? (
+                <img src={profile.avatar_url} alt="" className="w-8 h-8 rounded-full object-cover" />
+              ) : (
+                <User className="w-4 h-4 text-foreground/50" />
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-sidebar-foreground truncate">
+                {profile?.display_name || user?.email?.split("@")[0] || "User"}
+              </p>
+              <p className="text-[10px] text-muted-foreground truncate">{user?.email}</p>
+            </div>
+          </div>
+
           <button onClick={toggleLanguage} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors">
             <Languages className="w-4 h-4" /><span>{language === "en" ? "العربية" : "English"}</span>
           </button>
-          <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors">
+          <a href="/settings" className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors">
             <Settings className="w-4 h-4" /><span>{t.settings}</span>
+          </a>
+          <button onClick={signOut} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors">
+            <LogOut className="w-4 h-4" /><span>{t.signOut}</span>
           </button>
         </div>
       </div>
