@@ -1,349 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grok</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="login-design.css">
-    
-    <style>
-    /* 🔥 AUTH MODAL PRO DESIGN */
-    #authModal {
-      backdrop-filter: blur(10px);
-      animation: fadeIn 0.3s ease;
-      display: none;
-    }
-    #authModal > div {
-      background: rgba(20,20,20,0.9);
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-      border-radius: 20px;
-      padding: 30px;
-      width: 340px;
-      transform: scale(0.95);
-      animation: pop 0.25s ease forwards;
-    }
-    #authTitle {
-      font-size: 22px;
-      font-weight: 600;
-      text-align: center;
-    }
-    #authEmail, #authPassword {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.03);
-      color: white;
-      outline: none;
-      transition: 0.2s;
-    }
-    #authEmail:focus, #authPassword:focus {
-      border: 1px solid #6366f1;
-      background: rgba(99,102,241,0.08);
-      box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
-    }
-    #authSubmit {
-      margin-top: 20px;
-      background: linear-gradient(135deg, #6366f1, #4f46e5);
-      border: none;
-      border-radius: 10px;
-      padding: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-      width: 100%;
-    }
-    #authSubmit:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(99,102,241,0.4);
-    }
-    #authModal button:last-child {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.1);
-      margin-top: 10px;
-      width: 100%;
-    }
-    #authModal button:last-child:hover {
-      background: rgba(255,255,255,0.05);
-    }
-    @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
-    @keyframes pop { to { transform: scale(1) } }
-    </style>
-    <script src="https://unpkg.com/lucide@latest"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grok</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-    <!-- NAVIGATION -->
-    <header class="top-nav">
-        <div class="nav-left">
-            <div class="logo-container" onclick="location.reload()">
-                <svg class="grok-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="14.31" y1="8" x2="20.05" y2="17.94"></line>
-                    <line x1="9.69" y1="8" x2="21.17" y2="8"></line>
-                    <line x1="7.38" y1="12" x2="13.12" y2="2.06"></line>
-                    <line x1="9.69" y1="16" x2="3.95" y2="6.06"></line>
-                    <line x1="14.31" y1="16" x2="2.83" y2="16"></line>
-                    <line x1="16.62" y1="12" x2="10.88" y2="21.94"></line>
-                </svg>
-            </div>
-        </div>
-       
-        <div class="nav-right">
-            <button class="nav-btn">
-                <i data-lucide="sparkles"></i>
-                <span>Imagine</span>
-            </button>
-            <button class="nav-btn" id="settingsTrigger">
-                <i data-lucide="settings"></i>
-            </button>
-            <button class="btn-signin" onclick="openAuthModal('login')">Sign in</button>
-            <button class="btn-signup" onclick="openAuthModal('signup')">Sign up</button>
-        </div>
-    </header>
-
-    <main class="container">
-        <section id="signupPage" class="home-view hidden">
-  <h2>Sign up page</h2>
-</section>
-        <!-- AUTH FULL PAGE -->
-        <section id="authPage" class="home-view hidden">
-
-
-            
-          <div id="particles"></div>
-          <div style="display:flex;justify-content:center;align-items:center;height:80vh;">
-            <div class="auth-card">
-              <h2 id="authPageTitle">Sign in</h2>
-              <input id="authEmailPage" type="email" placeholder="Email">
-              <input id="authPasswordPage" type="password" placeholder="Password">
-              <button id="authPageSubmit">Continue</button>
-              <p id="switchAuth" style="margin-top:15px;cursor:pointer;opacity:0.7;">
-                Don't have an account? Sign up
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <!-- HOME VIEW -->
-        <section id="home" class="home-view">
-            <div class="hero-section">
-                <div class="hero-logo">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="14.31" y1="8" x2="20.05" y2="17.94"></line>
-                        <line x1="9.69" y1="8" x2="21.17" y2="8"></line>
-                        <line x1="7.38" y1="12" x2="13.12" y2="2.06"></line>
-                        <line x1="9.69" y1="16" x2="3.95" y2="6.06"></line>
-                        <line x1="14.31" y1="16" x2="2.83" y2="16"></line>
-                        <line x1="16.62" y1="12" x2="10.88" y2="21.94"></line>
-                    </svg>
-                    <h1>Grok</h1>
-                </div>
-            </div>
-           
-            <div class="search-container">
-                <div class="search-box">
-                    <div class="file-preview-area" id="homeFilePreview"></div>
-                    <div class="input-area">
-                        <button class="input-icon" onclick="document.getElementById('homeFileInput').click()">
-                            <i data-lucide="paperclip"></i>
-                        </button>
-                        <input type="file" id="homeFileInput" class="hidden-input" multiple>
-                        <textarea id="homeInput" placeholder="How can I help you today?" rows="1" oninput="autoResize(this)" onkeydown="handleKeydown(event, 'home')"></textarea>
-                        <div class="input-controls">
-                            <div class="mode-selector">
-                                <span>Auto</span>
-                                <i data-lucide="chevron-down"></i>
-                            </div>
-                            <button class="control-btn" id="homeMicBtn" onclick="toggleMic('home')">
-                                <i data-lucide="mic"></i>
-                            </button>
-                            <button class="control-btn send-btn" onclick="startChat()">
-                                <i data-lucide="arrow-up"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="search-hint">
-                    <i data-lucide="sparkles"></i>
-                    <span>New · Hold Ctrl+D to dictate</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- CHAT VIEW -->
-        <section id="chat" class="chat-view hidden">
-            <div id="messages" class="messages-list"></div>
-            <div class="chat-input-container">
-                <div class="search-box">
-                    <div class="file-preview-area" id="chatFilePreview"></div>
-                    <div class="input-area">
-                        <button class="input-icon" onclick="document.getElementById('chatFileInput').click()">
-                            <i data-lucide="paperclip"></i>
-                        </button>
-                        <input type="file" id="chatFileInput" class="hidden-input" multiple>
-                        <textarea id="chatInput" placeholder="Send a message..." rows="1" oninput="autoResize(this)" onkeydown="handleKeydown(event, 'chat')"></textarea>
-                        <div class="input-controls">
-                            <div class="mode-selector">
-                                <span>Auto</span>
-                                <i data-lucide="chevron-down"></i>
-                            </div>
-                            <button class="control-btn" id="chatMicBtn" onclick="toggleMic('chat')">
-                                <i data-lucide="mic"></i>
-                            </button>
-                            <button class="control-btn send-btn" onclick="send()">
-                                <i data-lucide="arrow-up"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- ====================== FIXED AUTH MODAL (One only) ====================== -->
-    <div id="authModal">
-      <div class="box">
-        <h2 id="authTitle">Login</h2>
-        <p class="subtitle">Welcome back</p>
-        
-        <input id="authEmail" type="email" placeholder="Email">
-        <input id="authPassword" type="password" placeholder="Password">
-        
-        <button id="authSubmit">Continue</button>
-        <button class="cancel" onclick="closeAuthModal()">Cancel</button>
-      </div>
+  <!-- ====== SIDEBAR ====== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <button class="sidebar-logo-btn" onclick="goHome()" title="Grok">
+        <svg viewBox="0 0 32 32" fill="currentColor" width="26" height="26">
+          <path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm0 3.5c2.006 0 3.89.524 5.522 1.44L7.94 21.522A10.45 10.45 0 0 1 5.5 16C5.5 9.649 10.649 4.5 17 4.5h-1zm0 21c-2.006 0-3.89-.524-5.522-1.44L24.06 10.478A10.45 10.45 0 0 1 26.5 16c0 6.351-5.149 11.5-11.5 11.5h1z"/>
+        </svg>
+      </button>
+      <button class="new-chat-btn" onclick="goHome()" title="New chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+      </button>
     </div>
 
-    <script src="ControleAi.js"></script>
-    <script src="features.js"></script>
-    <script type="module" src="firebase.js"></script>
+    <nav class="sidebar-nav">
+      <div class="nav-item active" id="navChat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chat
+      </div>
+    </nav>
 
-    <script>
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-            AI.init("messages", "https://my-webxyu.vercel.app/api/chat");
-            setupFileUpload('homeFileInput', 'homeFilePreview');
-            setupFileUpload('chatFileInput', 'chatFilePreview');
-            
-            document.getElementById('authSubmit').addEventListener('click', handleLogin);
-        });
+    <div class="sidebar-section-label">Recent</div>
+    <div class="sidebar-conversations" id="conversationsList">
+      <div class="no-conversations">No conversations yet</div>
+    </div>
 
- 
-    
- 
-         
-        // ====================== AUTH FUNCTIONS (Cleaned) ======================
-        function openAuthModal(mode) {
-            const modal = document.getElementById('authModal');
-            const title = document.getElementById('authTitle');
-            
-            title.textContent = (mode === 'signup') ? 'Create Account' : 'Login';
-            modal.style.display = 'flex';
-        }
+    <div class="sidebar-footer">
+      <div class="user-row" id="userRow">
+        <div class="user-avatar" id="userAvatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <span class="user-name" id="sidebarUserName">Guest</span>
+        <button class="signin-link" onclick="showAuthModal('signin')" id="signInBtn">Sign in</button>
+      </div>
+    </div>
+  </aside>
 
-        function closeAuthModal() {
-            document.getElementById('authModal').style.display = 'none';
-        }
+  <!-- ====== MAIN ====== -->
+  <main class="main" id="main">
 
-        async function handleLogin() {
-            const email = document.getElementById('authEmail').value.trim();
-            const password = document.getElementById('authPassword').value.trim();
-           
-            if (!email || !password) {
-                alert("Please enter email and password");
-                return;
-            }
+    <!-- HOME -->
+    <div class="home-view" id="homeView">
+      <div class="home-body">
+        <div class="home-logo">
+          <svg viewBox="0 0 56 56" fill="currentColor" width="48" height="48">
+            <path d="M28 2C13.64 2 2 13.64 2 28s11.64 26 26 26 26-11.64 26-26S42.36 2 28 2zm0 5c3.43 0 6.66.87 9.49 2.4L10.4 37.49A20.93 20.93 0 0 1 7 28C7 15.297 17.297 5 30 5h-2zm0 44c-3.43 0-6.66-.87-9.49-2.4L45.6 18.51A20.93 20.93 0 0 1 49 28C49 40.703 38.703 51 26 51h2z"/>
+          </svg>
+        </div>
+        <h1 class="home-greeting">What do you want to know?</h1>
+        <div class="suggestion-row">
+          <button class="suggestion-pill" onclick="useSuggestion(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            Write an essay
+          </button>
+          <button class="suggestion-pill" onclick="useSuggestion(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            Help me code
+          </button>
+          <button class="suggestion-pill" onclick="useSuggestion(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Search & analyze
+          </button>
+          <button class="suggestion-pill" onclick="useSuggestion(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Summarize text
+          </button>
+        </div>
+      </div>
 
-            try {
-                alert("Login successful!"); 
-                closeAuthModal();
-            } catch (error) {
-                alert("Login failed: " + error.message);
-            }
-        }
+      <div class="input-zone" id="homeInputZone"></div>
+    </div>
 
-        // Close when clicking outside
-        document.getElementById('authModal').addEventListener('click', function(e) {
-            if (e.target === this) closeAuthModal();
-        });
+    <!-- CHAT -->
+    <div class="chat-view" id="chatView">
+      <div class="messages-box" id="messagesBox"></div>
+      <div class="input-zone" id="chatInputZone"></div>
+    </div>
 
-        // ====================== YOUR ORIGINAL FUNCTIONS ======================
-        const homeView = document.getElementById("home");
-        const chatView = document.getElementById("chat");
+  </main>
 
-        function autoResize(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
-            textarea.style.transition = 'height 0.2s ease';
-        }
+  <!-- ====== AUTH MODAL ====== -->
+  <div class="auth-overlay" id="authModal">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <svg viewBox="0 0 32 32" fill="currentColor" width="26" height="26">
+          <path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm0 3.5c2.006 0 3.89.524 5.522 1.44L7.94 21.522A10.45 10.45 0 0 1 5.5 16C5.5 9.649 10.649 4.5 17 4.5h-1zm0 21c-2.006 0-3.89-.524-5.522-1.44L24.06 10.478A10.45 10.45 0 0 1 26.5 16c0 6.351-5.149 11.5-11.5 11.5h1z"/>
+        </svg>
+      </div>
+      <h2 class="auth-title" id="authTitle">Welcome back</h2>
+      <p class="auth-subtitle">Continue to Grok</p>
+      <input type="email" id="authEmail" class="auth-input" placeholder="Email address" autocomplete="email" />
+      <input type="password" id="authPassword" class="auth-input" placeholder="Password" autocomplete="current-password" />
+      <div class="auth-error" id="authError"></div>
+      <button class="auth-submit" id="authSubmit">Continue</button>
+      <button class="auth-cancel" id="authCancel" onclick="closeAuthModal()">Cancel</button>
+      <p class="auth-switch">Don't have an account? <span onclick="toggleAuthMode()" id="authSwitchLink">Sign up</span></p>
+    </div>
+  </div>
 
-        function handleKeydown(event, type) {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                if (type === 'home') startChat();
-                else send();
-            }
-        }
+  <!-- MODE POPUP -->
+  <div class="mode-popup" id="modePopup">
+    <button class="mode-option" data-mode="auto" onclick="selectMode('auto')">
+      <div class="mode-option-info">
+        <span class="mode-option-name">Auto</span>
+        <span class="mode-option-desc">Best model for each task</span>
+      </div>
+    </button>
+    <button class="mode-option" data-mode="fast" onclick="selectMode('fast')">
+      <div class="mode-option-info">
+        <span class="mode-option-name">Fast</span>
+        <span class="mode-option-desc">Quick responses</span>
+      </div>
+    </button>
+    <button class="mode-option" data-mode="thinking" onclick="selectMode('thinking')">
+      <div class="mode-option-info">
+        <span class="mode-option-name">Think</span>
+        <span class="mode-option-desc">Deep reasoning mode</span>
+      </div>
+    </button>
+  </div>
 
-        function startChat() {
-            const input = document.getElementById("homeInput");
-            const text = input.value.trim();
-            if (!text) return;
-           
-            homeView.style.animation = 'slideOut 0.4s ease-out forwards';
-            setTimeout(() => {
-                homeView.classList.add("hidden");
-                chatView.classList.remove("hidden");
-                chatView.style.animation = 'slideIn 0.4s ease-out';
-                AI.user(text);
-                input.value = "";
-                input.style.height = 'auto';
-                document.getElementById("homeFilePreview").innerHTML = '';
-                document.getElementById("homeFileInput").value = '';
-                AI.ask(text);
-            }, 400);
-        }
+  <script src="firebase.js" type="module"></script>
+  <script src="ControleAi.js"></script>
+  <script>
+    /* ===== INPUT TEMPLATE ===== */
+    const INPUT_HTML = `
+      <div class="input-box" id="inputBox">
+        <div class="input-text-row">
+          <textarea
+            id="chatTextarea"
+            class="chat-textarea"
+            placeholder="Ask anything"
+            rows="1"
+            onkeydown="onKey(event)"
+            oninput="onType(this)"
+          ></textarea>
+        </div>
+        <div class="input-actions-row">
+          <div class="input-left-actions">
+            <label class="icon-action attach-action" title="Attach files">
+              <input
+                type="file"
+                id="chatFileInput"
+                multiple
+                accept="image/*,.pdf,.txt,.js,.py,.html,.css,.md,.json"
+                style="display:none"
+                onchange="onFilePick(this)"
+              />
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+              </svg>
+            </label>
+            <button class="mode-trigger icon-action" id="modeTrigger" onclick="toggleModePopup(this)" title="Select mode">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              <span id="modeTriggerLabel">Auto</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+          </div>
+          <div class="input-right-actions">
+            <button class="icon-action mic-action" onclick="startVoice()" title="Voice input">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+            </button>
+            <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="Send">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15">
+                <path d="M12 3l8 18-8-4.5L4 21z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="file-preview-row" id="filePreviewRow" style="display:none"></div>
+      </div>
+    `;
 
-        function send() {
-            const input = document.getElementById("chatInput");
-            const text = input.value.trim();
-            if (!text) return;
-           
-            input.style.transform = 'scale(0.98)';
-            setTimeout(() => input.style.transform = 'scale(1)', 100);
-           
-            AI.user(text);
-            input.value = "";
-            input.style.height = 'auto';
-            document.getElementById("chatFilePreview").innerHTML = '';
-            document.getElementById("chatFileInput").value = '';
-            AI.ask(text);
-        }
+    /* ===== BOOT ===== */
+    document.addEventListener('DOMContentLoaded', () => {
+      AI.init('messagesBox', '/api/chat');
+      injectInput();
+    });
 
-        // Slide animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideOut {
-                from { opacity: 1; transform: scale(1); }
-                to { opacity: 0; transform: scale(0.95) translateY(-20px); }
-            }
-            @keyframes slideIn {
-                from { opacity: 0; transform: scale(0.95) translateY(20px); }
-                to { opacity: 1; transform: scale(1); }
-            }
-        `;
-        document.head.appendChild(style);
-    </script>
+    function injectInput() {
+      const hz = document.getElementById('homeInputZone');
+      const cz = document.getElementById('chatInputZone');
+      if (hz) hz.innerHTML = INPUT_HTML;
+      if (cz) cz.innerHTML = INPUT_HTML;
+    }
 
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+    /* ===== SEND ===== */
+    function sendMessage() {
+      const ta = document.getElementById('chatTextarea');
+      if (!ta) return;
+      const msg = ta.value.trim();
+      if (!msg) return;
+
+      const hv = document.getElementById('homeView');
+      const cv = document.getElementById('chatView');
+      hv.style.display = 'none';
+      cv.style.display = 'flex';
+
+      ta.value = '';
+      ta.style.height = 'auto';
+
+      AI.user(msg);
+      AI.ask(msg);
+    }
+
+    function onKey(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    }
+
+    function onType(el) {
+      el.style.height = 'auto';
+      el.style.height = Math.min(el.scrollHeight, 200) + 'px';
+    }
+
+    function useSuggestion(btn) {
+      const ta = document.getElementById('chatTextarea');
+      if (!ta) return;
+      ta.value = btn.textContent.trim();
+      ta.focus();
+      onType(ta);
+    }
+
+    function onFilePick(input) {
+      const row = document.getElementById('filePreviewRow');
+      if (!row) return;
+      if (input.files.length > 0) {
+        row.style.display = 'flex';
+        row.innerHTML = Array.from(input.files).map(f => `
+          <div class="file-chip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span>${f.name}</span>
+          </div>
+        `).join('');
+      } else {
+        row.style.display = 'none';
+      }
+    }
+
+    /* ===== VOICE ===== */
+    function startVoice() {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) { alert('Voice not supported in this browser'); return; }
+      const r = new SR();
+      r.lang = 'en-US';
+      r.onresult = e => {
+        const ta = document.getElementById('chatTextarea');
+        if (ta) { ta.value += e.results[0][0].transcript; onType(ta); }
+      };
+      r.start();
+    }
+
+    /* ===== MODE ===== */
+    let currentMode = 'auto';
+    function toggleModePopup(btn) {
+      const popup = document.getElementById('modePopup');
+      const rect = btn.getBoundingClientRect();
+      popup.style.bottom = (window.innerHeight - rect.top + 8) + 'px';
+      popup.style.left = rect.left + 'px';
+      popup.classList.toggle('open');
+      document.addEventListener('click', closeModePopup, { once: true, capture: true });
+    }
+    function closeModePopup(e) {
+      const popup = document.getElementById('modePopup');
+      if (!popup.contains(e.target)) popup.classList.remove('open');
+    }
+    function selectMode(mode) {
+      currentMode = mode;
+      const labels = { auto: 'Auto', fast: 'Fast', thinking: 'Think' };
+      const el = document.getElementById('modeTriggerLabel');
+      if (el) el.textContent = labels[mode] || 'Auto';
+      document.getElementById('modePopup').classList.remove('open');
+      if (AI.setMode) AI.setMode(mode);
+      else AI.currentMode = mode;
+    }
+
+    /* ===== HOME ===== */
+    function goHome() {
+      document.getElementById('homeView').style.display = 'flex';
+      document.getElementById('chatView').style.display = 'none';
+      injectInput();
+    }
+
+    /* ===== AUTH ===== */
+    let authMode = 'signin';
+    function showAuthModal(mode = 'signin') {
+      authMode = mode;
+      document.getElementById('authTitle').textContent = mode === 'signin' ? 'Welcome back' : 'Create account';
+      document.getElementById('authSwitchLink').textContent = mode === 'signin' ? 'Sign up' : 'Sign in';
+      document.getElementById('authModal').classList.add('open');
+    }
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.remove('open');
+    }
+    function toggleAuthMode() {
+      showAuthModal(authMode === 'signin' ? 'signup' : 'signin');
+    }
+  </script>
 </body>
 </html>
