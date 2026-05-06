@@ -657,3 +657,82 @@ const AI = {
     this.messagesBox.scrollTo({ top: this.messagesBox.scrollHeight, behavior: 'smooth' });
   },
 };
+
+
+/* ============================================================
+   🔧 BUTTON FIXES — Expose all required functions to window
+   ============================================================ */
+
+// Fix AI.scroll() and AI.stop() — expose directly on AI object
+if (typeof AI !== 'undefined') {
+  if (!AI.scroll) {
+    AI.scroll = function() {
+      const box = document.getElementById('messagesBox');
+      if (box) box.scrollTop = box.scrollHeight;
+    };
+  }
+  if (!AI.stop) {
+    AI.stop = function() {
+      if (AI.abortController) {
+        AI.abortController.abort();
+        AI.isStreaming = false;
+        AI._setStopBtn(false);
+      }
+    };
+  }
+}
+
+// Fix global window exports
+window.goHome       = function() { if(typeof AI!=='undefined') AI.goHome?.() || (document.getElementById('chatView') && (document.getElementById('chatView').style.display='none'), document.getElementById('homeView') && (document.getElementById('homeView').style.display='')); };
+window.newChat      = function() { if(typeof AI!=='undefined' && AI.newChat) AI.newChat(); };
+window.toggleSidebar= function() { const s=document.getElementById('sidebar'); if(s) s.classList.toggle('open'); };
+window.useSuggestion= window.useSuggestion || function(btn) { const ta=document.getElementById('chatTextarea')||document.getElementById('homeTextarea'); if(ta){ ta.value=btn.innerText.trim(); if(typeof sendMessage==='function') sendMessage(); } };
+
+// Fix handleAuth — Sign in / Continue button
+window.handleAuth = function() {
+  const email = document.getElementById('authEmail')?.value?.trim();
+  const pass  = document.getElementById('authPassword')?.value?.trim();
+  const err   = document.getElementById('authError');
+  if (!email || !pass) {
+    if (err) err.textContent = 'Please fill in all fields.';
+    return;
+  }
+  if (pass.length < 6) {
+    if (err) err.textContent = 'Password must be at least 6 characters.';
+    return;
+  }
+  // Firebase auth if available, otherwise demo mode
+  if (typeof firebase !== 'undefined' && firebase.auth) {
+    const isLogin = document.getElementById('authTitle')?.textContent?.includes('Sign in');
+    const fn = isLogin
+      ? firebase.auth().signInWithEmailAndPassword(email, pass)
+      : firebase.auth().createUserWithEmailAndPassword(email, pass);
+    fn.then(() => { if(typeof closeAuthModal==='function') closeAuthModal(); })
+      .catch(e => { if (err) err.textContent = e.message; });
+  } else {
+    // Demo mode — just close modal
+    if (err) err.textContent = '';
+    document.getElementById('sidebarUserName').textContent = email.split('@')[0];
+    if(typeof closeAuthModal==='function') closeAuthModal();
+    if(typeof showToast==='function') showToast('Signed in (demo mode) 👋');
+  }
+};
+
+// Ensure scroll-down button works
+const scrollBtn = document.getElementById('scrollDownBtn');
+if (scrollBtn) {
+  scrollBtn.onclick = function() {
+    const box = document.getElementById('messagesBox');
+    if (box) box.scrollTop = box.scrollHeight;
+  };
+}
+
+// Ensure stop button works
+const stopBtn = document.getElementById('stopBtn');
+if (stopBtn) {
+  stopBtn.onclick = function() {
+    if (typeof AI !== 'undefined' && AI.stop) AI.stop();
+  };
+}
+
+console.log('✅ IlyassAgentAI buttons patched successfully');
