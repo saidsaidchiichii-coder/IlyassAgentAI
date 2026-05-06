@@ -358,7 +358,26 @@ const AI = {
 
       const data = await res.json();
       load.remove();
-      const reply = data?.reply || 'No response from server.';
+
+      // 🎨 IMAGE RESPONSE — render image card
+      if (data?.type === 'image' && data?.imageUrl) {
+        const imgPrompt = data.prompt || '';
+        const imgHtml = `<div class="ai-image-card">
+          <p>🎨 Generated image for: <em>${imgPrompt}</em></p>
+          <img src="${data.imageUrl}"
+               alt="${imgPrompt}"
+               style="max-width:100%;border-radius:12px;margin-top:8px;display:block;"
+               onerror="this.alt='⚠️ Image failed to load. Try again.';this.style.display='none';this.parentElement.innerHTML+='<p style=color:red>⚠️ Image failed to load. Try again.</p>'"
+          />
+          <small style="opacity:0.6;font-size:11px">Powered by Pollinations.ai · Free</small>
+        </div>`;
+        this._renderHTML(imgHtml);
+        this._saveMessage('assistant', `![${imgPrompt}](${data.imageUrl})`);
+        return;
+      }
+
+      // 💬 TEXT RESPONSE — normal chat
+      const reply = data?.reply || data?.message || 'No response from server.';
       await this.streamRender(reply);
       this._saveMessage('assistant', reply);
 
@@ -388,6 +407,25 @@ const AI = {
     const wrapper = document.createElement('div');
     wrapper.className = 'msg-wrapper ai';
     wrapper.innerHTML = `<div class="msg ai error-msg">${msg}</div>`;
+    this.messagesBox.appendChild(wrapper);
+    this.scroll();
+  },
+
+  // 🎨 Render raw HTML block (used for image cards)
+  _renderHTML(html) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'msg-wrapper ai';
+    wrapper.innerHTML = `
+      <div class="ai-avatar">
+        <svg viewBox="0 0 32 32" fill="currentColor" width="14" height="14">
+          <path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm0 3.5c2.006 0 3.89.524 5.522 1.44L7.94 21.522A10.45 10.45 0 0 1 5.5 16C5.5 9.649 10.649 4.5 17 4.5h-1zm0 21c-2.006 0-3.89-.524-5.522-1.44L24.06 10.478A10.45 10.45 0 0 1 26.5 16c0 6.351-5.149 11.5-11.5 11.5h1z"/>        </svg>
+      </div>
+      <div class="msg ai">${html}</div>
+      <div class="msg-actions">
+        <button class="msg-action-btn copy-btn" title="Copy" onclick="AI._copy(this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        </button>
+      </div>`;
     this.messagesBox.appendChild(wrapper);
     this.scroll();
   },
