@@ -2,117 +2,62 @@ import { Composio } from "@composio/core";
 import { OpenAIProvider } from "@composio/openai";
 
 // ============================================================
-//  🎨 IMAGE INTENT DETECTION
-//  Detects if the user wants to generate an image
+//  🎨 IMAGE INTENT DETECTION — Simple & Reliable
 // ============================================================
 function detectImageIntent(message) {
-  const lower = message.toLowerCase();
-
-  const imagePatterns = [
+  const m = message.toLowerCase();
+  const keywords = [
     // English
-    /generate\s+(an?\s+)?image/i,
-    /create\s+(an?\s+)?image/i,
-    /make\s+(an?\s+)?image/i,
-    /draw\s+(me\s+)?/i,
-    /show\s+me\s+(an?\s+)?image/i,
-    /generate\s+(a\s+)?picture/i,
-    /create\s+(a\s+)?picture/i,
-    /paint\s+(me\s+)?/i,
-    /illustrate/i,
-    /visualize/i,
-    /render\s+(an?\s+)?image/i,
-    // Arabic
-    /ارسم/,
-    /صورة\s+ل/,
-    /توليد\s+صورة/,
-    /أنشئ\s+صورة/,
-    /اصنع\s+صورة/,
-    /رسم\s+/,
-    /أرسم/,
-    /صوّر/,
-    /صور\s+لي/,
-    /ولّد\s+صورة/,
-    /اعمل\s+صورة/,
+    "generate an image", "create an image", "make an image",
+    "generate a picture", "create a picture", "draw me",
+    "draw a ", "paint me", "paint a ", "illustrate",
+    "show me an image", "render an image",
+    // Arabic — simple includes check (no regex)
+    "ارسم", "أرسم", "رسم لي", "رسملي",
+    "صورة ل", "صوّر", "صور لي",
+    "توليد صورة", "أنشئ صورة", "اصنع صورة",
+    "اعمل صورة", "ولّد صورة", "ولد صورة"
   ];
-
-  return imagePatterns.some((pattern) => pattern.test(message));
+  return keywords.some(kw => m.includes(kw) || message.includes(kw));
 }
 
 // ============================================================
-//  🖼️ EXTRACT IMAGE PROMPT
-//  Cleans the prompt by removing command words
+//  🖼️ EXTRACT CLEAN PROMPT
 // ============================================================
 function extractImagePrompt(message) {
-  return message
-    .replace(
-      /generate\s+(an?\s+)?image\s+(of\s+)?/gi,
-      ""
-    )
-    .replace(/create\s+(an?\s+)?image\s+(of\s+)?/gi, "")
-    .replace(/make\s+(an?\s+)?image\s+(of\s+)?/gi, "")
-    .replace(/draw\s+(me\s+)?/gi, "")
-    .replace(/show\s+me\s+(an?\s+)?image\s+(of\s+)?/gi, "")
-    .replace(/generate\s+(a\s+)?picture\s+(of\s+)?/gi, "")
-    .replace(/create\s+(a\s+)?picture\s+(of\s+)?/gi, "")
-    .replace(/paint\s+(me\s+)?/gi, "")
-    .replace(/illustrate\s+/gi, "")
-    .replace(/visualize\s+/gi, "")
-    .replace(/render\s+(an?\s+)?image\s+(of\s+)?/gi, "")
-    // Arabic removals
-    .replace(/ارسم\s+لي\s+/g, "")
-    .replace(/ارسم\s+/g, "")
-    .replace(/أرسم\s+لي\s+/g, "")
-    .replace(/أرسم\s+/g, "")
-    .replace(/صورة\s+ل/g, "")
-    .replace(/توليد\s+صورة\s+/g, "")
-    .replace(/أنشئ\s+صورة\s+/g, "")
-    .replace(/اصنع\s+صورة\s+/g, "")
-    .replace(/رسم\s+/g, "")
-    .replace(/صوّر\s+/g, "")
-    .replace(/صور\s+لي\s+/g, "")
-    .replace(/ولّد\s+صورة\s+/g, "")
-    .replace(/اعمل\s+صورة\s+/g, "")
-    .trim();
-}
-
-// ============================================================
-//  🖼️ GENERATE IMAGE via Pollinations.ai (FREE, no API key)
-// ============================================================
-async function generateImage(prompt) {
-  const width = 768;
-  const height = 768;
-  const seed = Math.floor(Math.random() * 999999);
-  const encodedPrompt = encodeURIComponent(prompt);
-  const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=${width}&height=${height}&seed=${seed}&nologo=true&enhance=true`;
-
-  // Verify the URL is reachable (HEAD request)
-  const check = await fetch(imageUrl, { method: "HEAD" });
-  if (!check.ok) {
-    throw new Error("Pollinations.ai image generation failed");
+  const remove = [
+    "generate an image of", "generate an image",
+    "create an image of", "create an image",
+    "make an image of", "make an image",
+    "draw me", "draw a", "paint me", "paint a",
+    "illustrate", "show me an image of", "render an image of",
+    "ارسم لي", "أرسم لي", "رسم لي",
+    "صورة ل", "توليد صورة", "أنشئ صورة",
+    "اصنع صورة", "اعمل صورة", "ولّد صورة",
+    "ارسم", "أرسم", "صوّر", "صور لي"
+  ];
+  let prompt = message;
+  for (const r of remove) {
+    prompt = prompt.replace(new RegExp(r, 'gi'), '').trim();
   }
-
-  return { imageUrl, seed, width, height };
+  return prompt || message;
 }
 
 // ============================================================
-//  🤖 MAIN CHAT HANDLER
+//  🤖 MAIN HANDLER
 // ============================================================
 export default async function handler(req, res) {
-  // CORS headers
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   if (req.method === "OPTIONS") return res.status(200).end();
-
-  // GET test
   if (req.method === "GET") {
     return res.status(200).json({
       ok: true,
-      message: "IlyassAgentAI with Composio + Image Generation ✔️ Use POST",
+      message: "IlyassAgentAI v3 — LLM + Image Generation ✔️"
     });
   }
-
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Only POST allowed" });
   }
@@ -126,37 +71,35 @@ export default async function handler(req, res) {
     }
 
     // ============================================================
-    //  🎨 IMAGE GENERATION BRANCH
+    //  🎨 BRANCH 1 — IMAGE GENERATION
     // ============================================================
     if (detectImageIntent(message)) {
-      const imagePrompt = extractImagePrompt(message) || message;
+      const imagePrompt = extractImagePrompt(message);
+      const seed = Math.floor(Math.random() * 999999);
+      const encoded = encodeURIComponent(imagePrompt);
+      const imageUrl = `https://image.pollinations.ai/prompt/${encoded}?width=768&height=768&seed=${seed}&nologo=true&enhance=true`;
 
+      // Verify Pollinations is reachable
       try {
-        const { imageUrl, seed, width, height } = await generateImage(imagePrompt);
-
-        return res.status(200).json({
-          type: "image",
-          imageUrl: imageUrl,
-          prompt: imagePrompt,
-          seed: seed,
-          width: width,
-          height: height,
-          provider: "Pollinations.ai (Free)",
-          reply: `🎨 Here is your generated image for: **${imagePrompt}**`,
-        });
-      } catch (imgError) {
-        console.error("Image generation error:", imgError);
-        return res.status(500).json({
-          error: "Failed to generate image: " + imgError.message,
-        });
+        const check = await fetch(imageUrl, { method: "HEAD" });
+        if (!check.ok) throw new Error("Pollinations unreachable");
+      } catch (_) {
+        // fallback: still return the URL, browser will load it
       }
+
+      return res.status(200).json({
+        type: "image",
+        imageUrl: imageUrl,
+        prompt: imagePrompt,
+        seed: seed,
+        provider: "Pollinations.ai (Free)",
+        reply: `🎨 صورة تم توليدها لـ: ${imagePrompt}`
+      });
     }
 
     // ============================================================
-    //  🤖 LLM (GROQ) CHAT BRANCH
+    //  🤖 BRANCH 2 — GROQ LLM CHAT
     // ============================================================
-
-    // 🛠️ COMPOSIO SETUP
     const composio = new Composio({
       apiKey: process.env.COMPOSIO_API_KEY,
       provider: new OpenAIProvider(),
@@ -170,12 +113,9 @@ export default async function handler(req, res) {
       {
         role: "system",
         content:
-          "You are IlyassAgentAI, a personal AI agent. You have access to various tools via Composio. Use them to help the user with their tasks. If the user asks for an image, describe what you would generate.",
+          "You are IlyassAgentAI, a helpful AI assistant. Answer questions clearly and helpfully. If someone asks you to draw or generate an image, tell them you will do it via the image generation system.",
       },
-      {
-        role: "user",
-        content: message,
-      },
+      { role: "user", content: message },
     ];
 
     let response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -186,8 +126,8 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
-        messages: messages,
-        tools: tools,
+        messages,
+        tools,
         tool_choice: "auto",
         temperature: 0.7,
         max_tokens: 1024,
@@ -196,17 +136,13 @@ export default async function handler(req, res) {
 
     let data = await response.json();
 
-    // Agentic loop for tool calls
+    // Agentic tool-call loop
     let iterations = 0;
-    const maxIterations = 5;
-
-    while (data.choices?.[0]?.message?.tool_calls && iterations < maxIterations) {
+    while (data.choices?.[0]?.message?.tool_calls && iterations < 5) {
       iterations++;
       const toolMessage = data.choices[0].message;
       messages.push(toolMessage);
-
       const results = await composio.provider.handleToolCalls(userId, toolMessage);
-
       for (const [i, tc] of toolMessage.tool_calls.entries()) {
         messages.push({
           role: "tool",
@@ -214,7 +150,6 @@ export default async function handler(req, res) {
           content: JSON.stringify(results[i]),
         });
       }
-
       response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -223,30 +158,25 @@ export default async function handler(req, res) {
         },
         body: JSON.stringify({
           model: "llama-3.3-70b-versatile",
-          messages: messages,
-          tools: tools,
+          messages,
+          tools,
           tool_choice: "auto",
         }),
       });
       data = await response.json();
     }
 
-    // ❌ handle errors
     if (!response.ok) {
-      return res.status(500).json({
-        error: data.error?.message || "API error",
-      });
+      return res.status(500).json({ error: data.error?.message || "API error" });
     }
 
-    // ✅ success
     return res.status(200).json({
       type: "text",
       reply: data.choices?.[0]?.message?.content || "No response",
     });
+
   } catch (err) {
-    console.error("Error in chat handler:", err);
-    return res.status(500).json({
-      error: err.message || "Server error",
-    });
+    console.error("Handler error:", err);
+    return res.status(500).json({ error: err.message || "Server error" });
   }
 }
