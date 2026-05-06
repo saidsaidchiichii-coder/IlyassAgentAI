@@ -311,7 +311,19 @@ document.addEventListener('DOMContentLoaded', () => {
 function injectInput() {
   const hz = document.getElementById('homeInputZone');
   const cz = document.getElementById('chatInputZone');
-  if (hz) hz.innerHTML = INPUT_HTML;
+
+  // Home input — uses homeTextarea id
+  if (hz) hz.innerHTML = INPUT_HTML.replace('id="chatTextarea"', 'id="homeTextarea"')
+                                    .replace('id="inputBox"',    'id="homeInputBox"')
+                                    .replace('id="chatFileInput"','id="homeFileInput"')
+                                    .replace('id="sendBtn"',     'id="homeSendBtn"')
+                                    .replace('id="stopBtn"',     'id="homeStopBtn"')
+                                    .replace('id="modeTrigger"', 'id="homeModeTrigger"')
+                                    .replace('id="modeTriggerLabel"','id="homeModeTriggerLabel"')
+                                    .replace('id="filePreviewRow"','id="homeFilePreviewRow"')
+                                    .replace('id="imgGenBtn"',   'id="homeImgGenBtn"');
+
+  // Chat input — keeps original ids
   if (cz) cz.innerHTML = INPUT_HTML;
 }
 
@@ -324,16 +336,30 @@ function setGreeting() {
 
 /* ===== SEND ===== */
 function sendMessage() {
-  const ta = document.getElementById('chatTextarea');
+  // Get active textarea: chatView is visible → chatTextarea, else homeTextarea
+  const chatView = document.getElementById('chatView');
+  const isChatVisible = chatView && chatView.style.display !== 'none';
+  const ta = isChatVisible
+    ? document.getElementById('chatTextarea')
+    : (document.getElementById('homeTextarea') || document.getElementById('chatTextarea'));
+
   if (!ta) return;
   const msg = ta.value.trim();
   if (!msg) return;
 
+  // Switch to chat view
   document.getElementById('homeView').style.display = 'none';
-  document.getElementById('chatView').style.display = 'flex';
+  chatView.style.display = 'flex';
 
+  // Clear input + reset height
   ta.value = '';
   ta.style.height = 'auto';
+
+  // Focus the CHAT textarea for next message
+  setTimeout(() => {
+    const chatTa = document.getElementById('chatTextarea');
+    if (chatTa) chatTa.focus();
+  }, 50);
 
   AI.user(msg);
   AI.ask(msg);
