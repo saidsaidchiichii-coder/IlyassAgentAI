@@ -1,1 +1,28 @@
-ZXhwb3J0IGRlZmF1bHQgYXN5bmMgZnVuY3Rpb24gaGFuZGxlcihyZXEsIHJlcykgewogIC8vIENPUlMgaGVhZGVycwogIHJlcy5zZXRIZWFkZXIoIkFjY2Vzcy1Db250cm9sLUFsbG93LU9yaWdpbiIsICIqIik7CiAgcmVzLnNldEhlYWRlcigiQWNjZXNzLUNvbnRyb2wtQWxsb3ctTWV0aG9kcyIsICJHRVQsIFBPU1QsIE9QVElPTlMiKTsKICByZXMuc2V0SGVhZGVyKCJBY2Nlc3MtQ29udHJvbC1BbGxvdy1IZWFkZXJzIiwgIkNvbnRlbnQtVHlwZSIpOwoKICBpZiAocmVxLm1ldGhvZCA9PT0gIk9QVElPTlMiKSByZXR1cm4gcmVzLnN0YXR1cygyMDApLmVuZCgpOwoKICBpZiAocmVxLm1ldGhvZCA9PT0gIkdFVCIpIHsKICAgIHJldHVybiByZXMuc3RhdHVzKDIwMCkuanNvbih7IG9rOiB0cnVlLCBtZXNzYWdlOiAiSW1hZ2UgZ2VuZXJhdGlvbiBBUEkgcmVhZHkg4pyFIiB9KTsKICB9CgogIGlmIChyZXEubWV0aG9kICE9PSAiUE9TVCIpIHsKICAgIHJldHVybiByZXMuc3RhdHVzKDQwNSkuanNvbih7IGVycm9yOiAiT25seSBQT1NUIGFsbG93ZWQiIH0pOwogIH0KCiAgdHJ5IHsKICAgIGNvbnN0IGJvZHkgPSB0eXBlb2YgcmVxLmJvZHkgPT09ICJzdHJpbmciID8gSlNPTi5wYXJzZShyZXEuYm9keSkgOiByZXEuYm9keTsKICAgIGNvbnN0IHByb21wdCA9IGJvZHk/LnByb21wdDsKCiAgICBpZiAoIXByb21wdCkgewogICAgICByZXR1cm4gcmVzLnN0YXR1cyg0MDApLmpzb24oeyBlcnJvcjogIlByb21wdCBpcyByZXF1aXJlZCIgfSk7CiAgICB9CgogICAgY29uc3Qgd2lkdGggPSBib2R5Py53aWR0aCB8fCA3Njg7CiAgICBjb25zdCBoZWlnaHQgPSBib2R5Py5oZWlnaHQgfHwgNzY4OwogICAgY29uc3Qgc2VlZCA9IGJvZHk/LnNlZWQgfHwgTWF0aC5mbG9vcihNYXRoLnJhbmRvbSgpICogOTk5OTk5KTsKCiAgICAvLyBQb2xsaW5hdGlvbnMuYWkgLSAxMDAlIEZSRUUsIG5vIEFQSSBrZXkgbmVlZGVkIQogICAgY29uc3QgZW5jb2RlZFByb21wdCA9IGVuY29kZVVSSUNvbXBvbmVudChwcm9tcHQpOwogICAgY29uc3QgaW1hZ2VVcmwgPSBgaHR0cHM6Ly9pbWFnZS5wb2xsaW5hdGlvbnMuYWkvcHJvbXB0LyR7ZW5jb2RlZFByb21wdH0/d2lkdGg9JHt3aWR0aH0maGVpZ2h0PSR7aGVpZ2h0fSZzZWVkPSR7c2VlZH0mbm9sb2dvPXRydWUmZW5oYW5jZT10cnVlYDsKCiAgICByZXR1cm4gcmVzLnN0YXR1cygyMDApLmpzb24oewogICAgICBpbWFnZVVybDogaW1hZ2VVcmwsCiAgICAgIHByb21wdDogcHJvbXB0LAogICAgICBzZWVkOiBzZWVkLAogICAgICBwcm92aWRlcjogIlBvbGxpbmF0aW9ucy5haSAoRnJlZSkiCiAgICB9KTsKCiAgfSBjYXRjaCAoZXJyKSB7CiAgICBjb25zb2xlLmVycm9yKCJJbWFnZSBnZW5lcmF0aW9uIGVycm9yOiIsIGVycik7CiAgICByZXR1cm4gcmVzLnN0YXR1cyg1MDApLmpzb24oeyBlcnJvcjogZXJyLm1lc3NhZ2UgfHwgIlNlcnZlciBlcnJvciIgfSk7CiAgfQp9Cg==
+export default async function handler(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  if (req.method === "OPTIONS") return res.status(200).end();
+
+  if (req.method === "GET") {
+    return res.status(200).json({ ok: true, message: "Image generation API ready ✅" });
+  }
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Only POST allowed" });
+  }
+
+  try {
+    const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+    const prompt = body?.prompt;
+    if (!prompt) return res.status(400).json({ error: "Prompt is required" });
+
+    const width  = body?.width  || 768;
+    const height = body?.height || 768;
+    const seed   = body?.seed   || Math.floor(Math.random() * 999999);
+    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=${width}&height=${height}&seed=${seed}&nologo=true&enhance=true`;
+
+    return res.status(200).json({ imageUrl, prompt, seed, provider: "Pollinations.ai (Free)" });
+  } catch (err) {
+    return res.status(500).json({ error: err.message || "Server error" });
+  }
+}
