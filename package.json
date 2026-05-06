@@ -1,12 +1,7 @@
 {
   "name": "ilyass-agent-ai",
   "version": "1.0.0",
-  "description": "Personal AI Agent with Composio Integration",
-  "main": "index.html",
-  "scripts": {
-    "start": "serve .",
-    "build": "echo 'No build step needed'"
-  },
+  "private": true,
   "dependencies": {
     "@composio/core": "^0.6.0",
     "@composio/openai": "^0.6.0"
