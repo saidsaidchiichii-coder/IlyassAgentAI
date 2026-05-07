@@ -401,19 +401,89 @@ function onFilePick(input) {
   }).join('');
 }
 
-/* ===== VOICE ===== */
+/* ===== VOICE — Groq Whisper STT ===== */
+let _groqMediaRecorder = null;
+let _groqAudioChunks   = [];
+let _groqRecording     = false;
+
 function startVoice() {
+  if (_groqRecording) { _stopGroqRecording(); return; }
+  _startGroqRecording();
+}
+
+function _startGroqRecording() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    _fallbackWebSpeech(); return;
+  }
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
+      _groqAudioChunks = [];
+      _groqRecording   = true;
+      const mimeType   = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+        ? 'audio/webm;codecs=opus'
+        : MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/ogg;codecs=opus';
+      _groqMediaRecorder = new MediaRecorder(stream, { mimeType });
+      _groqMediaRecorder.ondataavailable = e => { if (e.data && e.data.size > 0) _groqAudioChunks.push(e.data); };
+      _groqMediaRecorder.onstop          = () => _submitGroqAudio(mimeType, stream);
+      _groqMediaRecorder.start(250);
+      const micBtn = document.querySelector('.mic-action');
+      if (micBtn) { micBtn.classList.add('recording'); micBtn.title = 'Stop Recording'; }
+      showToast('🎤 Recording… tap mic to stop');
+      setTimeout(() => { if (_groqRecording) _stopGroqRecording(); }, 60000);
+    })
+    .catch(err => { console.warn('[Groq Voice] mic failed:', err); _fallbackWebSpeech(); });
+}
+
+function _stopGroqRecording() {
+  if (_groqMediaRecorder && _groqRecording) {
+    _groqRecording = false;
+    _groqMediaRecorder.stop();
+    const micBtn = document.querySelector('.mic-action');
+    if (micBtn) { micBtn.classList.remove('recording'); micBtn.title = 'Voice input'; }
+    showToast('⏳ Transcribing with Groq Whisper…');
+  }
+}
+
+async function _submitGroqAudio(mimeType, stream) {
+  try {
+    stream.getTracks().forEach(t => t.stop());
+    if (_groqAudioChunks.length === 0) { showToast('No audio recorded'); return; }
+    const ext  = mimeType.includes('ogg') ? 'ogg' : 'webm';
+    const blob = new Blob(_groqAudioChunks, { type: mimeType });
+    if (blob.size < 100) { showToast('Audio too short'); return; }
+    const fd   = new FormData();
+    fd.append('audio', blob, `recording.${ext}`);
+    const uiLang = (document.documentElement.lang || navigator.language || 'en').split('-')[0];
+    fd.append('language', uiLang);
+    const res  = await fetch('/api/transcribe', { method: 'POST', body: fd });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Unknown' }));
+      showToast('❌ Transcription failed: ' + (err.error || res.status)); return;
+    }
+    const data = await res.json();
+    const text = (data.text || '').trim();
+    if (!text) { showToast('No speech detected'); return; }
+    const ta = document.getElementById('chatTextarea');
+    if (ta) { ta.value += (ta.value ? ' ' : '') + text; if (typeof onType === 'function') onType(ta); }
+    showToast('✅ ' + text.slice(0, 60) + (text.length > 60 ? '…' : ''));
+  } catch (err) {
+    console.error('[Groq Voice]', err);
+    showToast('❌ Voice error: ' + err.message);
+  }
+}
+
+function _fallbackWebSpeech() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) { showToast('Voice not supported in this browser'); return; }
   const r = new SR();
-  r.lang = 'en-US';
+  r.lang = document.documentElement.lang || 'en-US';
   r.onresult = e => {
     const ta = document.getElementById('chatTextarea');
-    if (ta) { ta.value += e.results[0][0].transcript; onType(ta); }
+    if (ta) { ta.value += e.results[0][0].transcript; if (typeof onType === 'function') onType(ta); }
   };
   r.onerror = () => showToast('Voice input failed');
   r.start();
-  showToast('Listening…');
+  showToast('🎤 Listening (browser mode)…');
 }
 
 /* ===== MODE ===== */
