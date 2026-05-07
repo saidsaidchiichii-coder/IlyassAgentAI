@@ -1,1 +1,36 @@
-ewogICJvdXRwdXREaXJlY3RvcnkiOiAicHVibGljIiwKICAiZnVuY3Rpb25zIjogewogICAgImFwaS8qLmpzIjogewogICAgICAibWF4RHVyYXRpb24iOiAzMAogICAgfQogIH0sCiAgInJvdXRlcyI6IFsKICAgIHsgInNyYyI6ICIvYXBwIiwgICAiZGVzdCI6ICIvYXBwLmh0bWwiIH0sCiAgICB7ICJzcmMiOiAiL2FnZW50IiwgImRlc3QiOiAiL2FnZW50Lmh0bWwiIH0sCiAgICB7ICJzcmMiOiAiL2F1dGgiLCAgImRlc3QiOiAiL2F1dGguaHRtbCIgfSwKCiAgICB7ICJzcmMiOiAiL2FwaS9oZWFsdGgiLCAgICAiZGVzdCI6ICIvYXBpL2hlYWx0aC5qcyIgICAgfSwKICAgIHsgInNyYyI6ICIvYXBpL2FnZW50IiwgICAgICJkZXN0IjogIi9hcGkvYWdlbnQuanMiICAgICB9LAogICAgeyAic3JjIjogIi9hcGkvZGlzY292ZXIiLCAgImRlc3QiOiAiL2FwaS9kaXNjb3Zlci5qcyIgIH0sCiAgICB7ICJzcmMiOiAiL2FwaS9jaGF0IiwgICAgICAiZGVzdCI6ICIvYXBpL2NoYXQuanMiICAgICAgfSwKICAgIHsgInNyYyI6ICIvYXBpL2ltYWdlIiwgICAgICJkZXN0IjogIi9hcGkvaW1hZ2UuanMiICAgICB9LAogICAgeyAic3JjIjogIi9hcGkvc2VhcmNoIiwgICAgImRlc3QiOiAiL2FwaS9zZWFyY2guanMiICAgIH0sCiAgICB7ICJzcmMiOiAiL2FwaS90cmFuc2NyaWJlIiwiZGVzdCI6ICIvYXBpL3RyYW5zY3JpYmUuanMifSwKICAgIHsgInNyYyI6ICIvYXBpL21lbW9yeSIsICAgICJkZXN0IjogIi9hcGkvbWVtb3J5LmpzIiAgICB9LAogICAgeyAic3JjIjogIi9hcGkvcGFyc2UiLCAgICAgImRlc3QiOiAiL2FwaS9wYXJzZS5qcyIgICAgIH0sCiAgICB7ICJzcmMiOiAiL2FwaS9tb2RlcmF0ZSIsICAiZGVzdCI6ICIvYXBpL21vZGVyYXRlLmpzIiAgfSwKCiAgICB7ICJzcmMiOiAiLyguKikiLCAiZGVzdCI6ICIvJDEiIH0KICBdLAogICJoZWFkZXJzIjogWwogICAgewogICAgICAic291cmNlIjogIi9hcGkvKC4qKSIsCiAgICAgICJoZWFkZXJzIjogWwogICAgICAgIHsgImtleSI6ICJBY2Nlc3MtQ29udHJvbC1BbGxvdy1PcmlnaW4iLCAgInZhbHVlIjogIioiIH0sCiAgICAgICAgeyAia2V5IjogIkFjY2Vzcy1Db250cm9sLUFsbG93LU1ldGhvZHMiLCAidmFsdWUiOiAiR0VULCBQT1NULCBQVVQsIERFTEVURSwgT1BUSU9OUyIgfSwKICAgICAgICB7ICJrZXkiOiAiQWNjZXNzLUNvbnRyb2wtQWxsb3ctSGVhZGVycyIsICJ2YWx1ZSI6ICJDb250ZW50LVR5cGUsIEF1dGhvcml6YXRpb24iIH0KICAgICAgXQogICAgfQogIF0KfQo=
+{
+  "outputDirectory": "public",
+  "functions": {
+    "api/*.js": {
+      "maxDuration": 30
+    }
+  },
+  "routes": [
+    { "src": "/app",   "dest": "/app.html" },
+    { "src": "/agent", "dest": "/agent.html" },
+    { "src": "/auth",  "dest": "/auth.html" },
+
+    { "src": "/api/health",    "dest": "/api/health.js"    },
+    { "src": "/api/agent",     "dest": "/api/agent.js"     },
+    { "src": "/api/discover",  "dest": "/api/discover.js"  },
+    { "src": "/api/chat",      "dest": "/api/chat.js"      },
+    { "src": "/api/image",     "dest": "/api/image.js"     },
+    { "src": "/api/search",    "dest": "/api/search.js"    },
+    { "src": "/api/transcribe","dest": "/api/transcribe.js"},
+    { "src": "/api/memory",    "dest": "/api/memory.js"    },
+    { "src": "/api/parse",     "dest": "/api/parse.js"     },
+    { "src": "/api/moderate",  "dest": "/api/moderate.js"  },
+
+    { "src": "/(.*)", "dest": "/$1" }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin",  "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, PUT, DELETE, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" }
+      ]
+    }
+  ]
+}

@@ -1,1 +1,217 @@
-Ly8gSWx5YXNzQUkg4oCUIC9hcGkvYWdlbnQKLy8gQXV0b25vbW91cyBhZ2VudCBlbmRwb2ludDogcGxhbnMsIGV4ZWN1dGVzIG11bHRpLXN0ZXAgdGFza3MsIGFuZCByZXBvcnRzIHByb2dyZXNzCgpleHBvcnQgZGVmYXVsdCBhc3luYyBmdW5jdGlvbiBoYW5kbGVyKHJlcSwgcmVzKSB7CiAgLy8g4pSA4pSAIENPUlMgcHJlZmxpZ2h0IOKUgOKUgAogIHJlcy5zZXRIZWFkZXIoJ0FjY2Vzcy1Db250cm9sLUFsbG93LU9yaWdpbicsICcqJyk7CiAgcmVzLnNldEhlYWRlcignQWNjZXNzLUNvbnRyb2wtQWxsb3ctTWV0aG9kcycsICdHRVQsIFBPU1QsIE9QVElPTlMnKTsKICByZXMuc2V0SGVhZGVyKCdBY2Nlc3MtQ29udHJvbC1BbGxvdy1IZWFkZXJzJywgJ0NvbnRlbnQtVHlwZSwgQXV0aG9yaXphdGlvbicpOwogIGlmIChyZXEubWV0aG9kID09PSAnT1BUSU9OUycpIHJldHVybiByZXMuc3RhdHVzKDIwMCkuZW5kKCk7CgogIGlmIChyZXEubWV0aG9kICE9PSAnUE9TVCcpIHsKICAgIHJldHVybiByZXMuc3RhdHVzKDQwNSkuanNvbih7IGVycm9yOiAnTWV0aG9kIG5vdCBhbGxvd2VkJyB9KTsKICB9CgogIHJlcy5zZXRIZWFkZXIoJ0NvbnRlbnQtVHlwZScsICd0ZXh0L2V2ZW50LXN0cmVhbScpOwogIHJlcy5zZXRIZWFkZXIoJ0NhY2hlLUNvbnRyb2wnLCAnbm8tY2FjaGUnKTsKICByZXMuc2V0SGVhZGVyKCdDb25uZWN0aW9uJywgJ2tlZXAtYWxpdmUnKTsKCiAgY29uc3QgeyB0YXNrLCBjb250ZXh0ID0gW10sIHRvb2xzID0gWydzZWFyY2gnLCAnY29kZScsICdpbWFnZScsICdkZXBsb3knXSB9ID0gcmVxLmJvZHkgfHwge307CgogIGlmICghdGFzaykgewogICAgcmVzLndyaXRlKGBkYXRhOiAke0pTT04uc3RyaW5naWZ5KHsgdHlwZTogJ2Vycm9yJywgbWVzc2FnZTogJ3Rhc2sgaXMgcmVxdWlyZWQnIH0pfVxuXG5gKTsKICAgIHJldHVybiByZXMuZW5kKCk7CiAgfQoKICBjb25zdCBzZW5kRXZlbnQgPSAodHlwZSwgZGF0YSkgPT4gewogICAgcmVzLndyaXRlKGBkYXRhOiAke0pTT04uc3RyaW5naWZ5KHsgdHlwZSwgLi4uZGF0YSwgdGltZXN0YW1wOiBuZXcgRGF0ZSgpLnRvSVNPU3RyaW5nKCkgfSl9XG5cbmApOwogIH07CgogIC8vIOKUgOKUgCBQaGFzZSAxOiBQbGFubmluZyDilIDilIAKICBzZW5kRXZlbnQoJ3RoaW5raW5nJywgeyBtZXNzYWdlOiAnQW5hbHl6aW5nIHRhc2sgYW5kIGNyZWF0aW5nIGV4ZWN1dGlvbiBwbGFu4oCmJywgc3RlcDogMCB9KTsKCiAgY29uc3QgZ3JvcUtleSA9IHByb2Nlc3MuZW52LkdST1FfQVBJX0tFWTsKCiAgLy8gRml4ZWQ6IHBsYW5uaW5nIHByb21wdCB3cmFwcyB0aGUgYXJyYXkgaW4gYW4gb2JqZWN0IHNvIGpzb25fb2JqZWN0IG1vZGUgd29ya3MgY29ycmVjdGx5CiAgY29uc3QgcGxhbm5pbmdQcm9tcHQgPSBgWW91IGFyZSBJbHlhc3NBSSwgYW4gYXV0b25vbW91cyBhZ2VudC4gQW5hbHl6ZSB0aGlzIHRhc2sgYW5kIGNyZWF0ZSBhIG51bWJlcmVkIGV4ZWN1dGlvbiBwbGFuIChtYXggNiBzdGVwcykuIEJlIHNwZWNpZmljIGFuZCBhY3Rpb25hYmxlLgoKVGFzazogJHt0YXNrfQoKUmVzcG9uZCB3aXRoIE9OTFkgdmFsaWQgSlNPTiBpbiB0aGlzIGV4YWN0IGZvcm1hdDoKeyJzdGVwcyI6IFsKICB7ICJzdGVwIjogMSwgImFjdGlvbiI6ICJzZWFyY2giLCAiZGVzY3JpcHRpb24iOiAiU2VhcmNoIGZvciBYIiB9LAogIHsgInN0ZXAiOiAyLCAiYWN0aW9uIjogImNvZGUiLCAiZGVzY3JpcHRpb24iOiAiV3JpdGUgWSBjb2RlIiB9LAogIHsgInN0ZXAiOiAzLCAiYWN0aW9uIjogImFuYWx5emUiLCAiZGVzY3JpcHRpb24iOiAiQW5hbHl6ZSByZXN1bHRzIiB9Cl19YDsKCiAgbGV0IHBsYW4gPSBbXTsKICAKICBpZiAoZ3JvcUtleSkgewogICAgdHJ5IHsKICAgICAgY29uc3QgcGxhblJlcyA9IGF3YWl0IGZldGNoKCdodHRwczovL2FwaS5ncm9xLmNvbS9vcGVuYWkvdjEvY2hhdC9jb21wbGV0aW9ucycsIHsKICAgICAgICBtZXRob2Q6ICdQT1NUJywKICAgICAgICBoZWFkZXJzOiB7CiAgICAgICAgICAnQ29udGVudC1UeXBlJzogJ2FwcGxpY2F0aW9uL2pzb24nLAogICAgICAgICAgJ0F1dGhvcml6YXRpb24nOiBgQmVhcmVyICR7Z3JvcUtleX1gCiAgICAgICAgfSwKICAgICAgICBib2R5OiBKU09OLnN0cmluZ2lmeSh7CiAgICAgICAgICBtb2RlbDogJ21ldGEtbGxhbWEvbGxhbWEtMy4zLTcwYi12ZXJzYXRpbGUnLAogICAgICAgICAgbWVzc2FnZXM6IFt7IHJvbGU6ICd1c2VyJywgY29udGVudDogcGxhbm5pbmdQcm9tcHQgfV0sCiAgICAgICAgICBtYXhfdG9rZW5zOiA1MTIsCiAgICAgICAgICB0ZW1wZXJhdHVyZTogMC4zLAogICAgICAgICAgcmVzcG9uc2VfZm9ybWF0OiB7IHR5cGU6ICdqc29uX29iamVjdCcgfQogICAgICAgIH0pCiAgICAgIH0pOwoKICAgICAgaWYgKHBsYW5SZXMub2spIHsKICAgICAgICBjb25zdCBwbGFuRGF0YSA9IGF3YWl0IHBsYW5SZXMuanNvbigpOwogICAgICAgIGNvbnN0IGNvbnRlbnQgPSBwbGFuRGF0YS5jaG9pY2VzPy5bMF0/Lm1lc3NhZ2U/LmNvbnRlbnQgfHwgJ3t9JzsKICAgICAgICB0cnkgewogICAgICAgICAgY29uc3QgcGFyc2VkID0gSlNPTi5wYXJzZShjb250ZW50KTsKICAgICAgICAgIC8vIEhhbmRsZSBib3RoIHtzdGVwczogWy4uLl19IGFuZCBkaXJlY3QgYXJyYXkgZm9ybWF0cwogICAgICAgICAgcGxhbiA9IEFycmF5LmlzQXJyYXkocGFyc2VkKSA/IHBhcnNlZCA6IChwYXJzZWQuc3RlcHMgfHwgcGFyc2VkLnBsYW4gfHwgW10pOwogICAgICAgIH0gY2F0Y2ggewogICAgICAgICAgcGxhbiA9IFtdOwogICAgICAgIH0KICAgICAgfQogICAgfSBjYXRjaCAoZSkgewogICAgICBjb25zb2xlLmVycm9yKCdQbGFubmluZyBlcnJvcjonLCBlLm1lc3NhZ2UpOwogICAgfQogIH0KCiAgaWYgKHBsYW4ubGVuZ3RoID09PSAwKSB7CiAgICBwbGFuID0gWwogICAgICB7IHN0ZXA6IDEsIGFjdGlvbjogJ2FuYWx5emUnLCBkZXNjcmlwdGlvbjogJ0FuYWx5emUgdGFzayByZXF1aXJlbWVudHMnIH0sCiAgICAgIHsgc3RlcDogMiwgYWN0aW9uOiAnZXhlY3V0ZScsIGRlc2NyaXB0aW9uOiAnRXhlY3V0ZSB0aGUgdGFzaycgfSwKICAgICAgeyBzdGVwOiAzLCBhY3Rpb246ICdjb21wbGV0ZScsIGRlc2NyaXB0aW9uOiAnRmluYWxpemUgYW5kIHJldHVybiByZXN1bHRzJyB9CiAgICBdOwogIH0KCiAgc2VuZEV2ZW50KCdwbGFuJywgeyBzdGVwczogcGxhbiwgdG90YWxTdGVwczogcGxhbi5sZW5ndGggfSk7CgogIC8vIOKUgOKUgCBQaGFzZSAyOiBFeGVjdXRlIGVhY2ggc3RlcCDilIDilIAKICBsZXQgcmVzdWx0cyA9IFtdOwogIGZvciAoY29uc3Qgc3RlcCBvZiBwbGFuKSB7CiAgICBzZW5kRXZlbnQoJ3N0ZXBfc3RhcnQnLCB7IHN0ZXA6IHN0ZXAuc3RlcCwgYWN0aW9uOiBzdGVwLmFjdGlvbiwgZGVzY3JpcHRpb246IHN0ZXAuZGVzY3JpcHRpb24gfSk7CiAgICAKICAgIGF3YWl0IG5ldyBQcm9taXNlKHIgPT4gc2V0VGltZW91dChyLCAzMDApKTsKCiAgICB0cnkgewogICAgICBsZXQgc3RlcFJlc3VsdCA9IG51bGw7CgogICAgICBpZiAoc3RlcC5hY3Rpb24gPT09ICdzZWFyY2gnICYmIHRvb2xzLmluY2x1ZGVzKCdzZWFyY2gnKSkgewogICAgICAgIC8vIEZpeGVkOiBjYWxsIHNlYXJjaCBsb2dpYyBpbmxpbmUgaW5zdGVhZCBvZiB1c2luZyB1bnN0YWJsZSBWRVJDRUxfVVJMIHNlbGYtY2FsbAogICAgICAgIHRyeSB7CiAgICAgICAgICBjb25zdCBxdWVyeSA9IHRhc2suc2xpY2UoMCwgMTAwKTsKICAgICAgICAgIGNvbnN0IGRkZ1JlcyA9IGF3YWl0IGZldGNoKAogICAgICAgICAgICBgaHR0cHM6Ly9hcGkuZHVja2R1Y2tnby5jb20vP3E9JHtlbmNvZGVVUklDb21wb25lbnQocXVlcnkpfSZmb3JtYXQ9anNvbiZub19odG1sPTEmc2tpcF9kaXNhbWJpZz0xYAogICAgICAgICAgKTsKICAgICAgICAgIGlmIChkZGdSZXMub2spIHsKICAgICAgICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IGRkZ1Jlcy5qc29uKCk7CiAgICAgICAgICAgIGNvbnN0IHNlYXJjaFJlc3VsdHMgPSBbXTsKICAgICAgICAgICAgaWYgKGRhdGEuQWJzdHJhY3RUZXh0KSB7CiAgICAgICAgICAgICAgc2VhcmNoUmVzdWx0cy5wdXNoKHsKICAgICAgICAgICAgICAgIHRpdGxlOiBkYXRhLkhlYWRpbmcgfHwgcXVlcnksCiAgICAgICAgICAgICAgICB1cmw6IGRhdGEuQWJzdHJhY3RVUkwgfHwgJyMnLAogICAgICAgICAgICAgICAgc25pcHBldDogZGF0YS5BYnN0cmFjdFRleHQsCiAgICAgICAgICAgICAgICBzb3VyY2U6ICdEdWNrRHVja0dvJwogICAgICAgICAgICAgIH0pOwogICAgICAgICAgICB9CiAgICAgICAgICAgIChkYXRhLlJlbGF0ZWRUb3BpY3MgfHwgW10pLnNsaWNlKDAsIDQpLmZvckVhY2godG9waWMgPT4gewogICAgICAgICAgICAgIGlmICh0b3BpYy5UZXh0KSB7CiAgICAgICAgICAgICAgICBzZWFyY2hSZXN1bHRzLnB1c2goewogICAgICAgICAgICAgICAgICB0aXRsZTogdG9waWMuVGV4dC5zcGxpdCgnIC0gJylbMF0gfHwgcXVlcnksCiAgICAgICAgICAgICAgICAgIHVybDogdG9waWMuRmlyc3RVUkwgfHwgJyMnLAogICAgICAgICAgICAgICAgICBzbmlwcGV0OiB0b3BpYy5UZXh0LAogICAgICAgICAgICAgICAgICBzb3VyY2U6ICdEdWNrRHVja0dvJwogICAgICAgICAgICAgICAgfSk7CiAgICAgICAgICAgICAgfQogICAgICAgICAgICB9KTsKICAgICAgICAgICAgc3RlcFJlc3VsdCA9IHsgdHlwZTogJ3NlYXJjaCcsIHJlc3VsdHM6IHNlYXJjaFJlc3VsdHMgfTsKICAgICAgICAgIH0KICAgICAgICB9IGNhdGNoIChzZWFyY2hFcnIpIHsKICAgICAgICAgIGNvbnNvbGUuZXJyb3IoJ1NlYXJjaCBzdGVwIGVycm9yOicsIHNlYXJjaEVyci5tZXNzYWdlKTsKICAgICAgICB9CiAgICAgIH0KCiAgICAgIGlmICghc3RlcFJlc3VsdCkgewogICAgICAgIC8vIEdlbmVyYXRlIGNvbnRlbnQgdXNpbmcgTExNCiAgICAgICAgY29uc3QgbWVzc2FnZXMgPSBbCiAgICAgICAgICB7IHJvbGU6ICdzeXN0ZW0nLCBjb250ZW50OiAnWW91IGFyZSBJbHlhc3NBSSwgYW4gYXV0b25vbW91cyBBSSBhZ2VudC4gRXhlY3V0ZSB0aGUgYXNzaWduZWQgc3RlcCB0aG9yb3VnaGx5LicgfSwKICAgICAgICAgIC4uLmNvbnRleHQsCiAgICAgICAgICB7IHJvbGU6ICd1c2VyJywgY29udGVudDogYFRhc2s6ICR7dGFza31cblxuRXhlY3V0ZSBzdGVwICR7c3RlcC5zdGVwfTogJHtzdGVwLmRlc2NyaXB0aW9ufVxuXG5Qcm92aWRlIGEgY29tcGxldGUsIGRldGFpbGVkIHJlc3BvbnNlLmAgfQogICAgICAgIF07CgogICAgICAgIGlmIChncm9xS2V5KSB7CiAgICAgICAgICBjb25zdCBleGVjUmVzID0gYXdhaXQgZmV0Y2goJ2h0dHBzOi8vYXBpLmdyb3EuY29tL29wZW5haS92MS9jaGF0L2NvbXBsZXRpb25zJywgewogICAgICAgICAgICBtZXRob2Q6ICdQT1NUJywKICAgICAgICAgICAgaGVhZGVyczogeyAnQ29udGVudC1UeXBlJzogJ2FwcGxpY2F0aW9uL2pzb24nLCAnQXV0aG9yaXphdGlvbic6IGBCZWFyZXIgJHtncm9xS2V5fWAgfSwKICAgICAgICAgICAgYm9keTogSlNPTi5zdHJpbmdpZnkoewogICAgICAgICAgICAgIG1vZGVsOiAnbWV0YS1sbGFtYS9sbGFtYS0zLjMtNzBiLXZlcnNhdGlsZScsCiAgICAgICAgICAgICAgbWVzc2FnZXMsCiAgICAgICAgICAgICAgbWF4X3Rva2VuczogMjA0OCwKICAgICAgICAgICAgICB0ZW1wZXJhdHVyZTogMC43CiAgICAgICAgICAgIH0pCiAgICAgICAgICB9KTsKCiAgICAgICAgICBpZiAoZXhlY1Jlcy5vaykgewogICAgICAgICAgICBjb25zdCBleGVjRGF0YSA9IGF3YWl0IGV4ZWNSZXMuanNvbigpOwogICAgICAgICAgICBjb25zdCBjb250ZW50ID0gZXhlY0RhdGEuY2hvaWNlcz8uWzBdPy5tZXNzYWdlPy5jb250ZW50IHx8ICcnOwogICAgICAgICAgICBzdGVwUmVzdWx0ID0geyB0eXBlOiAndGV4dCcsIGNvbnRlbnQgfTsKICAgICAgICAgICAgcmVzdWx0cy5wdXNoKHsgc3RlcDogc3RlcC5zdGVwLCAuLi5zdGVwUmVzdWx0IH0pOwogICAgICAgICAgfQogICAgICAgIH0KICAgICAgfQoKICAgICAgc2VuZEV2ZW50KCdzdGVwX2RvbmUnLCB7IAogICAgICAgIHN0ZXA6IHN0ZXAuc3RlcCwgCiAgICAgICAgZGVzY3JpcHRpb246IHN0ZXAuZGVzY3JpcHRpb24sCiAgICAgICAgcmVzdWx0OiBzdGVwUmVzdWx0LAogICAgICAgIHN0YXR1czogJ3N1Y2Nlc3MnCiAgICAgIH0pOwoKICAgIH0gY2F0Y2ggKGVycikgewogICAgICBzZW5kRXZlbnQoJ3N0ZXBfZXJyb3InLCB7IHN0ZXA6IHN0ZXAuc3RlcCwgZXJyb3I6IGVyci5tZXNzYWdlIH0pOwogICAgfQogIH0KCiAgLy8g4pSA4pSAIFBoYXNlIDM6IFN5bnRoZXNpemUgZmluYWwgcmVzcG9uc2Ug4pSA4pSACiAgc2VuZEV2ZW50KCdzeW50aGVzaXppbmcnLCB7IG1lc3NhZ2U6ICdDb21iaW5pbmcgcmVzdWx0cyBpbnRvIGZpbmFsIHJlc3BvbnNl4oCmJyB9KTsKCiAgbGV0IGZpbmFsUmVzcG9uc2UgPSAnJzsKICBpZiAoZ3JvcUtleSAmJiByZXN1bHRzLmxlbmd0aCA+IDApIHsKICAgIHRyeSB7CiAgICAgIGNvbnN0IHN5bnRoZXNpc1Byb21wdCA9IGBUYXNrOiAke3Rhc2t9CgpFeGVjdXRpb24gcmVzdWx0czoKJHtyZXN1bHRzLm1hcChyID0+IGBTdGVwICR7ci5zdGVwfTogJHtKU09OLnN0cmluZ2lmeShyKS5zbGljZSgwLCA1MDApfWApLmpvaW4oJ1xuJyl9CgpTeW50aGVzaXplIHRoZXNlIHJlc3VsdHMgaW50byBhIGNvbXByZWhlbnNpdmUsIHdlbGwtZm9ybWF0dGVkIGZpbmFsIHJlc3BvbnNlLiBVc2UgbWFya2Rvd24gZm9ybWF0dGluZy5gOwoKICAgICAgY29uc3Qgc3ludGhSZXMgPSBhd2FpdCBmZXRjaCgnaHR0cHM6Ly9hcGkuZ3JvcS5jb20vb3BlbmFpL3YxL2NoYXQvY29tcGxldGlvbnMnLCB7CiAgICAgICAgbWV0aG9kOiAnUE9TVCcsCiAgICAgICAgaGVhZGVyczogeyAnQ29udGVudC1UeXBlJzogJ2FwcGxpY2F0aW9uL2pzb24nLCAnQXV0aG9yaXphdGlvbic6IGBCZWFyZXIgJHtncm9xS2V5fWAgfSwKICAgICAgICBib2R5OiBKU09OLnN0cmluZ2lmeSh7CiAgICAgICAgICBtb2RlbDogJ21ldGEtbGxhbWEvbGxhbWEtMy4zLTcwYi12ZXJzYXRpbGUnLAogICAgICAgICAgbWVzc2FnZXM6IFt7IHJvbGU6ICd1c2VyJywgY29udGVudDogc3ludGhlc2lzUHJvbXB0IH1dLAogICAgICAgICAgbWF4X3Rva2VuczogMzAwMAogICAgICAgIH0pCiAgICAgIH0pOwoKICAgICAgaWYgKHN5bnRoUmVzLm9rKSB7CiAgICAgICAgY29uc3Qgc3ludGhEYXRhID0gYXdhaXQgc3ludGhSZXMuanNvbigpOwogICAgICAgIGZpbmFsUmVzcG9uc2UgPSBzeW50aERhdGEuY2hvaWNlcz8uWzBdPy5tZXNzYWdlPy5jb250ZW50IHx8ICcnOwogICAgICB9CiAgICB9IGNhdGNoIHt9CiAgfQoKICBzZW5kRXZlbnQoJ2NvbXBsZXRlJywgeyAKICAgIG1lc3NhZ2U6ICdUYXNrIGNvbXBsZXRlZCcsCiAgICByZXNwb25zZTogZmluYWxSZXNwb25zZSB8fCByZXN1bHRzLm1hcChyID0+IHIuY29udGVudCB8fCBKU09OLnN0cmluZ2lmeShyKSkuam9pbignXG5cbicpLAogICAgc3RlcHM6IHBsYW4ubGVuZ3RoLAogICAgZHVyYXRpb246ICfigJQnCiAgfSk7CgogIHJlcy53cml0ZSgnZGF0YTogW0RPTkVdXG5cbicpOwogIHJlcy5lbmQoKTsKfQo=
+// IlyassAI — /api/agent
+// Autonomous agent endpoint: plans, executes multi-step tasks, and reports progress
+
+export default async function handler(req, res) {
+  // ── CORS preflight ──
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+
+  const { task, context = [], tools = ['search', 'code', 'image', 'deploy'] } = req.body || {};
+
+  if (!task) {
+    res.write(`data: ${JSON.stringify({ type: 'error', message: 'task is required' })}\n\n`);
+    return res.end();
+  }
+
+  const sendEvent = (type, data) => {
+    res.write(`data: ${JSON.stringify({ type, ...data, timestamp: new Date().toISOString() })}\n\n`);
+  };
+
+  // ── Phase 1: Planning ──
+  sendEvent('thinking', { message: 'Analyzing task and creating execution plan…', step: 0 });
+
+  const groqKey = process.env.GROQ_API_KEY;
+
+  // Fixed: planning prompt wraps the array in an object so json_object mode works correctly
+  const planningPrompt = `You are IlyassAI, an autonomous agent. Analyze this task and create a numbered execution plan (max 6 steps). Be specific and actionable.
+
+Task: ${task}
+
+Respond with ONLY valid JSON in this exact format:
+{"steps": [
+  { "step": 1, "action": "search", "description": "Search for X" },
+  { "step": 2, "action": "code", "description": "Write Y code" },
+  { "step": 3, "action": "analyze", "description": "Analyze results" }
+]}`;
+
+  let plan = [];
+  
+  if (groqKey) {
+    try {
+      const planRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${groqKey}`
+        },
+        body: JSON.stringify({
+          model: 'meta-llama/llama-3.3-70b-versatile',
+          messages: [{ role: 'user', content: planningPrompt }],
+          max_tokens: 512,
+          temperature: 0.3,
+          response_format: { type: 'json_object' }
+        })
+      });
+
+      if (planRes.ok) {
+        const planData = await planRes.json();
+        const content = planData.choices?.[0]?.message?.content || '{}';
+        try {
+          const parsed = JSON.parse(content);
+          // Handle both {steps: [...]} and direct array formats
+          plan = Array.isArray(parsed) ? parsed : (parsed.steps || parsed.plan || []);
+        } catch {
+          plan = [];
+        }
+      }
+    } catch (e) {
+      console.error('Planning error:', e.message);
+    }
+  }
+
+  if (plan.length === 0) {
+    plan = [
+      { step: 1, action: 'analyze', description: 'Analyze task requirements' },
+      { step: 2, action: 'execute', description: 'Execute the task' },
+      { step: 3, action: 'complete', description: 'Finalize and return results' }
+    ];
+  }
+
+  sendEvent('plan', { steps: plan, totalSteps: plan.length });
+
+  // ── Phase 2: Execute each step ──
+  let results = [];
+  for (const step of plan) {
+    sendEvent('step_start', { step: step.step, action: step.action, description: step.description });
+    
+    await new Promise(r => setTimeout(r, 300));
+
+    try {
+      let stepResult = null;
+
+      if (step.action === 'search' && tools.includes('search')) {
+        // Fixed: call search logic inline instead of using unstable VERCEL_URL self-call
+        try {
+          const query = task.slice(0, 100);
+          const ddgRes = await fetch(
+            `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`
+          );
+          if (ddgRes.ok) {
+            const data = await ddgRes.json();
+            const searchResults = [];
+            if (data.AbstractText) {
+              searchResults.push({
+                title: data.Heading || query,
+                url: data.AbstractURL || '#',
+                snippet: data.AbstractText,
+                source: 'DuckDuckGo'
+              });
+            }
+            (data.RelatedTopics || []).slice(0, 4).forEach(topic => {
+              if (topic.Text) {
+                searchResults.push({
+                  title: topic.Text.split(' - ')[0] || query,
+                  url: topic.FirstURL || '#',
+                  snippet: topic.Text,
+                  source: 'DuckDuckGo'
+                });
+              }
+            });
+            stepResult = { type: 'search', results: searchResults };
+          }
+        } catch (searchErr) {
+          console.error('Search step error:', searchErr.message);
+        }
+      }
+
+      if (!stepResult) {
+        // Generate content using LLM
+        const messages = [
+          { role: 'system', content: 'You are IlyassAI, an autonomous AI agent. Execute the assigned step thoroughly.' },
+          ...context,
+          { role: 'user', content: `Task: ${task}\n\nExecute step ${step.step}: ${step.description}\n\nProvide a complete, detailed response.` }
+        ];
+
+        if (groqKey) {
+          const execRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${groqKey}` },
+            body: JSON.stringify({
+              model: 'meta-llama/llama-3.3-70b-versatile',
+              messages,
+              max_tokens: 2048,
+              temperature: 0.7
+            })
+          });
+
+          if (execRes.ok) {
+            const execData = await execRes.json();
+            const content = execData.choices?.[0]?.message?.content || '';
+            stepResult = { type: 'text', content };
+            results.push({ step: step.step, ...stepResult });
+          }
+        }
+      }
+
+      sendEvent('step_done', { 
+        step: step.step, 
+        description: step.description,
+        result: stepResult,
+        status: 'success'
+      });
+
+    } catch (err) {
+      sendEvent('step_error', { step: step.step, error: err.message });
+    }
+  }
+
+  // ── Phase 3: Synthesize final response ──
+  sendEvent('synthesizing', { message: 'Combining results into final response…' });
+
+  let finalResponse = '';
+  if (groqKey && results.length > 0) {
+    try {
+      const synthesisPrompt = `Task: ${task}
+
+Execution results:
+${results.map(r => `Step ${r.step}: ${JSON.stringify(r).slice(0, 500)}`).join('\n')}
+
+Synthesize these results into a comprehensive, well-formatted final response. Use markdown formatting.`;
+
+      const synthRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${groqKey}` },
+        body: JSON.stringify({
+          model: 'meta-llama/llama-3.3-70b-versatile',
+          messages: [{ role: 'user', content: synthesisPrompt }],
+          max_tokens: 3000
+        })
+      });
+
+      if (synthRes.ok) {
+        const synthData = await synthRes.json();
+        finalResponse = synthData.choices?.[0]?.message?.content || '';
+      }
+    } catch {}
+  }
+
+  sendEvent('complete', { 
+    message: 'Task completed',
+    response: finalResponse || results.map(r => r.content || JSON.stringify(r)).join('\n\n'),
+    steps: plan.length,
+    duration: '—'
+  });
+
+  res.write('data: [DONE]\n\n');
+  res.end();
+}

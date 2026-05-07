@@ -1,1 +1,85 @@
-Ly8gSWx5YXNzQUkg4oCUIC9hcGkvaW1hZ2UKLy8gSW1hZ2UgZ2VuZXJhdGlvbiB1c2luZyBQb2xsaW5hdGlvbnMuYWkgKGZyZWUpIHdpdGggU3RhYmxlIERpZmZ1c2lvbiBmYWxsYmFjawoKZXhwb3J0IGRlZmF1bHQgYXN5bmMgZnVuY3Rpb24gaGFuZGxlcihyZXEsIHJlcykgewogIC8vIOKUgOKUgCBDT1JTIHByZWZsaWdodCDilIDilIAKICByZXMuc2V0SGVhZGVyKCdBY2Nlc3MtQ29udHJvbC1BbGxvdy1PcmlnaW4nLCAnKicpOwogIHJlcy5zZXRIZWFkZXIoJ0FjY2Vzcy1Db250cm9sLUFsbG93LU1ldGhvZHMnLCAnR0VULCBQT1NULCBPUFRJT05TJyk7CiAgcmVzLnNldEhlYWRlcignQWNjZXNzLUNvbnRyb2wtQWxsb3ctSGVhZGVycycsICdDb250ZW50LVR5cGUsIEF1dGhvcml6YXRpb24nKTsKICBpZiAocmVxLm1ldGhvZCA9PT0gJ09QVElPTlMnKSByZXR1cm4gcmVzLnN0YXR1cygyMDApLmVuZCgpOwoKICBpZiAocmVxLm1ldGhvZCAhPT0gJ0dFVCcgJiYgcmVxLm1ldGhvZCAhPT0gJ1BPU1QnKSB7CiAgICByZXR1cm4gcmVzLnN0YXR1cyg0MDUpLmpzb24oeyBlcnJvcjogJ01ldGhvZCBub3QgYWxsb3dlZCcgfSk7CiAgfQoKICBjb25zdCB7IHByb21wdCwgbW9kZWwgPSAnZmx1eCcsIHdpZHRoID0gMTAyNCwgaGVpZ2h0ID0gMTAyNCwgc2VlZCwgZW5oYW5jZSA9IHRydWUgfSA9IAogICAgcmVxLm1ldGhvZCA9PT0gJ0dFVCcgPyByZXEucXVlcnkgOiAocmVxLmJvZHkgfHwge30pOwoKICBpZiAoIXByb21wdCkgewogICAgcmV0dXJuIHJlcy5zdGF0dXMoNDAwKS5qc29uKHsgZXJyb3I6ICdwcm9tcHQgaXMgcmVxdWlyZWQnIH0pOwogIH0KCiAgY29uc3QgZW5jb2RlZFByb21wdCA9IGVuY29kZVVSSUNvbXBvbmVudChwcm9tcHQpOwogIGNvbnN0IHNlZWRQYXJhbSA9IHNlZWQgPyBgJnNlZWQ9JHtzZWVkfWAgOiAnJzsKICBjb25zdCBlbmhhbmNlUGFyYW0gPSBlbmhhbmNlID8gJyZlbmhhbmNlPXRydWUnIDogJyc7CgogIC8vIOKUgOKUgCBQb2xsaW5hdGlvbnMuYWkgKDEwMCUgZnJlZSwgbm8gQVBJIGtleSBuZWVkZWQpIOKUgOKUgAogIC8vIEZpeGVkOiBhZGRlZCBBYm9ydFNpZ25hbC50aW1lb3V0KDI1MDAwKSB0byBzdGF5IHdpdGhpbiBWZXJjZWwncyAzMHMgbGltaXQKICB0cnkgewogICAgY29uc3QgcG9sbGluYXRpb25zVXJsID0gYGh0dHBzOi8vaW1hZ2UucG9sbGluYXRpb25zLmFpL3Byb21wdC8ke2VuY29kZWRQcm9tcHR9P21vZGVsPSR7bW9kZWx9JndpZHRoPSR7d2lkdGh9JmhlaWdodD0ke2hlaWdodH0mbm9sb2dvPXRydWUke3NlZWRQYXJhbX0ke2VuaGFuY2VQYXJhbX1gOwogICAgCiAgICBjb25zdCBwb2xsUmVzID0gYXdhaXQgZmV0Y2gocG9sbGluYXRpb25zVXJsLCB7CiAgICAgIHNpZ25hbDogQWJvcnRTaWduYWwudGltZW91dCgyNTAwMCkKICAgIH0pOwogICAgaWYgKHBvbGxSZXMub2spIHsKICAgICAgY29uc3QgY29udGVudFR5cGUgPSBwb2xsUmVzLmhlYWRlcnMuZ2V0KCdjb250ZW50LXR5cGUnKTsKICAgICAgY29uc3QgYnVmZmVyID0gYXdhaXQgcG9sbFJlcy5hcnJheUJ1ZmZlcigpOwogICAgICAKICAgICAgcmVzLnNldEhlYWRlcignQ29udGVudC1UeXBlJywgY29udGVudFR5cGUgfHwgJ2ltYWdlL2pwZWcnKTsKICAgICAgcmVzLnNldEhlYWRlcignWC1Qcm92aWRlcicsICdQb2xsaW5hdGlvbnMuYWknKTsKICAgICAgcmVzLnNldEhlYWRlcignWC1Nb2RlbCcsIG1vZGVsKTsKICAgICAgcmVzLnNldEhlYWRlcignQ2FjaGUtQ29udHJvbCcsICdwdWJsaWMsIG1heC1hZ2U9ODY0MDAnKTsKICAgICAgcmV0dXJuIHJlcy5zZW5kKEJ1ZmZlci5mcm9tKGJ1ZmZlcikpOwogICAgfQogIH0gY2F0Y2ggKGUpIHsKICAgIGNvbnNvbGUuZXJyb3IoJ1BvbGxpbmF0aW9ucyBlcnJvcjonLCBlLm1lc3NhZ2UpOwogIH0KCiAgLy8g4pSA4pSAIEh1Z2dpbmdGYWNlIFN0YWJsZSBEaWZmdXNpb24gZmFsbGJhY2sg4pSA4pSACiAgY29uc3QgaGZLZXkgPSBwcm9jZXNzLmVudi5IRl9BUElfS0VZOwogIGlmIChoZktleSkgewogICAgdHJ5IHsKICAgICAgY29uc3QgaGZSZXMgPSBhd2FpdCBmZXRjaCgKICAgICAgICAnaHR0cHM6Ly9hcGktaW5mZXJlbmNlLmh1Z2dpbmdmYWNlLmNvL21vZGVscy9ibGFjay1mb3Jlc3QtbGFicy9GTFVYLjEtc2NobmVsbCcsCiAgICAgICAgewogICAgICAgICAgbWV0aG9kOiAnUE9TVCcsCiAgICAgICAgICBoZWFkZXJzOiB7CiAgICAgICAgICAgICdBdXRob3JpemF0aW9uJzogYEJlYXJlciAke2hmS2V5fWAsCiAgICAgICAgICAgICdDb250ZW50LVR5cGUnOiAnYXBwbGljYXRpb24vanNvbicKICAgICAgICAgIH0sCiAgICAgICAgICBib2R5OiBKU09OLnN0cmluZ2lmeSh7IGlucHV0czogcHJvbXB0IH0pLAogICAgICAgICAgc2lnbmFsOiBBYm9ydFNpZ25hbC50aW1lb3V0KDI1MDAwKQogICAgICAgIH0KICAgICAgKTsKCiAgICAgIGlmIChoZlJlcy5vaykgewogICAgICAgIGNvbnN0IGJ1ZmZlciA9IGF3YWl0IGhmUmVzLmFycmF5QnVmZmVyKCk7CiAgICAgICAgcmVzLnNldEhlYWRlcignQ29udGVudC1UeXBlJywgJ2ltYWdlL2pwZWcnKTsKICAgICAgICByZXMuc2V0SGVhZGVyKCdYLVByb3ZpZGVyJywgJ0h1Z2dpbmdGYWNlIEZMVVgnKTsKICAgICAgICByZXMuc2V0SGVhZGVyKCdDYWNoZS1Db250cm9sJywgJ3B1YmxpYywgbWF4LWFnZT04NjQwMCcpOwogICAgICAgIHJldHVybiByZXMuc2VuZChCdWZmZXIuZnJvbShidWZmZXIpKTsKICAgICAgfQogICAgfSBjYXRjaCAoZSkgewogICAgICBjb25zb2xlLmVycm9yKCdIdWdnaW5nRmFjZSBpbWFnZSBlcnJvcjonLCBlLm1lc3NhZ2UpOwogICAgfQogIH0KCiAgLy8g4pSA4pSAIFJldHVybiBwbGFjZWhvbGRlciBTVkcgaWYgYWxsIGltYWdlIHByb3ZpZGVycyBmYWlsIOKUgOKUgAogIGNvbnN0IHN2ZyA9IGA8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICAgIDxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiBmaWxsPSIjMWExYTJlIi8+CiAgICA8dGV4dCB4PSIyNTYiIHk9IjI0MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiBmaWxsPSIjODg4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5JbWFnZSBnZW5lcmF0aW9uIHVuYXZhaWxhYmxlPC90ZXh0PgogICAgPHRleHQgeD0iMjU2IiB5PSIyNzUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzU1NSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+U2V0IEhGX0FQSV9LRVkgaW4gVmVyY2VsIGVudiB2YXJzPC90ZXh0PgogIDwvc3ZnPmA7CiAgcmVzLnNldEhlYWRlcignQ29udGVudC1UeXBlJywgJ2ltYWdlL3N2Zyt4bWwnKTsKICByZXR1cm4gcmVzLnN0YXR1cyg1MDMpLnNlbmQoc3ZnKTsKfQo=
+// IlyassAI — /api/image
+// Image generation using Pollinations.ai (free) with Stable Diffusion fallback
+
+export default async function handler(req, res) {
+  // ── CORS preflight ──
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
+  if (req.method !== 'GET' && req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const { prompt, model = 'flux', width = 1024, height = 1024, seed, enhance = true } = 
+    req.method === 'GET' ? req.query : (req.body || {});
+
+  if (!prompt) {
+    return res.status(400).json({ error: 'prompt is required' });
+  }
+
+  const encodedPrompt = encodeURIComponent(prompt);
+  const seedParam = seed ? `&seed=${seed}` : '';
+  const enhanceParam = enhance ? '&enhance=true' : '';
+
+  // ── Pollinations.ai (100% free, no API key needed) ──
+  // Fixed: added AbortSignal.timeout(25000) to stay within Vercel's 30s limit
+  try {
+    const pollinationsUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?model=${model}&width=${width}&height=${height}&nologo=true${seedParam}${enhanceParam}`;
+    
+    const pollRes = await fetch(pollinationsUrl, {
+      signal: AbortSignal.timeout(25000)
+    });
+    if (pollRes.ok) {
+      const contentType = pollRes.headers.get('content-type');
+      const buffer = await pollRes.arrayBuffer();
+      
+      res.setHeader('Content-Type', contentType || 'image/jpeg');
+      res.setHeader('X-Provider', 'Pollinations.ai');
+      res.setHeader('X-Model', model);
+      res.setHeader('Cache-Control', 'public, max-age=86400');
+      return res.send(Buffer.from(buffer));
+    }
+  } catch (e) {
+    console.error('Pollinations error:', e.message);
+  }
+
+  // ── HuggingFace Stable Diffusion fallback ──
+  const hfKey = process.env.HF_API_KEY;
+  if (hfKey) {
+    try {
+      const hfRes = await fetch(
+        'https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell',
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${hfKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ inputs: prompt }),
+          signal: AbortSignal.timeout(25000)
+        }
+      );
+
+      if (hfRes.ok) {
+        const buffer = await hfRes.arrayBuffer();
+        res.setHeader('Content-Type', 'image/jpeg');
+        res.setHeader('X-Provider', 'HuggingFace FLUX');
+        res.setHeader('Cache-Control', 'public, max-age=86400');
+        return res.send(Buffer.from(buffer));
+      }
+    } catch (e) {
+      console.error('HuggingFace image error:', e.message);
+    }
+  }
+
+  // ── Return placeholder SVG if all image providers fail ──
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+    <rect width="512" height="512" fill="#1a1a2e"/>
+    <text x="256" y="240" font-family="Arial" font-size="20" fill="#888" text-anchor="middle">Image generation unavailable</text>
+    <text x="256" y="275" font-family="Arial" font-size="14" fill="#555" text-anchor="middle">Set HF_API_KEY in Vercel env vars</text>
+  </svg>`;
+  res.setHeader('Content-Type', 'image/svg+xml');
+  return res.status(503).send(svg);
+}

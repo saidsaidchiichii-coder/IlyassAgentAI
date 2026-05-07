@@ -1,1 +1,86 @@
-Ly8gSWx5YXNzQUkg4oCUIC9hcGkvcGFyc2UKLy8gRG9jdW1lbnQvVVJMIHBhcnNpbmc6IGV4dHJhY3QgdGV4dCBmcm9tIFBERnMsIHdlYiBwYWdlcywgYW5kIGZpbGVzCgpleHBvcnQgZGVmYXVsdCBhc3luYyBmdW5jdGlvbiBoYW5kbGVyKHJlcSwgcmVzKSB7CiAgLy8g4pSA4pSAIENPUlMgcHJlZmxpZ2h0IOKUgOKUgAogIHJlcy5zZXRIZWFkZXIoJ0FjY2Vzcy1Db250cm9sLUFsbG93LU9yaWdpbicsICcqJyk7CiAgcmVzLnNldEhlYWRlcignQWNjZXNzLUNvbnRyb2wtQWxsb3ctTWV0aG9kcycsICdQT1NULCBPUFRJT05TJyk7CiAgcmVzLnNldEhlYWRlcignQWNjZXNzLUNvbnRyb2wtQWxsb3ctSGVhZGVycycsICdDb250ZW50LVR5cGUsIEF1dGhvcml6YXRpb24nKTsKICBpZiAocmVxLm1ldGhvZCA9PT0gJ09QVElPTlMnKSByZXR1cm4gcmVzLnN0YXR1cygyMDApLmVuZCgpOwoKICBpZiAocmVxLm1ldGhvZCAhPT0gJ1BPU1QnKSB7CiAgICByZXR1cm4gcmVzLnN0YXR1cyg0MDUpLmpzb24oeyBlcnJvcjogJ01ldGhvZCBub3QgYWxsb3dlZCcgfSk7CiAgfQoKICBjb25zdCB7IHVybCwgdHlwZSA9ICd3ZWInIH0gPSByZXEuYm9keSB8fCB7fTsKCiAgaWYgKCF1cmwpIHsKICAgIHJldHVybiByZXMuc3RhdHVzKDQwMCkuanNvbih7IGVycm9yOiAndXJsIGlzIHJlcXVpcmVkJyB9KTsKICB9CgogIHRyeSB7CiAgICBpZiAodHlwZSA9PT0gJ3dlYicpIHsKICAgICAgLy8gVHJ5IEppbmEgUmVhZGVyIGZpcnN0IChtdWNoIGJldHRlciB0ZXh0IGV4dHJhY3Rpb24sIGZyZWUpCiAgICAgIHRyeSB7CiAgICAgICAgY29uc3QgamluYVJlcyA9IGF3YWl0IGZldGNoKGBodHRwczovL3IuamluYS5haS8ke2VuY29kZVVSSUNvbXBvbmVudCh1cmwpfWAsIHsKICAgICAgICAgIGhlYWRlcnM6IHsgCiAgICAgICAgICAgICdBY2NlcHQnOiAnYXBwbGljYXRpb24vanNvbicsCiAgICAgICAgICAgICdVc2VyLUFnZW50JzogJ0lseWFzc0FJLzIuMCcKICAgICAgICAgIH0sCiAgICAgICAgICBzaWduYWw6IEFib3J0U2lnbmFsLnRpbWVvdXQoMTIwMDApCiAgICAgICAgfSk7CiAgICAgICAgaWYgKGppbmFSZXMub2spIHsKICAgICAgICAgIGNvbnN0IGppbmFEYXRhID0gYXdhaXQgamluYVJlcy5qc29uKCk7CiAgICAgICAgICByZXR1cm4gcmVzLnN0YXR1cygyMDApLmpzb24oewogICAgICAgICAgICBzdWNjZXNzOiB0cnVlLAogICAgICAgICAgICB1cmwsCiAgICAgICAgICAgIHRpdGxlOiBqaW5hRGF0YS5kYXRhPy50aXRsZSB8fCB1cmwsCiAgICAgICAgICAgIGRlc2NyaXB0aW9uOiBqaW5hRGF0YS5kYXRhPy5kZXNjcmlwdGlvbiB8fCAnJywKICAgICAgICAgICAgdGV4dDogKGppbmFEYXRhLmRhdGE/LmNvbnRlbnQgfHwgJycpLnNsaWNlKDAsIDEwMDAwKSwKICAgICAgICAgICAgd29yZENvdW50OiAoamluYURhdGEuZGF0YT8uY29udGVudCB8fCAnJykuc3BsaXQoL1xzKy8pLmxlbmd0aCwKICAgICAgICAgICAgcHJvdmlkZXI6ICdKaW5hIFJlYWRlcicKICAgICAgICAgIH0pOwogICAgICAgIH0KICAgICAgfSBjYXRjaCAoamluYUVycikgewogICAgICAgIGNvbnNvbGUuZXJyb3IoJ0ppbmEgUmVhZGVyIGVycm9yOicsIGppbmFFcnIubWVzc2FnZSk7CiAgICAgIH0KCiAgICAgIC8vIEZhbGxiYWNrOiBmZXRjaCByYXcgSFRNTCBhbmQgZXh0cmFjdCB0ZXh0CiAgICAgIGNvbnN0IHBhZ2VSZXMgPSBhd2FpdCBmZXRjaCh1cmwsIHsKICAgICAgICBoZWFkZXJzOiB7ICdVc2VyLUFnZW50JzogJ0lseWFzc0FJLzIuMCAoZG9jdW1lbnQtcGFyc2VyKScgfSwKICAgICAgICBzaWduYWw6IEFib3J0U2lnbmFsLnRpbWVvdXQoMTAwMDApCiAgICAgIH0pOwoKICAgICAgaWYgKCFwYWdlUmVzLm9rKSB0aHJvdyBuZXcgRXJyb3IoYEhUVFAgJHtwYWdlUmVzLnN0YXR1c31gKTsKCiAgICAgIGNvbnN0IGh0bWwgPSBhd2FpdCBwYWdlUmVzLnRleHQoKTsKICAgICAgCiAgICAgIC8vIFNpbXBsZSBIVE1MIHRleHQgZXh0cmFjdG9yCiAgICAgIGNvbnN0IHRleHQgPSBodG1sCiAgICAgICAgLnJlcGxhY2UoLzxzY3JpcHRbXj5dKj5bXHNcU10qPzxcL3NjcmlwdD4vZ2ksICcnKQogICAgICAgIC5yZXBsYWNlKC88c3R5bGVbXj5dKj5bXHNcU10qPzxcL3N0eWxlPi9naSwgJycpCiAgICAgICAgLnJlcGxhY2UoLzxbXj5dKz4vZywgJyAnKQogICAgICAgIC5yZXBsYWNlKC9ccysvZywgJyAnKQogICAgICAgIC50cmltKCkKICAgICAgICAuc2xpY2UoMCwgMTAwMDApOwoKICAgICAgY29uc3QgdGl0bGUgPSBodG1sLm1hdGNoKC88dGl0bGVbXj5dKj4oLio/KTxcL3RpdGxlPi9pKT8uWzFdIHx8IHVybDsKICAgICAgY29uc3QgZGVzY3JpcHRpb24gPSBodG1sLm1hdGNoKC88bWV0YVtePl0rbmFtZT0iZGVzY3JpcHRpb24iW14+XStjb250ZW50PSIoW14iXSspIi9pKT8uWzFdIHx8ICcnOwoKICAgICAgcmV0dXJuIHJlcy5zdGF0dXMoMjAwKS5qc29uKHsKICAgICAgICBzdWNjZXNzOiB0cnVlLAogICAgICAgIHVybCwKICAgICAgICB0aXRsZSwKICAgICAgICBkZXNjcmlwdGlvbiwKICAgICAgICB0ZXh0LAogICAgICAgIHdvcmRDb3VudDogdGV4dC5zcGxpdCgvXHMrLykubGVuZ3RoLAogICAgICAgIHByb3ZpZGVyOiAnRGlyZWN0IEZldGNoJwogICAgICB9KTsKICAgIH0KCiAgICByZXR1cm4gcmVzLnN0YXR1cyg0MDApLmpzb24oeyBlcnJvcjogYFVuc3VwcG9ydGVkIHR5cGU6ICR7dHlwZX1gIH0pOwoKICB9IGNhdGNoIChlcnIpIHsKICAgIHJldHVybiByZXMuc3RhdHVzKDUwMCkuanNvbih7IGVycm9yOiBlcnIubWVzc2FnZSB9KTsKICB9Cn0K
+// IlyassAI — /api/parse
+// Document/URL parsing: extract text from PDFs, web pages, and files
+
+export default async function handler(req, res) {
+  // ── CORS preflight ──
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const { url, type = 'web' } = req.body || {};
+
+  if (!url) {
+    return res.status(400).json({ error: 'url is required' });
+  }
+
+  try {
+    if (type === 'web') {
+      // Try Jina Reader first (much better text extraction, free)
+      try {
+        const jinaRes = await fetch(`https://r.jina.ai/${encodeURIComponent(url)}`, {
+          headers: { 
+            'Accept': 'application/json',
+            'User-Agent': 'IlyassAI/2.0'
+          },
+          signal: AbortSignal.timeout(12000)
+        });
+        if (jinaRes.ok) {
+          const jinaData = await jinaRes.json();
+          return res.status(200).json({
+            success: true,
+            url,
+            title: jinaData.data?.title || url,
+            description: jinaData.data?.description || '',
+            text: (jinaData.data?.content || '').slice(0, 10000),
+            wordCount: (jinaData.data?.content || '').split(/\s+/).length,
+            provider: 'Jina Reader'
+          });
+        }
+      } catch (jinaErr) {
+        console.error('Jina Reader error:', jinaErr.message);
+      }
+
+      // Fallback: fetch raw HTML and extract text
+      const pageRes = await fetch(url, {
+        headers: { 'User-Agent': 'IlyassAI/2.0 (document-parser)' },
+        signal: AbortSignal.timeout(10000)
+      });
+
+      if (!pageRes.ok) throw new Error(`HTTP ${pageRes.status}`);
+
+      const html = await pageRes.text();
+      
+      // Simple HTML text extractor
+      const text = html
+        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+        .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .slice(0, 10000);
+
+      const title = html.match(/<title[^>]*>(.*?)<\/title>/i)?.[1] || url;
+      const description = html.match(/<meta[^>]+name="description"[^>]+content="([^"]+)"/i)?.[1] || '';
+
+      return res.status(200).json({
+        success: true,
+        url,
+        title,
+        description,
+        text,
+        wordCount: text.split(/\s+/).length,
+        provider: 'Direct Fetch'
+      });
+    }
+
+    return res.status(400).json({ error: `Unsupported type: ${type}` });
+
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+}

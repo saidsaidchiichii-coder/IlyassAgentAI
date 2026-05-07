@@ -1,1 +1,98 @@
-Ly8gSWx5YXNzQUkg4oCUIC9hcGkvdHJhbnNjcmliZQovLyBTcGVlY2gtdG8tdGV4dCB1c2luZyBHcm9xIFdoaXNwZXIgKHByaW1hcnkpIGFuZCBPcGVuQUkgV2hpc3BlciAoZmFsbGJhY2spCgpleHBvcnQgY29uc3QgY29uZmlnID0geyBhcGk6IHsgYm9keVBhcnNlcjogZmFsc2UgfSB9OwoKZXhwb3J0IGRlZmF1bHQgYXN5bmMgZnVuY3Rpb24gaGFuZGxlcihyZXEsIHJlcykgewogIC8vIOKUgOKUgCBDT1JTIHByZWZsaWdodCDilIDilIAKICByZXMuc2V0SGVhZGVyKCdBY2Nlc3MtQ29udHJvbC1BbGxvdy1PcmlnaW4nLCAnKicpOwogIHJlcy5zZXRIZWFkZXIoJ0FjY2Vzcy1Db250cm9sLUFsbG93LU1ldGhvZHMnLCAnUE9TVCwgT1BUSU9OUycpOwogIHJlcy5zZXRIZWFkZXIoJ0FjY2Vzcy1Db250cm9sLUFsbG93LUhlYWRlcnMnLCAnQ29udGVudC1UeXBlLCBBdXRob3JpemF0aW9uJyk7CiAgaWYgKHJlcS5tZXRob2QgPT09ICdPUFRJT05TJykgcmV0dXJuIHJlcy5zdGF0dXMoMjAwKS5lbmQoKTsKCiAgaWYgKHJlcS5tZXRob2QgIT09ICdQT1NUJykgewogICAgcmV0dXJuIHJlcy5zdGF0dXMoNDA1KS5qc29uKHsgZXJyb3I6ICdNZXRob2Qgbm90IGFsbG93ZWQnIH0pOwogIH0KCiAgY29uc3QgZ3JvcUtleSA9IHByb2Nlc3MuZW52LkdST1FfQVBJX0tFWTsKICBjb25zdCBvcGVuYWlLZXkgPSBwcm9jZXNzLmVudi5PUEVOQUlfQVBJX0tFWTsKCiAgaWYgKCFncm9xS2V5ICYmICFvcGVuYWlLZXkpIHsKICAgIHJldHVybiByZXMuc3RhdHVzKDUwMykuanNvbih7IAogICAgICBlcnJvcjogJ1RyYW5zY3JpcHRpb24gcmVxdWlyZXMgR1JPUV9BUElfS0VZIG9yIE9QRU5BSV9BUElfS0VZIGluIFZlcmNlbCBlbnZpcm9ubWVudCB2YXJpYWJsZXMuJyAKICAgIH0pOwogIH0KCiAgdHJ5IHsKICAgIC8vIOKUgOKUgCBSZWFkIHJhdyBib2R5IHNhZmVseSDilIDilIAKICAgIGNvbnN0IGNodW5rcyA9IFtdOwogICAgYXdhaXQgbmV3IFByb21pc2UoKHJlc29sdmUsIHJlamVjdCkgPT4gewogICAgICByZXEub24oJ2RhdGEnLCBjaHVuayA9PiBjaHVua3MucHVzaChjaHVuaykpOwogICAgICByZXEub24oJ2VuZCcsIHJlc29sdmUpOwogICAgICByZXEub24oJ2Vycm9yJywgcmVqZWN0KTsKICAgIH0pOwogICAgY29uc3QgYm9keSA9IEJ1ZmZlci5jb25jYXQoY2h1bmtzKTsKICAgIGNvbnN0IGNvbnRlbnRUeXBlID0gcmVxLmhlYWRlcnNbJ2NvbnRlbnQtdHlwZSddIHx8ICdhdWRpby93ZWJtJzsKCiAgICAvLyDilIDilIAgR3JvcSBXaGlzcGVyIChwcmltYXJ5IOKAlCBmcmVlICYgZmFzdCkg4pSA4pSACiAgICBpZiAoZ3JvcUtleSkgewogICAgICB0cnkgewogICAgICAgIGNvbnN0IGdyb3FSZXMgPSBhd2FpdCBmZXRjaCgnaHR0cHM6Ly9hcGkuZ3JvcS5jb20vb3BlbmFpL3YxL2F1ZGlvL3RyYW5zY3JpcHRpb25zJywgewogICAgICAgICAgbWV0aG9kOiAnUE9TVCcsCiAgICAgICAgICBoZWFkZXJzOiB7CiAgICAgICAgICAgICdBdXRob3JpemF0aW9uJzogYEJlYXJlciAke2dyb3FLZXl9YCwKICAgICAgICAgICAgJ0NvbnRlbnQtVHlwZSc6IGNvbnRlbnRUeXBlCiAgICAgICAgICB9LAogICAgICAgICAgYm9keQogICAgICAgIH0pOwoKICAgICAgICBpZiAoZ3JvcVJlcy5vaykgewogICAgICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IGdyb3FSZXMuanNvbigpOwogICAgICAgICAgcmV0dXJuIHJlcy5zdGF0dXMoMjAwKS5qc29uKHsgCiAgICAgICAgICAgIHN1Y2Nlc3M6IHRydWUsIAogICAgICAgICAgICB0ZXh0OiBkYXRhLnRleHQsIAogICAgICAgICAgICBsYW5ndWFnZTogZGF0YS5sYW5ndWFnZSwKICAgICAgICAgICAgZHVyYXRpb246IGRhdGEuZHVyYXRpb24sCiAgICAgICAgICAgIHByb3ZpZGVyOiAnR3JvcSBXaGlzcGVyJwogICAgICAgICAgfSk7CiAgICAgICAgfSBlbHNlIHsKICAgICAgICAgIGNvbnN0IGVyclRleHQgPSBhd2FpdCBncm9xUmVzLnRleHQoKTsKICAgICAgICAgIGNvbnNvbGUuZXJyb3IoJ0dyb3EgV2hpc3BlciBlcnJvcjonLCBncm9xUmVzLnN0YXR1cywgZXJyVGV4dCk7CiAgICAgICAgfQogICAgICB9IGNhdGNoIChlKSB7CiAgICAgICAgY29uc29sZS5lcnJvcignR3JvcSBXaGlzcGVyIGV4Y2VwdGlvbjonLCBlLm1lc3NhZ2UpOwogICAgICB9CiAgICB9CgogICAgLy8g4pSA4pSAIE9wZW5BSSBXaGlzcGVyIGZhbGxiYWNrIOKUgOKUgAogICAgaWYgKG9wZW5haUtleSkgewogICAgICBjb25zdCB3aGlzcGVyUmVzID0gYXdhaXQgZmV0Y2goJ2h0dHBzOi8vYXBpLm9wZW5haS5jb20vdjEvYXVkaW8vdHJhbnNjcmlwdGlvbnMnLCB7CiAgICAgICAgbWV0aG9kOiAnUE9TVCcsCiAgICAgICAgaGVhZGVyczogewogICAgICAgICAgJ0F1dGhvcml6YXRpb24nOiBgQmVhcmVyICR7b3BlbmFpS2V5fWAsCiAgICAgICAgICAnQ29udGVudC1UeXBlJzogY29udGVudFR5cGUKICAgICAgICB9LAogICAgICAgIGJvZHkKICAgICAgfSk7CgogICAgICBpZiAoIXdoaXNwZXJSZXMub2spIHsKICAgICAgICBjb25zdCBlcnIgPSBhd2FpdCB3aGlzcGVyUmVzLnRleHQoKTsKICAgICAgICB0aHJvdyBuZXcgRXJyb3IoYFdoaXNwZXIgQVBJIGVycm9yOiAke3doaXNwZXJSZXMuc3RhdHVzfSAtICR7ZXJyfWApOwogICAgICB9CgogICAgICBjb25zdCBkYXRhID0gYXdhaXQgd2hpc3BlclJlcy5qc29uKCk7CiAgICAgIHJldHVybiByZXMuc3RhdHVzKDIwMCkuanNvbih7IAogICAgICAgIHN1Y2Nlc3M6IHRydWUsIAogICAgICAgIHRleHQ6IGRhdGEudGV4dCwgCiAgICAgICAgbGFuZ3VhZ2U6IGRhdGEubGFuZ3VhZ2UsCiAgICAgICAgZHVyYXRpb246IGRhdGEuZHVyYXRpb24sCiAgICAgICAgcHJvdmlkZXI6ICdPcGVuQUkgV2hpc3BlcicKICAgICAgfSk7CiAgICB9CgogICAgcmV0dXJuIHJlcy5zdGF0dXMoNTAzKS5qc29uKHsgZXJyb3I6ICdBbGwgdHJhbnNjcmlwdGlvbiBwcm92aWRlcnMgZmFpbGVkLicgfSk7CgogIH0gY2F0Y2ggKGVycikgewogICAgcmV0dXJuIHJlcy5zdGF0dXMoNTAwKS5qc29uKHsgZXJyb3I6IGVyci5tZXNzYWdlIH0pOwogIH0KfQo=
+// IlyassAI — /api/transcribe
+// Speech-to-text using Groq Whisper (primary) and OpenAI Whisper (fallback)
+
+export const config = { api: { bodyParser: false } };
+
+export default async function handler(req, res) {
+  // ── CORS preflight ──
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const groqKey = process.env.GROQ_API_KEY;
+  const openaiKey = process.env.OPENAI_API_KEY;
+
+  if (!groqKey && !openaiKey) {
+    return res.status(503).json({ 
+      error: 'Transcription requires GROQ_API_KEY or OPENAI_API_KEY in Vercel environment variables.' 
+    });
+  }
+
+  try {
+    // ── Read raw body safely ──
+    const chunks = [];
+    await new Promise((resolve, reject) => {
+      req.on('data', chunk => chunks.push(chunk));
+      req.on('end', resolve);
+      req.on('error', reject);
+    });
+    const body = Buffer.concat(chunks);
+    const contentType = req.headers['content-type'] || 'audio/webm';
+
+    // ── Groq Whisper (primary — free & fast) ──
+    if (groqKey) {
+      try {
+        const groqRes = await fetch('https://api.groq.com/openai/v1/audio/transcriptions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${groqKey}`,
+            'Content-Type': contentType
+          },
+          body
+        });
+
+        if (groqRes.ok) {
+          const data = await groqRes.json();
+          return res.status(200).json({ 
+            success: true, 
+            text: data.text, 
+            language: data.language,
+            duration: data.duration,
+            provider: 'Groq Whisper'
+          });
+        } else {
+          const errText = await groqRes.text();
+          console.error('Groq Whisper error:', groqRes.status, errText);
+        }
+      } catch (e) {
+        console.error('Groq Whisper exception:', e.message);
+      }
+    }
+
+    // ── OpenAI Whisper fallback ──
+    if (openaiKey) {
+      const whisperRes = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${openaiKey}`,
+          'Content-Type': contentType
+        },
+        body
+      });
+
+      if (!whisperRes.ok) {
+        const err = await whisperRes.text();
+        throw new Error(`Whisper API error: ${whisperRes.status} - ${err}`);
+      }
+
+      const data = await whisperRes.json();
+      return res.status(200).json({ 
+        success: true, 
+        text: data.text, 
+        language: data.language,
+        duration: data.duration,
+        provider: 'OpenAI Whisper'
+      });
+    }
+
+    return res.status(503).json({ error: 'All transcription providers failed.' });
+
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+}

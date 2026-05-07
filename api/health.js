@@ -1,1 +1,91 @@
-Ly8gSWx5YXNzQUkg4oCUIC9hcGkvaGVhbHRoCi8vIERpYWdub3N0aWMgZW5kcG9pbnQ6IHZlcmlmeSB3aGljaCBBUEkga2V5cyBhcmUgY29uZmlndXJlZCBhbmQgd29ya2luZwoKZXhwb3J0IGRlZmF1bHQgYXN5bmMgZnVuY3Rpb24gaGFuZGxlcihyZXEsIHJlcykgewogIHJlcy5zZXRIZWFkZXIoJ0FjY2Vzcy1Db250cm9sLUFsbG93LU9yaWdpbicsICcqJyk7CiAgcmVzLnNldEhlYWRlcignQWNjZXNzLUNvbnRyb2wtQWxsb3ctTWV0aG9kcycsICdHRVQsIE9QVElPTlMnKTsKICByZXMuc2V0SGVhZGVyKCdBY2Nlc3MtQ29udHJvbC1BbGxvdy1IZWFkZXJzJywgJ0NvbnRlbnQtVHlwZScpOwogIGlmIChyZXEubWV0aG9kID09PSAnT1BUSU9OUycpIHJldHVybiByZXMuc3RhdHVzKDIwMCkuZW5kKCk7CgogIGNvbnN0IGdyb3FLZXkgICA9IHByb2Nlc3MuZW52LkdST1FfQVBJX0tFWTsKICBjb25zdCBnZW1pbmlLZXkgPSBwcm9jZXNzLmVudi5HRU1JTklfQVBJX0tFWTsKICBjb25zdCBoZktleSAgICAgPSBwcm9jZXNzLmVudi5IRl9BUElfS0VZOwogIGNvbnN0IG9wZW5haUtleSA9IHByb2Nlc3MuZW52Lk9QRU5BSV9BUElfS0VZOwogIGNvbnN0IGJyYXZlS2V5ICA9IHByb2Nlc3MuZW52LkJSQVZFX0FQSV9LRVk7CiAgY29uc3Qga3ZVcmwgICAgID0gcHJvY2Vzcy5lbnYuS1ZfUkVTVF9BUElfVVJMOwoKICBjb25zdCBjaGVja3MgPSB7fTsKCiAgLy8g4pSA4pSAIFRlc3QgR3JvcSDilIDilIAKICBpZiAoZ3JvcUtleSkgewogICAgdHJ5IHsKICAgICAgY29uc3QgciA9IGF3YWl0IGZldGNoKCdodHRwczovL2FwaS5ncm9xLmNvbS9vcGVuYWkvdjEvbW9kZWxzJywgewogICAgICAgIGhlYWRlcnM6IHsgQXV0aG9yaXphdGlvbjogYEJlYXJlciAke2dyb3FLZXl9YCB9LAogICAgICAgIHNpZ25hbDogQWJvcnRTaWduYWwudGltZW91dCg1MDAwKQogICAgICB9KTsKICAgICAgY29uc3QgYm9keSA9IGF3YWl0IHIuanNvbigpLmNhdGNoKCgpID0+ICh7fSkpOwogICAgICBjaGVja3MuZ3JvcSA9IHIub2sKICAgICAgICA/IHsgc3RhdHVzOiAnb2snLCBtb2RlbHM6IChib2R5LmRhdGEgfHwgW10pLm1hcChtID0+IG0uaWQpLnNsaWNlKDAsIDUpIH0KICAgICAgICA6IHsgc3RhdHVzOiAnZXJyb3InLCBjb2RlOiByLnN0YXR1cywgbWVzc2FnZTogYm9keS5lcnJvcj8ubWVzc2FnZSB8fCAnVW5rbm93biBlcnJvcicgfTsKICAgIH0gY2F0Y2ggKGUpIHsKICAgICAgY2hlY2tzLmdyb3EgPSB7IHN0YXR1czogJ2Vycm9yJywgbWVzc2FnZTogZS5tZXNzYWdlIH07CiAgICB9CiAgfSBlbHNlIHsKICAgIGNoZWNrcy5ncm9xID0geyBzdGF0dXM6ICdtaXNzaW5nJywgbWVzc2FnZTogJ0dST1FfQVBJX0tFWSBub3Qgc2V0IGluIFZlcmNlbCBlbnYgdmFycycsIGZpeDogJ0dldCBmcmVlIGtleSBhdCBjb25zb2xlLmdyb3EuY29tJyB9OwogIH0KCiAgLy8g4pSA4pSAIFRlc3QgR2VtaW5pIOKUgOKUgAogIGlmIChnZW1pbmlLZXkpIHsKICAgIHRyeSB7CiAgICAgIGNvbnN0IHIgPSBhd2FpdCBmZXRjaCgKICAgICAgICBgaHR0cHM6Ly9nZW5lcmF0aXZlbGFuZ3VhZ2UuZ29vZ2xlYXBpcy5jb20vdjFiZXRhL21vZGVscz9rZXk9JHtnZW1pbmlLZXl9YCwKICAgICAgICB7IHNpZ25hbDogQWJvcnRTaWduYWwudGltZW91dCg1MDAwKSB9CiAgICAgICk7CiAgICAgIGNoZWNrcy5nZW1pbmkgPSByLm9rCiAgICAgICAgPyB7IHN0YXR1czogJ29rJyB9CiAgICAgICAgOiB7IHN0YXR1czogJ2Vycm9yJywgY29kZTogci5zdGF0dXMgfTsKICAgIH0gY2F0Y2ggKGUpIHsKICAgICAgY2hlY2tzLmdlbWluaSA9IHsgc3RhdHVzOiAnZXJyb3InLCBtZXNzYWdlOiBlLm1lc3NhZ2UgfTsKICAgIH0KICB9IGVsc2UgewogICAgY2hlY2tzLmdlbWluaSA9IHsgc3RhdHVzOiAnbWlzc2luZycsIG1lc3NhZ2U6ICdHRU1JTklfQVBJX0tFWSBub3Qgc2V0JywgZml4OiAnR2V0IGZyZWUga2V5IGF0IGFpc3R1ZGlvLmdvb2dsZS5jb20nIH07CiAgfQoKICAvLyDilIDilIAgVGVzdCBIdWdnaW5nRmFjZSDilIDilIAKICBjaGVja3MuaHVnZ2luZ2ZhY2UgPSBoZktleQogICAgPyB7IHN0YXR1czogJ2NvbmZpZ3VyZWQnLCBub3RlOiAnS2V5IHByZXNlbnQgKG5vdCB0ZXN0ZWQgdG8gc2F2ZSBxdW90YSknIH0KICAgIDogeyBzdGF0dXM6ICdtaXNzaW5nJywgbWVzc2FnZTogJ0hGX0FQSV9LRVkgbm90IHNldCcsIGZpeDogJ0dldCBmcmVlIGtleSBhdCBodWdnaW5nZmFjZS5jby9zZXR0aW5ncy90b2tlbnMnIH07CgogIC8vIOKUgOKUgCBUZXN0IE9wZW5BSSDilIDilIAKICBjaGVja3Mub3BlbmFpID0gb3BlbmFpS2V5CiAgICA/IHsgc3RhdHVzOiAnY29uZmlndXJlZCcsIG5vdGU6ICdLZXkgcHJlc2VudCAobm90IHRlc3RlZCB0byBzYXZlIGNyZWRpdHMpJyB9CiAgICA6IHsgc3RhdHVzOiAnbWlzc2luZycsIG1lc3NhZ2U6ICdPUEVOQUlfQVBJX0tFWSBub3Qgc2V0IChvcHRpb25hbCknIH07CgogIC8vIOKUgOKUgCBUZXN0IEJyYXZlIFNlYXJjaCDilIDilIAKICBjaGVja3MuYnJhdmVfc2VhcmNoID0gYnJhdmVLZXkKICAgID8geyBzdGF0dXM6ICdjb25maWd1cmVkJyB9CiAgICA6IHsgc3RhdHVzOiAnbWlzc2luZycsIG1lc3NhZ2U6ICdCUkFWRV9BUElfS0VZIG5vdCBzZXQgKG9wdGlvbmFsIOKAlCBEdWNrRHVja0dvIHVzZWQgYXMgZmFsbGJhY2spJyB9OwoKICAvLyDilIDilIAgQ2hlY2sgS1YgZm9yIG1lbW9yeSDilIDilIAKICBjaGVja3MubWVtb3J5X2t2ID0ga3ZVcmwKICAgID8geyBzdGF0dXM6ICdjb25maWd1cmVkJywgbm90ZTogJ1ZlcmNlbCBLViBjb25uZWN0ZWQg4oCUIG1lbW9yaWVzIHBlcnNpc3QgYWNyb3NzIHNlc3Npb25zJyB9CiAgICA6IHsgc3RhdHVzOiAnbWlzc2luZycsIG1lc3NhZ2U6ICdLVl9SRVNUX0FQSV9VUkwgbm90IHNldCDigJQgbWVtb3JpZXMgcmVzZXQgb24gY29sZCBzdGFydCcsIGZpeDogJ0FkZCBWZXJjZWwgS1YgU3RvcmFnZSBpbiB5b3VyIHByb2plY3QgZGFzaGJvYXJkJyB9OwoKICAvLyBPdmVyYWxsIHN0YXR1cwogIGNvbnN0IGhhc0xMTSA9IGNoZWNrcy5ncm9xPy5zdGF0dXMgPT09ICdvaycgfHwgY2hlY2tzLmdlbWluaT8uc3RhdHVzID09PSAnb2snIHx8IGNoZWNrcy5vcGVuYWk/LnN0YXR1cyA9PT0gJ2NvbmZpZ3VyZWQnOwoKICByZXR1cm4gcmVzLnN0YXR1cygyMDApLmpzb24oewogICAgc3RhdHVzOiBoYXNMTE0gPyAnaGVhbHRoeScgOiAnZGVncmFkZWQnLAogICAgdGltZXN0YW1wOiBuZXcgRGF0ZSgpLnRvSVNPU3RyaW5nKCksCiAgICBjaGVja3MsCiAgICBzdW1tYXJ5OiB7CiAgICAgIGNoYXRfd29ya2luZzogY2hlY2tzLmdyb3E/LnN0YXR1cyA9PT0gJ29rJywKICAgICAgbGxtX2F2YWlsYWJsZTogaGFzTExNLAogICAgICBzZWFyY2hfYXZhaWxhYmxlOiAhIShicmF2ZUtleSksCiAgICAgIG1lbW9yeV9wZXJzaXN0ZW50OiAhIWt2VXJsLAogICAgICByZWNvbW1lbmRhdGlvbjogY2hlY2tzLmdyb3E/LnN0YXR1cyAhPT0gJ29rJwogICAgICAgID8gJ+KaoO+4jyBBZGQgR1JPUV9BUElfS0VZIHRvIFZlcmNlbCBlbnYgdmFycyBmb3IgYmVzdCBwZXJmb3JtYW5jZSAoZnJlZSBhdCBjb25zb2xlLmdyb3EuY29tKScKICAgICAgICA6ICfinIUgQWxsIGNvcmUgZmVhdHVyZXMgcmVhZHknCiAgICB9CiAgfSk7Cn0K
+// IlyassAI — /api/health
+// Diagnostic endpoint: verify which API keys are configured and working
+
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
+  const groqKey   = process.env.GROQ_API_KEY;
+  const geminiKey = process.env.GEMINI_API_KEY;
+  const hfKey     = process.env.HF_API_KEY;
+  const openaiKey = process.env.OPENAI_API_KEY;
+  const braveKey  = process.env.BRAVE_API_KEY;
+  const kvUrl     = process.env.KV_REST_API_URL;
+
+  const checks = {};
+
+  // ── Test Groq ──
+  if (groqKey) {
+    try {
+      const r = await fetch('https://api.groq.com/openai/v1/models', {
+        headers: { Authorization: `Bearer ${groqKey}` },
+        signal: AbortSignal.timeout(5000)
+      });
+      const body = await r.json().catch(() => ({}));
+      checks.groq = r.ok
+        ? { status: 'ok', models: (body.data || []).map(m => m.id).slice(0, 5) }
+        : { status: 'error', code: r.status, message: body.error?.message || 'Unknown error' };
+    } catch (e) {
+      checks.groq = { status: 'error', message: e.message };
+    }
+  } else {
+    checks.groq = { status: 'missing', message: 'GROQ_API_KEY not set in Vercel env vars', fix: 'Get free key at console.groq.com' };
+  }
+
+  // ── Test Gemini ──
+  if (geminiKey) {
+    try {
+      const r = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models?key=${geminiKey}`,
+        { signal: AbortSignal.timeout(5000) }
+      );
+      checks.gemini = r.ok
+        ? { status: 'ok' }
+        : { status: 'error', code: r.status };
+    } catch (e) {
+      checks.gemini = { status: 'error', message: e.message };
+    }
+  } else {
+    checks.gemini = { status: 'missing', message: 'GEMINI_API_KEY not set', fix: 'Get free key at aistudio.google.com' };
+  }
+
+  // ── Test HuggingFace ──
+  checks.huggingface = hfKey
+    ? { status: 'configured', note: 'Key present (not tested to save quota)' }
+    : { status: 'missing', message: 'HF_API_KEY not set', fix: 'Get free key at huggingface.co/settings/tokens' };
+
+  // ── Test OpenAI ──
+  checks.openai = openaiKey
+    ? { status: 'configured', note: 'Key present (not tested to save credits)' }
+    : { status: 'missing', message: 'OPENAI_API_KEY not set (optional)' };
+
+  // ── Test Brave Search ──
+  checks.brave_search = braveKey
+    ? { status: 'configured' }
+    : { status: 'missing', message: 'BRAVE_API_KEY not set (optional — DuckDuckGo used as fallback)' };
+
+  // ── Check KV for memory ──
+  checks.memory_kv = kvUrl
+    ? { status: 'configured', note: 'Vercel KV connected — memories persist across sessions' }
+    : { status: 'missing', message: 'KV_REST_API_URL not set — memories reset on cold start', fix: 'Add Vercel KV Storage in your project dashboard' };
+
+  // Overall status
+  const hasLLM = checks.groq?.status === 'ok' || checks.gemini?.status === 'ok' || checks.openai?.status === 'configured';
+
+  return res.status(200).json({
+    status: hasLLM ? 'healthy' : 'degraded',
+    timestamp: new Date().toISOString(),
+    checks,
+    summary: {
+      chat_working: checks.groq?.status === 'ok',
+      llm_available: hasLLM,
+      search_available: !!(braveKey),
+      memory_persistent: !!kvUrl,
+      recommendation: checks.groq?.status !== 'ok'
+        ? '⚠️ Add GROQ_API_KEY to Vercel env vars for best performance (free at console.groq.com)'
+        : '✅ All core features ready'
+    }
+  });
+}
