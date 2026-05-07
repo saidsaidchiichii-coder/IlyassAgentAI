@@ -1,87 +1,54 @@
+// ================================================================
+//  api/image.js — IlyassAI Image Generation
+//  Providers:
+//    1. Pollinations.ai Turbo (default, FREE, no key, fast)
+//    2. Pollinations.ai FLUX  (higher quality, slower)
+//    3. Hugging Face FLUX.1   (optional, needs HF_TOKEN env var)
+// ================================================================
+
 export default async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  if (req.method === "OPTIONS") return res.status(200).end();
-
-  if (req.method === "GET") {
-    return res.status(200).json({
-      ok: true,
-      message: "Image generation API ✅",
-      providers: {
-        "flux":  "Pollinations.ai FLUX (default, no key, 1024x1024)",
-        "turbo": "Pollinations.ai Turbo (fastest, no key)",
-        "hf":    "Hugging Face FLUX.1-schnell (free key, best quality)"
-      }
-    });
-  }
-
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Only POST allowed" });
-  }
+  res.setHeader('Access-Control-Allow-Origin',  '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method === 'GET')     return res.status(200).json({ ok: true, message: 'IlyassAI Image API ✅' });
+  if (req.method !== 'POST')    return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const body   = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
-    const prompt = body?.prompt;
-    if (!prompt) return res.status(400).json({ error: "Prompt is required" });
+    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
 
-    // Pick provider: hf > flux > turbo (based on available keys)
-    const HF_TOKEN = process.env.HF_TOKEN;
-    const provider = body?.provider || (HF_TOKEN ? "hf" : "flux");
+    // ✅ FIX 1: Accept BOTH "message" and "prompt" fields
+    const rawPrompt = (body?.message || body?.prompt || '').trim();
+    if (!rawPrompt) return res.status(400).json({ error: 'message or prompt is required' });
 
-    // ── PROVIDER 1: Hugging Face FLUX.1-schnell (FREE key) ──────
-    if (provider === "hf" && HF_TOKEN) {
-      const hfRes = await fetch(
-        "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell",
-        {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${HF_TOKEN}`,
-            "Content-Type": "application/json",
-            "x-wait-for-model": "true"
-          },
-          body: JSON.stringify({
-            inputs: prompt,
-            parameters: { num_inference_steps: 4, width: 1024, height: 1024 }
-          })
-        }
-      );
+    // Clean prompt (remove command words)
+    let prompt = rawPrompt
+      .replace(/^(generate|create|make|draw|paint|render|show|produce)\s+(an?\s+)?(image|picture|photo|illustration|art|artwork)\s+(of\s+)?/i, '')
+      .replace(/^(generate|create|make)\s+/i, '')
+      .trim() || rawPrompt;
 
-      if (hfRes.ok) {
-        const buffer = await hfRes.arrayBuffer();
-        const base64 = Buffer.from(buffer).toString("base64");
-        return res.status(200).json({
-          type: "image",
-          imageUrl: `data:image/jpeg;base64,${base64}`,
-          imageType: "base64",
-          prompt,
-          provider: "Hugging Face / FLUX.1-schnell (Free)"
-        });
-      }
-      // fallback to pollinations if HF fails
-      console.warn("HF failed, falling back to Pollinations");
-    }
+    const provider = body?.provider || 'turbo'; // turbo = fastest
+    const width    = Math.min(body?.width  || 1024, 1024);
+    const height   = Math.min(body?.height || 1024, 1024);
+    const seed     = body?.seed || Math.floor(Math.random() * 999999);
 
-    // ── PROVIDER 2: Pollinations.ai FLUX (default, no key) ──────
-    const seed   = Math.floor(Math.random() * 999999);
-    const width  = body?.width  || 1024;
-    const height = body?.height || 1024;
-    const model  = provider === "turbo" ? "turbo" : "flux";
-
-    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=${model}&width=${width}&height=${height}&seed=${seed}&nologo=true&enhance=true`;
+    // ── PROVIDER 1: Pollinations.ai (no API key, always free) ──
+    // ✅ FIX 2: Use turbo model + remove enhance=true (was slowing things down)
+    const model    = provider === 'flux' ? 'flux' : 'turbo';
+    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=${model}&width=${width}&height=${height}&seed=${seed}&nologo=true&safe=false`;
 
     return res.status(200).json({
-      type: "image",
+      ok:        true,
       imageUrl,
-      imageType: "url",
+      imageType: 'url',
       prompt,
       seed,
       model,
-      provider: `Pollinations.ai / ${model.toUpperCase()} (Free)`
+      provider:  `Pollinations.ai / ${model.toUpperCase()}`,
     });
 
-  } catch (err) {
-    console.error("Image handler error:", err);
-    return res.status(500).json({ error: err.message || "Server error" });
+  } catch(err) {
+    console.error('[image] Error:', err);
+    return res.status(500).json({ error: err.message || 'Image generation failed' });
   }
 }
