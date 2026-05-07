@@ -576,382 +576,59 @@ textarea,input{font-family:inherit}
 </div><!-- /layout -->
 
 <script>
-// ══ STATE ══
-let selectedModel = 'llama-3.3-70b';
-let selectedModelName = 'Llama 3.3 70B';
-let isGenerating = false;
-let activeTools = new Set();
-let chatHistory = [];
-let activityPanelOpen = true;
+// ══════════════════════════════════════════════
+//   IlyassAI — Fixed JS (Grok-exact UI)
+// ══════════════════════════════════════════════
 
-// ══ INIT ══
+let selectedModel = 'llama-3.3-70b';
+let isGenerating  = false;
+let activeTools   = new Set();
+let chatHistory   = [];
+
+// ── INIT ──
 document.addEventListener('DOMContentLoaded', () => {
-  const input = document.getElementById('chatInput');
-  input.addEventListener('input', () => {
-    document.getElementById('sendBtn').disabled = input.value.trim() === '';
-  });
-  autoResize(input);
+  const ci = document.getElementById('chatInput');
+  if (ci) {
+    ci.addEventListener('input', () => {
+      autoResize(ci);
+      document.getElementById('sendBtn').disabled = ci.value.trim() === '';
+    });
+    ci.addEventListener('keydown', handleKeydown);
+  }
+  addToChatList('New Chat');
+  document.getElementById('historyToggle')?.addEventListener('click', toggleHistory);
+  document.querySelector('.sb-collapse')?.addEventListener('click', collapseSidebar);
+  document.addEventListener('click', closeDropdownOnOutsideClick);
 });
 
-// ══ TEXTAREA AUTO-RESIZE ══
+// ── UTILS ──
 function autoResize(el) {
   el.style.height = 'auto';
   el.style.height = Math.min(el.scrollHeight, 180) + 'px';
 }
-
-// ══ CHAR COUNT ══
-function updateCharCount() {
-  const val = document.getElementById('chatInput').value;
-  document.getElementById('charCount').textContent = val.length > 0 ? val.length : '';
-}
-
-// ══ KEYDOWN ══
-function handleKeydown(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    if (!document.getElementById('sendBtn').disabled) sendMessage();
-  }
-}
-
-// ══ MODEL SELECTOR ══
-function toggleModelDropdown() {
-  document.getElementById('modelDropdown').classList.toggle('open');
-}
-function selectModel(name, id) {
-  selectedModel = id;
-  selectedModelName = name;
-  document.getElementById('selectedModelName').textContent = name;
-  document.querySelectorAll('.model-option').forEach(o => o.classList.remove('selected'));
-  event.currentTarget.classList.add('selected');
-  document.getElementById('modelDropdown').classList.remove('open');
-}
-document.addEventListener('click', e => {
-  if (!e.target.closest('#modelSelector') && !e.target.closest('#modelDropdown')) {
-    document.getElementById('modelDropdown').classList.remove('open');
-  }
-});
-
-// ══ TOOLS ══
-function toggleTool(tool) {
-  const btn = document.getElementById(tool + 'Btn');
-  if (activeTools.has(tool)) {
-    activeTools.delete(tool);
-    btn.classList.remove('active');
-  } else {
-    activeTools.add(tool);
-    btn.classList.add('active');
-  }
-}
-
-// ══ VOICE ══
-function startVoice() {
-  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-    alert('Speech recognition not supported in this browser.');
-    return;
-  }
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const recognition = new SpeechRecognition();
-  recognition.continuous = false;
-  recognition.interimResults = false;
-  recognition.lang = 'en-US';
-  recognition.start();
-  recognition.onresult = e => {
-    const transcript = e.results[0][0].transcript;
-    document.getElementById('chatInput').value = transcript;
-    autoResize(document.getElementById('chatInput'));
-    document.getElementById('sendBtn').disabled = false;
-  };
-}
-
-// ══ THEME ══
-function toggleTheme() {
-  const html = document.documentElement;
-  html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
-  document.querySelector('.icon-btn[onclick="toggleTheme()"]').textContent = 
-    html.dataset.theme === 'dark' ? '🌙' : '☀️';
-}
-
-// ══ ACTIVITY PANEL ══
-function toggleActivityPanel() {
-  const panel = document.getElementById('activityPanel');
-  activityPanelOpen = !activityPanelOpen;
-  panel.classList.toggle('collapsed', !activityPanelOpen);
-}
-
-// ══ TABS ══
-function switchTab(tab) {
-  document.querySelectorAll('.activity-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('[id^="tabContent-"]').forEach(c => c.style.display = 'none');
-  document.getElementById('tab-' + tab).classList.add('active');
-  document.getElementById('tabContent-' + tab).style.display = 'block';
-}
-
-// ══ SUGGESTIONS ══
-function useSuggestion(text) {
-  const input = document.getElementById('chatInput');
-  input.value = text;
-  autoResize(input);
-  document.getElementById('sendBtn').disabled = false;
-  input.focus();
-}
-
-// ══ SEND MESSAGE ══
-async function sendMessage() {
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  if (!text || isGenerating) return;
-
-  // Hide welcome state
-  switchToChatMode();
-
-  // Add user message
-  addMessage('user', text);
-  input.value = '';
-  autoResize(input);
-  document.getElementById('sendBtn').disabled = true;
-  updateCharCount();
-  chatHistory.push({ role: 'user', content: text });
-
-  // Show typing
-  const typingId = showTyping();
-  isGenerating = true;
-
-  // Add activity items
-  addActivityStep('🧠', 'Processing request', `Routing to ${selectedModelName}...`, 'running');
-  if (activeTools.has('search')) addActivityStep('🔍', 'Web Search', 'Querying DuckDuckGo & Brave...', 'running');
-  if (activeTools.has('image')) addActivityStep('🖼️', 'Image Generation', 'Generating with Pollinations.ai...', 'running');
-  if (activeTools.has('deploy')) addActivityStep('🚀', 'Vercel Deploy', 'Preparing deployment...', 'running');
-
-  try {
-    const response = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: selectedModel,
-        messages: chatHistory,
-        tools: [...activeTools],
-        stream: true
-      })
-    });
-
-    removeTyping(typingId);
-
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let fullText = '';
-    const msgEl = addMessage('assistant', '');
-    const contentEl = msgEl.querySelector('.msg-content');
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      const chunk = decoder.decode(value);
-      const lines = chunk.split('\n');
-      for (const line of lines) {
-        if (line.startsWith('data: ')) {
-          const data = line.slice(6);
-          if (data === '[DONE]') break;
-          try {
-            const parsed = JSON.parse(data);
-            const delta = parsed.choices?.[0]?.delta?.content || '';
-            if (delta) {
-              fullText += delta;
-              contentEl.innerHTML = renderMarkdown(fullText);
-              hljs.highlightAll();
-              scrollToBottom();
-            }
-          } catch {}
-        }
-      }
-    }
-
-    chatHistory.push({ role: 'assistant', content: fullText });
-    updateActivityStep('done');
-    updateChatTitle(text);
-
-  } catch (err) {
-    removeTyping(typingId);
-
-    // Fetch the health endpoint for specific diagnostics
-    let diagInfo = '';
-    try {
-      const healthRes = await fetch('/api/health');
-      if (healthRes.ok) {
-        const health = await healthRes.json();
-        const groqStatus = health.checks?.groq?.status;
-        if (groqStatus === 'missing') {
-          diagInfo = '\n\n**Fix:** Add `GROQ_API_KEY` to your [Vercel Environment Variables](https://vercel.com/dashboard) — free key at [console.groq.com](https://console.groq.com)';
-        } else if (groqStatus === 'error') {
-          diagInfo = `\n\n**Groq error:** ${health.checks.groq.message || 'Invalid API key or rate limit'}\n\nCheck your key at [console.groq.com](https://console.groq.com)`;
-        } else if (!health.summary?.llm_available) {
-          diagInfo = '\n\n**No AI provider configured.** Add at least one API key:\n- `GROQ_API_KEY` (free) at [console.groq.com](https://console.groq.com)\n- `GEMINI_API_KEY` (free) at [aistudio.google.com](https://aistudio.google.com)';
-        }
-      }
-    } catch {}
-
-    const errMsg = err.message.includes('503')
-      ? `⚠️ **AI providers unreachable.** ${diagInfo || '\n\nRun [/api/health](/api/health) to diagnose.'}`
-      : `⚠️ **Error:** ${err.message}${diagInfo}`;
-
-    addMessage('assistant', errMsg);
-    addActivityStep('❌', 'Error', err.message, 'error');
-  }
-
-  isGenerating = false;
-}
-
-// ══ ADD MESSAGE ══
-function addMessage(role, content) {
-  const chatArea = document.getElementById('messagesView');
-  const msg = document.createElement('div');
-  msg.className = `msg ${role}`;
-  msg.innerHTML = `
-    <div class="msg-avatar">${role === 'assistant' ? '🤖' : '👤'}</div>
-    <div class="msg-bubble">
-      <div class="msg-name">${role === 'assistant' ? 'IlyassAI' : 'You'}</div>
-      <div class="msg-content">${renderMarkdown(content)}</div>
-      <div class="msg-actions">
-        ${role === 'assistant' ? '<button class="msg-action-btn" onclick="copyMsg(this)">📋 Copy</button><button class="msg-action-btn" onclick="regenMsg()">🔄 Retry</button>' : ''}
-      </div>
-    </div>`;
-  chatArea.appendChild(msg);
-  try { hljs.highlightAll(); } catch(e){}
-  scrollToBottom();
-  return msg;
-}
-
-// ══ TYPING ══
-function showTyping() {
-  const chatArea = document.getElementById('chatArea');
-  const id = 'typing-' + Date.now();
-  const el = document.createElement('div');
-  el.className = 'msg assistant';
-  el.id = id;
-  el.innerHTML = `<div class="msg-avatar">🤖</div><div class="msg-bubble"><div class="msg-name">IlyassAI</div><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
-  chatArea.appendChild(el);
-  scrollToBottom();
-  return id;
-}
-function removeTyping(id) { document.getElementById(id)?.remove(); }
-
-// ══ MARKDOWN RENDERER ══
-function renderMarkdown(text) {
-  if (!text) return '';
-  return text
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => 
-      `<pre><code class="language-${lang||'plaintext'}">${code.trim()}</code></pre>`)
-    .replace(/`([^`]+)`/g,'<code>$1</code>')
-    .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
-    .replace(/\*([^*]+)\*/g,'<em>$1</em>')
-    .replace(/^### (.+)$/gm,'<h3 style="font-size:15px;font-weight:700;margin:16px 0 8px">$1</h3>')
-    .replace(/^## (.+)$/gm,'<h2 style="font-size:17px;font-weight:800;margin:20px 0 10px">$1</h2>')
-    .replace(/^# (.+)$/gm,'<h1 style="font-size:20px;font-weight:900;margin:24px 0 12px">$1</h1>')
-    .replace(/^- (.+)$/gm,'<li style="margin:4px 0 4px 20px">$1</li>')
-    .replace(/^(\d+)\. (.+)$/gm,'<li style="margin:4px 0 4px 20px">$2</li>')
-    .replace(/\n\n/g,'<br/><br/>')
-    .replace(/\n/g,'<br/>');
-}
-
-// ══ ACTIVITY PANEL ══
-let activityItems = [];
-function addActivityStep(icon, label, detail, status) {
-  const content = document.getElementById('tabContent-steps');
-  const item = document.createElement('div');
-  item.className = 'activity-item';
-  item.dataset.status = status;
-  const now = new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-  const statusClass = status === 'running' ? 'status-running' : status === 'done' ? 'status-done' : 'status-error';
-  const statusLabel = status === 'running' ? '⏳ Running' : status === 'done' ? '✓ Done' : '✕ Error';
-  item.innerHTML = `
-    <div class="activity-item-header">
-      <span class="activity-icon">${icon}</span>
-      <span class="activity-label">${label}</span>
-      <span class="activity-time">${now}</span>
-    </div>
-    <div class="activity-detail">${detail}</div>
-    <span class="activity-status ${statusClass}">${statusLabel}</span>`;
-  
-  // Insert after section label or prepend
-  const label_el = content.querySelector('.activity-section-label');
-  if (label_el) { label_el.after(item); } else { content.prepend(item); }
-  activityItems.push(item);
-}
-
-function updateActivityStep(status) {
-  activityItems.forEach(item => {
-    if (item.dataset.status === 'running') {
-      item.dataset.status = status;
-      const badge = item.querySelector('.activity-status');
-      badge.className = `activity-status ${status === 'done' ? 'status-done' : 'status-error'}`;
-      badge.textContent = status === 'done' ? '✓ Done' : '✕ Error';
-    }
-  });
-}
-
-// ══ HELPERS ══
 function scrollToBottom() {
-  const chatArea = document.getElementById('messagesView');
-  chatArea.scrollTop = chatArea.scrollHeight;
+  const ca = document.getElementById('chatArea');
+  if (ca) requestAnimationFrame(() => ca.scrollTop = ca.scrollHeight);
 }
-function newChat() {
-  chatHistory = [];
-  const chatArea = switchToHomeMode();
-  const chatArea = document.getElementById('messagesView');
-  chatArea.innerHTML = `
-    <div class="welcome-state" id="welcomeState">
-      <div class="welcome-icon">🤖</div>
-      <h2 class="welcome-title">Hello, I'm IlyassAI</h2>
-      <p class="welcome-sub">Your autonomous AI agent. I can search the web, write & deploy code, generate images, and much more.</p>
-      <div class="suggestion-grid">
-        <div class="suggestion-card" onclick="useSuggestion('Search the web for the latest AI models released in 2025')"><div class="suggestion-icon">🔍</div><div class="suggestion-title">Search the web</div><div class="suggestion-desc">Find latest AI news</div></div>
-        <div class="suggestion-card" onclick="useSuggestion('Write a REST API in Node.js with Express and deploy it to Vercel')"><div class="suggestion-icon">💻</div><div class="suggestion-title">Build & deploy</div><div class="suggestion-desc">Code and ship to Vercel</div></div>
-        <div class="suggestion-card" onclick="useSuggestion('Generate a futuristic logo for an AI company')"><div class="suggestion-icon">🖼️</div><div class="suggestion-title">Generate images</div><div class="suggestion-desc">AI art generation</div></div>
-        <div class="suggestion-card" onclick="useSuggestion('Analyze and improve the performance of my Python script')"><div class="suggestion-icon">📊</div><div class="suggestion-title">Analyze & optimize</div><div class="suggestion-desc">Review code</div></div>
-      </div>
-    </div>`;
-  // Add to sidebar
-  addChatToSidebar('New Conversation');
+function escapeHtml(t) {
+  return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
-function loadChat(id) {
-  document.querySelectorAll('.chat-item').forEach(item => item.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-}
-function filterChats(query) {
-  document.querySelectorAll('.chat-item').forEach(item => {
-    const text = item.querySelector('.chat-item-text').textContent.toLowerCase();
-    item.style.display = text.includes(query.toLowerCase()) ? '' : 'none';
-  });
-}
-function addChatToSidebar(title) {
-  const list = document.getElementById('chatList');
-  const item = document.createElement('div');
-  item.className = 'chat-item active';
-  item.innerHTML = `<span class="chat-item-icon">💬</span><span class="chat-item-text">${title}</span>`;
-  item.onclick = () => { document.querySelectorAll('.chat-item').forEach(c=>c.classList.remove('active')); item.classList.add('active'); };
-  document.querySelectorAll('.chat-item').forEach(c => c.classList.remove('active'));
-  list.insertBefore(item, list.querySelector('.sidebar-section-label') || list.firstChild);
-}
-function updateChatTitle(text) {
-  const activeChat = document.querySelector('.chat-item.active .chat-item-text');
-  if (activeChat && activeChat.textContent === 'New Conversation') {
-    activeChat.textContent = text.slice(0, 40) + (text.length > 40 ? '…' : '');
+function showToast(msg, type='') {
+  let tc = document.getElementById('__toasts');
+  if (!tc) {
+    tc = Object.assign(document.createElement('div'), {id:'__toasts'});
+    Object.assign(tc.style, {position:'fixed',bottom:'90px',left:'50%',transform:'translateX(-50%)',zIndex:'9999',display:'flex',flexDirection:'column',gap:'8px',pointerEvents:'none',alignItems:'center'});
+    document.body.appendChild(tc);
   }
+  const t = document.createElement('div');
+  const colors = {error:'color:#f87171;border-color:rgba(248,113,113,.35)',ok:'color:#4ade80;border-color:rgba(74,222,128,.3)','':`color:#ececec;border-color:rgba(255,255,255,0.12)`};
+  Object.assign(t.style, {background:'#111',border:'1px solid',borderRadius:'999px',padding:'9px 18px',fontSize:'13px',fontFamily:'Inter,sans-serif',boxShadow:'0 8px 24px rgba(0,0,0,.5)',whiteSpace:'nowrap',cssText:`background:#111;border:1px solid rgba(255,255,255,0.12);border-radius:999px;padding:9px 18px;font-size:13px;font-family:Inter,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.5);white-space:nowrap;${colors[type]||''}`});
+  t.textContent = msg;
+  tc.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
 }
-function copyMsg(btn) {
-  const content = btn.closest('.msg-bubble').querySelector('.msg-content').innerText;
-  navigator.clipboard.writeText(content);
-  btn.textContent = '✅ Copied!';
-  setTimeout(() => btn.textContent = '📋 Copy', 1500);
-}
-function regenMsg() { sendMessage(); }
-</script>
 
-<script>
-// ── extra helpers for new layout ──
-
+// ── MODE SWITCH ──
 function switchToChatMode() {
   document.getElementById('welcomeState').style.display = 'none';
   document.getElementById('messagesView').style.display = 'flex';
@@ -961,51 +638,272 @@ function switchToHomeMode() {
   document.getElementById('welcomeState').style.display = 'flex';
   document.getElementById('messagesView').style.display = 'none';
   document.getElementById('chatInputBar').style.display = 'none';
+  document.getElementById('messagesView').innerHTML = '';
+  chatHistory = [];
 }
 
-// sync home input
+// ── HOME INPUT ──
 function syncHomeInput(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 160) + 'px';
+  autoResize(el);
   document.getElementById('homeSendBtn').disabled = el.value.trim() === '';
 }
 function handleHomeKeydown(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    if (!document.getElementById('homeSendBtn').disabled) sendFromHome();
-  }
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendFromHome(); }
 }
 function sendFromHome() {
-  const homeInput = document.getElementById('homeInput');
-  const chatInput = document.getElementById('chatInput');
-  chatInput.value = homeInput.value;
+  const v = document.getElementById('homeInput').value.trim();
+  if (!v || isGenerating) return;
   switchToChatMode();
+  document.getElementById('chatInput').value = v;
+  document.getElementById('sendBtn').disabled = false;
   sendMessage();
 }
-function toggleSendBtn() {
-  const input = document.getElementById('chatInput');
-  document.getElementById('sendBtn').disabled = input.value.trim() === '';
-  autoResize(input);
+function useSuggestion(text) {
+  const hi = document.getElementById('homeInput');
+  hi.value = text; autoResize(hi);
+  document.getElementById('homeSendBtn').disabled = false;
 }
-// update both model name spans
-const origSelectModel = window.selectModel;
-window.selectModel = function(name, id) {
-  origSelectModel && origSelectModel(name, id);
-  document.getElementById('selectedModelName').textContent = name === 'Llama 3.3 70B' ? 'Fast' : name;
-  document.getElementById('selectedModelName2').textContent = name === 'Llama 3.3 70B' ? 'Fast' : name;
+
+// ── CHAT INPUT ──
+function handleKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+// ── MODEL ──
+function toggleModelDropdown() {
+  document.getElementById('modelDropdown').classList.toggle('open');
+}
+function closeDropdownOnOutsideClick(e) {
+  if (!e.target.closest('#modelDropdown') && !e.target.closest('#homeFastBtn') && !e.target.closest('#modelSelector'))
+    document.getElementById('modelDropdown')?.classList.remove('open');
+}
+function selectModel(name, id) {
+  selectedModel = id;
+  const label = name === 'Llama 3.3 70B' ? 'Fast' : name.split(' ')[0];
+  ['selectedModelName','selectedModelName2'].forEach(eid => {
+    const el = document.getElementById(eid); if (el) el.textContent = label;
+  });
+  document.querySelectorAll('.model-option').forEach(o => o.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
   document.getElementById('modelDropdown').classList.remove('open');
-};
-// History toggle
-document.getElementById('historyToggle').addEventListener('click', function() {
-  const list = document.getElementById('chatList');
-  list.style.display = list.style.display === 'none' ? '' : 'none';
-});
-// close dropdown on outside click
-document.addEventListener('click', e => {
-  if (!e.target.closest('#modelSelector') && !e.target.closest('#modelDropdown') && !e.target.closest('#homeFastBtn')) {
-    document.getElementById('modelDropdown').classList.remove('open');
+  showToast('✓ ' + name, 'ok');
+}
+
+// ── TOOLS ──
+function toggleTool(tool) {
+  const btns = document.querySelectorAll(\`[data-tool="\${tool}"]\`);
+  if (activeTools.has(tool)) {
+    activeTools.delete(tool); btns.forEach(b => b.classList.remove('active'));
+    showToast(tool[0].toUpperCase()+tool.slice(1)+' off');
+  } else {
+    activeTools.add(tool); btns.forEach(b => b.classList.add('active'));
+    showToast(tool[0].toUpperCase()+tool.slice(1)+' on ✓','ok');
   }
-});
+}
+
+// ── VOICE ──
+function startVoice() {
+  if (!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)) {
+    showToast('Voice not supported in this browser','error'); return;
+  }
+  const SR = window.SpeechRecognition||window.webkitSpeechRecognition;
+  const r = new SR();
+  r.lang='en-US'; r.continuous=false; r.interimResults=false;
+  showToast('🎤 Listening…');
+  r.start();
+  r.onresult = e => {
+    const t = e.results[0][0].transcript;
+    const inHome = document.getElementById('welcomeState').style.display !== 'none';
+    const inputEl = document.getElementById(inHome ? 'homeInput' : 'chatInput');
+    inputEl.value = t; autoResize(inputEl);
+    document.getElementById(inHome ? 'homeSendBtn' : 'sendBtn').disabled = false;
+    showToast('✅ Got it','ok');
+  };
+  r.onerror = () => showToast('Voice error','error');
+}
+
+// ── THEME ──
+function toggleTheme() {
+  const h = document.documentElement;
+  h.dataset.theme = h.dataset.theme==='dark' ? 'light' : 'dark';
+  showToast(h.dataset.theme==='light' ? '☀️ Light' : '🌙 Dark');
+}
+
+// ── SEND ──
+async function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const text  = input.value.trim();
+  if (!text || isGenerating) return;
+
+  if (document.getElementById('welcomeState').style.display !== 'none') switchToChatMode();
+
+  addMessage('user', text);
+  input.value = ''; autoResize(input);
+  document.getElementById('sendBtn').disabled = true;
+  chatHistory.push({role:'user', content:text});
+
+  const tid = showTyping();
+  isGenerating = true;
+
+  try {
+    const res = await fetch('/api/chat', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({model:selectedModel, messages:chatHistory, tools:[...activeTools], stream:true})
+    });
+    removeTyping(tid);
+    if (!res.ok) throw new Error('HTTP '+res.status);
+
+    const reader=res.body.getReader(), dec=new TextDecoder();
+    let full='';
+    const msgEl = addMessage('assistant','');
+    const bodyEl = msgEl.querySelector('.ai-body-content');
+
+    while(true){
+      const {done,value} = await reader.read(); if(done) break;
+      for(const line of dec.decode(value).split('\n')){
+        if(!line.startsWith('data: ')) continue;
+        const d=line.slice(6); if(d==='[DONE]') break;
+        try{
+          const delta=JSON.parse(d)?.choices?.[0]?.delta?.content||'';
+          if(delta){ full+=delta; bodyEl.innerHTML=renderMarkdown(full); scrollToBottom(); }
+        }catch{}
+      }
+    }
+    chatHistory.push({role:'assistant',content:full});
+    updateChatTitle(text);
+
+  } catch(err) {
+    removeTyping(tid);
+    let extra='';
+    try{
+      const hj=await(await fetch('/api/health')).json();
+      if(!hj.summary?.llm_available)
+        extra='\n\n**Fix:** Add `GROQ_API_KEY` in [Vercel settings](https://vercel.com/dashboard) — free at [console.groq.com](https://console.groq.com)';
+    }catch{}
+    addMessage('assistant','⚠️ **Error:** '+err.message+extra);
+    showToast(err.message,'error');
+  }
+  isGenerating=false;
+  document.getElementById('sendBtn').disabled=false;
+}
+
+// ── ADD MESSAGE ──
+function addMessage(role, content) {
+  const view = document.getElementById('messagesView');
+  const row  = document.createElement('div');
+  row.className = 'msg-row '+role;
+  if(role==='user'){
+    row.innerHTML=`<div class="user-bubble">${escapeHtml(content)}</div>`;
+  } else {
+    row.innerHTML=`
+      <div class="ai-row">
+        <div class="ai-avatar-small">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="16" cy="16" r="14"/><line x1="6" y1="26" x2="26" y2="6"/>
+          </svg>
+        </div>
+        <div class="ai-body">
+          <div class="ai-body-content">${renderMarkdown(content)}</div>
+          <div class="msg-actions">
+            <button class="msg-action-btn" onclick="copyAiMsg(this)">📋 Copy</button>
+            <button class="msg-action-btn" onclick="retryLast()">🔄 Retry</button>
+          </div>
+        </div>
+      </div>`;
+  }
+  view.appendChild(row); scrollToBottom(); return row;
+}
+function showTyping(){
+  const view=document.getElementById('messagesView');
+  const id='t'+Date.now(); const el=document.createElement('div');
+  el.id=id; el.className='msg-row assistant';
+  el.innerHTML=`<div class="ai-row"><div class="ai-avatar-small"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="16" cy="16" r="14"/><line x1="6" y1="26" x2="26" y2="6"/></svg></div><div class="ai-body"><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div></div>`;
+  view.appendChild(el); scrollToBottom(); return id;
+}
+function removeTyping(id){ document.getElementById(id)?.remove(); }
+
+// ── MARKDOWN ──
+function renderMarkdown(text){
+  if(!text) return '';
+  return text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/```(\w*)\n?([\s\S]*?)```/g,(_,lang,code)=>
+      `<div style="background:#0d0d0d;border:1px solid rgba(255,255,255,0.09);border-radius:10px;overflow:hidden;margin:10px 0">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 14px;border-bottom:1px solid rgba(255,255,255,0.07)">
+          <span style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,0.28);font-family:Inter,sans-serif">${lang||'code'}</span>
+          <button onclick="copyCode(this)" style="font-family:Inter,sans-serif;font-size:12px;background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;padding:2px 8px;border-radius:5px;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='none'">Copy</button>
+        </div>
+        <pre style="margin:0;padding:14px;overflow-x:auto;font-size:13px;font-family:'JetBrains Mono',monospace;line-height:1.6;color:#d4d4d4"><code>${code.trim()}</code></pre>
+      </div>`)
+    .replace(/\`([^\`]+)\`/g,'<code style="background:rgba(255,255,255,0.07);color:#e2b96f;font-family:JetBrains Mono,monospace;font-size:13px;padding:2px 5px;border-radius:4px">$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*([^*]+)\*/g,'<em style="opacity:.75">$1</em>')
+    .replace(/^### (.+)$/gm,'<h3 style="font-size:15px;font-weight:700;margin:16px 0 8px">$1</h3>')
+    .replace(/^## (.+)$/gm,'<h2 style="font-size:18px;font-weight:700;margin:20px 0 10px">$1</h2>')
+    .replace(/^# (.+)$/gm,'<h1 style="font-size:21px;font-weight:800;margin:22px 0 12px">$1</h1>')
+    .replace(/^> (.+)$/gm,'<blockquote style="border-left:3px solid rgba(255,255,255,0.2);padding:6px 14px;margin:10px 0;opacity:.75">$1</blockquote>')
+    .replace(/^- (.+)$/gm,'<li style="margin:4px 0 4px 18px;list-style:disc">$1</li>')
+    .replace(/^\d+\. (.+)$/gm,'<li style="margin:4px 0 4px 18px;list-style:decimal">$1</li>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener" style="color:#60a5fa;text-decoration:underline">$1</a>')
+    .replace(/\n\n/g,'<br/><br/>')
+    .replace(/\n/g,'<br/>');
+}
+function copyCode(btn){
+  const code=btn.closest('div').nextElementSibling.querySelector('code').innerText;
+  navigator.clipboard.writeText(code).then(()=>{btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',1500)});
+}
+function copyAiMsg(btn){
+  const t=btn.closest('.ai-body').querySelector('.ai-body-content').innerText;
+  navigator.clipboard.writeText(t).then(()=>{btn.textContent='✅ Copied!';setTimeout(()=>btn.textContent='📋 Copy',1500)});
+}
+function retryLast(){
+  const userMsgs=chatHistory.filter(m=>m.role==='user');
+  if(!userMsgs.length) return;
+  const last=userMsgs[userMsgs.length-1];
+  chatHistory=chatHistory.slice(0,-2);
+  document.getElementById('messagesView').lastElementChild?.remove();
+  document.getElementById('messagesView').lastElementChild?.remove();
+  document.getElementById('chatInput').value=last.content;
+  document.getElementById('sendBtn').disabled=false;
+  sendMessage();
+}
+
+// ── CHAT LIST ──
+function newChat(){
+  switchToHomeMode();
+  document.getElementById('homeInput').value='';
+  document.getElementById('homeSendBtn').disabled=true;
+  addToChatList('New Chat');
+}
+function addToChatList(title){
+  const list=document.getElementById('chatList');
+  const item=document.createElement('div');
+  item.className='chat-item active';
+  item.innerHTML=`<span class="chat-item-icon">💬</span><span class="chat-item-text">${escapeHtml(title)}</span>`;
+  item.onclick=()=>{ document.querySelectorAll('.chat-item').forEach(c=>c.classList.remove('active')); item.classList.add('active'); };
+  document.querySelectorAll('.chat-item').forEach(c=>c.classList.remove('active'));
+  list.prepend(item);
+}
+function updateChatTitle(text){
+  const a=document.querySelector('#chatList .chat-item.active .chat-item-text');
+  if(a&&a.textContent.trim()==='New Chat') a.textContent=text.slice(0,36)+(text.length>36?'…':'');
+}
+function toggleHistory(){
+  const list=document.getElementById('chatList');
+  const arrow=document.querySelector('#historyToggle .sb-section-arrow');
+  const hidden=list.style.display==='none';
+  list.style.display=hidden?'':'none';
+  if(arrow) arrow.innerHTML=hidden?'&#x276F;':'&#x2304;';
+}
+function collapseSidebar(){
+  const sb=document.getElementById('sidebar');
+  const collapsed=sb.dataset.collapsed==='1';
+  sb.dataset.collapsed=collapsed?'0':'1';
+  sb.style.width=collapsed?'':'60px';
+  sb.querySelectorAll('.sb-nav-item span,.sb-section-text,.sb-sub-item span,.sidebar-logo-text')
+    .forEach(el=>el.style.display=collapsed?'':'none');
+}
 </script>
 </body>
 </html>
