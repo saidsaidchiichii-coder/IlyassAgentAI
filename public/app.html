@@ -3,861 +3,577 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>IlyassAI — Workspace</title>
+<title>IlyassAI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <style>
-/* ================================================================
-   IlyassAI — app.html  ·  Grok UI Exact Copy
-   ================================================================ */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-
+/* ── Grok Exact Clone ── */
 :root {
-  --bg:          #000000;
-  --bg2:         #0a0a0a;
-  --bg3:         #111111;
-  --bg4:         #1a1a1a;
-  --surface:     rgba(255,255,255,0.04);
-  --surface2:    rgba(255,255,255,0.07);
-  --surface3:    rgba(255,255,255,0.12);
-  --border:      rgba(255,255,255,0.07);
-  --border2:     rgba(255,255,255,0.12);
-  --text:        #ececec;
-  --text2:       rgba(236,236,236,0.60);
-  --text3:       rgba(236,236,236,0.32);
-  --accent:      #ff6b35;
-  --accent-dim:  rgba(255,107,53,0.12);
-  --green:       #4ade80;
-  --blue:        #60a5fa;
-  --red:         #f87171;
-  --yellow:      #fbbf24;
-  --r-sm:        6px;
-  --r:           10px;
-  --r-lg:        14px;
-  --r-xl:        20px;
-  --sidebar-w:   260px;
-  --activity-w:  300px;
-  --transition:  all .18s cubic-bezier(.4,0,.2,1);
+  --bg:       #000;
+  --sidebar:  #0a0a0a;
+  --border:   rgba(255,255,255,0.08);
+  --surface:  rgba(255,255,255,0.05);
+  --surface2: rgba(255,255,255,0.09);
+  --text:     #ececec;
+  --text2:    rgba(255,255,255,0.50);
+  --text3:    rgba(255,255,255,0.28);
+  --green:    #1db954;
+  --blue:     #60a5fa;
+  --red:      #f87171;
 }
 [data-theme="light"] {
-  --bg:#ffffff; --bg2:#f5f5f5; --bg3:#eeeeee; --bg4:#e8e8e8;
-  --surface:rgba(0,0,0,0.03); --surface2:rgba(0,0,0,0.06); --surface3:rgba(0,0,0,0.10);
-  --border:rgba(0,0,0,0.07); --border2:rgba(0,0,0,0.12);
-  --text:#111111; --text2:rgba(17,17,17,0.60); --text3:rgba(17,17,17,0.35);
+  --bg:#fff; --sidebar:#f7f7f7; --border:rgba(0,0,0,0.08);
+  --surface:rgba(0,0,0,0.04); --surface2:rgba(0,0,0,0.08);
+  --text:#111; --text2:rgba(0,0,0,0.50); --text3:rgba(0,0,0,0.28);
 }
 
-/* ── RESET ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
-a{text-decoration:none;color:inherit}
-button{font-family:inherit;cursor:pointer;border:none;background:none}
+body{font-family:"Inter",sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
 textarea,input{font-family:inherit}
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:99px}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:var(--surface2);border-radius:4px}
 
-/* ════════════════════════════════
-   LAYOUT
-════════════════════════════════ */
-.app-layout{display:flex;height:100vh;overflow:hidden}
+/* ══ LAYOUT ══ */
+.layout{display:flex;height:100vh;overflow:hidden}
 
-/* ════════════════════════════════
-   SIDEBAR  — exact Grok
-════════════════════════════════ */
+/* ══ SIDEBAR ══ */
 .sidebar{
-  width:var(--sidebar-w);
-  background:var(--bg2);
+  width:240px;flex-shrink:0;
+  background:var(--sidebar);
   border-right:1px solid var(--border);
-  display:flex;flex-direction:column;flex-shrink:0;
-  transition:var(--transition);overflow:hidden;
-  padding:10px 8px 12px;
+  display:flex;flex-direction:column;
+  padding:12px 8px;
+  gap:2px;
 }
 
-.sidebar-header{
-  display:flex;align-items:center;
-  justify-content:space-between;
-  padding:4px 4px 10px;
-}
-
-.sidebar-logo{
-  display:flex;align-items:center;gap:9px;
-  font-weight:700;font-size:15px;letter-spacing:-.2px;
-  color:var(--text);
-}
-.logo-icon{
-  width:28px;height:28px;
-  background:var(--accent);
-  border-radius:8px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:800;color:#000;flex-shrink:0;
-}
-
-.new-chat-btn{
-  width:30px;height:30px;border-radius:var(--r);
-  background:none;
-  display:flex;align-items:center;justify-content:center;
-  color:var(--text2);transition:var(--transition);
-}
-.new-chat-btn:hover{background:var(--surface2);color:var(--text)}
-
-/* search */
-.sidebar-search{padding:0 0 8px}
-.sidebar-search input{
-  width:100%;
-  background:var(--surface2);
-  border:1px solid var(--border);
-  border-radius:var(--r-lg);
-  padding:8px 12px;font-size:13px;
-  color:var(--text);outline:none;
-  transition:var(--transition);
-}
-.sidebar-search input:focus{border-color:var(--border2)}
-.sidebar-search input::placeholder{color:var(--text3)}
-
-/* chat list */
-.sidebar-content{flex:1;overflow-y:auto;padding:2px 0}
-
-.sidebar-section-label{
-  font-size:11px;font-weight:600;
-  text-transform:uppercase;letter-spacing:.06em;
-  color:var(--text3);
-  padding:10px 10px 4px;
-}
-
-.chat-item{
-  display:flex;align-items:center;gap:8px;
-  padding:8px 10px;border-radius:var(--r);
-  cursor:pointer;transition:var(--transition);
-  overflow:hidden;white-space:nowrap;
-}
-.chat-item:hover{background:var(--surface2)}
-.chat-item.active{background:var(--surface2)}
-.chat-item-icon{font-size:13px;flex-shrink:0;opacity:.7}
-.chat-item-text{
-  font-size:13px;color:var(--text2);
-  overflow:hidden;text-overflow:ellipsis;flex:1;
-}
-.chat-item.active .chat-item-text{color:var(--text)}
-
-/* sidebar footer */
-.sidebar-footer{
-  border-top:1px solid var(--border);
-  padding-top:10px;margin-top:4px;
-}
-.user-info{
-  display:flex;align-items:center;gap:10px;
-  padding:8px 10px;border-radius:var(--r);
-  cursor:pointer;transition:var(--transition);
-}
-.user-info:hover{background:var(--surface2)}
-.user-avatar{
-  width:30px;height:30px;border-radius:50%;
-  background:var(--accent);color:#000;
-  display:flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:700;flex-shrink:0;
-}
-.user-name{font-size:13px;font-weight:600;flex:1}
-.user-plan{
-  font-size:10px;
-  background:var(--surface3);
-  color:var(--text2);
-  padding:2px 7px;border-radius:999px;
-  border:1px solid var(--border2);
-}
-
-/* ════════════════════════════════
-   MAIN AREA
-════════════════════════════════ */
-.main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
-
-/* ── HEADER ── exact Grok topbar */
-.main-header{
-  height:56px;
+/* top logo row */
+.sb-logo-row{
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 20px;
-  border-bottom:1px solid var(--border);
-  flex-shrink:0;gap:12px;
-  background:var(--bg);
+  padding:4px 8px 12px;
 }
-.header-left{display:flex;align-items:center;gap:10px;position:relative}
-
-.model-selector{
-  display:flex;align-items:center;gap:7px;
-  padding:6px 12px;border-radius:var(--r);
-  background:none;border:none;
-  font-size:14px;font-weight:600;
-  cursor:pointer;color:var(--text);
-  transition:var(--transition);
-}
-.model-selector:hover{background:var(--surface2)}
-.model-dot{
-  width:7px;height:7px;border-radius:50%;
-  background:var(--green);flex-shrink:0;
-  animation:pulse-green 2s infinite;
-}
-@keyframes pulse-green{0%,100%{opacity:1}50%{opacity:.4}}
-
-.header-right{display:flex;align-items:center;gap:6px}
-
-.icon-btn{
-  width:34px;height:34px;border-radius:var(--r);
-  background:none;border:none;
+.sb-logo{
+  width:28px;height:28px;
   display:flex;align-items:center;justify-content:center;
-  font-size:16px;color:var(--text2);
-  transition:var(--transition);
 }
-.icon-btn:hover{background:var(--surface2);color:var(--text)}
+.sb-logo svg{width:24px;height:24px;fill:var(--text)}
+.sb-collapse{
+  width:28px;height:28px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text2);font-size:13px;
+  transition:background .15s;
+}
+.sb-collapse:hover{background:var(--surface2)}
 
-.toggle-activity-btn{
-  font-size:12px;font-weight:600;
-  padding:6px 12px;border-radius:var(--r);
-  background:var(--surface2);
-  border:1px solid var(--border2);
+/* nav items */
+.sb-nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 10px;border-radius:8px;
+  font-size:14px;font-weight:500;
+  color:var(--text2);cursor:pointer;
+  transition:background .15s,color .15s;
+}
+.sb-nav-item:hover{background:var(--surface);color:var(--text)}
+.sb-nav-item.active{background:var(--surface2);color:var(--text)}
+.sb-nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:.85}
+
+/* divider */
+.sb-divider{height:1px;background:var(--border);margin:8px 4px}
+
+/* section headers */
+.sb-section{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 10px 4px;
+  font-size:13px;font-weight:600;color:var(--text2);
+  cursor:pointer;border-radius:8px;
+  transition:background .15s;
+}
+.sb-section:hover{background:var(--surface)}
+.sb-section-arrow{font-size:11px;color:var(--text3)}
+
+.sb-sub-item{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 10px 7px 14px;
+  font-size:13px;color:var(--text2);
+  cursor:pointer;border-radius:8px;
+  transition:background .15s,color .15s;
+}
+.sb-sub-item:hover{background:var(--surface);color:var(--text)}
+.sb-sub-item svg{width:13px;height:13px;opacity:.7}
+
+.sb-spacer{flex:1}
+
+/* user avatar at bottom */
+.sb-user{
+  padding:8px 10px;
+  display:flex;align-items:center;
+}
+.sb-avatar{
+  width:30px;height:30px;border-radius:50%;
+  background:#1db954;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:#000;
+  cursor:pointer;
+}
+
+/* ══ MAIN ══ */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+
+/* top-right buttons */
+.main-topbar{
+  display:flex;align-items:center;justify-content:flex-end;
+  padding:12px 20px;gap:6px;flex-shrink:0;
+}
+.topbar-btn{
+  display:flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:8px;
+  font-size:13px;font-weight:500;
   color:var(--text2);
-  transition:var(--transition);
+  transition:background .15s,color .15s;
 }
-.toggle-activity-btn:hover{background:var(--surface3);color:var(--text)}
+.topbar-btn:hover{background:var(--surface);color:var(--text)}
+.topbar-btn svg{width:15px;height:15px}
 
-/* ── CHAT AREA ── */
+/* ══ CHAT AREA ══ */
 .chat-area{
   flex:1;overflow-y:auto;
-  padding:16px 0 12px;
-  display:flex;flex-direction:column;gap:0;
+  display:flex;flex-direction:column;
 }
 .chat-area::-webkit-scrollbar{width:4px}
 
-/* ── WELCOME STATE ── exact Grok home */
-.welcome-state{
+/* ── home / welcome ── */
+.home-view{
   flex:1;display:flex;flex-direction:column;
   align-items:center;justify-content:center;
-  text-align:center;padding:40px 24px;
+  padding:40px 24px;
+  gap:0;
 }
-.welcome-icon{
-  width:56px;height:56px;
-  background:var(--accent);
-  border-radius:50%;
+.home-logo-row{
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:48px;
+}
+.home-logo-icon{
+  width:52px;height:52px;
   display:flex;align-items:center;justify-content:center;
-  font-size:26px;margin:0 auto 22px;
-  box-shadow:0 0 40px rgba(255,107,53,.3);
 }
-.welcome-title{
-  font-size:30px;font-weight:700;
-  letter-spacing:-.5px;margin-bottom:10px;
-  color:var(--text);
+.home-logo-icon svg{width:52px;height:52px;fill:var(--text)}
+.home-title{
+  font-size:44px;font-weight:700;
+  letter-spacing:-.5px;color:var(--text);
 }
-.welcome-sub{
-  font-size:15px;color:var(--text2);
-  max-width:440px;line-height:1.65;margin-bottom:32px;
-}
-.suggestion-grid{
-  display:flex;flex-wrap:wrap;gap:10px;
-  justify-content:center;max-width:600px;width:100%;
-}
-.suggestion-card{
-  background:var(--surface2);
-  border:1px solid var(--border2);
-  border-radius:999px;
-  padding:9px 18px;
-  cursor:pointer;transition:var(--transition);
-  display:flex;align-items:center;gap:8px;
-}
-.suggestion-card:hover{background:var(--surface3);border-color:var(--border2)}
-.suggestion-icon{font-size:14px}
-.suggestion-title{font-size:13px;color:var(--text2);font-weight:500}
-.suggestion-desc{display:none}
 
-/* ── MESSAGES ── exact Grok */
-.message-row{
-  display:flex;
-  padding:8px 24px;
-  max-width:800px;margin:0 auto;width:100%;
+/* single pill input (home) */
+.home-input-wrap{
+  width:100%;max-width:680px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:999px;
+  display:flex;align-items:center;
+  padding:0 6px 0 20px;
+  gap:8px;
+  transition:border-color .2s,box-shadow .2s;
 }
-.message-row.user{justify-content:flex-end}
-.message-row.assistant{justify-content:flex-start}
+.home-input-wrap:focus-within{
+  border-color:rgba(255,255,255,0.20);
+  box-shadow:0 0 0 3px rgba(255,255,255,0.04);
+}
+.home-input-plus{
+  color:var(--text2);font-size:18px;font-weight:300;
+  flex-shrink:0;
+}
+.home-input-wrap textarea{
+  flex:1;background:none;border:none;outline:none;
+  color:var(--text);font-size:15px;
+  resize:none;line-height:1.5;
+  padding:16px 0;
+  max-height:160px;overflow-y:auto;
+  scrollbar-width:none;
+}
+.home-input-wrap textarea::placeholder{color:var(--text3)}
+.home-input-wrap textarea::-webkit-scrollbar{display:none}
+
+.home-input-right{
+  display:flex;align-items:center;gap:6px;flex-shrink:0;
+}
+
+/* Fast selector */
+.fast-btn{
+  display:flex;align-items:center;gap:4px;
+  padding:6px 10px;border-radius:6px;
+  font-size:13px;font-weight:500;color:var(--text2);
+  transition:background .15s;
+}
+.fast-btn:hover{background:var(--surface2)}
+.fast-btn svg{width:12px;height:12px}
+
+/* mic button */
+.mic-btn{
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text2);transition:background .15s;
+}
+.mic-btn:hover{background:var(--surface2)}
+.mic-btn svg{width:17px;height:17px}
+
+/* send / waveform button (white circle) */
+.send-circle-btn{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--text);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all .18s;
+}
+.send-circle-btn:hover:not(:disabled){background:#ccc;transform:scale(1.05)}
+.send-circle-btn:disabled{background:var(--surface2);cursor:not-allowed}
+.send-circle-btn svg{width:16px;height:16px;fill:var(--bg)}
+
+/* ── chat messages ── */
+.messages-view{
+  flex:1;
+  padding:24px 0 12px;
+  display:flex;flex-direction:column;
+  gap:4px;
+}
+
+.msg-row{
+  display:flex;
+  padding:6px 20px;
+  max-width:760px;margin:0 auto;width:100%;
+}
+.msg-row.user{justify-content:flex-end}
+.msg-row.assistant{justify-content:flex-start;align-items:flex-start;gap:12px}
 
 .user-bubble{
   background:var(--surface2);
-  border:1px solid var(--border2);
-  color:var(--text);
-  padding:11px 16px;
-  border-radius:18px 18px 4px 18px;
+  border:1px solid var(--border);
+  padding:10px 16px;border-radius:18px 18px 4px 18px;
   font-size:14.5px;line-height:1.65;
-  max-width:75%;word-break:break-word;
+  max-width:72%;word-break:break-word;color:var(--text);
 }
 
-.ai-row{
-  display:flex;gap:12px;align-items:flex-start;
-  width:100%;
+.ai-avatar-small{
+  width:26px;height:26px;flex-shrink:0;margin-top:2px;
 }
-.ai-avatar{
-  width:28px;height:28px;
-  background:var(--accent);border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:700;color:#000;
-  flex-shrink:0;margin-top:2px;
-}
-.ai-content{
+.ai-avatar-small svg{width:26px;height:26px;fill:var(--text)}
+
+.ai-body{
   flex:1;font-size:14.5px;line-height:1.75;
   color:var(--text);word-break:break-word;
 }
 
-/* ── THINKING ── */
-.thinking-row{
-  display:flex;align-items:center;gap:10px;
-  padding:8px 24px;max-width:800px;margin:0 auto;width:100%;
-  color:var(--text2);font-size:13px;
+/* typing dots */
+.typing-indicator{display:flex;align-items:center;gap:4px;padding:8px 0}
+.typing-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--text3);
+  animation:dot-pulse 1.4s ease-in-out infinite;
 }
-.thinking-dots span{
-  display:inline-block;width:5px;height:5px;
-  background:var(--text3);border-radius:50%;
-  animation:dot-pulse 1.4s ease-in-out infinite;margin:0 1px;
-}
-.thinking-dots span:nth-child(2){animation-delay:.2s}
-.thinking-dots span:nth-child(3){animation-delay:.4s}
+.typing-dot:nth-child(2){animation-delay:.2s}
+.typing-dot:nth-child(3){animation-delay:.4s}
 @keyframes dot-pulse{
   0%,80%,100%{transform:scale(.8);opacity:.4}
   40%{transform:scale(1.2);opacity:1}
 }
 
-/* ── MSG ACTIONS ── */
-.msg-actions{
-  display:flex;gap:4px;margin-top:8px;
-  opacity:0;transition:opacity .15s;
-}
-.ai-content:hover .msg-actions,
-.ai-row:hover .msg-actions{opacity:1}
+/* msg actions */
+.msg-actions{display:flex;gap:4px;margin-top:8px;opacity:0;transition:opacity .15s}
+.msg-row:hover .msg-actions{opacity:1}
 .msg-action-btn{
-  display:flex;align-items:center;gap:5px;
-  background:none;border:none;
-  color:var(--text3);font-size:12px;
-  padding:4px 8px;border-radius:var(--r-sm);
-  transition:var(--transition);
+  padding:4px 8px;border-radius:6px;
+  font-size:12px;color:var(--text3);
+  transition:all .15s;
 }
-.msg-action-btn:hover{background:var(--surface2);color:var(--text2)}
+.msg-action-btn:hover{background:var(--surface);color:var(--text2)}
 
-/* ── MARKDOWN ── */
-.ai-content h1,.ai-content h2,.ai-content h3{
-  font-weight:600;margin:18px 0 8px;line-height:1.3;color:var(--text);
-}
-.ai-content h1{font-size:21px}
-.ai-content h2{font-size:18px}
-.ai-content h3{font-size:16px}
-.ai-content p{margin:0 0 12px}
-.ai-content p:last-child{margin-bottom:0}
-.ai-content ul,.ai-content ol{padding-left:22px;margin:8px 0 12px}
-.ai-content li{margin:5px 0}
-.ai-content strong{font-weight:600;color:var(--text)}
-.ai-content em{font-style:italic;color:var(--text2)}
-.ai-content a{color:var(--blue)}
-.ai-content a:hover{text-decoration:underline}
-.ai-content hr{border:none;border-top:1px solid var(--border2);margin:16px 0}
-.ai-content blockquote{
-  border-left:3px solid var(--accent);
-  padding:6px 14px;margin:12px 0;
-  color:var(--text2);background:var(--surface);
-  border-radius:0 var(--r-sm) var(--r-sm) 0;
-}
-.ai-content table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0;border-radius:var(--r);overflow:hidden}
-.ai-content th{background:var(--surface2);padding:9px 14px;text-align:left;font-weight:600;border-bottom:1px solid var(--border2)}
-.ai-content td{padding:8px 14px;border-bottom:1px solid var(--border);color:var(--text2)}
-.ai-content tr:last-child td{border-bottom:none}
-.ai-content tr:hover td{background:var(--surface)}
+/* markdown */
+.ai-body h1{font-size:21px;font-weight:700;margin:18px 0 8px}
+.ai-body h2{font-size:18px;font-weight:700;margin:16px 0 8px}
+.ai-body h3{font-size:16px;font-weight:600;margin:14px 0 6px}
+.ai-body p{margin:0 0 10px}
+.ai-body p:last-child{margin-bottom:0}
+.ai-body ul,.ai-body ol{padding-left:20px;margin:6px 0 10px}
+.ai-body li{margin:4px 0}
+.ai-body strong{font-weight:600}
+.ai-body em{font-style:italic;color:var(--text2)}
+.ai-body a{color:var(--blue)}
+.ai-body blockquote{border-left:3px solid var(--border);padding:6px 14px;margin:10px 0;color:var(--text2)}
+.ai-body table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}
+.ai-body th{padding:8px 14px;text-align:left;font-weight:600;border-bottom:1px solid var(--border)}
+.ai-body td{padding:7px 14px;border-bottom:1px solid var(--border);color:var(--text2)}
+.ai-body code{background:var(--surface2);color:#e2b96f;font-family:"JetBrains Mono",monospace;font-size:13px;padding:2px 5px;border-radius:4px}
+.ai-body pre{background:#111;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:10px 0}
+.ai-body pre code{background:none;color:#d4d4d4;font-size:13px;padding:14px;display:block;overflow-x:auto}
 
-/* code inline */
-.ai-content code{
-  background:var(--surface2);
-  border:1px solid var(--border2);
-  color:#e2b96f;
-  font-family:'JetBrains Mono',monospace;
-  font-size:13px;padding:2px 6px;border-radius:4px;
-}
-/* code block */
-.code-block-wrap{
-  background:var(--bg3);
-  border:1px solid var(--border2);
-  border-radius:var(--r-lg);
-  overflow:hidden;margin:12px 0;
-}
-.code-block-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:8px 14px;background:var(--bg4);
-  border-bottom:1px solid var(--border);
-}
-.code-lang{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3)}
-.copy-btn{
-  display:flex;align-items:center;gap:5px;
-  background:none;border:none;color:var(--text2);
-  font-size:12px;padding:3px 8px;border-radius:var(--r-sm);
-  cursor:pointer;transition:var(--transition);
-}
-.copy-btn:hover{background:var(--surface3);color:var(--text)}
-.copy-btn.copied{color:var(--green)}
-.code-block-wrap pre{
-  margin:0;padding:16px;overflow-x:auto;
-  font-size:13px;font-family:'JetBrains Mono',monospace;
-  line-height:1.6;color:#d4d4d4;
-}
-
-/* ════════════════════════════════
-   INPUT AREA — exact Grok
-════════════════════════════════ */
-.input-section{
+/* ── bottom input bar (chat mode) ── */
+.chat-input-bar{
   flex-shrink:0;
-  padding:12px 20px 20px;
+  padding:10px 20px 18px;
   background:var(--bg);
 }
-.input-container{
+.chat-input-pill{
   max-width:760px;margin:0 auto;
-  background:var(--bg3);
-  border:1px solid var(--border2);
+  background:var(--surface);
+  border:1px solid var(--border);
   border-radius:22px;
   overflow:hidden;
-  transition:border-color .2s,box-shadow .2s;
+  transition:border-color .2s;
 }
-.input-container:focus-within{
-  border-color:rgba(255,255,255,0.18);
-  box-shadow:0 0 0 3px rgba(255,255,255,0.04);
-}
-.input-top{
+.chat-input-pill:focus-within{border-color:rgba(255,255,255,0.18)}
+.chat-input-pill-top{
   display:flex;align-items:flex-end;
-  padding:12px 14px 10px;gap:10px;
+  padding:12px 14px 8px;gap:10px;
 }
-#messageInput{
+#chatInput{
   flex:1;background:none;border:none;outline:none;
-  color:var(--text);font-size:15px;
-  line-height:1.6;resize:none;
-  min-height:26px;max-height:200px;
+  color:var(--text);font-size:15px;resize:none;
+  line-height:1.6;min-height:26px;max-height:180px;
   overflow-y:auto;padding:0;
   scrollbar-width:thin;
 }
-#messageInput::placeholder{color:var(--text3)}
-.input-toolbar{
+#chatInput::placeholder{color:var(--text3)}
+.chat-input-pill-bottom{
   display:flex;align-items:center;
-  padding:6px 12px 10px;gap:2px;
+  padding:4px 12px 10px;gap:4px;
   border-top:1px solid var(--border);
 }
-.tool-btn{
+.tool-chip{
   display:flex;align-items:center;gap:5px;
-  background:none;border:none;
-  color:var(--text2);font-size:12px;
+  padding:5px 11px;border-radius:999px;
+  font-size:12px;color:var(--text2);
+  transition:all .15s;
+}
+.tool-chip:hover{background:var(--surface2);color:var(--text)}
+.tool-chip.active{background:rgba(255,255,255,0.1);color:var(--text)}
+.tool-chip svg{width:13px;height:13px}
+.pill-spacer{flex:1}
+
+/* model dropdown */
+.model-selector{
+  display:flex;align-items:center;gap:6px;
   padding:5px 10px;border-radius:999px;
-  cursor:pointer;transition:var(--transition);white-space:nowrap;
+  font-size:13px;font-weight:500;color:var(--text2);
+  position:relative;transition:background .15s;
 }
-.tool-btn:hover{background:var(--surface2);color:var(--text)}
-.tool-btn.active{background:var(--accent-dim);color:var(--accent)}
-.tool-btn svg{flex-shrink:0}
-.spacer{flex:1}
-.send-btn{
-  width:34px;height:34px;
-  background:var(--text);color:var(--bg);
-  border:none;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;flex-shrink:0;
-  transition:var(--transition);
+.model-selector:hover{background:var(--surface2)}
+.model-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pg 2s infinite}
+@keyframes pg{0%,100%{opacity:1}50%{opacity:.3}}
+
+.model-dropdown{
+  position:absolute;bottom:calc(100% + 8px);right:0;
+  background:#111;border:1px solid var(--border);
+  border-radius:12px;padding:6px;min-width:220px;
+  box-shadow:0 16px 40px rgba(0,0,0,.7);
+  z-index:100;display:none;
+  animation:fdUp .15s ease;
 }
-.send-btn:hover:not(:disabled){background:#cccccc;transform:scale(1.05)}
-.send-btn:disabled{background:var(--surface3);color:var(--text3);cursor:not-allowed}
-.stop-btn{
-  width:34px;height:34px;
-  background:none;border:1.5px solid var(--border2);
-  border-radius:50%;color:var(--text);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:var(--transition);
+.model-dropdown.open{display:block}
+@keyframes fdUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.model-option{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 12px;border-radius:8px;cursor:pointer;transition:background .13s;
 }
-.stop-btn:hover{background:var(--surface2)}
+.model-option:hover,.model-option.selected{background:var(--surface2)}
+.model-option-name{font-size:13px;font-weight:500}
+.model-option-tag{font-size:11px;color:var(--text3);background:var(--surface2);padding:2px 7px;border-radius:999px}
+
+/* disclaimer */
 .input-disclaimer{
   text-align:center;font-size:11.5px;
   color:var(--text3);margin-top:10px;
   max-width:760px;margin-left:auto;margin-right:auto;
 }
 
-/* ════════════════════════════════
-   MODEL DROPDOWN
-════════════════════════════════ */
-.model-dropdown{
-  position:absolute;top:calc(100% + 8px);left:0;
-  background:var(--bg3);border:1px solid var(--border2);
-  border-radius:var(--r-lg);padding:6px;
-  min-width:240px;
-  box-shadow:0 16px 40px rgba(0,0,0,.6);
-  z-index:100;
-  display:none;
-  animation:fadeDown .15s ease;
-}
-.model-dropdown.open{display:block}
-@keyframes fadeDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
-
-.model-option{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:9px 12px;border-radius:var(--r);
-  cursor:pointer;transition:var(--transition);
-}
-.model-option:hover{background:var(--surface2)}
-.model-option.selected{background:var(--surface2)}
-.model-option-name{font-size:13.5px;font-weight:500;color:var(--text)}
-.model-option-tag{
-  font-size:11px;font-weight:600;
-  color:var(--text3);background:var(--surface3);
-  padding:2px 8px;border-radius:999px;
-}
-
-/* ════════════════════════════════
-   ACTIVITY PANEL
-════════════════════════════════ */
-.activity-panel{
-  width:var(--activity-w);
-  background:var(--bg2);
-  border-left:1px solid var(--border);
-  display:flex;flex-direction:column;
-  flex-shrink:0;overflow:hidden;
-  transition:var(--transition);
-}
-.activity-panel.hidden{width:0;border-left:none}
-.activity-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 16px;border-bottom:1px solid var(--border);
-}
-.activity-title{font-size:13px;font-weight:600;color:var(--text)}
-.activity-content{flex:1;overflow-y:auto;padding:12px}
-.activity-item{
-  display:flex;align-items:flex-start;gap:10px;
-  padding:8px;border-radius:var(--r);
-  font-size:12.5px;color:var(--text2);
-  transition:var(--transition);margin-bottom:2px;
-}
-.activity-item:hover{background:var(--surface)}
-.activity-icon{
-  width:22px;height:22px;border-radius:6px;
-  background:var(--surface2);
-  display:flex;align-items:center;justify-content:center;
-  font-size:11px;flex-shrink:0;
-}
-.activity-icon.done{background:rgba(74,222,128,.15);color:var(--green)}
-.activity-icon.run{background:rgba(255,107,53,.15);color:var(--accent)}
-.activity-icon.think{background:rgba(96,165,250,.15);color:var(--blue)}
-.activity-text{flex:1;line-height:1.5}
-.activity-sub{font-size:11px;color:var(--text3);margin-top:2px}
-
-/* ════════════════════════════════
-   TOAST
-════════════════════════════════ */
-.toast-container{
-  position:fixed;bottom:90px;left:50%;
-  transform:translateX(-50%);
-  display:flex;flex-direction:column;gap:8px;
-  z-index:500;pointer-events:none;
-}
-.toast{
-  background:var(--bg4);border:1px solid var(--border2);
-  color:var(--text);font-size:13px;
-  padding:10px 18px;border-radius:999px;
-  box-shadow:0 8px 24px rgba(0,0,0,.4);
-  animation:toastIn .2s ease;white-space:nowrap;
-}
-.toast.success{color:var(--green);border-color:rgba(74,222,128,.25)}
-.toast.error{color:var(--red);border-color:rgba(248,113,113,.25)}
-@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-
-/* ── images ── */
-.ai-image{max-width:400px;width:100%;border-radius:var(--r-lg);border:1px solid var(--border2);margin:8px 0;display:block}
-
-/* ════════════════════════════════
-   MOBILE
-════════════════════════════════ */
+/* ── Mobile ── */
 @media(max-width:768px){
   .sidebar{position:fixed;left:-100%;top:0;bottom:0;z-index:50;transition:left .22s ease}
   .sidebar.open{left:0}
-  .activity-panel{display:none}
-  .main-header{padding:0 14px}
-  .message-row{padding:6px 14px}
-  .input-section{padding:10px 12px 16px}
+  .main-topbar{padding:10px 14px}
+  .msg-row{padding:6px 14px}
+  .home-title{font-size:28px}
+  .home-logo-icon svg{width:36px;height:36px}
   .user-bubble{max-width:88%}
-  .welcome-title{font-size:22px}
-  .suggestion-grid{flex-direction:column}
 }
 </style>
 </head>
 <body>
+<div class="layout">
 
-<div class="app-layout">
-
-  <!-- ══════════════════════ SIDEBAR ══════════════════════ -->
+  <!-- ══ SIDEBAR ══ -->
   <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <div class="sidebar-logo">
-        <div class="logo-icon">I</div>
-        IlyassAI
+
+    <!-- Logo row -->
+    <div class="sb-logo-row">
+      <div class="sb-logo">
+        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2.5"/>
+          <line x1="6" y1="26" x2="26" y2="6" stroke="currentColor" stroke-width="2.5"/>
+        </svg>
       </div>
-      <button class="new-chat-btn" onclick="newChat()" title="New Chat">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <button class="sb-collapse" title="Collapse">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/><polyline points="9 18 3 12 9 6"/></svg>
       </button>
     </div>
-    <div class="sidebar-search">
-      <input type="text" placeholder="Search conversations…" oninput="filterChats(this.value)"/>
+
+    <!-- Nav items -->
+    <div class="sb-nav-item" onclick="void(0)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Search
     </div>
-    <div class="sidebar-content" id="chatList">
-      <div class="sidebar-section-label">Today</div>
-      <div class="chat-item active" onclick="loadChat(0)">
-        <span class="chat-item-icon">💬</span>
-        <span class="chat-item-text">New Conversation</span>
-      </div>
-      <div class="sidebar-section-label">Yesterday</div>
-      <div class="chat-item" onclick="loadChat(1)">
-        <span class="chat-item-icon">💻</span>
-        <span class="chat-item-text">Build a REST API in Node.js</span>
-      </div>
-      <div class="chat-item" onclick="loadChat(2)">
-        <span class="chat-item-icon">🔍</span>
-        <span class="chat-item-text">Research AI market trends 2025</span>
-      </div>
-      <div class="chat-item" onclick="loadChat(3)">
-        <span class="chat-item-icon">🚀</span>
-        <span class="chat-item-text">Deploy React app to Vercel</span>
-      </div>
-      <div class="sidebar-section-label">Previous 7 Days</div>
-      <div class="chat-item" onclick="loadChat(4)">
-        <span class="chat-item-icon">🖼️</span>
-        <span class="chat-item-text">Generate logo concepts for startup</span>
-      </div>
-      <div class="chat-item" onclick="loadChat(5)">
-        <span class="chat-item-icon">📊</span>
-        <span class="chat-item-text">Analyze Python script performance</span>
-      </div>
+
+    <div class="sb-nav-item active" onclick="newChat()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      New Chat
     </div>
-    <div class="sidebar-footer">
-      <div class="user-info">
-        <div class="user-avatar">U</div>
-        <div style="flex:1;min-width:0">
-          <div class="user-name" style="font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">User</div>
-          <div style="font-size:11px;color:var(--text3)">Free Plan</div>
-        </div>
-        <span class="user-plan">Free</span>
-      </div>
+
+    <div class="sb-nav-item" onclick="startVoice()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Voice
     </div>
+
+    <div class="sb-nav-item" onclick="toggleTool('image')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      Imagine
+    </div>
+
+    <div class="sb-divider"></div>
+
+    <!-- Projects -->
+    <div class="sb-section">
+      Projects
+      <span class="sb-section-arrow">&#x2304;</span>
+    </div>
+    <div class="sb-sub-item" onclick="newChat()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New Project
+    </div>
+
+    <!-- History -->
+    <div class="sb-section" id="historyToggle">
+      History
+      <span class="sb-section-arrow">&#x276F;</span>
+    </div>
+    <div id="chatList"></div>
+
+    <div class="sb-spacer"></div>
+
+    <!-- User -->
+    <div class="sb-user">
+      <div class="sb-avatar" title="Profile">B</div>
+    </div>
+
   </aside>
 
-  <!-- ══════════════════════ MAIN AREA ══════════════════════ -->
-  <div class="main-area">
+  <!-- ══ MAIN ══ -->
+  <div class="main">
 
-    <!-- HEADER -->
-    <div class="main-header">
-      <div class="header-left" style="position:relative">
-        <div class="model-selector" id="modelSelector" onclick="toggleModelDropdown()">
-          <span class="model-dot"></span>
-          <span id="selectedModelName">Llama 3.3 70B</span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left:2px;opacity:0.6"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <!-- Model Dropdown -->
-        <div class="model-dropdown" id="modelDropdown">
-          <div class="model-option selected" onclick="selectModel('Llama 3.3 70B','llama-3.3-70b')">
-            <span class="model-option-name">Llama 3.3 70B</span>
-            <span class="model-option-tag">Free · Fast</span>
-          </div>
-          <div class="model-option" onclick="selectModel('DeepSeek R1','deepseek-r1')">
-            <span class="model-option-name">DeepSeek R1</span>
-            <span class="model-option-tag">Free</span>
-          </div>
-          <div class="model-option" onclick="selectModel('Gemma 2 27B','gemma-2-27b')">
-            <span class="model-option-name">Gemma 2 27B</span>
-            <span class="model-option-tag">Free · Fast</span>
-          </div>
-          <div class="model-option" onclick="selectModel('Qwen 2.5 72B','qwen-2.5-72b')">
-            <span class="model-option-name">Qwen 2.5 72B</span>
-            <span class="model-option-tag">Free</span>
-          </div>
-          <div class="model-option" onclick="selectModel('Mistral 7B','mistral-7b')">
-            <span class="model-option-name">Mistral 7B</span>
-            <span class="model-option-tag">Free</span>
-          </div>
-          <div class="model-option" onclick="selectModel('Auto (Best)','auto')">
-            <span class="model-option-name">🔄 Auto (Best)</span>
-            <span class="model-option-tag">Smart</span>
-          </div>
-        </div>
-      </div>
-      <div class="header-right">
-        <button class="toggle-activity-btn" onclick="toggleActivityPanel()">⚡ Live Activity</button>
-        <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
-        <button class="icon-btn" onclick="window.location.href='/'" title="Home">🏠</button>
-      </div>
+    <!-- Top-right buttons -->
+    <div class="main-topbar">
+      <button class="topbar-btn" onclick="toggleTool('image')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Imagine
+      </button>
+      <button class="topbar-btn" onclick="toggleTheme()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/><path d="M12 2a10 10 0 0 1 0 20V2z"/></svg>
+        Private
+      </button>
     </div>
 
-    <!-- CHAT AREA -->
+    <!-- Chat area -->
     <div class="chat-area" id="chatArea">
-      <div class="welcome-state" id="welcomeState">
-        <div class="welcome-icon">🤖</div>
-        <h2 class="welcome-title">Hello, I'm IlyassAI</h2>
-        <p class="welcome-sub">Your autonomous AI agent. I can search the web, write & deploy code, generate images, manage GitHub repos, and much more — all in one conversation.</p>
-        <div class="suggestion-grid">
-          <div class="suggestion-card" onclick="useSuggestion('Search the web for the latest AI models released in 2025 and summarize the findings')">
-            <div class="suggestion-icon">🔍</div>
-            <div class="suggestion-title">Search the web</div>
-            <div class="suggestion-desc">Find latest AI news & research</div>
-          </div>
-          <div class="suggestion-card" onclick="useSuggestion('Write a REST API in Node.js with Express, including authentication, CRUD endpoints, and deploy it to Vercel')">
-            <div class="suggestion-icon">💻</div>
-            <div class="suggestion-title">Build & deploy code</div>
-            <div class="suggestion-desc">Generate and ship to Vercel</div>
-          </div>
-          <div class="suggestion-card" onclick="useSuggestion('Generate a professional logo concept for an AI startup called NeuralFlow, modern minimalist style')">
-            <div class="suggestion-icon">🖼️</div>
-            <div class="suggestion-title">Generate images</div>
-            <div class="suggestion-desc">Create with AI art models</div>
-          </div>
-          <div class="suggestion-card" onclick="useSuggestion('Analyze my GitHub repository and suggest improvements to the code structure, performance, and security')">
-            <div class="suggestion-icon">📊</div>
-            <div class="suggestion-title">Analyze & optimize</div>
-            <div class="suggestion-desc">Review code and repositories</div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- INPUT AREA -->
-    <div class="input-area">
-      <div class="input-wrapper">
-        <div class="input-toolbar">
-          <button class="tool-btn" id="searchBtn" onclick="toggleTool('search')" title="Web Search">
-            <span>🔍</span> Search
-          </button>
-          <button class="tool-btn" id="codeBtn" onclick="toggleTool('code')" title="Code Mode">
-            <span>💻</span> Code
-          </button>
-          <button class="tool-btn" id="imageBtn" onclick="toggleTool('image')" title="Image Generation">
-            <span>🖼️</span> Image
-          </button>
-          <button class="tool-btn" id="deployBtn" onclick="toggleTool('deploy')" title="Deploy to Vercel">
-            <span>🚀</span> Deploy
-          </button>
-          <button class="tool-btn" id="memoryBtn" onclick="toggleTool('memory')" title="Memory">
-            <span>💾</span> Memory
-          </button>
-          <button class="tool-btn" onclick="startVoice()" title="Voice Input">
-            <span>🎤</span> Voice
-          </button>
+      <!-- HOME VIEW -->
+      <div class="home-view" id="welcomeState">
+        <div class="home-logo-row">
+          <div class="home-logo-icon">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2.2"/>
+              <line x1="6" y1="26" x2="26" y2="6" stroke="currentColor" stroke-width="2.2"/>
+            </svg>
+          </div>
+          <div class="home-title">IlyassAI</div>
         </div>
-        <div class="input-row">
-          <textarea
-            class="chat-input"
-            id="chatInput"
-            placeholder="Ask IlyassAI anything — search, code, deploy, analyze…"
-            rows="1"
-            onkeydown="handleKeydown(event)"
-            oninput="autoResize(this); updateCharCount()"
-          ></textarea>
-          <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
-            <div class="send-icon">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+
+        <!-- Pill input (home) -->
+        <div class="home-input-wrap" id="homeInputWrap">
+          <span class="home-input-plus">+</span>
+          <textarea id="homeInput" rows="1" placeholder="What do you want to know?"
+            oninput="syncHomeInput(this)" onkeydown="handleHomeKeydown(event)"></textarea>
+          <div class="home-input-right">
+            <!-- Fast dropdown placeholder -->
+            <button class="fast-btn" id="homeFastBtn" onclick="toggleModelDropdown()">
+              <span id="selectedModelName">Fast</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <!-- Model dropdown -->
+            <div class="model-dropdown" id="modelDropdown">
+              <div class="model-option selected" onclick="selectModel('Llama 3.3 70B','llama-3.3-70b')"><span class="model-option-name">Llama 3.3 70B</span><span class="model-option-tag">Fast</span></div>
+              <div class="model-option" onclick="selectModel('DeepSeek R1','deepseek-r1')"><span class="model-option-name">DeepSeek R1</span><span class="model-option-tag">Free</span></div>
+              <div class="model-option" onclick="selectModel('Gemma 2 27B','gemma-2-27b')"><span class="model-option-name">Gemma 2 27B</span><span class="model-option-tag">Fast</span></div>
+              <div class="model-option" onclick="selectModel('Qwen 2.5 72B','qwen-2.5-72b')"><span class="model-option-name">Qwen 2.5 72B</span><span class="model-option-tag">Free</span></div>
+              <div class="model-option" onclick="selectModel('Mistral 7B','mistral-7b')"><span class="model-option-name">Mistral 7B</span><span class="model-option-tag">Free</span></div>
             </div>
+            <!-- Mic -->
+            <button class="mic-btn" onclick="startVoice()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+            </button>
+            <!-- Send -->
+            <button class="send-circle-btn" id="homeSendBtn" disabled onclick="sendFromHome()">
+              <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MESSAGES (hidden initially) -->
+      <div class="messages-view" id="messagesView" style="display:none"></div>
+
+    </div><!-- /chat-area -->
+
+    <!-- Bottom input bar (chat mode, hidden at start) -->
+    <div class="chat-input-bar" id="chatInputBar" style="display:none">
+      <div class="chat-input-pill" style="position:relative">
+        <div class="chat-input-pill-top">
+          <textarea id="chatInput" rows="1" placeholder="What do you want to know?"
+            oninput="autoResize(this);toggleSendBtn()" onkeydown="handleKeydown(event)"></textarea>
+          <button class="send-circle-btn" id="sendBtn" disabled onclick="sendMessage()">
+            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
           </button>
         </div>
-        <div class="input-footer">
-          <span class="input-hint">⏎ Send · ⇧⏎ New line · IlyassAI may make mistakes</span>
-          <span class="char-count" id="charCount">0</span>
+        <div class="chat-input-pill-bottom">
+          <!-- attach -->
+          <button class="tool-chip" title="Attach">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <!-- search -->
+          <button class="tool-chip" id="searchBtn" onclick="toggleTool('search')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Search
+          </button>
+          <!-- image -->
+          <button class="tool-chip" id="imageBtn" onclick="toggleTool('image')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Imagine
+          </button>
+          <div class="pill-spacer"></div>
+          <!-- model -->
+          <div class="model-selector" id="modelSelector" onclick="toggleModelDropdown()">
+            <span class="model-dot"></span>
+            <span id="selectedModelName2">Fast</span>
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <!-- mic -->
+          <button class="mic-btn" onclick="startVoice()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+          </button>
         </div>
       </div>
+      <div class="input-disclaimer">IlyassAI can make mistakes. Verify important information.</div>
     </div>
 
-  </div>
-
-  <!-- ══════════════════════ LIVE ACTIVITY PANEL ══════════════════════ -->
-  <aside class="activity-panel" id="activityPanel">
-    <div class="activity-header">
-      <div class="activity-title">
-        <span class="activity-live-dot"></span>
-        Live Activity
-      </div>
-      <button class="activity-close" onclick="toggleActivityPanel()">✕</button>
-    </div>
-    <div class="activity-tabs">
-      <div class="activity-tab active" id="tab-steps" onclick="switchTab('steps')">Steps</div>
-      <div class="activity-tab" id="tab-apis" onclick="switchTab('apis')">APIs</div>
-      <div class="activity-tab" id="tab-memory" onclick="switchTab('memory')">Memory</div>
-    </div>
-    <div class="activity-content" id="activityContent">
-      <!-- STEPS TAB (default) -->
-      <div id="tabContent-steps">
-        <div class="activity-section-label">Ready</div>
-        <div class="activity-item">
-          <div class="activity-item-header">
-            <span class="activity-icon">✅</span>
-            <span class="activity-label">System initialized</span>
-            <span class="activity-time">now</span>
-          </div>
-          <div class="activity-detail">All 15 AI models loaded. Web search, image generation, and GitHub integration ready.</div>
-          <span class="activity-status status-done">● Online</span>
-        </div>
-        <div class="activity-item">
-          <div class="activity-item-header">
-            <span class="activity-icon">🔄</span>
-            <span class="activity-label">API Discovery</span>
-            <span class="activity-time">1m ago</span>
-          </div>
-          <div class="activity-detail">Scanned 24 free API sources. 2 new models available: DeepSeek V3, Qwen 2.5-Max.</div>
-          <span class="activity-status status-done">● Completed</span>
-        </div>
-        <div class="activity-item">
-          <div class="activity-item-header">
-            <span class="activity-icon">💾</span>
-            <span class="activity-label">Memory loaded</span>
-            <span class="activity-time">1m ago</span>
-          </div>
-          <div class="activity-detail">0 previous conversations indexed. Ready for persistent context.</div>
-          <span class="activity-status status-done">● Ready</span>
-        </div>
-      </div>
-
-      <!-- APIs TAB (hidden) -->
-      <div id="tabContent-apis" style="display:none">
-        <div class="activity-section-label">LLM Models</div>
-        <div class="api-status-item"><span class="api-status-name">Groq (Llama/Gemma)</span><span class="api-status-badge badge-online">Online</span></div>
-        <div class="api-status-item"><span class="api-status-name">HuggingFace Inference</span><span class="api-status-badge badge-online">Online</span></div>
-        <div class="api-status-item"><span class="api-status-name">Google Gemini</span><span class="api-status-badge badge-online">Online</span></div>
-        <div class="api-status-item"><span class="api-status-name">DeepSeek API</span><span class="api-status-badge badge-online">Online</span></div>
-        <div class="api-status-item"><span class="api-status-name">OpenRouter</span><span class="api-status-badge badge-online">Online</span></div>
-        <div class="activity-section-label">Tools</div>
-        <div class="api-status-item"><span class="api-status-name">Web Search (Brave)</span><span class="api-status-badge badge-online">Online</span></div>
-        <div class="api-status-item"><span class="api-status-name">Image Gen (Pollinations)</span><span class="api-status-badge badge-online">Online</span></div>
-        <div class="api-status-item"><span class="api-status-name">Speech (Whisper)</span><span class="api-status-badge badge-online">Online</span></div>
-        <div class="api-status-item"><span class="api-status-name">GitHub API</span><span class="api-status-badge badge-online">Online</span></div>
-        <div class="api-status-item"><span class="api-status-name">Vercel API</span><span class="api-status-badge badge-online">Online</span></div>
-        <div class="api-status-item"><span class="api-status-name">Content Moderation</span><span class="api-status-badge badge-online">Online</span></div>
-        <div class="api-status-item"><span class="api-status-name">PDF Parser</span><span class="api-status-badge badge-limited">Limited</span></div>
-      </div>
-
-      <!-- MEMORY TAB (hidden) -->
-      <div id="tabContent-memory" style="display:none">
-        <div class="activity-section-label">Context</div>
-        <div class="activity-item">
-          <div class="activity-item-header">
-            <span class="activity-icon">💾</span>
-            <span class="activity-label">Memory System</span>
-          </div>
-          <div class="activity-detail">No memories stored yet. IlyassAI will remember your preferences, projects, and context across conversations.</div>
-        </div>
-        <div class="activity-section-label">How Memory Works</div>
-        <div class="activity-item">
-          <div class="activity-item-header">
-            <span class="activity-icon">🧠</span>
-            <span class="activity-label">Automatic capture</span>
-          </div>
-          <div class="activity-detail">Key facts, preferences, and project details are automatically extracted from your conversations.</div>
-        </div>
-        <div class="activity-item">
-          <div class="activity-item-header">
-            <span class="activity-icon">🔗</span>
-            <span class="activity-label">Context linking</span>
-          </div>
-          <div class="activity-detail">Memories are linked across conversations so IlyassAI always has relevant context available.</div>
-        </div>
-      </div>
-    </div>
-  </aside>
-
-</div>
+  </div><!-- /main -->
+</div><!-- /layout -->
 
 <script>
 // ══ STATE ══
@@ -986,7 +702,7 @@ async function sendMessage() {
   if (!text || isGenerating) return;
 
   // Hide welcome state
-  document.getElementById('welcomeState')?.remove();
+  switchToChatMode();
 
   // Add user message
   addMessage('user', text);
@@ -1088,7 +804,7 @@ async function sendMessage() {
 
 // ══ ADD MESSAGE ══
 function addMessage(role, content) {
-  const chatArea = document.getElementById('chatArea');
+  const chatArea = document.getElementById('messagesView');
   const msg = document.createElement('div');
   msg.className = `msg ${role}`;
   msg.innerHTML = `
@@ -1177,12 +893,13 @@ function updateActivityStep(status) {
 
 // ══ HELPERS ══
 function scrollToBottom() {
-  const chatArea = document.getElementById('chatArea');
+  const chatArea = document.getElementById('messagesView');
   chatArea.scrollTop = chatArea.scrollHeight;
 }
 function newChat() {
   chatHistory = [];
-  const chatArea = document.getElementById('chatArea');
+  const chatArea = switchToHomeMode();
+  const chatArea = document.getElementById('messagesView');
   chatArea.innerHTML = `
     <div class="welcome-state" id="welcomeState">
       <div class="welcome-icon">🤖</div>
@@ -1230,6 +947,65 @@ function copyMsg(btn) {
   setTimeout(() => btn.textContent = '📋 Copy', 1500);
 }
 function regenMsg() { sendMessage(); }
+</script>
+
+<script>
+// ── extra helpers for new layout ──
+
+function switchToChatMode() {
+  document.getElementById('welcomeState').style.display = 'none';
+  document.getElementById('messagesView').style.display = 'flex';
+  document.getElementById('chatInputBar').style.display = 'block';
+}
+function switchToHomeMode() {
+  document.getElementById('welcomeState').style.display = 'flex';
+  document.getElementById('messagesView').style.display = 'none';
+  document.getElementById('chatInputBar').style.display = 'none';
+}
+
+// sync home input
+function syncHomeInput(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 160) + 'px';
+  document.getElementById('homeSendBtn').disabled = el.value.trim() === '';
+}
+function handleHomeKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    if (!document.getElementById('homeSendBtn').disabled) sendFromHome();
+  }
+}
+function sendFromHome() {
+  const homeInput = document.getElementById('homeInput');
+  const chatInput = document.getElementById('chatInput');
+  chatInput.value = homeInput.value;
+  switchToChatMode();
+  sendMessage();
+}
+function toggleSendBtn() {
+  const input = document.getElementById('chatInput');
+  document.getElementById('sendBtn').disabled = input.value.trim() === '';
+  autoResize(input);
+}
+// update both model name spans
+const origSelectModel = window.selectModel;
+window.selectModel = function(name, id) {
+  origSelectModel && origSelectModel(name, id);
+  document.getElementById('selectedModelName').textContent = name === 'Llama 3.3 70B' ? 'Fast' : name;
+  document.getElementById('selectedModelName2').textContent = name === 'Llama 3.3 70B' ? 'Fast' : name;
+  document.getElementById('modelDropdown').classList.remove('open');
+};
+// History toggle
+document.getElementById('historyToggle').addEventListener('click', function() {
+  const list = document.getElementById('chatList');
+  list.style.display = list.style.display === 'none' ? '' : 'none';
+});
+// close dropdown on outside click
+document.addEventListener('click', e => {
+  if (!e.target.closest('#modelSelector') && !e.target.closest('#modelDropdown') && !e.target.closest('#homeFastBtn')) {
+    document.getElementById('modelDropdown').classList.remove('open');
+  }
+});
 </script>
 </body>
 </html>
