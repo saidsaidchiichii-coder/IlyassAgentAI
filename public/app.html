@@ -801,6 +801,294 @@ textarea{font-family:inherit;resize:none;outline:none;border:none}
   .suggestions-grid{grid-template-columns:1fr}
   #input-zone{padding:10px 14px 16px}
 }
+
+/* ═══════════════════════════════════════════════════════
+   HOME VIEW ENHANCEMENTS
+═══════════════════════════════════════════════════════ */
+.home-logo-ring {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.home-logo-glow {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124,58,237,0.25) 0%, transparent 70%);
+  animation: logo-pulse 3s ease-in-out infinite;
+}
+@keyframes logo-pulse {
+  0%,100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+.home-logo-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(59,130,246,0.15));
+  border: 1px solid rgba(124,58,237,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+/* Live Status Bar */
+.live-status-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 50px;
+  padding: 6px 14px;
+  margin: 0 auto 28px;
+  width: fit-content;
+  font-size: 12px;
+  color: var(--text2);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+  animation: blink 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.status-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.status-chip {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 2px 8px;
+  font-size: 11px;
+  color: var(--text2);
+}
+
+/* Suggestions grid - 3 columns */
+.suggestions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  max-width: 680px;
+  margin: 0 auto;
+}
+@media (max-width: 600px) {
+  .suggestions-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   LIVE ACTIVITY PANEL
+═══════════════════════════════════════════════════════ */
+.activity-btn {
+  position: relative;
+}
+.activity-pulse {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #7c3aed;
+  animation: blink 2s ease-in-out infinite;
+}
+.activity-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 12px;
+  width: 320px;
+  max-height: 420px;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-lg);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(124,58,237,0.1);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: panel-in 0.2s cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes panel-in {
+  from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.activity-panel.hidden { display: none; }
+.activity-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 600;
+}
+.activity-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.activity-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+  animation: blink 1.5s ease-in-out infinite;
+}
+.activity-close {
+  background: none;
+  border: none;
+  color: var(--text2);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.activity-close:hover { background: var(--surface2); }
+.activity-log {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.activity-empty {
+  color: var(--text3);
+  font-size: 12px;
+  text-align: center;
+  padding: 20px;
+}
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--surface);
+  border-radius: var(--r-sm);
+  font-size: 12px;
+  animation: item-in 0.2s ease;
+}
+@keyframes item-in {
+  from { opacity: 0; transform: translateX(-6px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.activity-item-icon { flex-shrink: 0; font-size: 13px; }
+.activity-item-text { color: var(--text2); line-height: 1.4; }
+.activity-item-time { color: var(--text3); font-size: 10px; margin-left: auto; flex-shrink: 0; }
+.activity-item.success .activity-item-icon { color: #22c55e; }
+.activity-item.thinking .activity-item-icon { color: #a78bfa; }
+.activity-item.search .activity-item-icon { color: #3b82f6; }
+
+/* ═══════════════════════════════════════════════════════
+   ENHANCED MESSAGE BUBBLES
+═══════════════════════════════════════════════════════ */
+.msg-meta-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.msg-model-badge {
+  font-size: 10px;
+  color: var(--text3);
+  background: var(--surface);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+.msg-latency {
+  font-size: 10px;
+  color: var(--text3);
+}
+
+/* ═══════════════════════════════════════════════════════
+   THINKING INDICATOR (Chain of Thought)
+═══════════════════════════════════════════════════════ */
+.thinking-block {
+  background: rgba(124,58,237,0.06);
+  border: 1px solid rgba(124,58,237,0.15);
+  border-radius: var(--r);
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: var(--text2);
+}
+.thinking-block summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--purple2);
+  font-weight: 500;
+  list-style: none;
+  user-select: none;
+}
+.thinking-block summary::before {
+  content: "💭";
+}
+.thinking-content {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(124,58,237,0.12);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE IMPROVEMENTS
+═══════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .activity-panel { right: 8px; left: 8px; width: auto; }
+  .live-status-bar { font-size: 11px; padding: 5px 10px; }
+  .status-chip { font-size: 10px; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   SMOOTH ENTRANCE ANIMATIONS
+═══════════════════════════════════════════════════════ */
+#home-view { animation: fade-up 0.4s cubic-bezier(0.4,0,0.2,1); }
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.suggestion-card {
+  transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
+}
+.suggestion-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(124,58,237,0.4);
+  box-shadow: 0 8px 24px rgba(124,58,237,0.12);
+}
+
+/* ═══════════════════════════════════════════════════════
+   WELCOME TYPING ANIMATION
+═══════════════════════════════════════════════════════ */
+.home-sub {
+  animation: fade-up 0.5s 0.1s cubic-bezier(0.4,0,0.2,1) both;
+}
+.home-greeting {
+  animation: fade-up 0.4s 0.05s cubic-bezier(0.4,0,0.2,1) both;
+  font-size: 26px;
+  font-weight: 700;
+}
 </style>
 </head>
 <body>
@@ -846,6 +1134,11 @@ textarea{font-family:inherit;resize:none;outline:none;border:none}
       <span class="topbar-title" id="topbar-title">IlyassAI Workspace</span>
     </div>
     <div class="topbar-right">
+      <!-- Live Activity Panel Toggle -->
+      <button class="topbar-btn activity-btn" id="activity-toggle-btn" onclick="UI.toggleActivityPanel()" title="Live Activity Panel">
+        <span class="activity-pulse"></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </button>
       <button class="topbar-btn" onclick="UI.toggleTheme()" title="Toggle theme" id="theme-btn">🌙</button>
       <button class="topbar-btn" onclick="App.shareChat()" title="Share">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
@@ -855,6 +1148,19 @@ textarea{font-family:inherit;resize:none;outline:none;border:none}
         Home
       </a>
     </div>
+    <!-- Live Activity Panel -->
+    <div id="activity-panel" class="activity-panel hidden">
+      <div class="activity-header">
+        <div class="activity-header-left">
+          <div class="activity-live-dot"></div>
+          <span>Live Activity</span>
+        </div>
+        <button onclick="UI.toggleActivityPanel()" class="activity-close">✕</button>
+      </div>
+      <div id="activity-log" class="activity-log">
+        <div class="activity-empty">Activity will appear here during AI processing...</div>
+      </div>
+    </div>
   </div>
 
   <!-- Messages wrap -->
@@ -862,30 +1168,62 @@ textarea{font-family:inherit;resize:none;outline:none;border:none}
 
     <!-- Home view -->
     <div id="home-view">
+      <div class="home-logo-ring">
+        <div class="home-logo-glow"></div>
+        <div class="home-logo-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="url(#grad-icon)" stroke-width="1.5">
+            <defs><linearGradient id="grad-icon" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs>
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+      </div>
       <div class="home-greeting">
         Good <span class="grad" id="greeting-time">morning</span> 👋
       </div>
-      <div class="home-sub">What are we building today?</div>
+      <div class="home-sub">I'm IlyassAI — your enterprise AI assistant. How can I help you today?</div>
+
+      <!-- Live Status Bar -->
+      <div class="live-status-bar">
+        <div class="live-dot"></div>
+        <span>All systems operational</span>
+        <div class="status-chips">
+          <span class="status-chip">⚡ Groq LLM</span>
+          <span class="status-chip">🎨 Image Gen</span>
+          <span class="status-chip">🔍 Web Search</span>
+          <span class="status-chip">🎤 Voice</span>
+        </div>
+      </div>
+
       <div class="suggestions-grid">
-        <div class="suggestion-card" onclick="App.useSuggestion('Write a Python script to scrape and analyze website data')">
+        <div class="suggestion-card" onclick="App.useSuggestion('Write a Python script to scrape and analyze website data with BeautifulSoup and pandas')">
           <span class="sc-icon">🐍</span>
           <div class="sc-title">Web scraping script</div>
           <div class="sc-sub">Python + BeautifulSoup</div>
         </div>
-        <div class="suggestion-card" onclick="App.useSuggestion('Create a beautiful landing page with glassmorphism design')">
+        <div class="suggestion-card" onclick="App.useSuggestion('Create a beautiful landing page with glassmorphism design and smooth animations')">
           <span class="sc-icon">🎨</span>
           <div class="sc-title">Design a landing page</div>
           <div class="sc-sub">HTML + CSS + animations</div>
         </div>
-        <div class="suggestion-card" onclick="App.useSuggestion('Explain how large language models work in simple terms')">
+        <div class="suggestion-card" onclick="App.useSuggestion('Explain how large language models work in simple terms with examples')">
           <span class="sc-icon">🧠</span>
           <div class="sc-title">Explain LLMs</div>
           <div class="sc-sub">Simple, clear explanation</div>
         </div>
-        <div class="suggestion-card" onclick="App.useSuggestion('Write a professional email to follow up after a job interview')">
+        <div class="suggestion-card" onclick="App.useSuggestion('Write a professional follow-up email after a job interview')">
           <span class="sc-icon">✉️</span>
           <div class="sc-title">Professional email</div>
           <div class="sc-sub">Job interview follow-up</div>
+        </div>
+        <div class="suggestion-card" onclick="App.useSuggestion('Build a REST API with Node.js and Express with authentication')">
+          <span class="sc-icon">⚙️</span>
+          <div class="sc-title">Build a REST API</div>
+          <div class="sc-sub">Node.js + Express + JWT</div>
+        </div>
+        <div class="suggestion-card" onclick="App.useSuggestion('Generate a realistic image of a futuristic AI city at night')">
+          <span class="sc-icon">🖼️</span>
+          <div class="sc-title">Generate an image</div>
+          <div class="sc-sub">AI image generation</div>
         </div>
       </div>
     </div>
@@ -1866,6 +2204,144 @@ document.addEventListener('DOMContentLoaded', () => {
   const ta = document.getElementById('msg-textarea');
   ta.addEventListener('input', function() { App.onType(this); });
 });
+</script>
+<script>
+
+// ═══════════════════════════════════════════════════════
+// LIVE ACTIVITY PANEL - Real-time AI transparency
+// ═══════════════════════════════════════════════════════
+UI.toggleActivityPanel = function() {
+  const panel = document.getElementById('activity-panel');
+  if (panel) panel.classList.toggle('hidden');
+};
+
+UI.logActivity = function(icon, text, type = 'info') {
+  const log = document.getElementById('activity-log');
+  if (!log) return;
+  // Remove empty state
+  const empty = log.querySelector('.activity-empty');
+  if (empty) empty.remove();
+
+  const now = new Date();
+  const time = now.toLocaleTimeString('en-US', {hour12:false, hour:'2-digit', minute:'2-digit', second:'2-digit'});
+  const item = document.createElement('div');
+  item.className = `activity-item ${type}`;
+  item.innerHTML = `
+    <span class="activity-item-icon">${icon}</span>
+    <span class="activity-item-text">${text}</span>
+    <span class="activity-item-time">${time}</span>
+  `;
+  log.appendChild(item);
+  log.scrollTop = log.scrollHeight;
+  // Keep only last 50 items
+  while (log.children.length > 50) log.removeChild(log.firstChild);
+};
+
+UI.clearActivity = function() {
+  const log = document.getElementById('activity-log');
+  if (log) log.innerHTML = '<div class="activity-empty">Activity will appear here during AI processing...</div>';
+};
+
+// ═══════════════════════════════════════════════════════
+// KEYBOARD SHORTCUTS
+// ═══════════════════════════════════════════════════════
+document.addEventListener('keydown', function(e) {
+  // Ctrl/Cmd + K = focus textarea
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    const ta = document.getElementById('msg-textarea');
+    if (ta) ta.focus();
+  }
+  // Ctrl/Cmd + Shift + A = toggle activity panel
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'A') {
+    e.preventDefault();
+    UI.toggleActivityPanel();
+  }
+  // Escape = close activity panel
+  if (e.key === 'Escape') {
+    const panel = document.getElementById('activity-panel');
+    if (panel && !panel.classList.contains('hidden')) {
+      panel.classList.add('hidden');
+    }
+  }
+});
+
+// ═══════════════════════════════════════════════════════
+// ENHANCED GREETING - time-aware
+// ═══════════════════════════════════════════════════════
+(function() {
+  const h = new Date().getHours();
+  const el = document.getElementById('greeting-time');
+  if (el) {
+    if (h < 12) el.textContent = 'morning';
+    else if (h < 17) el.textContent = 'afternoon';
+    else if (h < 21) el.textContent = 'evening';
+    else el.textContent = 'night';
+  }
+})();
+
+// ═══════════════════════════════════════════════════════
+// AUTO-CLOSE ACTIVITY PANEL ON OUTSIDE CLICK
+// ═══════════════════════════════════════════════════════
+document.addEventListener('click', function(e) {
+  const panel = document.getElementById('activity-panel');
+  const btn = document.getElementById('activity-toggle-btn');
+  if (panel && !panel.classList.contains('hidden')) {
+    if (!panel.contains(e.target) && !btn.contains(e.target)) {
+      panel.classList.add('hidden');
+    }
+  }
+});
+
+// ═══════════════════════════════════════════════════════
+// PATCH: Log AI calls into activity panel
+// ═══════════════════════════════════════════════════════
+(function patchAIForActivity() {
+  const origSend = App && App.send ? App.send : null;
+  // We'll intercept fetch calls via monkey-patching
+  const origFetch = window.fetch;
+  window.fetch = async function(url, options) {
+    if (typeof url === 'string' && url.includes('/api/chat')) {
+      UI.logActivity('🧠', 'Sending message to AI...', 'thinking');
+      const start = Date.now();
+      try {
+        const res = await origFetch.apply(this, arguments);
+        const elapsed = ((Date.now() - start) / 1000).toFixed(1);
+        UI.logActivity('✅', `Response received in ${elapsed}s`, 'success');
+        return res;
+      } catch(err) {
+        UI.logActivity('❌', `Error: ${err.message}`, 'error');
+        throw err;
+      }
+    }
+    if (typeof url === 'string' && url.includes('/api/search')) {
+      UI.logActivity('🔍', 'Searching the web...', 'search');
+    }
+    if (typeof url === 'string' && url.includes('/api/image')) {
+      UI.logActivity('🎨', 'Generating image...', 'thinking');
+    }
+    if (typeof url === 'string' && url.includes('/api/transcribe')) {
+      UI.logActivity('🎤', 'Transcribing audio...', 'thinking');
+    }
+    return origFetch.apply(this, arguments);
+  };
+})();
+
+// ═══════════════════════════════════════════════════════
+// TOAST IMPROVEMENT: better positioning & auto-dismiss
+// ═══════════════════════════════════════════════════════
+if (typeof showToast === 'undefined') {
+  window.showToast = function(msg, type = 'info', duration = 3000) {
+    const toast = document.getElementById('toast');
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.className = `toast-show toast-${type}`;
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => { toast.className = ''; }, duration);
+  };
+}
+
+console.log('✅ IlyassAI Enhanced — Live Activity Panel, Keyboard Shortcuts, Activity Logging ready');
 </script>
 </body>
 </html>
