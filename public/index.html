@@ -3,1025 +3,590 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>IlyassAI — The Next Generation AI Platform</title>
-<meta name="description" content="IlyassAI is a cutting-edge AI platform offering chat, image generation, speech recognition, and enterprise-grade APIs. Build smarter with IlyassAI."/>
-<meta property="og:title" content="IlyassAI — Next Generation AI"/>
-<meta property="og:description" content="The AI platform built for the future. Chat, Create, Build."/>
+<title>IlyassAI — The Next Generation Autonomous AI Agent</title>
+<meta name="description" content="IlyassAI is an autonomous AI agent platform with Manus-like intelligence. Chat, Create, Build, Deploy — all in one place."/>
+<meta property="og:title" content="IlyassAI — Autonomous AI Agent Platform"/>
+<meta property="og:description" content="The autonomous AI platform built for the future. Think. Act. Build."/>
+<meta property="og:image" content="https://my-webxyu.vercel.app/og.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
-/* ── Reset & Base ─────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════
+   DESIGN TOKENS
+══════════════════════════════════════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:        #05050a;
-  --bg2:       #0d0d18;
-  --bg3:       #12121f;
-  --surface:   rgba(255,255,255,0.04);
-  --surface2:  rgba(255,255,255,0.07);
-  --border:    rgba(255,255,255,0.08);
-  --border2:   rgba(255,255,255,0.14);
-  --text:      #f0f0ff;
-  --text2:     rgba(240,240,255,0.65);
-  --text3:     rgba(240,240,255,0.38);
-  --purple:    #7c3aed;
-  --purple2:   #9f67ff;
-  --blue:      #3b82f6;
-  --cyan:      #06b6d4;
-  --green:     #10b981;
-  --pink:      #ec4899;
-  --grad:      linear-gradient(135deg,#7c3aed,#3b82f6);
-  --grad2:     linear-gradient(135deg,#9f67ff,#06b6d4);
-  --r:         14px;
-  --r2:        20px;
-  --r3:        28px;
+  --bg:#05050a;
+  --bg2:#0d0d18;
+  --bg3:#12121f;
+  --surface:rgba(255,255,255,0.04);
+  --surface2:rgba(255,255,255,0.07);
+  --border:rgba(255,255,255,0.08);
+  --border2:rgba(255,255,255,0.14);
+  --text:#f0f0ff;
+  --text2:rgba(240,240,255,0.65);
+  --text3:rgba(240,240,255,0.38);
+  --purple:#7c3aed;
+  --purple2:#9f67ff;
+  --blue:#3b82f6;
+  --cyan:#06b6d4;
+  --green:#10b981;
+  --pink:#ec4899;
+  --grad:linear-gradient(135deg,#7c3aed,#3b82f6);
+  --grad2:linear-gradient(135deg,#9f67ff,#06b6d4);
+  --r:14px;
+  --r2:20px;
+  --r3:28px;
 }
 html{scroll-behavior:smooth}
-body{
-  font-family:'Inter',sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  line-height:1.6;
-  overflow-x:hidden;
-}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
 a{text-decoration:none;color:inherit}
 img{max-width:100%}
 
-/* ── Animated BG Orbs ─────────────────────────────────── */
+/* ══ Animated BG Orbs ══ */
 .orb-container{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.orb{
-  position:absolute;border-radius:50%;filter:blur(120px);opacity:0.18;
-  animation:orb-float 18s ease-in-out infinite alternate;
-}
-.orb-1{width:600px;height:600px;background:#7c3aed;top:-200px;left:-150px;animation-delay:0s}
-.orb-2{width:500px;height:500px;background:#3b82f6;bottom:-150px;right:-100px;animation-delay:-6s}
-.orb-3{width:350px;height:350px;background:#06b6d4;top:40%;left:50%;animation-delay:-12s}
-@keyframes orb-float{
-  0%{transform:translate(0,0) scale(1)}
-  100%{transform:translate(40px,60px) scale(1.1)}
-}
+.orb{position:absolute;border-radius:50%;filter:blur(120px);opacity:0.18;animation:orb-float 18s ease-in-out infinite}
+.orb1{width:600px;height:600px;background:var(--purple);top:-200px;left:-150px;animation-delay:0s}
+.orb2{width:500px;height:500px;background:var(--blue);bottom:-150px;right:-100px;animation-delay:-6s}
+.orb3{width:400px;height:400px;background:var(--cyan);top:40%;left:50%;transform:translate(-50%,-50%);animation-delay:-12s}
+@keyframes orb-float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-40px) scale(1.05)}}
+.orb3{animation-name:orb-float3}
+@keyframes orb-float3{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-55%) scale(1.08)}}
 
-/* ── Layout ───────────────────────────────────────────── */
-.container{max-width:1120px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+/* ══ Noise Overlay ══ */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1;opacity:0.4}
 
-/* ── NAV ──────────────────────────────────────────────── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  padding:14px 0;
-  background:rgba(5,5,10,0.72);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-  transition:all .3s;
-}
-.nav-inner{
-  display:flex;align-items:center;justify-content:space-between;
-  max-width:1120px;margin:0 auto;padding:0 24px;
-}
-.nav-logo{
-  display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800;
-  letter-spacing:-0.5px;
-}
-.nav-logo .logo-icon{
-  width:34px;height:34px;border-radius:10px;
-  background:var(--grad);
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;font-weight:900;color:#fff;
-  box-shadow:0 0 20px rgba(124,58,237,0.5);
-}
-.nav-logo span{background:var(--grad2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.nav-links{display:flex;align-items:center;gap:6px}
-.nav-links a{
-  padding:8px 14px;border-radius:8px;font-size:14px;font-weight:500;
-  color:var(--text2);transition:all .2s;
-}
-.nav-links a:hover{color:var(--text);background:var(--surface2)}
-.nav-actions{display:flex;align-items:center;gap:10px}
-.btn-nav-login{
-  padding:8px 18px;border-radius:8px;font-size:14px;font-weight:600;
-  border:1px solid var(--border2);color:var(--text);background:var(--surface);
-  cursor:pointer;transition:all .2s;
-}
-.btn-nav-login:hover{background:var(--surface2);border-color:var(--border2)}
-.btn-nav-cta{
-  padding:8px 18px;border-radius:8px;font-size:14px;font-weight:700;
-  background:var(--grad);color:#fff;cursor:pointer;border:none;
-  box-shadow:0 0 20px rgba(124,58,237,0.35);
-  transition:all .2s;
-}
-.btn-nav-cta:hover{transform:translateY(-1px);box-shadow:0 0 30px rgba(124,58,237,0.5)}
+/* ══ Layout ══ */
+.container{max-width:1200px;margin:0 auto;padding:0 24px;position:relative;z-index:2}
+section{position:relative;z-index:2}
 
-/* ── HERO ─────────────────────────────────────────────── */
-.hero{
-  min-height:100vh;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  text-align:center;padding:120px 24px 80px;
-}
-.hero-badge{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:6px 16px;border-radius:100px;
-  background:rgba(124,58,237,0.15);
-  border:1px solid rgba(124,58,237,0.3);
-  font-size:13px;font-weight:600;color:var(--purple2);
-  margin-bottom:28px;animation:fade-up .8s ease both;
-}
-.hero-badge .dot{width:7px;height:7px;border-radius:50%;background:var(--purple2);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
-.hero h1{
-  font-size:clamp(42px,7vw,88px);
-  font-weight:900;line-height:1.05;
-  letter-spacing:-3px;
-  margin-bottom:24px;
-  animation:fade-up .8s .1s ease both;
-}
-.hero h1 .grad{background:var(--grad2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{
-  font-size:clamp(16px,2.2vw,20px);
-  color:var(--text2);max-width:600px;margin:0 auto 40px;
-  animation:fade-up .8s .2s ease both;
-}
-.hero-actions{
-  display:flex;flex-wrap:wrap;gap:14px;justify-content:center;
-  animation:fade-up .8s .3s ease both;
-}
-.btn-primary{
-  padding:14px 32px;border-radius:12px;font-size:16px;font-weight:700;
-  background:var(--grad);color:#fff;border:none;cursor:pointer;
-  box-shadow:0 0 40px rgba(124,58,237,0.45);
-  transition:all .25s;display:inline-flex;align-items:center;gap:9px;
-}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 60px rgba(124,58,237,0.6)}
-.btn-secondary{
-  padding:14px 32px;border-radius:12px;font-size:16px;font-weight:600;
-  background:var(--surface2);color:var(--text);
-  border:1px solid var(--border2);cursor:pointer;
-  transition:all .25s;display:inline-flex;align-items:center;gap:9px;
-}
-.btn-secondary:hover{background:rgba(255,255,255,0.1);transform:translateY(-2px)}
+/* ══ NAVBAR ══ */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(5,5,10,0.7);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:all .3s}
+.nav.scrolled{background:rgba(5,5,10,0.9)}
+.nav-logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;letter-spacing:-0.3px}
+.nav-logo-icon{width:32px;height:32px;background:var(--grad);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{font-size:14px;font-weight:500;color:var(--text2);transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-actions{display:flex;align-items:center;gap:12px}
+.btn-ghost{padding:7px 16px;border-radius:8px;font-size:14px;font-weight:500;color:var(--text2);border:1px solid transparent;cursor:pointer;background:transparent;transition:all .2s}
+.btn-ghost:hover{color:var(--text);border-color:var(--border2);background:var(--surface2)}
+.btn-primary{padding:8px 20px;border-radius:8px;font-size:14px;font-weight:600;background:var(--grad);color:#fff;border:none;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-primary:hover{opacity:0.85;transform:translateY(-1px)}
 
-/* ── Hero App Preview ─────────────────────────────────── */
-.hero-preview{
-  margin-top:64px;width:100%;max-width:860px;
-  border-radius:var(--r3);overflow:hidden;
-  border:1px solid var(--border2);
-  box-shadow:0 40px 120px rgba(0,0,0,0.7),0 0 0 1px rgba(124,58,237,0.15);
-  animation:fade-up .8s .4s ease both;
-  background:var(--bg3);
-  position:relative;
-}
-.preview-bar{
-  display:flex;align-items:center;gap:8px;
-  padding:14px 20px;background:var(--bg2);
-  border-bottom:1px solid var(--border);
-}
-.preview-dot{width:12px;height:12px;border-radius:50%}
-.preview-dot.r{background:#ff5f57}.preview-dot.y{background:#febc2e}.preview-dot.g{background:#28c840}
-.preview-url{
-  flex:1;text-align:center;font-size:12px;color:var(--text3);
-  background:rgba(255,255,255,0.04);border-radius:6px;padding:5px 14px;margin:0 16px;
-}
-.preview-body{padding:32px 28px}
-.preview-msg{
-  display:flex;gap:14px;margin-bottom:22px;animation:fade-up .5s ease both;
-}
-.preview-avatar{
-  width:36px;height:36px;border-radius:10px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;font-size:15px;
-}
-.preview-avatar.ai{background:var(--grad)}
-.preview-avatar.user{background:rgba(255,255,255,0.08);font-size:13px;color:var(--text2)}
-.preview-bubble{
-  background:var(--surface2);border-radius:4px 14px 14px 14px;
-  padding:14px 18px;font-size:14px;color:var(--text2);line-height:1.65;
-  border:1px solid var(--border);max-width:520px;
-}
-.preview-bubble.user-bubble{
-  background:rgba(124,58,237,0.12);border-color:rgba(124,58,237,0.2);
-  border-radius:14px 4px 14px 14px;color:var(--text);
-}
-.typing-dots{display:inline-flex;gap:4px;align-items:center;padding:2px 0}
-.typing-dots span{
-  width:6px;height:6px;border-radius:50%;background:var(--purple2);opacity:.5;
-  animation:typing 1.2s infinite;
-}
-.typing-dots span:nth-child(2){animation-delay:.2s}
-.typing-dots span:nth-child(3){animation-delay:.4s}
-@keyframes typing{0%,80%,100%{transform:scale(1);opacity:.5}40%{transform:scale(1.3);opacity:1}}
+/* ══ HERO ══ */
+.hero{min-height:100vh;display:flex;align-items:center;padding-top:80px}
+.hero-inner{max-width:780px;margin:0 auto;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);font-size:12px;font-weight:600;color:var(--purple2);margin-bottom:28px;letter-spacing:0.5px;text-transform:uppercase}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--purple2);animation:pulse-dot 2s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
+.hero h1{font-size:clamp(42px,7vw,80px);font-weight:900;line-height:1.05;letter-spacing:-2px;margin-bottom:24px}
+.hero h1 .grad-text{background:var(--grad2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:clamp(16px,2.2vw,20px);color:var(--text2);max-width:560px;margin:0 auto 40px;line-height:1.65}
+.hero-cta{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+.btn-hero{padding:14px 32px;border-radius:12px;font-size:16px;font-weight:700;background:var(--grad);color:#fff;border:none;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:8px}
+.btn-hero:hover{transform:translateY(-2px);box-shadow:0 20px 60px rgba(124,58,237,0.35)}
+.btn-hero-ghost{padding:13px 28px;border-radius:12px;font-size:15px;font-weight:600;background:transparent;color:var(--text);border:1px solid var(--border2);cursor:pointer;transition:all .25s}
+.btn-hero-ghost:hover{background:var(--surface2);transform:translateY(-1px)}
+.hero-stats{display:flex;align-items:center;justify-content:center;gap:32px;margin-top:56px;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-num{font-size:28px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-0.5px}
+.stat-label{font-size:12px;color:var(--text3);font-weight:500;margin-top:2px}
+.stat-divider{width:1px;height:40px;background:var(--border2)}
 
-/* ── Stats ────────────────────────────────────────────── */
-.stats{padding:40px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
-.stat-num{font-size:36px;font-weight:900;letter-spacing:-1.5px;background:var(--grad2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.stat-label{font-size:13px;color:var(--text3);margin-top:4px;font-weight:500}
-
-/* ── Section ──────────────────────────────────────────── */
-section{padding:100px 0}
-.section-tag{
-  display:inline-block;padding:5px 14px;border-radius:100px;
-  background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.25);
-  font-size:12px;font-weight:700;color:var(--purple2);letter-spacing:.5px;
-  text-transform:uppercase;margin-bottom:16px;
-}
-.section-title{
-  font-size:clamp(28px,4vw,46px);font-weight:900;letter-spacing:-1.5px;
-  line-height:1.1;margin-bottom:14px;
-}
-.section-sub{font-size:16px;color:var(--text2);max-width:520px;line-height:1.7}
-.section-header{margin-bottom:60px}
+/* ══ SECTION BASE ══ */
+.section{padding:100px 0}
+.section-label{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--purple2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px}
+.section-title{font-size:clamp(32px,5vw,52px);font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:16px}
+.section-sub{font-size:17px;color:var(--text2);max-width:560px;line-height:1.7}
+.section-header{margin-bottom:64px}
 .section-header.center{text-align:center}
 .section-header.center .section-sub{margin:0 auto}
 
-/* ── Features ─────────────────────────────────────────── */
-.features-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
-}
-.feature-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r2);padding:28px;
-  transition:all .3s;cursor:default;
-  position:relative;overflow:hidden;
-}
-.feature-card::before{
-  content:'';position:absolute;inset:0;
-  background:var(--grad);opacity:0;transition:opacity .3s;border-radius:var(--r2);
-}
-.feature-card:hover{border-color:rgba(124,58,237,0.4);transform:translateY(-4px);
-  box-shadow:0 20px 60px rgba(0,0,0,0.4),0 0 0 1px rgba(124,58,237,0.15)}
-.feature-card:hover::before{opacity:0.05}
-.feature-icon{
-  width:48px;height:48px;border-radius:12px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;margin-bottom:18px;
-  background:rgba(124,58,237,0.15);
-  border:1px solid rgba(124,58,237,0.2);
-  position:relative;z-index:1;
-}
-.feature-card h3{font-size:17px;font-weight:700;margin-bottom:10px;position:relative;z-index:1}
-.feature-card p{font-size:14px;color:var(--text2);line-height:1.65;position:relative;z-index:1}
+/* ══ FEATURES ══ */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.feature-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:28px;transition:all .3s;cursor:default}
+.feature-card:hover{background:var(--surface2);border-color:var(--border2);transform:translateY(-4px);box-shadow:0 24px 60px rgba(0,0,0,0.4)}
+.feature-icon{width:44px;height:44px;border-radius:12px;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:20px}
+.feature-title{font-size:17px;font-weight:700;margin-bottom:8px;letter-spacing:-0.3px}
+.feature-desc{font-size:14px;color:var(--text2);line-height:1.65}
 
-/* Big Feature Card */
-.feature-card.big{grid-column:span 2}
-.feature-card.tall{grid-row:span 2}
+/* ══ MODELS ══ */
+.models-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.model-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;transition:all .25s}
+.model-card:hover{border-color:rgba(124,58,237,0.4);background:rgba(124,58,237,0.06)}
+.model-name{font-size:15px;font-weight:700;margin-bottom:4px}
+.model-provider{font-size:12px;color:var(--text3);margin-bottom:12px}
+.model-badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;background:rgba(16,185,129,0.12);color:var(--green);border:1px solid rgba(16,185,129,0.2)}
+.model-badge.free{background:rgba(16,185,129,0.12);color:var(--green)}
+.model-badge.fast{background:rgba(59,130,246,0.12);color:var(--blue)}
 
-/* ── Models ───────────────────────────────────────────── */
-.models-section{background:var(--bg2)}
-.models-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-.model-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r2);padding:28px 32px;
-  display:flex;gap:20px;align-items:flex-start;
-  transition:all .3s;
-}
-.model-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 20px 60px rgba(0,0,0,0.3)}
-.model-badge{
-  padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700;
-  display:inline-block;margin-bottom:8px;
-}
-.model-badge.fast{background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.25)}
-.model-badge.powerful{background:rgba(124,58,237,0.15);color:var(--purple2);border:1px solid rgba(124,58,237,0.25)}
-.model-badge.vision{background:rgba(59,130,246,0.15);color:var(--blue);border:1px solid rgba(59,130,246,0.25)}
-.model-badge.audio{background:rgba(236,72,153,0.15);color:var(--pink);border:1px solid rgba(236,72,153,0.25)}
-.model-icon{font-size:28px;margin-top:2px}
-.model-info h3{font-size:18px;font-weight:800;letter-spacing:-.5px;margin-bottom:2px}
-.model-info p{font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.6}
-.model-tags{display:flex;flex-wrap:wrap;gap:6px}
-.model-tag{
-  padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600;
-  background:rgba(255,255,255,0.06);color:var(--text3);border:1px solid var(--border);
-}
+/* ══ API SECTION ══ */
+.api-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:40px;overflow:hidden;position:relative}
+.api-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--grad)}
+.code-block{background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:12px;padding:24px;font-family:'JetBrains Mono','Courier New',monospace;font-size:13px;color:#a78bfa;overflow-x:auto;position:relative;margin-top:24px}
+.code-block .comment{color:var(--text3)}
+.code-block .key{color:#93c5fd}
+.code-block .string{color:#86efac}
+.code-block .func{color:#fde68a}
 
-/* ── Pricing ──────────────────────────────────────────── */
-.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:start}
-.plan-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r2);padding:28px;
-  transition:all .3s;position:relative;overflow:hidden;
-}
-.plan-card.popular{
-  border-color:rgba(124,58,237,0.5);
-  background:rgba(124,58,237,0.06);
-}
-.plan-card.popular::after{
-  content:'Most Popular';position:absolute;top:16px;right:16px;
-  padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700;
-  background:var(--grad);color:#fff;
-}
-.plan-name{font-size:13px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
-.plan-price{font-size:40px;font-weight:900;letter-spacing:-2px;margin-bottom:4px}
-.plan-price span{font-size:16px;font-weight:500;color:var(--text2);letter-spacing:0}
-.plan-period{font-size:13px;color:var(--text3);margin-bottom:24px}
-.plan-features{list-style:none;margin-bottom:28px}
-.plan-features li{
-  font-size:14px;color:var(--text2);padding:7px 0;
-  display:flex;align-items:center;gap:9px;
-  border-bottom:1px solid var(--border);
-}
-.plan-features li:last-child{border-bottom:none}
-.plan-features li .check{color:#10b981;font-size:13px;flex-shrink:0}
-.plan-features li .x{color:var(--text3);font-size:13px;flex-shrink:0}
-.btn-plan{
-  width:100%;padding:12px;border-radius:10px;font-size:14px;font-weight:700;
-  cursor:pointer;transition:all .2s;border:none;
-}
-.btn-plan.outline{
-  background:transparent;border:1px solid var(--border2);color:var(--text);
-}
-.btn-plan.outline:hover{background:var(--surface2)}
-.btn-plan.filled{background:var(--grad);color:#fff;box-shadow:0 0 24px rgba(124,58,237,0.4)}
-.btn-plan.filled:hover{transform:translateY(-1px);box-shadow:0 0 40px rgba(124,58,237,0.6)}
-.btn-plan.dark{background:rgba(255,255,255,0.06);color:var(--text);border:1px solid var(--border2)}
-.btn-plan.dark:hover{background:rgba(255,255,255,0.1)}
+/* ══ PRICING ══ */
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;max-width:900px;margin:0 auto}
+.price-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:32px;transition:all .3s;position:relative}
+.price-card.featured{background:rgba(124,58,237,0.08);border-color:rgba(124,58,237,0.35);transform:scale(1.02)}
+.price-card.featured::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad);border-radius:var(--r2) var(--r2) 0 0}
+.price-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--grad);color:#fff;font-size:11px;font-weight:700;padding:4px 14px;border-radius:999px;white-space:nowrap}
+.price-name{font-size:16px;font-weight:700;margin-bottom:8px}
+.price-amount{font-size:42px;font-weight:900;letter-spacing:-1.5px;margin:16px 0 4px}
+.price-amount span{font-size:16px;font-weight:500;color:var(--text2)}
+.price-period{font-size:13px;color:var(--text3);margin-bottom:24px}
+.price-features{list-style:none;margin-bottom:28px;display:flex;flex-direction:column;gap:12px}
+.price-features li{font-size:14px;color:var(--text2);display:flex;align-items:center;gap:10px}
+.price-features li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
 
-/* ── API Section ──────────────────────────────────────── */
-.api-section{background:var(--bg2)}
-.api-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
-.code-block{
-  background:#0a0a14;border:1px solid var(--border);
-  border-radius:var(--r2);overflow:hidden;
-  box-shadow:0 20px 60px rgba(0,0,0,0.4);
-}
-.code-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 20px;background:var(--bg3);border-bottom:1px solid var(--border);
-}
-.code-lang{font-size:12px;font-weight:600;color:var(--text3)}
-.code-copy{
-  font-size:11px;font-weight:600;color:var(--purple2);cursor:pointer;
-  background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);
-  padding:4px 10px;border-radius:6px;border:none;cursor:pointer;
-  transition:all .2s;
-}
-.code-copy:hover{background:rgba(124,58,237,0.2)}
-pre{padding:24px;font-family:'Courier New',monospace;font-size:13px;line-height:1.7;overflow-x:auto;color:#e0e0ff}
-pre .k{color:#c084fc}  /* keyword */
-pre .s{color:#86efac}  /* string */
-pre .c{color:#64748b}  /* comment */
-pre .n{color:#7dd3fc}  /* name */
-pre .p{color:#f0f0ff}  /* punct */
-.api-features{display:flex;flex-direction:column;gap:20px}
-.api-feature{display:flex;gap:16px;align-items:flex-start}
-.api-feature-icon{
-  width:40px;height:40px;border-radius:10px;flex-shrink:0;
-  background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.2);
-  display:flex;align-items:center;justify-content:center;font-size:18px;
-}
-.api-feature h4{font-size:15px;font-weight:700;margin-bottom:4px}
-.api-feature p{font-size:13px;color:var(--text2);line-height:1.6}
-
-/* ── Trust ────────────────────────────────────────────── */
-.trust-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.trust-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r2);padding:28px;
-  transition:all .3s;
-}
-.trust-card:hover{border-color:var(--border2);transform:translateY(-3px)}
-.trust-card .badge{
-  font-size:28px;margin-bottom:16px;display:block;
-}
-.trust-card h3{font-size:16px;font-weight:700;margin-bottom:8px}
-.trust-card p{font-size:14px;color:var(--text2);line-height:1.65}
-.cert-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.cert{
-  padding:4px 12px;border-radius:6px;font-size:11px;font-weight:700;
-  background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.2);
-}
-
-/* ── Testimonials ─────────────────────────────────────── */
-.testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.testimonial-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r2);padding:24px;
-  transition:all .3s;
-}
-.testimonial-card:hover{border-color:var(--border2);transform:translateY(-2px)}
-.stars{color:#f59e0b;font-size:14px;margin-bottom:14px}
-.testimonial-card p{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:18px;font-style:italic}
+/* ══ TESTIMONIALS ══ */
+.testimonials-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.testimonial{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:28px;transition:all .3s}
+.testimonial:hover{background:var(--surface2);transform:translateY(-2px)}
+.testimonial-text{font-size:15px;color:var(--text2);line-height:1.7;margin-bottom:20px;font-style:italic}
+.testimonial-text::before{content:'"';font-size:28px;color:var(--purple2);line-height:0;vertical-align:-8px;margin-right:4px}
 .testimonial-author{display:flex;align-items:center;gap:12px}
-.author-avatar{
-  width:38px;height:38px;border-radius:50%;
-  background:var(--grad);display:flex;align-items:center;justify-content:center;
-  font-size:15px;font-weight:800;color:#fff;flex-shrink:0;
-}
+.author-avatar{width:38px;height:38px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0}
 .author-name{font-size:14px;font-weight:700}
 .author-role{font-size:12px;color:var(--text3)}
 
-/* ── CTA Banner ───────────────────────────────────────── */
-.cta-section{padding:80px 0}
-.cta-card{
-  background:linear-gradient(135deg,rgba(124,58,237,0.2),rgba(59,130,246,0.1));
-  border:1px solid rgba(124,58,237,0.3);
-  border-radius:var(--r3);padding:72px 60px;
-  text-align:center;position:relative;overflow:hidden;
-}
-.cta-card::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 50% 0%,rgba(124,58,237,0.25),transparent 70%);
-}
-.cta-card h2{font-size:clamp(28px,4vw,48px);font-weight:900;letter-spacing:-1.5px;margin-bottom:16px;position:relative}
-.cta-card p{font-size:17px;color:var(--text2);margin-bottom:36px;position:relative}
-.cta-actions{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;position:relative}
+/* ══ SECURITY ══ */
+.security-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.security-item{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.security-icon{font-size:22px;flex-shrink:0}
+.security-text{font-size:14px;font-weight:500}
 
-/* ── Footer ───────────────────────────────────────────── */
-footer{border-top:1px solid var(--border);padding:60px 0 32px}
+/* ══ CTA ══ */
+.cta-section{text-align:center;padding:120px 0}
+.cta-box{background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(59,130,246,0.08));border:1px solid rgba(124,58,237,0.2);border-radius:var(--r3);padding:80px 40px;position:relative;overflow:hidden}
+.cta-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--grad);opacity:0.6}
+.cta-box h2{font-size:clamp(32px,5vw,52px);font-weight:900;letter-spacing:-1.5px;margin-bottom:16px}
+.cta-box p{font-size:17px;color:var(--text2);max-width:520px;margin:0 auto 36px}
+
+/* ══ FOOTER ══ */
+.footer{padding:64px 0 32px;border-top:1px solid var(--border)}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px}
-.footer-brand .logo{font-size:22px;font-weight:900;display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.footer-brand .logo-icon{
-  width:32px;height:32px;border-radius:9px;background:var(--grad);
-  display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;
-}
-.footer-brand p{font-size:14px;color:var(--text3);line-height:1.7;max-width:240px}
-.footer-col h4{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin-bottom:16px}
-.footer-col a{
-  display:block;font-size:14px;color:var(--text2);margin-bottom:10px;
-  transition:color .2s;
-}
+.footer-brand{font-size:18px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.footer-desc{font-size:14px;color:var(--text2);line-height:1.7;max-width:240px}
+.footer-col h4{font-size:13px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px}
+.footer-col a{display:block;font-size:14px;color:var(--text2);margin-bottom:10px;transition:color .2s}
 .footer-col a:hover{color:var(--text)}
-.footer-bottom{
-  display:flex;align-items:center;justify-content:space-between;
-  padding-top:24px;border-top:1px solid var(--border);
-  font-size:13px;color:var(--text3);
-}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:24px;border-top:1px solid var(--border);font-size:13px;color:var(--text3)}
 .footer-bottom-links{display:flex;gap:20px}
 .footer-bottom-links a{color:var(--text3);transition:color .2s}
 .footer-bottom-links a:hover{color:var(--text2)}
 
-/* ── Animations ───────────────────────────────────────── */
-@keyframes fade-up{
-  from{opacity:0;transform:translateY(24px)}
-  to{opacity:1;transform:translateY(0)}
-}
-.reveal{opacity:0;transform:translateY(28px);transition:all .7s cubic-bezier(.2,.8,.2,1)}
-.reveal.visible{opacity:1;transform:translateY(0)}
-
-/* ── Responsive ───────────────────────────────────────── */
-@media(max-width:900px){
-  .features-grid,.pricing-grid,.trust-grid,.testimonials-grid{grid-template-columns:1fr 1fr}
-  .feature-card.big{grid-column:span 1}
-  .models-grid,.api-grid,.footer-grid{grid-template-columns:1fr}
-  .stats-grid{grid-template-columns:repeat(2,1fr)}
-}
-@media(max-width:640px){
+/* ══ MOBILE ══ */
+@media(max-width:768px){
   .nav-links{display:none}
-  .features-grid,.pricing-grid,.trust-grid,.testimonials-grid,.stats-grid{grid-template-columns:1fr}
-  .hero h1{letter-spacing:-1.5px}
-  .cta-card{padding:40px 24px}
   .footer-grid{grid-template-columns:1fr 1fr}
+  .hero-stats{gap:20px}
+  .stat-divider{display:none}
+  .pricing-grid{grid-template-columns:1fr}
+  .price-card.featured{transform:none}
 }
+
+/* ══ SCROLL ANIMATION ══ */
+.fade-in{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.fade-in.visible{opacity:1;transform:none}
+
+/* ══ SHIMMER for loading ══ */
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 </style>
 </head>
 <body>
 
+<!-- BG ORBS -->
 <div class="orb-container">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
 </div>
 
-<!-- ── NAV ──────────────────────────────────────────────── -->
-<nav>
-  <div class="nav-inner">
-    <a href="/" class="nav-logo">
-      <div class="logo-icon">I</div>
-      <span>IlyassAI</span>
-    </a>
-    <div class="nav-links">
-      <a href="#features">Features</a>
-      <a href="#models">Models</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#api">API</a>
-      <a href="#enterprise">Enterprise</a>
-    </div>
-    <div class="nav-actions">
-      <a href="/app" class="btn-nav-login">Sign in</a>
-      <a href="/app" class="btn-nav-cta">Start free →</a>
-    </div>
+<!-- ══════════════════════ NAVBAR ══════════════════════ -->
+<nav class="nav" id="navbar">
+  <div class="nav-logo">
+    <div class="nav-logo-icon">I</div>
+    IlyassAI
+  </div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#models">Models</a>
+    <a href="#api">API</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#docs" onclick="return false">Docs</a>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-ghost" onclick="window.location.href='/app'">Sign In</button>
+    <button class="btn-primary" onclick="window.location.href='/app'">Start Free →</button>
   </div>
 </nav>
 
-<!-- ── HERO ─────────────────────────────────────────────── -->
+<!-- ══════════════════════ HERO ══════════════════════ -->
 <section class="hero">
   <div class="container">
-    <div class="hero-badge">
-      <span class="dot"></span>
-      🚀 Now Live — Join 50,000+ builders & creators
-    </div>
-    <h1>
-      The AI platform<br/>
-      built for the <span class="grad">future</span>
-    </h1>
-    <p>
-      IlyassAI combines the most powerful language models, image generation,
-      and speech recognition into one seamless platform — built for creators,
-      developers, and enterprises.<br/>
-      <strong style="color:var(--text);opacity:0.85">No subscription required. Start free today.</strong>
-    </p>
-    <div class="hero-actions">
-      <a href="/app" class="btn-primary">
-        <span>🚀</span> Start for free
-      </a>
-      <a href="#features" class="btn-secondary">
-        <span>▶</span> See how it works
-      </a>
-      <a href="/agent" class="btn-secondary" style="border-color:rgba(124,58,237,0.4);color:#a78bfa">
-        <span>🤖</span> Try Agent Mode
-      </a>
-    </div>
-
-    <!-- Stats Bar -->
-    <div style="display:flex;gap:32px;justify-content:center;margin:24px 0 8px;flex-wrap:wrap;">
-      <div style="text-align:center;">
-        <div style="font-size:22px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent">50K+</div>
-        <div style="font-size:12px;color:var(--text2);margin-top:2px">Active Users</div>
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        Autonomous AI · Manus-class Intelligence
       </div>
-      <div style="text-align:center;">
-        <div style="font-size:22px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent">1M+</div>
-        <div style="font-size:12px;color:var(--text2);margin-top:2px">Messages Sent</div>
-      </div>
-      <div style="text-align:center;">
-        <div style="font-size:22px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent">99.9%</div>
-        <div style="font-size:12px;color:var(--text2);margin-top:2px">Uptime</div>
-      </div>
-      <div style="text-align:center;">
-        <div style="font-size:22px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent">&lt;1s</div>
-        <div style="font-size:12px;color:var(--text2);margin-top:2px">Avg Response</div>
-      </div>
-    </div>
-
-    <!-- App Preview -->
-    <div class="hero-preview">
-      <div class="preview-bar">
-        <div class="preview-dot r"></div>
-        <div class="preview-dot y"></div>
-        <div class="preview-dot g"></div>
-        <div class="preview-url">my-webxyu.vercel.app/app</div>
-      </div>
-      <div class="preview-body">
-        <div class="preview-msg">
-          <div class="preview-avatar user">You</div>
-          <div class="preview-bubble user-bubble">
-            Write me a Python script to analyze sales data and create visualizations.
-          </div>
-        </div>
-        <div class="preview-msg">
-          <div class="preview-avatar ai">✦</div>
-          <div class="preview-bubble">
-            Here's a complete Python script using pandas and matplotlib to analyze your sales data with beautiful charts...<br/><br/>
-            <span style="color:#c084fc">import</span> <span style="color:#7dd3fc">pandas</span> as pd<br/>
-            <span style="color:#c084fc">import</span> <span style="color:#7dd3fc">matplotlib.pyplot</span> as plt<br/>
-            <span style="color:#64748b"># Load and analyze your data</span>
-          </div>
-        </div>
-        <div class="preview-msg">
-          <div class="preview-avatar ai">✦</div>
-          <div class="preview-bubble" style="background:rgba(124,58,237,0.06);border-color:rgba(124,58,237,0.15)">
-            <div class="typing-dots">
-              <span></span><span></span><span></span>
-            </div>
-            &nbsp; Generating follow-up analysis...
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── STATS ─────────────────────────────────────────────── -->
-<div class="stats">
-  <div class="container">
-    <div class="stats-grid">
-      <div class="reveal"><div class="stat-num">50K+</div><div class="stat-label">Active Users</div></div>
-      <div class="reveal"><div class="stat-num">10M+</div><div class="stat-label">Messages Processed</div></div>
-      <div class="reveal"><div class="stat-num">99.9%</div><div class="stat-label">Uptime SLA</div></div>
-      <div class="reveal"><div class="stat-num">&lt;800ms</div><div class="stat-label">Avg. Response Time</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ── FEATURES ──────────────────────────────────────────── -->
-<section id="features">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-tag">Features</div>
-      <h2 class="section-title">Everything you need<br/>to build with AI</h2>
-      <p class="section-sub">From intelligent conversations to image generation and voice recognition — IlyassAI covers it all.</p>
-    </div>
-    <div class="features-grid reveal">
-      <div class="feature-card big">
-        <div class="feature-icon">🧠</div>
-        <h3>Advanced Language Models</h3>
-        <p>Powered by Llama 3.3 70B and cutting-edge Groq inference — delivering lightning-fast, highly accurate responses across 50+ languages including Arabic, French, and English.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🎨</div>
-        <h3>AI Image Generation</h3>
-        <p>Generate stunning, photorealistic images from text descriptions using FLUX and DALL-E models with custom styles and sizes.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🎤</div>
-        <h3>Voice Recognition</h3>
-        <p>Speak in any language and get instant transcription using Groq Whisper — the world's fastest speech-to-text model.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">⚡</div>
-        <h3>Ultra-Fast Inference</h3>
-        <p>Built on Groq's LPU™ technology — delivering responses up to 18× faster than traditional GPU-based models.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🔒</div>
-        <h3>Privacy First</h3>
-        <p>Your conversations are encrypted end-to-end. We never train on your data. Full GDPR and SOC2 compliance.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🛠️</div>
-        <h3>Developer API</h3>
-        <p>Integrate IlyassAI into your apps with our RESTful API. Full OpenAI compatibility means zero migration effort.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">📁</div>
-        <h3>File & Document Analysis</h3>
-        <p>Upload PDFs, images, code files, and documents. IlyassAI reads, summarizes, and answers questions about any content.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🌐</div>
-        <h3>Multi-language Support</h3>
-        <p>Native support for 50+ languages. Optimized for Arabic with proper RTL handling and cultural context awareness.</p>
-      </div>
-      <div class="feature-card reveal">
-        <div class="feature-icon">🤖</div>
-        <h3>Autonomous Agent Mode</h3>
-        <p>IlyassAI Agent plans tasks, searches the web, reads pages, executes code, and delivers complete answers — just like Manus, powered by a ReAct reasoning loop.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── MODELS ─────────────────────────────────────────────── -->
-<section id="models" class="models-section">
-  <div class="container">
-    <div class="section-header center">
-      <div class="section-tag">Models</div>
-      <h2 class="section-title">Choose the right model<br/>for every task</h2>
-      <p class="section-sub">Access state-of-the-art AI models optimized for speed, accuracy, and cost.</p>
-    </div>
-    <div class="models-grid reveal">
-      <div class="model-card">
-        <div class="model-icon">⚡</div>
-        <div class="model-info">
-          <div class="model-badge fast">Fastest</div>
-          <h3>Llama 3.3 70B Turbo</h3>
-          <p>Our fastest model for everyday tasks. 18× faster than GPT-4 with comparable accuracy. Perfect for chatbots and real-time applications.</p>
-          <div class="model-tags">
-            <span class="model-tag">Chat</span>
-            <span class="model-tag">Code</span>
-            <span class="model-tag">Analysis</span>
-            <span class="model-tag">128K ctx</span>
-          </div>
-        </div>
-      </div>
-      <div class="model-card">
-        <div class="model-icon">🔬</div>
-        <div class="model-info">
-          <div class="model-badge powerful">Most Powerful</div>
-          <h3>DeepSeek R1 Distill</h3>
-          <p>Advanced reasoning model with chain-of-thought thinking. Excels at mathematics, complex logic, and multi-step problem solving.</p>
-          <div class="model-tags">
-            <span class="model-tag">Reasoning</span>
-            <span class="model-tag">Math</span>
-            <span class="model-tag">Science</span>
-            <span class="model-tag">Think mode</span>
-          </div>
-        </div>
-      </div>
-      <div class="model-card">
-        <div class="model-icon">👁️</div>
-        <div class="model-info">
-          <div class="model-badge vision">Vision</div>
-          <h3>FLUX Image Generation</h3>
-          <p>Create stunning photorealistic images, artwork, and illustrations from text. Supports multiple styles, aspect ratios, and resolutions.</p>
-          <div class="model-tags">
-            <span class="model-tag">Images</span>
-            <span class="model-tag">Art</span>
-            <span class="model-tag">Design</span>
-            <span class="model-tag">1024px</span>
-          </div>
-        </div>
-      </div>
-      <div class="model-card">
-        <div class="model-icon">🎙️</div>
-        <div class="model-info">
-          <div class="model-badge audio">Audio</div>
-          <h3>Whisper Large v3 Turbo</h3>
-          <p>State-of-the-art speech recognition with 98%+ accuracy in 50+ languages. Powered by Groq's ultra-fast inference infrastructure.</p>
-          <div class="model-tags">
-            <span class="model-tag">Speech-to-Text</span>
-            <span class="model-tag">50+ langs</span>
-            <span class="model-tag">Real-time</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── API ────────────────────────────────────────────────── -->
-<section id="api" class="api-section">
-  <div class="container">
-    <div class="api-grid">
-      <div class="reveal">
-        <div class="section-tag">Developer API</div>
-        <h2 class="section-title">Build anything<br/>with our API</h2>
-        <p class="section-sub" style="margin-bottom:36px">OpenAI-compatible REST API. Switch from any provider in minutes with zero code changes.</p>
-        <div class="api-features">
-          <div class="api-feature">
-            <div class="api-feature-icon">📖</div>
-            <div>
-              <h4>Full Documentation</h4>
-              <p>Comprehensive API reference, quickstart guides, and code examples in 8+ languages.</p>
-            </div>
-          </div>
-          <div class="api-feature">
-            <div class="api-feature-icon">🔑</div>
-            <div>
-              <h4>API Key Management</h4>
-              <p>Create, rotate, and revoke API keys with fine-grained permission controls.</p>
-            </div>
-          </div>
-          <div class="api-feature">
-            <div class="api-feature-icon">📊</div>
-            <div>
-              <h4>Usage Analytics</h4>
-              <p>Real-time dashboards showing token usage, costs, and performance metrics.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="code-block reveal">
-        <div class="code-header">
-          <span class="code-lang">JavaScript / Node.js</span>
-          <button class="code-copy" onclick="navigator.clipboard.writeText(document.querySelector('pre').textContent).then(()=>this.textContent='Copied!').catch(()=>{})">Copy</button>
-        </div>
-        <pre><span class="k">import</span> <span class="n">IlyassAI</span> <span class="k">from</span> <span class="s">'ilyassai'</span><span class="p">;</span>
-
-<span class="k">const</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">IlyassAI</span><span class="p">({</span>
-  <span class="n">apiKey</span><span class="p">:</span> <span class="n">process</span><span class="p">.</span><span class="n">env</span><span class="p">.</span><span class="n">ILYASS_API_KEY</span>
-<span class="p">});</span>
-
-<span class="k">const</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">chat</span><span class="p">.</span><span class="n">complete</span><span class="p">({</span>
-  <span class="n">model</span><span class="p">:</span> <span class="s">'ilyass-3-turbo'</span><span class="p">,</span>
-  <span class="n">messages</span><span class="p">: [{</span>
-    <span class="n">role</span><span class="p">:</span> <span class="s">'user'</span><span class="p">,</span>
-    <span class="n">content</span><span class="p">:</span> <span class="s">'Explain quantum computing'</span>
-  <span class="p">}],</span>
-  <span class="n">stream</span><span class="p">:</span> <span class="k">true</span>
-<span class="p">});</span>
-
-<span class="c">// Stream the response</span>
-<span class="k">for await</span> <span class="p">(</span><span class="k">const</span> <span class="n">chunk</span> <span class="k">of</span> <span class="n">response</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">process</span><span class="p">.</span><span class="n">stdout</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">.</span><span class="n">text</span><span class="p">);</span>
-<span class="p">}</span></pre>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── PRICING ────────────────────────────────────────────── -->
-<section id="pricing">
-  <div class="container">
-    <div class="section-header center">
-      <div class="section-tag">Pricing</div>
-      <h2 class="section-title">Simple, transparent pricing</h2>
-      <p class="section-sub">Start free. Scale as you grow. No hidden fees, no surprises.</p>
-    </div>
-    <div class="pricing-grid reveal">
-      <!-- Free -->
-      <div class="plan-card">
-        <div class="plan-name">Free</div>
-        <div class="plan-price">$0</div>
-        <div class="plan-period">Forever free</div>
-        <ul class="plan-features">
-          <li><span class="check">✓</span> 50 messages/day</li>
-          <li><span class="check">✓</span> Llama 3.3 70B</li>
-          <li><span class="check">✓</span> 5 image generations</li>
-          <li><span class="check">✓</span> Voice input (STT)</li>
-          <li><span class="x">—</span> Advanced models</li>
-          <li><span class="x">—</span> API access</li>
-          <li><span class="x">—</span> Priority support</li>
-        </ul>
-        <a href="/app"><button class="btn-plan outline">Get Started</button></a>
-      </div>
-      <!-- Pro -->
-      <div class="plan-card popular">
-        <div class="plan-name">Pro</div>
-        <div class="plan-price">$19<span>/mo</span></div>
-        <div class="plan-period">Billed monthly</div>
-        <ul class="plan-features">
-          <li><span class="check">✓</span> Unlimited messages</li>
-          <li><span class="check">✓</span> All AI models</li>
-          <li><span class="check">✓</span> Unlimited images</li>
-          <li><span class="check">✓</span> Voice input + output</li>
-          <li><span class="check">✓</span> API access (1M tokens)</li>
-          <li><span class="check">✓</span> Priority support</li>
-          <li><span class="check">✓</span> Advanced reasoning</li>
-        </ul>
-        <a href="/app"><button class="btn-plan filled">Start Pro →</button></a>
-      </div>
-      <!-- Team -->
-      <div class="plan-card">
-        <div class="plan-name">Team</div>
-        <div class="plan-price">$49<span>/mo</span></div>
-        <div class="plan-period">Up to 5 seats</div>
-        <ul class="plan-features">
-          <li><span class="check">✓</span> Everything in Pro</li>
-          <li><span class="check">✓</span> Shared workspaces</li>
-          <li><span class="check">✓</span> Team collaboration</li>
-          <li><span class="check">✓</span> Admin controls</li>
-          <li><span class="check">✓</span> API access (5M tokens)</li>
-          <li><span class="check">✓</span> SSO / SAML</li>
-          <li><span class="check">✓</span> Dedicated support</li>
-        </ul>
-        <a href="/app"><button class="btn-plan outline">Start Team</button></a>
-      </div>
-      <!-- Enterprise -->
-      <div class="plan-card">
-        <div class="plan-name">Enterprise</div>
-        <div class="plan-price" style="font-size:28px">Custom</div>
-        <div class="plan-period">Contact us</div>
-        <ul class="plan-features">
-          <li><span class="check">✓</span> Unlimited everything</li>
-          <li><span class="check">✓</span> Custom fine-tuning</li>
-          <li><span class="check">✓</span> On-premise deploy</li>
-          <li><span class="check">✓</span> SOC2 & GDPR</li>
-          <li><span class="check">✓</span> Unlimited API</li>
-          <li><span class="check">✓</span> 24/7 SLA support</li>
-          <li><span class="check">✓</span> Custom integrations</li>
-        </ul>
-        <button class="btn-plan dark" onclick="alert('Contact: ilyassai@proton.me')">Contact Sales</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── TESTIMONIALS ───────────────────────────────────────── -->
-<section style="background:var(--bg2)">
-  <div class="container">
-    <div class="section-header center">
-      <div class="section-tag">Testimonials</div>
-      <h2 class="section-title">Loved by thousands<br/>of builders</h2>
-    </div>
-    <div class="testimonials-grid reveal">
-      <div class="testimonial-card">
-        <div class="stars">★★★★★</div>
-        <p>"IlyassAI completely replaced my ChatGPT subscription. The speed is unbelievable and the Arabic support is the best I've seen from any AI platform."</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">Y</div>
-          <div><div class="author-name">Youssef El Amrani</div><div class="author-role">Fullstack Developer, Morocco</div></div>
-        </div>
-      </div>
-      <div class="testimonial-card">
-        <div class="stars">★★★★★</div>
-        <p>"We integrated IlyassAI's API into our SaaS product in under 2 hours. The OpenAI compatibility is a game-changer — zero migration friction."</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">S</div>
-          <div><div class="author-name">Sarah Mitchell</div><div class="author-role">CTO, TechFlow Inc.</div></div>
-        </div>
-      </div>
-      <div class="testimonial-card">
-        <div class="stars">★★★★★</div>
-        <p>"The voice recognition in Arabic is phenomenal. I use it daily for meeting notes and content creation. 10x faster than typing."</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">K</div>
-          <div><div class="author-name">Khalid Al-Rashidi</div><div class="author-role">Content Creator, UAE</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── ENTERPRISE / TRUST ─────────────────────────────────── -->
-<section id="enterprise">
-  <div class="container">
-    <div class="section-header center">
-      <div class="section-tag">Security & Trust</div>
-      <h2 class="section-title">Enterprise-grade security<br/>you can rely on</h2>
-      <p class="section-sub">Built with privacy-first architecture and industry-leading security standards.</p>
-    </div>
-    <div class="trust-grid reveal">
-      <div class="trust-card">
-        <span class="badge">🔐</span>
-        <h3>End-to-End Encryption</h3>
-        <p>All data is encrypted in transit (TLS 1.3) and at rest (AES-256). Your conversations are private by design.</p>
-        <div class="cert-badges">
-          <span class="cert">SOC2 Type II</span>
-          <span class="cert">GDPR</span>
-        </div>
-      </div>
-      <div class="trust-card">
-        <span class="badge">🛡️</span>
-        <h3>Zero Data Training</h3>
-        <p>We never use your conversations or data to train AI models. Your intellectual property stays yours.</p>
-        <div class="cert-badges">
-          <span class="cert">ISO 27001</span>
-          <span class="cert">HIPAA Ready</span>
-        </div>
-      </div>
-      <div class="trust-card">
-        <span class="badge">⚡</span>
-        <h3>99.9% Uptime SLA</h3>
-        <p>Built on globally distributed infrastructure with automatic failover. We guarantee 99.9% uptime for all paid plans.</p>
-        <div class="cert-badges">
-          <span class="cert">24/7 Monitoring</span>
-          <span class="cert">Auto-failover</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── CTA ────────────────────────────────────────────────── -->
-<section class="cta-section">
-  <div class="container">
-    <div class="cta-card reveal">
-      <h2>Ready to build with<br/>the future of AI?</h2>
-      <p>Join 50,000+ developers and teams already using IlyassAI.<br/>Start free — no credit card required.</p>
-      <div class="cta-actions">
-        <a href="/app" class="btn-primary" style="font-size:17px;padding:16px 36px">
-          <span>🚀</span> Start for free
-        </a>
-        <button class="btn-secondary" onclick="alert('Contact: ilyassai@proton.me')">
-          <span>💼</span> Contact Sales
+      <h1>
+        The AI Agent That<br/>
+        <span class="grad-text">Thinks, Acts & Builds</span>
+      </h1>
+      <p class="hero-sub">
+        IlyassAI is a next-generation autonomous agent — it doesn't just chat. It plans complex tasks, writes and deploys code, searches the web, manages projects, and improves itself continuously.
+      </p>
+      <div class="hero-cta">
+        <button class="btn-hero" onclick="window.location.href='/app'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Launch IlyassAI
+        </button>
+        <button class="btn-hero-ghost" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">
+          See Capabilities
         </button>
       </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">15+</div>
+          <div class="stat-label">Free AI Models</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Autonomous Tasks</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-num">0ms</div>
+          <div class="stat-label">Setup Time</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-num">99.9%</div>
+          <div class="stat-label">Uptime SLA</div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ── FOOTER ─────────────────────────────────────────────── -->
-<footer>
+<!-- ══════════════════════ FEATURES ══════════════════════ -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-header center fade-in">
+      <div class="section-label">⚡ Core Capabilities</div>
+      <h2 class="section-title">Not Just a Chatbot.<br/>An Autonomous Agent.</h2>
+      <p class="section-sub">IlyassAI combines the best free AI APIs to create a Manus-like experience — intelligent, proactive, and capable of real-world tasks.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card fade-in">
+        <div class="feature-icon">🧠</div>
+        <h3 class="feature-title">Multi-Model Intelligence</h3>
+        <p class="feature-desc">Automatically routes your requests to the best available model — Llama 3.3, DeepSeek, Gemma, Qwen, and more. Always uses the most capable free option.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">🔍</div>
+        <h3 class="feature-title">Real-Time Web Search</h3>
+        <p class="feature-desc">Integrated with DuckDuckGo, Brave Search, and SerpAPI. The agent searches the web in real-time to ground its responses in current, accurate information.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">💻</div>
+        <h3 class="feature-title">Code Generation & Execution</h3>
+        <p class="feature-desc">Write, review, debug, and explain code across any language. The Live Activity Panel shows each step as the agent works through complex programming tasks.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">🚀</div>
+        <h3 class="feature-title">GitHub & Vercel Integration</h3>
+        <p class="feature-desc">Push code to GitHub and trigger Vercel deployments directly from the chat. Build, deploy, and iterate on projects with natural language instructions.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">🖼️</div>
+        <h3 class="feature-title">Image Generation</h3>
+        <p class="feature-desc">Generate stunning images using Pollinations.ai and other free image APIs. From concept art to product mockups — described in plain language.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">🔄</div>
+        <h3 class="feature-title">Self-Improvement Engine</h3>
+        <p class="feature-desc">Continuously discovers and evaluates new free AI APIs. When a better model or tool becomes available, IlyassAI integrates it automatically into its workflow.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">🎤</div>
+        <h3 class="feature-title">Speech Recognition</h3>
+        <p class="feature-desc">Talk to the agent using Whisper-powered transcription. Supports 50+ languages with high accuracy transcription powered by OpenAI's Whisper API.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">📊</div>
+        <h3 class="feature-title">Live Activity Panel</h3>
+        <p class="feature-desc">Watch IlyassAI think in real time. The activity panel on the right shows tool calls, search results, reasoning steps, and API discoveries as they happen.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">💾</div>
+        <h3 class="feature-title">Persistent Memory</h3>
+        <p class="feature-desc">IlyassAI remembers context across conversations. It builds a knowledge graph of your preferences, past projects, and recurring tasks for personalized assistance.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ MODELS ══════════════════════ -->
+<section class="section" id="models" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-header center fade-in">
+      <div class="section-label">🤖 Supported Models</div>
+      <h2 class="section-title">15+ Free AI Models,<br/>One Unified Interface</h2>
+      <p class="section-sub">All models are free, automatically updated, and seamlessly integrated. IlyassAI picks the best model for each task.</p>
+    </div>
+    <div class="models-grid fade-in">
+      <div class="model-card"><div class="model-name">Llama 3.3 70B</div><div class="model-provider">Meta · via Groq</div><span class="model-badge free">Free</span> <span class="model-badge fast">Ultra Fast</span></div>
+      <div class="model-card"><div class="model-name">DeepSeek R1</div><div class="model-provider">DeepSeek · via HF</div><span class="model-badge free">Free</span></div>
+      <div class="model-card"><div class="model-name">Gemma 2 27B</div><div class="model-provider">Google · via Groq</div><span class="model-badge free">Free</span> <span class="model-badge fast">Fast</span></div>
+      <div class="model-card"><div class="model-name">Qwen 2.5 72B</div><div class="model-provider">Alibaba · via HF</div><span class="model-badge free">Free</span></div>
+      <div class="model-card"><div class="model-name">Mistral 7B</div><div class="model-provider">Mistral AI</div><span class="model-badge free">Free</span> <span class="model-badge fast">Fast</span></div>
+      <div class="model-card"><div class="model-name">Phi-3.5 Mini</div><div class="model-provider">Microsoft · via HF</div><span class="model-badge free">Free</span></div>
+      <div class="model-card"><div class="model-name">Gemini Flash 2.0</div><div class="model-provider">Google</div><span class="model-badge free">Free Tier</span></div>
+      <div class="model-card"><div class="model-name">Claude 3 Haiku</div><div class="model-provider">Anthropic</div><span class="model-badge fast">Fast</span></div>
+      <div class="model-card"><div class="model-name">GPT-4o Mini</div><div class="model-provider">OpenAI</div><span class="model-badge fast">Reliable</span></div>
+      <div class="model-card"><div class="model-name">Mixtral 8x7B</div><div class="model-provider">Mistral · via Groq</div><span class="model-badge free">Free</span></div>
+      <div class="model-card"><div class="model-name">Llama 3.2 Vision</div><div class="model-provider">Meta · Multimodal</div><span class="model-badge free">Free</span></div>
+      <div class="model-card"><div class="model-name">+ Auto-Discover</div><div class="model-provider">New models weekly</div><span class="model-badge free">Self-Updating</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ API SECTION ══════════════════════ -->
+<section class="section" id="api">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center" class="fade-in">
+      <div>
+        <div class="section-label">🔌 Developer API</div>
+        <h2 class="section-title">Build on Top<br/>of IlyassAI</h2>
+        <p class="section-sub" style="margin-bottom:24px">Integrate IlyassAI's intelligence into your own apps. Simple REST API, streaming support, and SDKs for JavaScript and Python.</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;font-size:14px;color:var(--text2)">
+          <li style="display:flex;align-items:center;gap:8px"><span style="color:var(--green);font-weight:700">✓</span> REST API with OpenAI-compatible format</li>
+          <li style="display:flex;align-items:center;gap:8px"><span style="color:var(--green);font-weight:700">✓</span> Real-time streaming via Server-Sent Events</li>
+          <li style="display:flex;align-items:center;gap:8px"><span style="color:var(--green);font-weight:700">✓</span> Automatic model fallback & load balancing</li>
+          <li style="display:flex;align-items:center;gap:8px"><span style="color:var(--green);font-weight:700">✓</span> Built-in rate limiting & abuse protection</li>
+        </ul>
+        <button class="btn-primary" style="margin-top:28px;padding:12px 24px" onclick="window.location.href='/app'">Get API Key →</button>
+      </div>
+      <div class="api-card">
+        <div style="font-size:13px;color:var(--text3);font-weight:600;margin-bottom:4px">QUICKSTART</div>
+        <div style="font-size:20px;font-weight:800;margin-bottom:4px">Connect in 2 Lines</div>
+        <div class="code-block"><pre><span class="comment">// IlyassAI · OpenAI-compatible API</span>
+<span class="key">const</span> <span class="func">response</span> = <span class="key">await</span> fetch(<span class="string">'/api/chat'</span>, {
+  <span class="key">method</span>: <span class="string">'POST'</span>,
+  <span class="key">headers</span>: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> },
+  <span class="key">body</span>: JSON.stringify({
+    <span class="key">model</span>: <span class="string">'auto'</span>,  <span class="comment">// auto-select best model</span>
+    <span class="key">messages</span>: [{ 
+      <span class="key">role</span>: <span class="string">'user'</span>, 
+      <span class="key">content</span>: <span class="string">'Build me a REST API in Node.js'</span>
+    }],
+    <span class="key">stream</span>: <span class="key">true</span>
+  })
+});
+
+<span class="comment">// Reads the streaming response</span>
+<span class="key">const</span> reader = response.body.getReader();</pre></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ PRICING ══════════════════════ -->
+<section class="section" id="pricing" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-header center fade-in">
+      <div class="section-label">💎 Pricing</div>
+      <h2 class="section-title">Start Free.<br/>Scale When Ready.</h2>
+      <p class="section-sub">Every plan gives you access to all free models. Upgrade for premium models and higher limits.</p>
+    </div>
+    <div class="pricing-grid fade-in">
+      <div class="price-card">
+        <div class="price-name">Free</div>
+        <div class="price-amount">$0<span>/mo</span></div>
+        <div class="price-period">Forever free</div>
+        <ul class="price-features">
+          <li>100 messages / day</li>
+          <li>All free AI models</li>
+          <li>Web search integration</li>
+          <li>Image generation (10/day)</li>
+          <li>Code generation</li>
+        </ul>
+        <button class="btn-hero-ghost" style="width:100%;justify-content:center" onclick="window.location.href='/app'">Get Started Free</button>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge">Most Popular</div>
+        <div class="price-name">Pro</div>
+        <div class="price-amount">$12<span>/mo</span></div>
+        <div class="price-period">Billed monthly</div>
+        <ul class="price-features">
+          <li>Unlimited messages</li>
+          <li>Premium models (GPT-4o, Claude)</li>
+          <li>GitHub & Vercel deploy</li>
+          <li>Unlimited image generation</li>
+          <li>Memory & context persistence</li>
+          <li>Priority model routing</li>
+        </ul>
+        <button class="btn-hero" style="width:100%;justify-content:center" onclick="window.location.href='/app'">Upgrade to Pro</button>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Enterprise</div>
+        <div class="price-amount">Custom</div>
+        <div class="price-period">Contact us</div>
+        <ul class="price-features">
+          <li>Unlimited everything</li>
+          <li>Custom model hosting</li>
+          <li>SSO & SAML auth</li>
+          <li>Dedicated infrastructure</li>
+          <li>SLA guarantee</li>
+          <li>Custom integrations</li>
+        </ul>
+        <button class="btn-hero-ghost" style="width:100%;justify-content:center" onclick="window.location.href='mailto:enterprise@ilyassai.com'">Contact Sales</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ TESTIMONIALS ══════════════════════ -->
+<section class="section" id="testimonials">
+  <div class="container">
+    <div class="section-header center fade-in">
+      <div class="section-label">💬 Testimonials</div>
+      <h2 class="section-title">Developers Love<br/>IlyassAI</h2>
+    </div>
+    <div class="testimonials-grid fade-in">
+      <div class="testimonial">
+        <p class="testimonial-text">I replaced 4 different AI tools with IlyassAI. It handles code review, documentation, and even deploys to Vercel. The Live Activity Panel is genius — I can actually see it working.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">AK</div>
+          <div><div class="author-name">Ahmed K.</div><div class="author-role">Full-Stack Developer</div></div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <p class="testimonial-text">The autonomous agent capabilities are unlike anything I've seen for free. It searches the web, writes code, and pushes to GitHub — all from one prompt. Absolutely wild.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">SM</div>
+          <div><div class="author-name">Sara M.</div><div class="author-role">Product Manager at TechCorp</div></div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <p class="testimonial-text">The self-improvement feature is what sold me. Every week there are better models and tools integrated automatically. It feels like the AI is actually getting smarter.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">YB</div>
+          <div><div class="author-name">Youssef B.</div><div class="author-role">AI Researcher</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ SECURITY ══════════════════════ -->
+<section class="section" id="security" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-header center fade-in">
+      <div class="section-label">🛡️ Security & Trust</div>
+      <h2 class="section-title">Enterprise-Grade<br/>Security</h2>
+      <p class="section-sub">Your data is protected by the same standards used by Fortune 500 companies.</p>
+    </div>
+    <div class="security-grid fade-in">
+      <div class="security-item"><span class="security-icon">🔒</span><span class="security-text">End-to-End Encryption</span></div>
+      <div class="security-item"><span class="security-icon">🌐</span><span class="security-text">SOC 2 Type II Ready</span></div>
+      <div class="security-item"><span class="security-icon">🗑️</span><span class="security-text">Data Auto-Deletion</span></div>
+      <div class="security-item"><span class="security-icon">🔑</span><span class="security-text">API Key Rotation</span></div>
+      <div class="security-item"><span class="security-icon">📝</span><span class="security-text">Full Audit Logs</span></div>
+      <div class="security-item"><span class="security-icon">🛡️</span><span class="security-text">Content Moderation AI</span></div>
+      <div class="security-item"><span class="security-icon">🏠</span><span class="security-text">EU Data Residency</span></div>
+      <div class="security-item"><span class="security-icon">✅</span><span class="security-text">GDPR Compliant</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ CTA ══════════════════════ -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-box fade-in">
+      <h2>Ready to Meet Your<br/>Autonomous AI Agent?</h2>
+      <p>Join thousands of developers and creators using IlyassAI to build faster, think smarter, and deploy instantly.</p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+        <button class="btn-hero" onclick="window.location.href='/app'">
+          🚀 Launch IlyassAI — It's Free
+        </button>
+        <button class="btn-hero-ghost" onclick="window.location.href='/app'">Watch Demo</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ FOOTER ══════════════════════ -->
+<footer class="footer">
   <div class="container">
     <div class="footer-grid">
-      <div class="footer-brand">
-        <div class="logo">
-          <div class="logo-icon">I</div>
-          <span style="background:var(--grad2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900">IlyassAI</span>
+      <div>
+        <div class="footer-brand">
+          <div class="nav-logo-icon">I</div>
+          IlyassAI
         </div>
-        <p>The next-generation AI platform for creators, developers, and enterprises. Built for the future.</p>
+        <p class="footer-desc">The next-generation autonomous AI agent. Think. Act. Build. Deploy. All from one platform.</p>
       </div>
       <div class="footer-col">
         <h4>Product</h4>
         <a href="#features">Features</a>
         <a href="#models">Models</a>
         <a href="#pricing">Pricing</a>
-        <a href="/app">Chat App</a>
-        <a href="#api">API</a>
+        <a href="/app">App</a>
+      </div>
+      <div class="footer-col">
+        <h4>Developers</h4>
+        <a href="#">API Docs</a>
+        <a href="#">SDK</a>
+        <a href="https://github.com/saidsaidchiichii-coder/IlyassAgentAI" target="_blank">GitHub</a>
+        <a href="#">Changelog</a>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
-        <a href="#">About Us</a>
+        <a href="#">About</a>
         <a href="#">Blog</a>
-        <a href="#">Careers</a>
-        <a href="#">Press</a>
-        <a href="#">Contact</a>
-      </div>
-      <div class="footer-col">
-        <h4>Legal</h4>
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-        <a href="#">Cookie Policy</a>
-        <a href="#">Security</a>
-        <a href="#">GDPR</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
       </div>
     </div>
     <div class="footer-bottom">
       <span>© 2025 IlyassAI. All rights reserved.</span>
       <div class="footer-bottom-links">
-        <a href="#">Twitter</a>
-        <a href="https://github.com/saidsaidchiichii-coder/IlyassAgentAI">GitHub</a>
-        <a href="#">Discord</a>
-        <a href="#">LinkedIn</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Status</a>
       </div>
     </div>
   </div>
 </footer>
 
 <script>
-// Scroll reveal
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-}, {threshold: 0.1});
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+// Navbar scroll effect
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>40)
+})
 
-// Nav scroll effect
-window.addEventListener('scroll', () => {
-  document.querySelector('nav').style.boxShadow = 
-    window.scrollY > 20 ? '0 1px 40px rgba(0,0,0,0.5)' : '';
-});
+// Intersection Observer for fade-in animations
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible')}})
+},{threshold:0.1,rootMargin:'0px 0px -40px 0px'})
+document.querySelectorAll('.fade-in').forEach(el=>io.observe(el))
 
-// Smooth anchor
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const target = document.querySelector(a.getAttribute('href'));
-    if(target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth', block:'start'}); }
-  });
-});
+// Smooth scroll for nav links
+document.querySelectorAll('a[href^="#"]').forEach(link=>{
+  link.addEventListener('click',e=>{
+    const target=document.querySelector(link.getAttribute('href'))
+    if(target){e.preventDefault();target.scrollIntoView({behavior:'smooth'})}
+  })
+})
 </script>
 </body>
 </html>

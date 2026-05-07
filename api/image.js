@@ -1,54 +1,75 @@
-// ================================================================
-//  api/image.js — IlyassAI Image Generation
-//  Providers:
-//    1. Pollinations.ai Turbo (default, FREE, no key, fast)
-//    2. Pollinations.ai FLUX  (higher quality, slower)
-//    3. Hugging Face FLUX.1   (optional, needs HF_TOKEN env var)
-// ================================================================
+// IlyassAI — /api/image
+// Image generation using Pollinations.ai (free) with Stable Diffusion fallback
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin',  '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method === 'GET')     return res.status(200).json({ ok: true, message: 'IlyassAI Image API ✅' });
-  if (req.method !== 'POST')    return res.status(405).json({ error: 'Method not allowed' });
-
-  try {
-    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-
-    // ✅ FIX 1: Accept BOTH "message" and "prompt" fields
-    const rawPrompt = (body?.message || body?.prompt || '').trim();
-    if (!rawPrompt) return res.status(400).json({ error: 'message or prompt is required' });
-
-    // Clean prompt (remove command words)
-    let prompt = rawPrompt
-      .replace(/^(generate|create|make|draw|paint|render|show|produce)\s+(an?\s+)?(image|picture|photo|illustration|art|artwork)\s+(of\s+)?/i, '')
-      .replace(/^(generate|create|make)\s+/i, '')
-      .trim() || rawPrompt;
-
-    const provider = body?.provider || 'turbo'; // turbo = fastest
-    const width    = Math.min(body?.width  || 1024, 1024);
-    const height   = Math.min(body?.height || 1024, 1024);
-    const seed     = body?.seed || Math.floor(Math.random() * 999999);
-
-    // ── PROVIDER 1: Pollinations.ai (no API key, always free) ──
-    // ✅ FIX 2: Use turbo model + remove enhance=true (was slowing things down)
-    const model    = provider === 'flux' ? 'flux' : 'turbo';
-    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=${model}&width=${width}&height=${height}&seed=${seed}&nologo=true&safe=false`;
-
-    return res.status(200).json({
-      ok:        true,
-      imageUrl,
-      imageType: 'url',
-      prompt,
-      seed,
-      model,
-      provider:  `Pollinations.ai / ${model.toUpperCase()}`,
-    });
-
-  } catch(err) {
-    console.error('[image] Error:', err);
-    return res.status(500).json({ error: err.message || 'Image generation failed' });
+  if (req.method !== 'GET' && req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  res.setHeader('Access-Control-Allow-Origin', '*');
+
+  const { prompt, model = 'flux', width = 1024, height = 1024, seed, enhance = true } = 
+    req.method === 'GET' ? req.query : (req.body || {});
+
+  if (!prompt) {
+    return res.status(400).json({ error: 'prompt is required' });
+  }
+
+  const encodedPrompt = encodeURIComponent(prompt);
+  const seedParam = seed ? `&seed=${seed}` : '';
+  const enhanceParam = enhance ? '&enhance=true' : '';
+
+  // ── Pollinations.ai (100% free, no API key needed) ──
+  try {
+    const pollinationsUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?model=${model}&width=${width}&height=${height}&nologo=true${seedParam}${enhanceParam}`;
+    
+    const pollRes = await fetch(pollinationsUrl);
+    if (pollRes.ok) {
+      const contentType = pollRes.headers.get('content-type');
+      const buffer = await pollRes.arrayBuffer();
+      
+      res.setHeader('Content-Type', contentType || 'image/jpeg');
+      res.setHeader('X-Provider', 'Pollinations.ai');
+      res.setHeader('X-Model', model);
+      res.setHeader('Cache-Control', 'public, max-age=86400');
+      return res.send(Buffer.from(buffer));
+    }
+  } catch (e) {
+    console.error('Pollinations error:', e.message);
+  }
+
+  // ── HuggingFace Stable Diffusion fallback ──
+  const hfKey = process.env.HF_API_KEY;
+  if (hfKey) {
+    try {
+      const hfRes = await fetch(
+        'https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell',
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${hfKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ inputs: prompt })
+        }
+      );
+
+      if (hfRes.ok) {
+        const buffer = await hfRes.arrayBuffer();
+        res.setHeader('Content-Type', 'image/png');
+        res.setHeader('X-Provider', 'HuggingFace FLUX');
+        return res.send(Buffer.from(buffer));
+      }
+    } catch (e) {
+      console.error('HuggingFace image error:', e.message);
+    }
+  }
+
+  // ── Return URL fallback ──
+  return res.status(200).json({
+    success: true,
+    provider: 'Pollinations.ai (URL)',
+    url: `https://image.pollinations.ai/prompt/${encodedPrompt}?model=${model}&width=${width}&height=${height}&nologo=true`,
+    prompt
+  });
 }

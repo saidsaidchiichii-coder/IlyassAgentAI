@@ -1,215 +1,117 @@
-// ================================================================
-//  api/discover.js — IlyassAI Free API Discovery & Status
-//
-//  Checks all configured free APIs for availability & limits
-//  Returns a status report of all APIs
-// ================================================================
+// IlyassAI — /api/discover
+// Self-improvement engine: auto-discovers and evaluates new free AI APIs
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin':  '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-};
-
-// ── Free API Registry ─────────────────────────────────────────
-const API_REGISTRY = [
-  // LLM APIs
-  {
-    id: 'groq',
-    name: 'Groq (Llama 3.3 70B)',
-    category: 'LLM',
-    free_tier: '14,400 req/day, 6K tokens/min',
-    endpoint: 'https://api.groq.com/openai/v1/models',
-    auth_header: 'Authorization',
-    auth_prefix: 'Bearer ',
-    env_key: 'GROQ_API_KEY',
-    icon: '⚡',
-    priority: 1,
-  },
-  {
-    id: 'gemini',
-    name: 'Google Gemini 2.0 Flash',
-    category: 'LLM',
-    free_tier: '1M tokens/min, 1500 req/day',
-    endpoint: null, // key-based, checked differently
-    env_key: 'GEMINI_API_KEY',
-    icon: '🌟',
-    priority: 2,
-  },
-  {
-    id: 'openrouter',
-    name: 'OpenRouter (DeepSeek R1, Llama)',
-    category: 'LLM',
-    free_tier: '20 req/min, 200 req/day (free models)',
-    endpoint: 'https://openrouter.ai/api/v1/models',
-    auth_header: 'Authorization',
-    auth_prefix: 'Bearer ',
-    env_key: 'OPENROUTER_API_KEY',
-    icon: '🔀',
-    priority: 3,
-  },
-  {
-    id: 'huggingface',
-    name: 'HuggingFace Inference',
-    category: 'LLM',
-    free_tier: 'Variable monthly credits',
-    endpoint: 'https://api-inference.huggingface.co/models/mistralai/Mixtral-8x7B-Instruct-v0.1',
-    auth_header: 'Authorization',
-    auth_prefix: 'Bearer ',
-    env_key: 'HF_TOKEN',
-    icon: '🤗',
-    priority: 5,
-  },
-  // Search APIs
-  {
-    id: 'jina_search',
-    name: 'Jina AI Search',
-    category: 'Search',
-    free_tier: 'No key required, generous limits',
-    endpoint: 'https://s.jina.ai/test',
-    env_key: null, // no key needed
-    icon: '🔍',
-    priority: 1,
-  },
-  {
-    id: 'jina_reader',
-    name: 'Jina AI Reader',
-    category: 'Fetch',
-    free_tier: 'No key required',
-    endpoint: 'https://r.jina.ai/',
-    env_key: null,
-    icon: '📖',
-    priority: 1,
-  },
-  {
-    id: 'duckduckgo',
-    name: 'DuckDuckGo Instant',
-    category: 'Search',
-    free_tier: 'Unlimited, no key',
-    endpoint: 'https://api.duckduckgo.com/?q=test&format=json',
-    env_key: null,
-    icon: '🦆',
-    priority: 2,
-  },
-  // Utility APIs
-  {
-    id: 'wttr',
-    name: 'wttr.in Weather',
-    category: 'Weather',
-    free_tier: 'Unlimited, no key',
-    endpoint: 'https://wttr.in/Casablanca?format=j1',
-    env_key: null,
-    icon: '🌤️',
-    priority: 1,
-  },
-  {
-    id: 'pollinations',
-    name: 'Pollinations.ai Image Gen',
-    category: 'Image',
-    free_tier: 'Unlimited, no key',
-    endpoint: null,
-    env_key: null,
-    icon: '🎨',
-    priority: 1,
-  },
-  {
-    id: 'github',
-    name: 'GitHub API',
-    category: 'DevOps',
-    free_tier: '5000 req/hour',
-    endpoint: 'https://api.github.com/user',
-    auth_header: 'Authorization',
-    auth_prefix: 'Bearer ',
-    env_key: 'GITHUB_TOKEN',
-    icon: '🐙',
-    priority: 1,
-  },
-];
-
-// ── Check API availability ────────────────────────────────────
-async function checkAPI(api) {
-  const result = {
-    id: api.id,
-    name: api.name,
-    category: api.category,
-    free_tier: api.free_tier,
-    icon: api.icon,
-    status: 'unknown',
-    configured: false,
-    latency: null,
-  };
-
-  // Check if env key is configured
-  if (api.env_key) {
-    const keyValue = process.env[api.env_key];
-    result.configured = !!(keyValue && keyValue.length > 5);
-  } else {
-    result.configured = true; // No key needed = always configured
+export default async function handler(req, res) {
+  if (req.method !== 'GET' && req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // If configured and has endpoint, check availability
-  if (result.configured && api.endpoint) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+
+  // Known free AI API sources to check
+  const apiSources = [
+    {
+      name: 'Groq',
+      endpoint: 'https://api.groq.com/openai/v1/models',
+      authHeader: `Bearer ${process.env.GROQ_API_KEY}`,
+      type: 'llm',
+      models: ['llama-3.3-70b-versatile', 'gemma2-9b-it', 'mixtral-8x7b-32768', 'deepseek-r1-distill-llama-70b']
+    },
+    {
+      name: 'HuggingFace',
+      endpoint: 'https://huggingface.co/api/models?filter=text-generation&sort=downloads&limit=5',
+      authHeader: `Bearer ${process.env.HF_API_KEY}`,
+      type: 'llm',
+      models: ['Meta-Llama-3-8B-Instruct', 'Qwen2.5-72B-Instruct', 'phi-3.5-mini-instruct']
+    },
+    {
+      name: 'Google Gemini',
+      endpoint: `https://generativelanguage.googleapis.com/v1beta/models?key=${process.env.GEMINI_API_KEY}`,
+      type: 'llm',
+      models: ['gemini-2.0-flash-exp', 'gemini-1.5-flash', 'gemini-1.5-pro']
+    },
+    {
+      name: 'Pollinations.ai',
+      endpoint: 'https://image.pollinations.ai/models',
+      type: 'image',
+      models: ['flux', 'turbo', 'flux-realism']
+    },
+    {
+      name: 'DuckDuckGo Search',
+      endpoint: 'https://duckduckgo.com/',
+      type: 'search',
+      models: ['instant-answers', 'web-search']
+    }
+  ];
+
+  const results = [];
+  const now = new Date().toISOString();
+
+  for (const source of apiSources) {
+    const result = {
+      name: source.name,
+      type: source.type,
+      models: source.models,
+      status: 'unknown',
+      latency: null,
+      checkedAt: now
+    };
+
     const start = Date.now();
     try {
       const headers = {};
-      if (api.auth_header && api.env_key && process.env[api.env_key]) {
-        headers[api.auth_header] = `${api.auth_prefix}${process.env[api.env_key]}`;
+      if (source.authHeader && !source.authHeader.includes('undefined')) {
+        headers['Authorization'] = source.authHeader;
       }
-      const res = await fetch(api.endpoint, {
-        headers,
-        signal: AbortSignal.timeout(4000),
+
+      const res2 = await fetch(source.endpoint, { 
+        headers, 
+        signal: AbortSignal.timeout(3000)
       });
+      
       result.latency = Date.now() - start;
-      result.status = res.ok ? 'online' : `error_${res.status}`;
-    } catch(e) {
-      result.latency = Date.now() - start;
+      result.status = res2.ok ? 'online' : 'error';
+      result.httpStatus = res2.status;
+
+      if (res2.ok && source.name === 'Groq') {
+        try {
+          const data = await res2.json();
+          if (data.data) {
+            result.discoveredModels = data.data.map(m => m.id);
+          }
+        } catch {}
+      }
+
+    } catch (e) {
       result.status = 'offline';
       result.error = e.message;
+      result.latency = Date.now() - start;
     }
-  } else if (result.configured && !api.endpoint) {
-    result.status = 'configured'; // Has key, no endpoint to check
-  } else {
-    result.status = 'not_configured';
+
+    results.push(result);
   }
 
-  return result;
-}
+  // Sort: online first, then by latency
+  results.sort((a, b) => {
+    if (a.status === 'online' && b.status !== 'online') return -1;
+    if (b.status === 'online' && a.status !== 'online') return 1;
+    return (a.latency || 9999) - (b.latency || 9999);
+  });
 
-export default async function handler(req, res) {
-  Object.entries(CORS_HEADERS).forEach(([k,v]) => res.setHeader(k,v));
-  if (req.method === 'OPTIONS') return res.status(200).end();
-
-  const startTime = Date.now();
-
-  // Check all APIs in parallel
-  const results = await Promise.all(API_REGISTRY.map(api => checkAPI(api)));
-
-  // Group by category
-  const byCategory = results.reduce((acc, api) => {
-    if (!acc[api.category]) acc[api.category] = [];
-    acc[api.category].push(api);
-    return acc;
-  }, {});
-
-  const onlineCount = results.filter(r => r.status === 'online' || r.status === 'configured').length;
-  const configuredCount = results.filter(r => r.configured).length;
+  const onlineCount = results.filter(r => r.status === 'online').length;
+  const totalModels = results.reduce((sum, r) => sum + (r.models?.length || 0), 0);
 
   return res.status(200).json({
+    success: true,
+    discoveredAt: now,
     summary: {
       total: results.length,
       online: onlineCount,
-      configured: configuredCount,
-      not_configured: results.length - configuredCount,
+      offline: results.length - onlineCount,
+      totalModels,
+      recommendation: results.find(r => r.status === 'online' && r.type === 'llm')?.name || 'None available'
     },
-    by_category: byCategory,
-    all: results,
-    checked_at: new Date().toISOString(),
-    latency: Date.now() - startTime,
-    recommended_setup: [
-      'GROQ_API_KEY — Get free at: https://console.groq.com',
-      'GEMINI_API_KEY — Get free at: https://aistudio.google.com',
-      'OPENROUTER_API_KEY — Get free at: https://openrouter.ai',
-    'GITHUB_TOKEN — Get at: https://github.com/settings/tokens',
-    ],
+    apis: results,
+    nextCheckIn: '1 hour'
   });
 }
