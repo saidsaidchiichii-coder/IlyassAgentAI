@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>IlyassAI — Agent Mode</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════ TOKENS ═══════════════════════════════ */
+:root {
+  --bg:      #07070f;
+  --bg2:     #0e0e1a;
+  --bg3:     #141422;
+  --surface: rgba(255,255,255,0.04);
+  --border:  rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --text:    #eeeeff;
+  --text2:   rgba(238,238,255,0.62);
+  --text3:   rgba(238,238,255,0.32);
+  --purple:  #7c3aed;
+  --purple2: #a78bfa;
+  --blue:    #3b82f6;
+  --green:   #22c55e;
+  --yellow:  #f59e0b;
+  --red:     #ef4444;
+  --grad:    linear-gradient(135deg,#7c3aed,#3b82f6);
+  --r:       12px;
+  --r-lg:    18px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px}
+button{font-family:inherit;cursor:pointer;border:none;outline:none}
+textarea{font-family:inherit;resize:none;outline:none;border:none;background:transparent;color:inherit}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px}
+
+/* ═══════════════════════════ LAYOUT ═══════════════════════════ */
+.app { display:flex; height:100vh; overflow:hidden; }
+
+/* LEFT: Task Input Panel */
+.left-panel {
+  width: 380px;
+  flex-shrink: 0;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.left-header {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.back-link {
+  color: var(--text2);
+  font-size: 12px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+}
+.back-link:hover { background: var(--surface); color: var(--text); }
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+.agent-badge {
+  background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(59,130,246,0.2));
+  border: 1px solid rgba(124,58,237,0.3);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--purple2);
+}
+
+/* Task input */
+.task-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.task-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+.task-textarea {
+  width: 100%;
+  min-height: 140px;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  padding: 14px;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+  transition: border-color 0.2s;
+}
+.task-textarea:focus { border-color: rgba(124,58,237,0.5); }
+.task-textarea::placeholder { color: var(--text3); }
+
+/* Example tasks */
+.examples-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-top: 4px;
+}
+.example-chip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.2s;
+  line-height: 1.4;
+}
+.example-chip:hover { background: rgba(124,58,237,0.08); border-color: rgba(124,58,237,0.3); color: var(--text); }
+
+/* Options */
+.options-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.option-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+.option-badge.active {
+  background: rgba(124,58,237,0.15);
+  border-color: rgba(124,58,237,0.4);
+  color: var(--purple2);
+}
+.option-badge .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--text3);
+}
+.option-badge.active .dot { background: var(--purple2); }
+
+/* Run button */
+.run-btn {
+  width: 100%;
+  padding: 13px;
+  background: var(--grad);
+  color: white;
+  border-radius: var(--r);
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.run-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(124,58,237,0.3); }
+.run-btn:active { transform: translateY(0); }
+.run-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* Task history */
+.history-section { border-top: 1px solid var(--border); }
+.history-title {
+  padding: 12px 20px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+.history-list { overflow-y: auto; max-height: 180px; }
+.history-item {
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.history-item:hover { background: var(--surface); }
+.history-item-task {
+  font-size: 12px;
+  color: var(--text2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.history-item-time { font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+/* CENTER: Live Activity Panel */
+.center-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-right: 1px solid var(--border);
+}
+.center-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.center-title { font-size: 13px; font-weight: 600; }
+.agent-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text2);
+}
+.status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--text3);
+}
+.status-dot.running { background: var(--yellow); animation: pulse 1s infinite; }
+.status-dot.done { background: var(--green); }
+.status-dot.error { background: var(--red); }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+/* Steps feed */
+.steps-feed {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Empty state */
+.empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+  color: var(--text3);
+}
+.empty-icon { font-size: 40px; opacity: 0.6; }
+.empty-title { font-size: 15px; font-weight: 600; color: var(--text2); }
+.empty-sub { font-size: 13px; max-width: 280px; line-height: 1.5; }
+
+/* Step card */
+.step-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  animation: step-in 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes step-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  user-select: none;
+}
+.step-num {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--grad);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.step-action-name {
+  font-size: 12px;
+  font-weight: 600;
+  flex: 1;
+}
+.step-tool-badge {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.step-tool-badge.web_search   { background: rgba(59,130,246,0.15); color: #7dd3fc; }
+.step-tool-badge.web_fetch    { background: rgba(34,197,94,0.15); color: #86efac; }
+.step-tool-badge.code_execute { background: rgba(245,158,11,0.15); color: #fcd34d; }
+.step-tool-badge.get_weather  { background: rgba(6,182,212,0.15); color: #67e8f9; }
+.step-tool-badge.get_news     { background: rgba(236,72,153,0.15); color: #f9a8d4; }
+.step-tool-badge.github_read  { background: rgba(167,139,250,0.15); color: #c4b5fd; }
+.step-tool-badge.final        { background: rgba(34,197,94,0.15); color: #86efac; }
+.step-time { font-size: 10px; color: var(--text3); flex-shrink: 0; }
+
+.step-body {
+  padding: 0 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.step-thought {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.5;
+  background: rgba(124,58,237,0.06);
+  border-left: 2px solid rgba(124,58,237,0.4);
+  padding: 6px 10px;
+  border-radius: 0 6px 6px 0;
+}
+.step-observation {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.5;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-family: 'JetBrains Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.obs-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 4px;
+}
+
+/* Progress bar */
+.progress-bar-wrap {
+  height: 2px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 0;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--grad);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+/* RIGHT: Answer Panel */
+.right-panel {
+  width: 400px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.right-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.right-title { font-size: 13px; font-weight: 600; }
+.copy-btn {
+  font-size: 11px;
+  color: var(--text2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  transition: all 0.2s;
+}
+.copy-btn:hover { background: var(--bg3); color: var(--text); }
+
+.answer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+.answer-placeholder {
+  color: var(--text3);
+  font-size: 13px;
+  text-align: center;
+  padding: 40px 20px;
+}
+.answer-content {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.answer-content h1,h2,h3 { color: var(--text); margin: 12px 0 6px; }
+.answer-meta {
+  margin-top: 20px;
+  padding: 12px;
+  background: var(--surface);
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+}
+.meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text3);
+  padding: 2px 0;
+}
+.meta-val { color: var(--text2); font-weight: 500; }
+
+/* API Status sidebar mini */
+.api-status-mini {
+  border-top: 1px solid var(--border);
+  padding: 12px 20px;
+}
+.api-status-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.api-refresh-btn {
+  font-size: 10px;
+  color: var(--text3);
+  background: none;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.api-refresh-btn:hover { background: var(--surface); color: var(--text2); }
+.api-list { display: flex; flex-direction: column; gap: 4px; }
+.api-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+}
+.api-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.api-dot.online    { background: var(--green); }
+.api-dot.configured{ background: var(--yellow); }
+.api-dot.offline   { background: var(--red); }
+.api-dot.not_configured { background: var(--text3); }
+.api-name { flex: 1; color: var(--text2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.api-category { font-size: 10px; color: var(--text3); }
+
+/* Loading spinner */
+.spinner {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.15);
+  border-top-color: var(--purple2);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Streaming dots */
+.typing-dots span {
+  display: inline-block;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--purple2);
+  margin: 0 2px;
+  animation: dot-bounce 1.2s ease-in-out infinite;
+}
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dot-bounce {
+  0%,80%,100% { transform: translateY(0); }
+  40% { transform: translateY(-4px); }
+}
+
+/* Markdown rendering */
+.md-code { background: #1a1a2e; border-radius: 6px; padding: 10px 12px; margin: 8px 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; overflow-x: auto; }
+.md-inline-code { background: rgba(255,255,255,0.08); padding: 1px 5px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+.md-h1 { font-size: 18px; font-weight: 700; margin: 16px 0 8px; }
+.md-h2 { font-size: 16px; font-weight: 600; margin: 14px 0 6px; }
+.md-h3 { font-size: 14px; font-weight: 600; margin: 12px 0 5px; }
+.md-hr { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+
+@media (max-width: 900px) {
+  .right-panel { display: none; }
+  .left-panel { width: 320px; }
+}
+@media (max-width: 620px) {
+  .left-panel { width: 100%; border-right: none; }
+  .center-panel { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ═══ LEFT: Input Panel ═══ -->
+  <div class="left-panel">
+    <div class="left-header">
+      <a href="/app" class="back-link">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Chat
+      </a>
+      <div class="header-title">
+        <span style="font-size:16px">🤖</span>
+        <span style="font-size:13px;font-weight:700">IlyassAI Agent</span>
+        <span class="agent-badge">AUTONOMOUS</span>
+      </div>
+    </div>
+
+    <div class="task-area">
+      <div class="task-label">Task</div>
+      <textarea
+        id="task-input"
+        class="task-textarea"
+        placeholder="Describe what you want me to do...&#10;&#10;Example: Research the latest AI news and summarize the top 5 stories in Arabic"
+        rows="6"
+      ></textarea>
+
+      <div class="options-row">
+        <div class="option-badge active" id="opt-search" onclick="toggleOption(this)">
+          <div class="dot"></div>
+          Web Search
+        </div>
+        <div class="option-badge active" id="opt-fetch" onclick="toggleOption(this)">
+          <div class="dot"></div>
+          Web Fetch
+        </div>
+        <div class="option-badge" id="opt-code" onclick="toggleOption(this)">
+          <div class="dot"></div>
+          Code Eval
+        </div>
+        <div class="option-badge" id="opt-github" onclick="toggleOption(this)">
+          <div class="dot"></div>
+          GitHub
+        </div>
+      </div>
+
+      <div>
+        <div class="task-label" style="margin-bottom:8px">Max iterations</div>
+        <div class="options-row">
+          <div class="option-badge active" id="iter-3" onclick="setIter(3,this)"><div class="dot"></div>3</div>
+          <div class="option-badge" id="iter-5" onclick="setIter(5,this)"><div class="dot"></div>5</div>
+          <div class="option-badge" id="iter-8" onclick="setIter(8,this)"><div class="dot"></div>8</div>
+          <div class="option-badge" id="iter-10" onclick="setIter(10,this)"><div class="dot"></div>10</div>
+        </div>
+      </div>
+
+      <button class="run-btn" id="run-btn" onclick="runAgent()">
+        <span id="run-icon">🚀</span>
+        <span id="run-label">Run Agent</span>
+      </button>
+
+      <div class="examples-title" style="margin-top:4px">Quick examples</div>
+      <div class="example-chip" onclick="setTask(this)">🔍 Search the latest news about AI in 2026 and summarize in Arabic</div>
+      <div class="example-chip" onclick="setTask(this)">⚡ What is the weather in Casablanca right now?</div>
+      <div class="example-chip" onclick="setTask(this)">📊 Research and compare Groq vs Gemini APIs for free tier usage</div>
+      <div class="example-chip" onclick="setTask(this)">🐍 Write and explain a Python fibonacci function with O(n) complexity</div>
+      <div class="example-chip" onclick="setTask(this)">🌐 Fetch and summarize the content of https://github.com/trending</div>
+    </div>
+
+    <div class="history-section" id="history-section" style="display:none">
+      <div class="history-title">Recent Tasks</div>
+      <div class="history-list" id="history-list"></div>
+    </div>
+  </div>
+
+  <!-- ═══ CENTER: Live Activity ═══ -->
+  <div class="center-panel">
+    <div class="center-header">
+      <span class="center-title">Live Activity</span>
+      <div class="agent-status">
+        <div class="status-dot" id="status-dot"></div>
+        <span id="status-label">Idle</span>
+      </div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progress-bar" style="width:0%"></div>
+    </div>
+
+    <div class="steps-feed" id="steps-feed">
+      <div class="empty-state" id="empty-state">
+        <div class="empty-icon">🤖</div>
+        <div class="empty-title">Ready to execute</div>
+        <div class="empty-sub">Enter a task on the left and click "Run Agent" to see the step-by-step reasoning in real time.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ RIGHT: Answer Panel ═══ -->
+  <div class="right-panel">
+    <div class="right-header">
+      <span class="right-title">Final Answer</span>
+      <button class="copy-btn" onclick="copyAnswer()">📋 Copy</button>
+    </div>
+    <div class="answer-body" id="answer-body">
+      <div class="answer-placeholder" id="answer-placeholder">
+        The agent's final answer will appear here after completing the task.
+      </div>
+    </div>
+
+    <!-- API Status Mini -->
+    <div class="api-status-mini">
+      <div class="api-status-title">
+        API Status
+        <button class="api-refresh-btn" onclick="loadAPIStatus()">↻ Refresh</button>
+      </div>
+      <div class="api-list" id="api-status-list">
+        <div style="font-size:11px;color:var(--text3)">Loading...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── State ────────────────────────────────────────────────────
+let maxIterations = 3;
+let taskHistory = JSON.parse(localStorage.getItem('agent_history') || '[]');
+let isRunning = false;
+
+// ── Options ──────────────────────────────────────────────────
+function toggleOption(el) {
+  el.classList.toggle('active');
+}
+
+function setIter(n, el) {
+  document.querySelectorAll('[id^="iter-"]').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+  maxIterations = n;
+}
+
+function setTask(el) {
+  const text = el.textContent.replace(/^[^ ]+ /, '').trim();
+  document.getElementById('task-input').value = text;
+}
+
+// ── Run Agent ────────────────────────────────────────────────
+async function runAgent() {
+  const task = document.getElementById('task-input').value.trim();
+  if (!task) return;
+  if (isRunning) return;
+
+  isRunning = true;
+  const runBtn = document.getElementById('run-btn');
+  runBtn.disabled = true;
+  document.getElementById('run-icon').innerHTML = '<div class="spinner"></div>';
+  document.getElementById('run-label').textContent = 'Running...';
+
+  // Clear previous
+  const feed = document.getElementById('steps-feed');
+  const emptyState = document.getElementById('empty-state');
+  feed.innerHTML = '';
+  document.getElementById('answer-body').innerHTML = '<div style="text-align:center;padding:40px 20px;"><div class="typing-dots"><span></span><span></span><span></span></div><div style="margin-top:8px;font-size:12px;color:var(--text3)">Agent is working...</div></div>';
+  document.getElementById('answer-placeholder') && document.getElementById('answer-placeholder').remove();
+
+  // Status
+  setStatus('running', 'Running...');
+  setProgress(5);
+
+  const startTime = Date.now();
+
+  try {
+    const res = await fetch('/api/agent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ task, maxIterations }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || `HTTP ${res.status}`);
+    }
+
+    const data = await res.json();
+    const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+
+    // Render steps
+    if (data.steps?.length > 0) {
+      data.steps.forEach((step, i) => {
+        setTimeout(() => {
+          renderStep(step, i + 1, data.steps.length);
+          setProgress(Math.round(((i + 1) / data.steps.length) * 85) + 10);
+        }, i * 120);
+      });
+    }
+
+    // Final answer
+    setTimeout(() => {
+      renderAnswer(data.answer, {
+        iterations: data.iterations,
+        latency: elapsed,
+        task: data.task,
+      });
+      setStatus('done', `Done in ${elapsed}s`);
+      setProgress(100);
+    }, (data.steps?.length || 0) * 120 + 200);
+
+    // Save to history
+    saveHistory(task, data.answer);
+
+  } catch(err) {
+    console.error('[agent]', err);
+    feed.innerHTML = `<div style="padding:20px;color:var(--red);font-size:13px">❌ Error: ${err.message}</div>`;
+    document.getElementById('answer-body').innerHTML = `<div style="padding:20px;color:var(--red);font-size:13px">Error: ${err.message}</div>`;
+    setStatus('error', 'Error');
+    setProgress(0);
+  } finally {
+    isRunning = false;
+    runBtn.disabled = false;
+    document.getElementById('run-icon').textContent = '🚀';
+    document.getElementById('run-label').textContent = 'Run Agent';
+  }
+}
+
+// ── Render step card ─────────────────────────────────────────
+function renderStep(step, num, total) {
+  const feed = document.getElementById('steps-feed');
+
+  const isFinal = step.final;
+  const toolClass = step.action || 'final';
+  const toolIcon = {
+    web_search: '🔍', web_fetch: '📖', code_execute: '⚡',
+    get_weather: '🌤️', get_news: '📰', github_read: '🐙',
+    summarize: '📝', translate: '🌐', final: '✅',
+  }[toolClass] || '🔧';
+
+  const time = new Date(step.timestamp).toLocaleTimeString('en-US', {hour12:false});
+
+  const card = document.createElement('div');
+  card.className = 'step-card';
+  card.innerHTML = `
+    <div class="step-header" onclick="this.parentElement.querySelector('.step-body').style.display = this.parentElement.querySelector('.step-body').style.display === 'none' ? 'flex' : 'none'">
+      <div class="step-num">${num}</div>
+      <span class="step-action-name">${isFinal ? 'Final Answer' : (step.action || 'Thinking')}</span>
+      <span class="step-tool-badge ${toolClass}">${toolIcon} ${isFinal ? 'Done' : (step.action || 'think')}</span>
+      <span class="step-time">${time}</span>
+    </div>
+    <div class="step-body" style="display:flex">
+      ${step.thought ? `<div class="step-thought">💭 ${escHtml(step.thought.slice(0,400))}</div>` : ''}
+      ${step.observation ? `
+        <div>
+          <div class="obs-label">Observation</div>
+          <div class="step-observation">${escHtml(step.observation.slice(0,600))}${step.observation.length > 600 ? '...' : ''}</div>
+        </div>
+      ` : ''}
+    </div>
+  `;
+  feed.appendChild(card);
+  feed.scrollTop = feed.scrollHeight;
+}
+
+// ── Render final answer ──────────────────────────────────────
+function renderAnswer(answer, meta) {
+  const body = document.getElementById('answer-body');
+  body.innerHTML = `
+    <div class="answer-content">${renderMarkdown(answer)}</div>
+    <div class="answer-meta">
+      <div class="meta-row"><span>Iterations</span><span class="meta-val">${meta.iterations}</span></div>
+      <div class="meta-row"><span>Time</span><span class="meta-val">${meta.latency}s</span></div>
+    </div>
+  `;
+}
+
+// ── Simple Markdown ──────────────────────────────────────────
+function renderMarkdown(text) {
+  return text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/```[\w]*\n?([\s\S]*?)```/g, '<div class="md-code">$1</div>')
+    .replace(/`([^`]+)`/g, '<span class="md-inline-code">$1</span>')
+    .replace(/^### (.+)$/gm, '<div class="md-h3">$1</div>')
+    .replace(/^## (.+)$/gm, '<div class="md-h2">$1</div>')
+    .replace(/^# (.+)$/gm, '<div class="md-h1">$1</div>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^---$/gm, '<hr class="md-hr"/>')
+    .replace(/\n/g, '<br/>');
+}
+
+function escHtml(text) {
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── Status & Progress ────────────────────────────────────────
+function setStatus(type, label) {
+  const dot = document.getElementById('status-dot');
+  const lbl = document.getElementById('status-label');
+  dot.className = `status-dot ${type}`;
+  lbl.textContent = label;
+}
+
+function setProgress(pct) {
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+// ── Copy answer ──────────────────────────────────────────────
+function copyAnswer() {
+  const text = document.getElementById('answer-body').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = '✅ Copied';
+    setTimeout(() => { btn.textContent = '📋 Copy'; }, 2000);
+  });
+}
+
+// ── History ──────────────────────────────────────────────────
+function saveHistory(task, answer) {
+  taskHistory.unshift({ task, answer: answer?.slice(0,200), time: new Date().toISOString() });
+  taskHistory = taskHistory.slice(0, 10);
+  localStorage.setItem('agent_history', JSON.stringify(taskHistory));
+  renderHistory();
+}
+
+function renderHistory() {
+  if (taskHistory.length === 0) return;
+  document.getElementById('history-section').style.display = 'block';
+  const list = document.getElementById('history-list');
+  list.innerHTML = taskHistory.map((h,i) => `
+    <div class="history-item" onclick="loadHistory(${i})">
+      <div class="history-item-task">${h.task}</div>
+      <div class="history-item-time">${new Date(h.time).toLocaleString()}</div>
+    </div>
+  `).join('');
+}
+
+function loadHistory(i) {
+  const h = taskHistory[i];
+  document.getElementById('task-input').value = h.task;
+}
+
+// ── API Status ───────────────────────────────────────────────
+async function loadAPIStatus() {
+  const list = document.getElementById('api-status-list');
+  list.innerHTML = '<div style="font-size:11px;color:var(--text3)">Checking...</div>';
+  try {
+    const res = await fetch('/api/discover');
+    const data = await res.json();
+    list.innerHTML = (data.all || []).slice(0, 8).map(api => `
+      <div class="api-item">
+        <div class="api-dot ${api.status}"></div>
+        <span class="api-name">${api.icon} ${api.name}</span>
+        <span class="api-category">${api.category}</span>
+      </div>
+    `).join('');
+  } catch(e) {
+    list.innerHTML = '<div style="font-size:11px;color:var(--red)">Failed to load</div>';
+  }
+}
+
+// ── Init ─────────────────────────────────────────────────────
+renderHistory();
+loadAPIStatus();
+
+// Keyboard: Ctrl+Enter = run
+document.getElementById('task-input').addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+    e.preventDefault();
+    runAgent();
+  }
+});
+</script>
+</body>
+</html>

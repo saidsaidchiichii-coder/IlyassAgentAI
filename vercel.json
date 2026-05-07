@@ -2,7 +2,17 @@
   "outputDirectory": "public",
   "routes": [
     { "src": "/app", "dest": "/app.html" },
-    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/agent", "dest": "/agent.html" },
+    { "src": "/auth", "dest": "/auth.html" },
+    { "src": "/api/agent", "dest": "/api/agent.js" },
+    { "src": "/api/discover", "dest": "/api/discover.js" },
+    { "src": "/api/chat", "dest": "/api/chat.js" },
+    { "src": "/api/image", "dest": "/api/image.js" },
+    { "src": "/api/search", "dest": "/api/search.js" },
+    { "src": "/api/transcribe", "dest": "/api/transcribe.js" },
+    { "src": "/api/memory", "dest": "/api/memory.js" },
+    { "src": "/api/parse", "dest": "/api/parse.js" },
+    { "src": "/api/moderate", "dest": "/api/moderate.js" },
     { "src": "/(.*)", "dest": "/$1" }
   ]
 }

@@ -59,6 +59,72 @@ function quickModerate(text) {
   return !blocked.some(p => p.test(lower));
 }
 
+// ── Multi-LLM Router (Gemini → OpenRouter → Mistral → Groq) ──
+async function callGeminiDirect(messages, system) {
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) return null;
+  const contents = messages.filter(m => m.role !== 'system').map(m => ({
+    role: m.role === 'assistant' ? 'model' : 'user',
+    parts: [{ text: m.content }],
+  }));
+  try {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${key}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: system }] },
+          contents,
+          generationConfig: { temperature: 0.7, maxOutputTokens: 4096 },
+        }),
+        signal: AbortSignal.timeout(15000),
+      }
+    );
+    const data = await res.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || null;
+  } catch(e) { return null; }
+}
+
+async function callOpenRouterDirect(messages) {
+  const key = process.env.OPENROUTER_API_KEY;
+  if (!key) return null;
+  try {
+    const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${key}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://my-webxyu.vercel.app',
+      },
+      body: JSON.stringify({
+        model: 'meta-llama/llama-3.3-70b-instruct:free',
+        messages,
+        temperature: 0.7,
+        max_tokens: 4096,
+      }),
+      signal: AbortSignal.timeout(15000),
+    });
+    const data = await res.json();
+    return data.choices?.[0]?.message?.content || null;
+  } catch(e) { return null; }
+}
+
+async function callMistralDirect(messages) {
+  const key = process.env.MISTRAL_API_KEY;
+  if (!key) return null;
+  try {
+    const res = await fetch('https://api.mistral.ai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'mistral-large-latest', messages, temperature: 0.7, max_tokens: 4096 }),
+      signal: AbortSignal.timeout(15000),
+    });
+    const data = await res.json();
+    return data.choices?.[0]?.message?.content || null;
+  } catch(e) { return null; }
+}
+
 export default async function handler(req, res) {
   // CORS
   Object.entries(CORS_HEADERS).forEach(([k, v]) => res.setHeader(k, v));
@@ -179,7 +245,40 @@ export default async function handler(req, res) {
     ];
 
     // ── Step 6: Call Groq (with optional Helicone proxy) ──────
-    const GROQ_KEY = process.env.GROQ_API_KEY;
+    // ── LLM Fallback chain ──────────────────────────────────────
+  const systemContent = systemPrompt; // already built above
+
+  // Try Gemini first (if GEMINI_API_KEY set)
+  let fallbackUsed = 'groq';
+  let earlyReply = null;
+  if (process.env.GEMINI_API_KEY) {
+    earlyReply = await callGeminiDirect(requestMessages, systemContent);
+    if (earlyReply) fallbackUsed = 'gemini';
+  }
+  if (!earlyReply && process.env.OPENROUTER_API_KEY) {
+    earlyReply = await callOpenRouterDirect(requestMessages);
+    if (earlyReply) fallbackUsed = 'openrouter';
+  }
+  if (!earlyReply && process.env.MISTRAL_API_KEY) {
+    earlyReply = await callMistralDirect(requestMessages);
+    if (earlyReply) fallbackUsed = 'mistral';
+  }
+  // If a non-Groq provider succeeded, return early
+  if (earlyReply) {
+    return res.status(200).json({
+      reply: earlyReply,
+      model: fallbackUsed,
+      mode,
+      searchUsed: !!searchContext,
+      urlFetched: urls.length > 0 ? urls[0] : null,
+      memoryUsed: false,
+      searchResults: searchResults || null,
+      latency: Date.now() - startTime,
+      tokens: { prompt: 0, completion: 0, total: 0 },
+    });
+  }
+
+  const GROQ_KEY = process.env.GROQ_API_KEY;
     if (!GROQ_KEY) {
       return res.status(500).json({ error: '⚠️ GROQ_API_KEY not configured in Vercel environment variables.' });
     }

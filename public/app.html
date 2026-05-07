@@ -1143,6 +1143,10 @@ textarea{font-family:inherit;resize:none;outline:none;border:none}
       <button class="topbar-btn" onclick="App.shareChat()" title="Share">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
       </button>
+      <a href="/agent" class="home-link" style="background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(59,130,246,0.15));border-color:rgba(124,58,237,0.3);color:#a78bfa">
+        <span>🤖</span>
+        Agent
+      </a>
       <a href="/" class="home-link">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
         Home
@@ -1226,6 +1230,16 @@ textarea{font-family:inherit;resize:none;outline:none;border:none}
           <div class="sc-sub">AI image generation</div>
         </div>
       </div>
+
+      <!-- Agent Mode CTA -->
+      <a href="/agent" style="display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(59,130,246,0.1));border:1px solid rgba(124,58,237,0.25);border-radius:14px;padding:12px 18px;text-decoration:none;color:inherit;transition:all 0.2s;margin-top:4px" onmouseover="this.style.borderColor='rgba(124,58,237,0.5)'" onmouseout="this.style.borderColor='rgba(124,58,237,0.25)'">
+        <span style="font-size:22px">🤖</span>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#a78bfa">Agent Mode</div>
+          <div style="font-size:11px;color:var(--text2)">Autonomous AI that plans, searches & acts — like Manus</div>
+        </div>
+        <svg style="margin-left:auto;flex-shrink:0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
     </div>
 
     <!-- Messages list -->
