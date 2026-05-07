@@ -146,7 +146,7 @@ async function callOpenRouter(messages, isJSON) {
       'X-Title': 'IlyassAI',
     },
     body: JSON.stringify({
-      model: 'deepseek/deepseek-r1:free',
+      model: 'google/gemma-4-31b-it:free',
       messages,
       temperature: 0.1,
       max_tokens: 4096,

@@ -98,7 +98,7 @@ async function callOpenRouterDirect(messages) {
         'HTTP-Referer': 'https://my-webxyu.vercel.app',
       },
       body: JSON.stringify({
-        model: 'meta-llama/llama-3.3-70b-instruct:free',
+        model: 'google/gemma-4-31b-it:free',
         messages,
         temperature: 0.7,
         max_tokens: 4096,
