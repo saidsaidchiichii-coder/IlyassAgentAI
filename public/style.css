@@ -329,15 +329,6 @@ a:hover { text-decoration: underline; }
 .mode-trigger:hover { border-color: var(--border); background: var(--surface-2); color: var(--text); }
 
 /* send / stop */
-.send-btn {
-  width: 32px; height: 32px; border-radius: var(--r-full);
-  background: #fff; border: none; color: #000;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; transition: opacity .15s, transform .1s;
-}
-.send-btn:hover  { opacity: .86; transform: scale(1.06); }
-.send-btn:active { transform: scale(.95); }
-
 .stop-btn {
   width: 32px; height: 32px; border-radius: var(--r-full);
   background: var(--surface-3); border: 1px solid var(--border-md);
@@ -811,6 +802,41 @@ a:hover { text-decoration: underline; }
 @keyframes blink {
   0%,100% { opacity: 1; }
   50% { opacity: 0.3; }
+}
+
+
+/* ===== Send Button — Premium ===== */
+.send-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: none;
+  background: #ffffff;
+  color: #111;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.20);
+  transition: background 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
+}
+.send-btn:hover {
+  background: #f2f2f2;
+  transform: scale(1.08);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+}
+.send-btn:active {
+  background: #e6e6e6;
+  transform: scale(0.93);
+  box-shadow: none;
+}
+.send-btn svg {
+  display: block;
+  transition: transform 0.12s ease;
+}
+.send-btn:hover svg {
+  transform: translate(1px, -1px);
 }
 
 /* ===== Groq Whisper — Mic Recording State ===== */
