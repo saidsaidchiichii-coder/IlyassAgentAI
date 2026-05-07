@@ -740,7 +740,12 @@ function regenerateImage(prompt) {
 // Auto-detect image generation commands in sendMessage
 const _origSendMessage = sendMessage;
 function sendMessage() {
-  const ta = document.getElementById('chatTextarea');
+  // ✅ FIX: use active textarea (homeTextarea OR chatTextarea)
+  const chatView = document.getElementById('chatView');
+  const isChatVisible = chatView && chatView.style.display !== 'none';
+  const ta = isChatVisible
+    ? document.getElementById('chatTextarea')
+    : (document.getElementById('homeTextarea') || document.getElementById('chatTextarea'));
   if (!ta) return _origSendMessage();
   const msg = ta.value.trim().toLowerCase();
   const imgTriggers = ['generate image', 'create image', 'draw ', 'paint ', 'make image', 'image of ', 'picture of ', 'photo of ', 'generate a ', '/img ', '/image '];
