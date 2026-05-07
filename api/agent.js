@@ -89,8 +89,7 @@ async function callLLM(messages, isJSON = true) {
   const providers = [
     () => callGemini(messages, isJSON),
     () => callOpenRouter(messages, isJSON),
-    () => callMistral(messages, isJSON),
-    () => callGroq(messages, isJSON),
+() => callGroq(messages, isJSON),
   ];
 
   for (const provider of providers) {
@@ -148,28 +147,6 @@ async function callOpenRouter(messages, isJSON) {
     },
     body: JSON.stringify({
       model: 'deepseek/deepseek-r1:free',
-      messages,
-      temperature: 0.1,
-      max_tokens: 4096,
-      ...(isJSON ? { response_format: { type: 'json_object' } } : {}),
-    }),
-  });
-  const data = await res.json();
-  return data.choices?.[0]?.message?.content || null;
-}
-
-async function callMistral(messages, isJSON) {
-  const key = process.env.MISTRAL_API_KEY;
-  if (!key) return null;
-
-  const res = await fetch('https://api.mistral.ai/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${key}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'mistral-large-latest',
       messages,
       temperature: 0.1,
       max_tokens: 4096,

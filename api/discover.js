@@ -49,18 +49,6 @@ const API_REGISTRY = [
     priority: 3,
   },
   {
-    id: 'mistral',
-    name: 'Mistral Large',
-    category: 'LLM',
-    free_tier: '1 req/sec, 500K tokens/min',
-    endpoint: 'https://api.mistral.ai/v1/models',
-    auth_header: 'Authorization',
-    auth_prefix: 'Bearer ',
-    env_key: 'MISTRAL_API_KEY',
-    icon: '🌪️',
-    priority: 4,
-  },
-  {
     id: 'huggingface',
     name: 'HuggingFace Inference',
     category: 'LLM',
@@ -221,8 +209,7 @@ export default async function handler(req, res) {
       'GROQ_API_KEY — Get free at: https://console.groq.com',
       'GEMINI_API_KEY — Get free at: https://aistudio.google.com',
       'OPENROUTER_API_KEY — Get free at: https://openrouter.ai',
-      'MISTRAL_API_KEY — Get free at: https://console.mistral.ai',
-      'GITHUB_TOKEN — Get at: https://github.com/settings/tokens',
+    'GITHUB_TOKEN — Get at: https://github.com/settings/tokens',
     ],
   });
 }

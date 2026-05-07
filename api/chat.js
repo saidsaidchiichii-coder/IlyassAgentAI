@@ -110,21 +110,6 @@ async function callOpenRouterDirect(messages) {
   } catch(e) { return null; }
 }
 
-async function callMistralDirect(messages) {
-  const key = process.env.MISTRAL_API_KEY;
-  if (!key) return null;
-  try {
-    const res = await fetch('https://api.mistral.ai/v1/chat/completions', {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'mistral-large-latest', messages, temperature: 0.7, max_tokens: 4096 }),
-      signal: AbortSignal.timeout(15000),
-    });
-    const data = await res.json();
-    return data.choices?.[0]?.message?.content || null;
-  } catch(e) { return null; }
-}
-
 export default async function handler(req, res) {
   // CORS
   Object.entries(CORS_HEADERS).forEach(([k, v]) => res.setHeader(k, v));
@@ -258,10 +243,6 @@ export default async function handler(req, res) {
   if (!earlyReply && process.env.OPENROUTER_API_KEY) {
     earlyReply = await callOpenRouterDirect(requestMessages);
     if (earlyReply) fallbackUsed = 'openrouter';
-  }
-  if (!earlyReply && process.env.MISTRAL_API_KEY) {
-    earlyReply = await callMistralDirect(requestMessages);
-    if (earlyReply) fallbackUsed = 'mistral';
   }
   // If a non-Groq provider succeeded, return early
   if (earlyReply) {
