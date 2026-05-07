@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grok</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ════════════════════════════════
+     SIDEBAR
+════════════════════════════════ -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="sidebar-header">
+    <button class="sidebar-logo-btn" onclick="goHome()" title="Home">
+      <svg viewBox="0 0 32 32" fill="currentColor" width="26" height="26">
+        <path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm0 3.5c2.006 0 3.89.524 5.522 1.44L7.94 21.522A10.45 10.45 0 0 1 5.5 16C5.5 9.649 10.649 4.5 17 4.5h-1zm0 21c-2.006 0-3.89-.524-5.522-1.44L24.06 10.478A10.45 10.45 0 0 1 26.5 16c0 6.351-5.149 11.5-11.5 11.5h1z"/>
+      </svg>
+    </button>
+    <button class="new-chat-btn" onclick="newChat()" title="New chat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17">
+        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Search -->
+  <div class="sidebar-search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" placeholder="Search conversations" id="convSearch" oninput="filterConvs(this.value)" />
+  </div>
+
+  <!-- Conversations -->
+  <div class="sidebar-conversations" id="conversationsList">
+    <div class="no-conversations">No conversations yet</div>
+  </div>
+
+  <!-- Footer -->
+  <div class="sidebar-footer">
+    <button class="sidebar-footer-btn" onclick="openSettings()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="15" height="15"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Settings
+    </button>
+    <div class="user-row" id="userRow">
+      <div class="user-avatar" id="userAvatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <span class="user-name" id="sidebarUserName">Guest</span>
+      <button class="signin-link" id="signInBtn" onclick="showAuthModal('login')">Sign in</button>
+    </div>
+  </div>
+</aside>
+
+<!-- ════════════════════════════════
+     MAIN
+════════════════════════════════ -->
+<main class="main" id="main">
+
+  <!-- Mobile toggle -->
+  <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleSidebar()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+
+  <!-- ── HOME ── -->
+  <div class="home-view" id="homeView">
+    <div class="home-body">
+      <div class="home-logo">
+        <svg viewBox="0 0 56 56" fill="currentColor" width="52" height="52">
+          <path d="M28 2C13.64 2 2 13.64 2 28s11.64 26 26 26 26-11.64 26-26S42.36 2 28 2zm0 5c3.43 0 6.66.87 9.49 2.4L10.4 37.49A20.93 20.93 0 0 1 7 28C7 15.297 17.297 5 30 5h-2zm0 44c-3.43 0-6.66-.87-9.49-2.4L45.6 18.51A20.93 20.93 0 0 1 49 28C49 40.703 38.703 51 26 51h2z"/>
+        </svg>
+      </div>
+      <h1 class="home-greeting" id="homeGreeting">What do you want to know?</h1>
+      <div class="suggestion-row">
+        <button class="suggestion-pill" onclick="useSuggestion(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="13" height="13"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          Write an essay
+        </button>
+        <button class="suggestion-pill" onclick="useSuggestion(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="13" height="13"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Help me code
+        </button>
+        <button class="suggestion-pill" onclick="useSuggestion(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="13" height="13"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Analyze & research
+        </button>
+        <button class="suggestion-pill" onclick="useSuggestion(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="13" height="13"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Summarize text
+        </button>
+        <button class="suggestion-pill" onclick="useSuggestion(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="13" height="13"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Explain a concept
+        </button>
+        <button class="suggestion-pill" onclick="useSuggestion(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="13" height="13"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Plan a trip
+        </button>
+      </div>
+    </div>
+    <div class="input-zone" id="homeInputZone"></div>
+    <p class="input-hint">Grok can make mistakes. Consider checking important information.</p>
+  </div>
+
+  <!-- ── CHAT ── -->
+  <div class="chat-view" id="chatView">
+    <div class="messages-box" id="messagesBox"></div>
+    <button class="scroll-down-btn" id="scrollDownBtn" onclick="AI.scroll()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="input-zone" id="chatInputZone"></div>
+    <p class="input-hint">Grok can make mistakes. Consider checking important information.</p>
+  </div>
+
+</main>
+
+<!-- ════════════════════════════════
+     AUTH MODAL
+════════════════════════════════ -->
+<div class="auth-overlay" id="authModal">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <svg viewBox="0 0 32 32" fill="currentColor" width="26" height="26">
+        <path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm0 3.5c2.006 0 3.89.524 5.522 1.44L7.94 21.522A10.45 10.45 0 0 1 5.5 16C5.5 9.649 10.649 4.5 17 4.5h-1zm0 21c-2.006 0-3.89-.524-5.522-1.44L24.06 10.478A10.45 10.45 0 0 1 26.5 16c0 6.351-5.149 11.5-11.5 11.5h1z"/>
+      </svg>
+    </div>
+    <h2 class="auth-title" id="authTitle">Welcome back</h2>
+    <p class="auth-subtitle">Continue to Grok</p>
+    <input type="email"    id="authEmail"    class="auth-input" placeholder="Email address"    autocomplete="email" />
+    <input type="password" id="authPassword" class="auth-input" placeholder="Password"         autocomplete="current-password" />
+    <div class="auth-error" id="authError"></div>
+    <button class="auth-submit" onclick="handleAuth()">Continue</button>
+    <button class="auth-cancel" onclick="closeAuthModal()">Cancel</button>
+    <p class="auth-switch">Don't have an account? <span id="authSwitchLink" onclick="toggleAuthMode()">Sign up</span></p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     SETTINGS PANEL
+════════════════════════════════ -->
+<div class="settings-overlay" id="settingsOverlay" onclick="closeSettings()"></div>
+<aside class="settings-panel" id="settingsPanel">
+  <div class="settings-header">
+    <h3>Settings</h3>
+    <button class="settings-close" onclick="closeSettings()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-label">Appearance</div>
+    <div class="settings-row">
+      <span>Theme</span>
+      <div class="theme-pills">
+        <button class="theme-pill active" onclick="setTheme('dark',this)">Dark</button>
+        <button class="theme-pill" onclick="setTheme('light',this)">Light</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-label">Default Mode</div>
+    <div class="settings-row">
+      <span>Response mode</span>
+      <select id="defaultMode" onchange="setDefaultMode(this.value)" class="settings-select">
+        <option value="auto">Auto</option>
+        <option value="fast">Fast</option>
+        <option value="thinking">Think</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-label">Memory</div>
+    <div class="settings-row">
+      <span>Clear all conversations</span>
+      <button class="danger-btn" onclick="clearAllConvs()">Clear</button>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-label">Account</div>
+    <div class="settings-row" id="settingsUserRow">
+      <span id="settingsEmail">Not signed in</span>
+      <button class="auth-action-btn" id="settingsAuthBtn" onclick="showAuthModal('login')">Sign in</button>
+    </div>
+  </div>
+</aside>
+
+<!-- ════════════════════════════════
+     MODE POPUP
+════════════════════════════════ -->
+<div class="mode-popup" id="modePopup">
+  <div class="mode-popup-title">Select mode</div>
+  <button class="mode-option active" data-mode="auto"     onclick="selectMode('auto')">
+    <div class="mode-icon auto-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+    </div>
+    <div class="mode-info">
+      <span class="mode-name">Auto</span>
+      <span class="mode-desc">Best model for each task</span>
+    </div>
+    <svg class="mode-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+  </button>
+  <button class="mode-option" data-mode="fast"      onclick="selectMode('fast')">
+    <div class="mode-icon fast-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    </div>
+    <div class="mode-info">
+      <span class="mode-name">Fast</span>
+      <span class="mode-desc">Quick responses</span>
+    </div>
+    <svg class="mode-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+  </button>
+  <button class="mode-option" data-mode="thinking"  onclick="selectMode('thinking')">
+    <div class="mode-icon think-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </div>
+    <div class="mode-info">
+      <span class="mode-name">Think</span>
+      <span class="mode-desc">Deep reasoning mode</span>
+    </div>
+    <svg class="mode-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+  </button>
+</div>
+
+<!-- ════════════════════════════════
+     TOAST CONTAINER
+════════════════════════════════ -->
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- ════════════════════════════════
+     SCRIPTS
+════════════════════════════════ -->
+<script src="firebase.js" type="module"></script>
+<script src="ControleAi.js"></script>
+<script>
+/* ===== INPUT HTML ===== */
+const INPUT_HTML = `
+  <div class="input-box" id="inputBox">
+    <div class="input-text-row">
+      <textarea
+        id="chatTextarea"
+        class="chat-textarea"
+        placeholder="Ask anything"
+        rows="1"
+        onkeydown="onKey(event)"
+        oninput="onType(this)"
+      ></textarea>
+    </div>
+    <div class="input-actions-row">
+      <div class="input-left-actions">
+        <label class="icon-action attach-action" title="Attach files">
+          <input type="file" id="chatFileInput" multiple accept="image/*,.pdf,.txt,.js,.py,.html,.css,.md,.json" style="display:none" onchange="onFilePick(this)" />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+          </svg>
+        </label>
+        <button class="mode-trigger icon-action" id="modeTrigger" onclick="toggleModePopup(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          <span id="modeTriggerLabel">Auto</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+      <div class="input-right-actions">
+        <button class="icon-action mic-action" onclick="startVoice()" title="Voice input">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+        </button>
+        <button class="img-gen-btn icon-action" id="imgGenBtn" onclick="generateImage()" title="Generate Image from prompt">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+          </svg>
+        </button>
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="Send">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+        <button class="stop-btn"  id="stopBtn"  onclick="AI.stop()" style="display:none;" title="Stop generating">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="file-preview-row" id="filePreviewRow" style="display:none"></div>
+  </div>
+`;
+
+/* ===== BOOT ===== */
+document.addEventListener('DOMContentLoaded', () => {
+  AI.init('messagesBox', '/api/chat');
+  injectInput();
+  setGreeting();
+
+  // Close mode popup on outside click
+  document.addEventListener('click', e => {
+    const popup = document.getElementById('modePopup');
+    const trigger = document.getElementById('modeTrigger');
+    if (popup && !popup.contains(e.target) && trigger && !trigger.contains(e.target)) {
+      popup.classList.remove('open');
+    }
+  });
+});
+
+function injectInput() {
+  const hz = document.getElementById('homeInputZone');
+  const cz = document.getElementById('chatInputZone');
+
+  // Home input — uses homeTextarea id
+  if (hz) hz.innerHTML = INPUT_HTML.replace('id="chatTextarea"', 'id="homeTextarea"')
+                                    .replace('id="inputBox"',    'id="homeInputBox"')
+                                    .replace('id="chatFileInput"','id="homeFileInput"')
+                                    .replace('id="sendBtn"',     'id="homeSendBtn"')
+                                    .replace('id="stopBtn"',     'id="homeStopBtn"')
+                                    .replace('id="modeTrigger"', 'id="homeModeTrigger"')
+                                    .replace('id="modeTriggerLabel"','id="homeModeTriggerLabel"')
+                                    .replace('id="filePreviewRow"','id="homeFilePreviewRow"')
+                                    .replace('id="imgGenBtn"',   'id="homeImgGenBtn"');
+
+  // Chat input — keeps original ids
+  if (cz) cz.innerHTML = INPUT_HTML;
+}
+
+function setGreeting() {
+  const h = new Date().getHours();
+  const greet = h < 12 ? 'Good morning.' : h < 17 ? 'Good afternoon.' : 'Good evening.';
+  const el = document.getElementById('homeGreeting');
+  if (el) el.textContent = greet;
+}
+
+/* ===== SEND ===== */
+function sendMessage() {
+  // Get active textarea: chatView is visible → chatTextarea, else homeTextarea
+  const chatView = document.getElementById('chatView');
+  const isChatVisible = chatView && chatView.style.display !== 'none';
+  const ta = isChatVisible
+    ? document.getElementById('chatTextarea')
+    : (document.getElementById('homeTextarea') || document.getElementById('chatTextarea'));
+
+  if (!ta) return;
+  const msg = ta.value.trim();
+  if (!msg) return;
+
+  // Switch to chat view
+  document.getElementById('homeView').style.display = 'none';
+  chatView.style.display = 'flex';
+
+  // Clear input + reset height
+  ta.value = '';
+  ta.style.height = 'auto';
+
+  // Focus the CHAT textarea for next message
+  setTimeout(() => {
+    const chatTa = document.getElementById('chatTextarea');
+    if (chatTa) chatTa.focus();
+  }, 50);
+
+  AI.user(msg);
+  AI.ask(msg);
+}
+
+function onKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+function onType(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 200) + 'px';
+}
+
+/* ===== SUGGESTIONS ===== */
+function useSuggestion(btn) {
+  const ta = document.getElementById('chatTextarea');
+  if (!ta) return;
+  ta.value = btn.textContent.trim();
+  ta.focus();
+  onType(ta);
+}
+
+/* ===== FILE PICK ===== */
+function onFilePick(input) {
+  const row = document.getElementById('filePreviewRow');
+  if (!row) return;
+  if (!input.files.length) { row.style.display = 'none'; return; }
+  row.style.display = 'flex';
+  row.innerHTML = Array.from(input.files).map(f => {
+    const isImg = f.type.startsWith('image/');
+    if (isImg) {
+      const url = URL.createObjectURL(f);
+      return `<div class="file-chip img-chip"><img src="${url}" alt="${f.name}" /></div>`;
+    }
+    return `<div class="file-chip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span>${f.name}</span>
+    </div>`;
+  }).join('');
+}
+
+/* ===== VOICE — Groq Whisper STT ===== */
+let _groqMediaRecorder = null;
+let _groqAudioChunks   = [];
+let _groqRecording     = false;
+
+/* ✅ FIX: Returns the currently visible textarea (homeView or chatView) */
+function _getActiveTextarea() {
+  const chatView = document.getElementById('chatView');
+  const isChatVisible = chatView && chatView.style.display !== 'none';
+  return isChatVisible
+    ? document.getElementById('chatTextarea')
+    : (document.getElementById('homeTextarea') || document.getElementById('chatTextarea'));
+}
+
+/* ✅ FIX: Updates ALL mic buttons in DOM (home + chat zones) */
+function _setMicState(recording) {
+  document.querySelectorAll('.mic-action').forEach(btn => {
+    if (recording) {
+      btn.classList.add('recording');
+      btn.title = 'Stop Recording';
+    } else {
+      btn.classList.remove('recording');
+      btn.title = 'Voice input';
+    }
+  });
+}
+
+function startVoice() {
+  if (_groqRecording) { _stopGroqRecording(); return; }
+  _startGroqRecording();
+}
+
+function _startGroqRecording() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    _fallbackWebSpeech(); return;
+  }
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
+      _groqAudioChunks = [];
+      _groqRecording   = true;
+
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+        ? 'audio/webm;codecs=opus'
+        : MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/ogg;codecs=opus';
+
+      _groqMediaRecorder = new MediaRecorder(stream, { mimeType });
+      _groqMediaRecorder.ondataavailable = e => {
+        if (e.data && e.data.size > 0) _groqAudioChunks.push(e.data);
+      };
+      _groqMediaRecorder.onstop = () => _submitGroqAudio(mimeType, stream);
+      _groqMediaRecorder.start(250);
+
+      _setMicState(true);
+      showToast('🎤 Recording… tap mic to stop');
+      setTimeout(() => { if (_groqRecording) _stopGroqRecording(); }, 60000);
+    })
+    .catch(err => { console.warn('[Groq Voice] mic failed:', err); _fallbackWebSpeech(); });
+}
+
+function _stopGroqRecording() {
+  if (_groqMediaRecorder && _groqRecording) {
+    _groqRecording = false;
+    _groqMediaRecorder.stop();
+    _setMicState(false);
+    showToast('⏳ Transcribing with Groq Whisper…');
+  }
+}
+
+async function _submitGroqAudio(mimeType, stream) {
+  try {
+    stream.getTracks().forEach(t => t.stop());
+    if (_groqAudioChunks.length === 0) { showToast('No audio recorded'); return; }
+
+    const ext  = mimeType.includes('ogg') ? 'ogg' : 'webm';
+    const blob = new Blob(_groqAudioChunks, { type: mimeType });
+    if (blob.size < 100) { showToast('Audio too short'); return; }
+
+    const fd = new FormData();
+    fd.append('audio', blob, `recording.${ext}`);
+    const uiLang = (document.documentElement.lang || navigator.language || 'en').split('-')[0];
+    fd.append('language', uiLang);
+
+    const res = await fetch('/api/transcribe', { method: 'POST', body: fd });
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({ error: 'Unknown' }));
+      showToast('❌ Transcription failed: ' + (errData.error || res.status));
+      return;
+    }
+
+    const data = await res.json();
+    const text = (data.text || '').trim();
+    if (!text) { showToast('🔇 No speech detected'); return; }
+
+    /* ✅ KEY FIX: write to whichever textarea is active (home or chat) */
+    const ta = _getActiveTextarea();
+    if (ta) {
+      ta.value += (ta.value ? ' ' : '') + text;
+      ta.focus();
+      ta.dispatchEvent(new Event('input', { bubbles: true }));
+      if (typeof onType === 'function') onType(ta);
+    }
+
+    showToast('✅ ' + text.slice(0, 60) + (text.length > 60 ? '…' : ''));
+
+  } catch (err) {
+    console.error('[Groq Voice]', err);
+    showToast('❌ Voice error: ' + err.message);
+  }
+}
+
+function _fallbackWebSpeech() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { showToast('Voice not supported in this browser'); return; }
+  const r = new SR();
+  r.lang = document.documentElement.lang || 'en-US';
+  r.onresult = e => {
+    const text = e.results[0][0].transcript;
+    const ta   = _getActiveTextarea();
+    if (ta) {
+      ta.value += text;
+      ta.focus();
+      ta.dispatchEvent(new Event('input', { bubbles: true }));
+      if (typeof onType === 'function') onType(ta);
+    }
+  };
+  r.onerror = () => showToast('Voice input failed');
+  r.start();
+  showToast('🎤 Listening (browser mode)…');
+}
+
+/* ===== MODE ===== */
+let currentMode = 'auto';
+function toggleModePopup(btn) {
+  const popup = document.getElementById('modePopup');
+  if (!popup) return;
+  const rect = btn.getBoundingClientRect();
+  popup.style.bottom = (window.innerHeight - rect.top + 10) + 'px';
+  popup.style.left   = rect.left + 'px';
+  popup.classList.toggle('open');
+}
+function selectMode(mode) {
+  currentMode = mode;
+  AI.currentMode = mode;
+  const labels = { auto: 'Auto', fast: 'Fast', thinking: 'Think' };
+  const el = document.getElementById('modeTriggerLabel');
+  if (el) el.textContent = labels[mode];
+  document.querySelectorAll('.mode-option').forEach(o => {
+    o.classList.toggle('active', o.dataset.mode === mode);
+  });
+  document.getElementById('modePopup')?.classList.remove('open');
+}
+
+/* ===== NAVIGATION ===== */
+function goHome() {
+  AI.currentConvId = null;
+  document.getElementById('homeView').style.display = 'flex';
+  document.getElementById('chatView').style.display = 'none';
+  if (AI.messagesBox) AI.messagesBox.innerHTML = '';
+  injectInput();
+  setGreeting();
+}
+function newChat() {
+  goHome();
+  showToast('New conversation');
+}
+function filterConvs(q) {
+  document.querySelectorAll('.conv-item').forEach(el => {
+    const title = el.querySelector('.conv-title')?.textContent || '';
+    el.style.display = title.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+  });
+}
+function toggleSidebar() {
+  document.getElementById('sidebar')?.classList.toggle('open');
+}
+
+/* ===== SETTINGS ===== */
+function openSettings() {
+  document.getElementById('settingsPanel')?.classList.add('open');
+  document.getElementById('settingsOverlay')?.classList.add('open');
+}
+function closeSettings() {
+  document.getElementById('settingsPanel')?.classList.remove('open');
+  document.getElementById('settingsOverlay')?.classList.remove('open');
+}
+function setTheme(t, btn) {
+  document.body.setAttribute('data-theme', t);
+  document.querySelectorAll('.theme-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  localStorage.setItem('aiTheme', t);
+  showToast(`${t.charAt(0).toUpperCase()+t.slice(1)} theme`);
+}
+function setDefaultMode(mode) {
+  selectMode(mode);
+  localStorage.setItem('aiDefaultMode', mode);
+}
+function clearAllConvs() {
+  if (!confirm('Clear all conversations?')) return;
+  AI.conversations = [];
+  AI._saveToStorage();
+  AI._renderSidebar();
+  goHome();
+  showToast('All conversations cleared');
+}
+// Load saved settings
+try {
+  const savedTheme = localStorage.getItem('aiTheme');
+  if (savedTheme) document.body.setAttribute('data-theme', savedTheme);
+  const savedMode = localStorage.getItem('aiDefaultMode');
+  if (savedMode) { currentMode = savedMode; }
+} catch(e) {}
+
+/* ===== AUTH ===== */
+let _authMode = 'login';
+function showAuthModal(mode = 'login') {
+  _authMode = mode;
+  window.setAuthMode?.(mode);
+  document.getElementById('authTitle').textContent    = mode === 'login' ? 'Welcome back'   : 'Create account';
+  document.getElementById('authSwitchLink').textContent = mode === 'login' ? 'Sign up' : 'Sign in';
+  document.getElementById('authModal').classList.add('open');
+  document.getElementById('authError').textContent = '';
+}
+function closeAuthModal() {
+  document.getElementById('authModal').classList.remove('open');
+}
+function toggleAuthMode() {
+  showAuthModal(_authMode === 'login' ? 'signup' : 'login');
+}
+
+/* ===== TOAST ===== */
+function showToast(msg, duration = 2800) {
+  const container = document.getElementById('toastContainer');
+  if (!container) return;
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = msg;
+  container.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('show'));
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 300);
+  }, duration);
+}
+window.showToast = showToast;
+window.generateImage = generateImage;
+window.regenerateImage = regenerateImage;
+
+/* ===== DRAG & DROP ===== */
+document.addEventListener('dragover', e => e.preventDefault());
+document.addEventListener('drop', e => {
+  e.preventDefault();
+  const files = e.dataTransfer.files;
+  if (!files.length) return;
+  const input = document.getElementById('chatFileInput');
+  if (input) {
+    const dt = new DataTransfer();
+    Array.from(files).forEach(f => dt.items.add(f));
+    input.files = dt.files;
+    onFilePick(input);
+    showToast(`${files.length} file${files.length > 1 ? 's' : ''} attached`);
+  }
+});
+/* ===== IMAGE GENERATION (Pollinations.ai - FREE) ===== */
+async function generateImage() {
+  const ta = document.getElementById('chatTextarea');
+  if (!ta) return;
+  const prompt = ta.value.trim();
+  if (!prompt) { showToast('Write a prompt to generate an image 🎨'); return; }
+
+  // Show chat view
+  document.getElementById('homeView').style.display = 'none';
+  document.getElementById('chatView').style.display = 'flex';
+
+  ta.value = '';
+  ta.style.height = 'auto';
+
+  // Show user message
+  AI.user('🎨 Generate image: ' + prompt);
+
+  // Show loading
+  const loadId = 'img-load-' + Date.now();
+  const box = document.getElementById('messagesBox');
+  if (box) {
+    const loadDiv = document.createElement('div');
+    loadDiv.id = loadId;
+    loadDiv.className = 'msg ai-msg';
+    loadDiv.innerHTML = `<div class="msg-bubble"><span class="img-loading">🎨 Generating image<span class="dots">...</span></span></div>`;
+    box.appendChild(loadDiv);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  try {
+    const res = await fetch('/api/image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt, width: 768, height: 768 })
+    });
+    const data = await res.json();
+
+    const loadEl = document.getElementById(loadId);
+    if (loadEl) {
+      if (data.imageUrl) {
+        loadEl.innerHTML = `
+          <div class="msg-bubble">
+            <p style="margin:0 0 10px 0;opacity:0.7;font-size:13px;">🎨 <em>${prompt}</em></p>
+            <div class="generated-img-wrap">
+              <img 
+                src="${data.imageUrl}" 
+                alt="${prompt}" 
+                class="generated-img"
+                onload="this.classList.add('loaded')"
+                onerror="this.parentElement.innerHTML='<p style=color:red>❌ Failed to load image. Try again.</p>'"
+              />
+              <div class="img-actions">
+                <a href="${data.imageUrl}" target="_blank" download class="img-action-btn">⬇️ Download</a>
+                <button onclick="regenerateImage('${prompt.replace(/'/g,"\'")}')" class="img-action-btn">🔄 Regenerate</button>
+              </div>
+            </div>
+            <p style="margin:6px 0 0 0;opacity:0.4;font-size:11px;">Powered by Pollinations.ai (Free)</p>
+          </div>`;
+      } else {
+        loadEl.innerHTML = `<div class="msg-bubble">❌ Error: ${data.error || 'Unknown error'}</div>`;
+      }
+      box.scrollTop = box.scrollHeight;
+    }
+  } catch(err) {
+    const loadEl = document.getElementById(loadId);
+    if (loadEl) loadEl.innerHTML = `<div class="msg-bubble">❌ Error: ${err.message}</div>`;
+  }
+}
+
+function regenerateImage(prompt) {
+  const ta = document.getElementById('chatTextarea');
+  if (ta) ta.value = prompt;
+  generateImage();
+}
+
+// Auto-detect image generation commands in sendMessage
+const _origSendMessage = sendMessage;
+function sendMessage() {
+  // ✅ FIX: use active textarea (homeTextarea OR chatTextarea)
+  const chatView = document.getElementById('chatView');
+  const isChatVisible = chatView && chatView.style.display !== 'none';
+  const ta = isChatVisible
+    ? document.getElementById('chatTextarea')
+    : (document.getElementById('homeTextarea') || document.getElementById('chatTextarea'));
+  if (!ta) return _origSendMessage();
+  const msg = ta.value.trim().toLowerCase();
+  const imgTriggers = ['generate image', 'create image', 'draw ', 'paint ', 'make image', 'image of ', 'picture of ', 'photo of ', 'generate a ', '/img ', '/image '];
+  if (imgTriggers.some(t => msg.startsWith(t) || msg.includes(t))) {
+    return generateImage();
+  }
+  return _origSendMessage();
+}
+
+</script>
+</body>
+</html>
