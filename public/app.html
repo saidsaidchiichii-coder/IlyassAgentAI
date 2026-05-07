@@ -785,6 +785,8 @@ textarea{font-family:inherit;resize:none;outline:none;border:none}
 /* ═══════════════════════════════════════════════════════════
    ANIMATIONS
 ═══════════════════════════════════════════════════════════ */
+@keyframes spin-img{to{transform:rotate(360deg)}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse-glow{0%,100%{box-shadow:0 0 0 0 rgba(124,58,237,.3)}50%{box-shadow:0 0 0 8px rgba(124,58,237,0)}}
@@ -1478,27 +1480,68 @@ const App = {
 
     // Image mode
     if (State.mode === 'image') {
+      const imgId = 'img_' + Date.now();
       try {
-        bubble.innerHTML = '<span class="stream-cursor"></span> Generating image…';
-        const res = await fetch('/api/image', {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({message: msg}),
-          signal: State.abortCtrl.signal
+        bubble.innerHTML = `
+          <div style="display:flex;align-items:center;gap:12px;padding:6px 0">
+            <div style="width:32px;height:32px;border-radius:50%;border:3px solid rgba(124,58,237,.25);border-top-color:var(--purple2);animation:spin-img .8s linear infinite;flex-shrink:0"></div>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--text)">🎨 Generating image...</div>
+              <div style="font-size:11px;color:var(--text3);margin-top:2px">Powered by Pollinations.ai · 5–20 sec</div>
+            </div>
+          </div>`;
+        UI.scrollToBottom();
+
+        const imgRes = await fetch('/api/image', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ message: msg, provider: 'turbo' }),
         });
-        const data = await res.json();
-        if (data.imageUrl) {
-          bubble.innerHTML = `
-            <p style="margin-bottom:10px;color:var(--text2);font-size:13px">🎨 <em>${msg}</em></p>
-            <img src="${data.imageUrl}" alt="${msg}" class="msg-image" onclick="window.open(this.src,'_blank')"/>
-            <div style="margin-top:10px;display:flex;gap:8px">
-              <a href="${data.imageUrl}" download class="code-action-btn" style="padding:6px 12px">⬇ Download</a>
-              <button class="code-action-btn" onclick="App.useSuggestion('regenerate: ${msg.replace(/'/g,"\\'")}')">🔄 Regenerate</button>
-            </div>`;
-          this.addMsgActions(bubble.parentNode, '');
-        }
+        if (!imgRes.ok) throw new Error('API error ' + imgRes.status);
+        const imgData = await imgRes.json();
+        if (!imgData.imageUrl) throw new Error(imgData.error || 'No image URL');
+
+        const safeMsg = msg.replace(/</g,'&lt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+        const imgUrl  = imgData.imageUrl;
+
+        bubble.innerHTML = `
+          <p style="font-size:12px;color:var(--text3);margin-bottom:10px">🎨 <em>${safeMsg}</em></p>
+          <div id="${imgId}_sk" style="
+            width:100%;height:260px;border-radius:12px;
+            background:linear-gradient(90deg,rgba(124,58,237,.07) 25%,rgba(124,58,237,.14) 50%,rgba(124,58,237,.07) 75%);
+            background-size:200% 100%;animation:shimmer 1.4s infinite;
+            display:flex;align-items:center;justify-content:center;
+            border:1px solid var(--border);color:var(--text3);font-size:12px;gap:8px">
+            <span style="display:inline-block;animation:spin-img 1s linear infinite">⚙</span>
+            Loading image...
+          </div>
+          <img id="${imgId}_img" src="${imgUrl}"
+            style="display:none;width:100%;max-height:500px;object-fit:contain;border-radius:12px;border:1px solid var(--border);cursor:pointer"
+            onclick="window.open(this.src,'_blank')"
+            onload="document.getElementById('${imgId}_sk').style.display='none';this.style.display='block';document.getElementById('${imgId}_btns').style.display='flex'"
+            onerror="document.getElementById('${imgId}_sk').innerHTML='<div style=padding:20px;text-align:center><b style=color:#ef4444>❌ Failed</b><br><a href=${imgUrl} target=_blank style=color:#a78bfa>Open direct ↗</a></div>'"
+          />
+          <div id="${imgId}_btns" style="display:none;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center">
+            <a href="${imgUrl}" target="_blank" download
+               style="padding:6px 14px;border-radius:8px;background:var(--surface2);border:1px solid var(--border2);color:var(--text2);font-size:12px;font-weight:600;text-decoration:none">
+              ⬇ Download
+            </a>
+            <button data-p="${safeMsg}" onclick="App.regenImage(this.dataset.p)"
+              style="padding:6px 14px;border-radius:8px;background:var(--surface2);border:1px solid var(--border2);color:var(--text2);font-size:12px;font-weight:600;cursor:pointer">
+              🔄 Regenerate
+            </button>
+            <span style="font-size:10px;color:var(--text3)">seed: ${imgData.seed||'?'}</span>
+          </div>`;
+
       } catch(e) {
-        bubble.innerHTML = '❌ Image generation failed: ' + e.message;
+        bubble.innerHTML = `
+          <div style="padding:16px;border-radius:12px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2)">
+            <div style="font-weight:700;color:#ef4444;margin-bottom:6px">❌ Image generation failed</div>
+            <div style="font-size:12px;color:var(--text3)">${e.message}</div>
+            <button data-p="${(msg||'').replace(/</g,'&lt;').replace(/'/g,"&#39;")}" onclick="App.regenImage(this.dataset.p)"
+              style="margin-top:10px;padding:7px 16px;border-radius:8px;background:rgba(124,58,237,.15);color:var(--purple2);border:1px solid rgba(124,58,237,.25);font-size:12px;font-weight:600;cursor:pointer">
+              🔄 Try again
+            </button>
+          </div>`;
       }
       State.streaming = false;
       UI.scrollToBottom();
