@@ -1,5 +1,5 @@
-// IlyassAI — /api/chat  
-// OpenRouter → Groq → Gemini — returns JSON {reply}
+// IlyassAI — /api/chat
+// Accepts { message, mode } from frontend OR { messages } from direct API calls
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -8,18 +8,30 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { messages = [] } = req.body || {};
-  if (!messages || messages.length === 0)
-    return res.status(400).json({ error: 'messages array is required' });
+  const body = req.body || {};
+
+  // Support BOTH formats:
+  // 1. Frontend format: { message: "hi", mode: "auto", files: [] }
+  // 2. Direct API format: { messages: [{role, content}] }
+  let messages;
+  if (body.messages && Array.isArray(body.messages)) {
+    messages = body.messages;
+  } else if (body.message) {
+    messages = [{ role: 'user', content: body.message }];
+  } else {
+    return res.status(400).json({ error: 'message or messages array is required' });
+  }
+
+  const mode = body.mode || 'auto'; // auto | fast | thinking
 
   const systemMsg = {
     role: 'system',
-    content: 'You are IlyassAI, a powerful AI assistant. Be helpful, concise, and accurate.'
+    content: `You are IlyassAI, a powerful and intelligent AI assistant. Be helpful, concise, and accurate. Format responses with markdown when helpful. Current mode: ${mode}.`
   };
   const fullMessages = [systemMsg, ...messages];
   const errors = [];
 
-  // 1. Groq — try multiple models on 429
+  // ═══ 1. Groq — fastest, try multiple models on 429 ═══
   const groqKey = process.env.GROQ_API_KEY;
   if (groqKey) {
     const groqModels = [
@@ -41,19 +53,20 @@ export default async function handler(req, res) {
           const reply = data.choices?.[0]?.message?.content;
           if (reply) return res.status(200).json({ reply, model: gModel, provider: 'Groq' });
         }
-        if (r.status !== 429) break; // only retry on rate limit
-        errors.push(`Groq ${gModel}: 429 rate limit`);
-      } catch (e) { errors.push(`Groq ${gModel}: ${e.message}`); break; }
+        const status = r.status;
+        errors.push(`Groq/${gModel}: ${status}`);
+        if (status !== 429) break;
+      } catch (e) { errors.push(`Groq/${gModel}: ${e.message}`); break; }
     }
   }
 
-  // 2. Gemini — use stable models
+  // ═══ 2. Gemini — reliable fallback ═══
   const geminiKey = process.env.GEMINI_API_KEY;
   if (geminiKey) {
     const geminiModels = ['gemini-1.5-flash', 'gemini-1.5-flash-8b', 'gemini-1.5-pro'];
     for (const gModel of geminiModels) {
       try {
-        const geminiMessages = messages.map(m => ({
+        const gemContents = messages.map(m => ({
           role: m.role === 'assistant' ? 'model' : 'user',
           parts: [{ text: m.content }]
         }));
@@ -63,7 +76,7 @@ export default async function handler(req, res) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              contents: geminiMessages,
+              contents: gemContents,
               systemInstruction: { parts: [{ text: systemMsg.content }] },
               generationConfig: { maxOutputTokens: 2048, temperature: 0.7 }
             }),
@@ -75,12 +88,12 @@ export default async function handler(req, res) {
           const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
           if (reply) return res.status(200).json({ reply, model: gModel, provider: 'Gemini' });
         }
-        errors.push(`Gemini ${gModel}: HTTP ${r.status}`);
-      } catch (e) { errors.push(`Gemini ${gModel}: ${e.message}`); }
+        errors.push(`Gemini/${gModel}: ${r.status}`);
+      } catch (e) { errors.push(`Gemini/${gModel}: ${e.message}`); }
     }
   }
 
-  // 3. OpenRouter — try multiple free models
+  // ═══ 3. OpenRouter — many free models ═══
   const orKey = process.env.OPENROUTER_API_KEY;
   if (orKey) {
     const orModels = [
@@ -107,9 +120,9 @@ export default async function handler(req, res) {
           const reply = data.choices?.[0]?.message?.content;
           if (reply) return res.status(200).json({ reply, model: orModel, provider: 'OpenRouter' });
         }
+        errors.push(`OpenRouter/${orModel}: ${r.status}`);
         if (r.status !== 429) break;
-        errors.push(`OpenRouter ${orModel}: 429`);
-      } catch (e) { errors.push(`OpenRouter ${orModel}: ${e.message}`); break; }
+      } catch (e) { errors.push(`OpenRouter/${orModel}: ${e.message}`); break; }
     }
   }
 
