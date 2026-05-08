@@ -1,0 +1,141 @@
+
+/* ═══ IMAGE TO VIDEO — IlyassAI ═══ */
+var _vStyle='cinematic', _vB64=null, _vImgUrl=null, _vFrames=[], _vTimer=null, _vCurUrl=null;
+
+function setVideoMode(btn){
+  document.querySelectorAll('.imagine-style-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); _imagineStyle='video';
+  ['.aspect-ratio-row','.imagine-input-wrap','.imagine-templates'].forEach(s=>{var e=document.querySelector(s);if(e)e.style.display='none';});
+  var g=document.getElementById('imagineGallery'); if(g)g.style.display='none';
+  var v=document.getElementById('videoGenSection'); if(v){v.style.display='flex';v.style.flexDirection='column';}
+}
+
+function _exitVideo(){
+  ['.aspect-ratio-row','.imagine-input-wrap','.imagine-templates'].forEach(s=>{var e=document.querySelector(s);if(e)e.style.display='';});
+  var g=document.getElementById('imagineGallery'); if(g)g.style.display='';
+  var v=document.getElementById('videoGenSection'); if(v)v.style.display='none';
+}
+
+var _origSIS=window.setImagineStyle;
+window.setImagineStyle=function(style,btn){
+  if(_imagineStyle==='video')_exitVideo();
+  _imagineStyle=style;
+  document.querySelectorAll('.imagine-style-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+};
+
+function setVStyle(s,btn){
+  _vStyle=s;
+  document.querySelectorAll('.vst-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function onVideoImg(input){
+  var file=input.files[0]; if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    _vB64=e.target.result; _vImgUrl=null;
+    var pv=document.getElementById('videoPreview');
+    var ph=document.getElementById('videoUploadPH');
+    var cb=document.getElementById('videoChangBtn');
+    if(pv){pv.src=e.target.result;pv.style.display='block';}
+    if(ph)ph.style.display='none';
+    if(cb)cb.style.display='block';
+    var ta=document.getElementById('videoPromptIn');
+    if(ta&&!ta.value.trim()){
+      var map={cinematic:'cinematic camera movement, dramatic lighting',smooth:'gentle smooth motion, dreamy flow',dynamic:'dynamic zoom, energetic movement','slow-motion':'slow motion, graceful movement'};
+      ta.value=map[_vStyle]||'smooth animation';
+    }
+    showToast('Image loaded! Click Generate Video.');
+  };
+  reader.readAsDataURL(file);
+}
+
+async function doGenerateVideo(){
+  if(!_vB64&&!_vImgUrl){
+    showToast('Please upload an image first');
+    var z=document.getElementById('videoUploadZone');
+    if(z){z.style.borderColor='#6366f1';setTimeout(()=>{z.style.borderColor='';},2000);}
+    return;
+  }
+  var prompt=(document.getElementById('videoPromptIn').value.trim()||'cinematic motion');
+  var genBtn=document.getElementById('videoGenBtn');
+  var loadDiv=document.getElementById('videoLoadDiv');
+  var resultDiv=document.getElementById('videoResultDiv');
+  if(genBtn)genBtn.style.display='none';
+  if(loadDiv)loadDiv.style.display='flex';
+  if(resultDiv)resultDiv.style.display='none';
+
+  var msgs=['Analyzing image...','Generating frames...','Rendering motion...','Almost done...'];
+  var mi=0;
+  var mt=setInterval(function(){
+    var el=document.getElementById('videoLoadTxt');
+    if(el)el.textContent=msgs[mi++%msgs.length];
+  },3500);
+
+  try{
+    var res=await fetch('/api/video',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({imageBase64:_vB64,imageUrl:_vImgUrl,prompt:prompt,style:_vStyle}),
+      signal:AbortSignal.timeout(90000)
+    });
+    var data=await res.json();
+    clearInterval(mt);
+    if(genBtn)genBtn.style.display='flex';
+    if(loadDiv)loadDiv.style.display='none';
+
+    if(!data.success)throw new Error(data.error||'Failed');
+
+    if(resultDiv)resultDiv.style.display='block';
+    var pb=document.getElementById('videoProvBadge');
+    if(pb)pb.textContent=data.provider||'AI';
+
+    if(data.videoBase64||data.videoUrl){
+      var src=data.videoBase64||data.videoUrl;
+      var ve=document.getElementById('videoEl');
+      var vs=document.getElementById('videoSrc');
+      var fe=document.getElementById('framesEl');
+      if(vs)vs.src=src;
+      if(ve){ve.style.display='block';ve.load();}
+      if(fe)fe.style.display='none';
+      _vCurUrl=src;
+      showToast('Video ready!');
+    } else if(data.frames&&data.frames.length>0){
+      _vFrames=data.frames; _vCurUrl=data.frames[0];
+      var ve=document.getElementById('videoEl');
+      var fe=document.getElementById('framesEl');
+      if(ve)ve.style.display='none';
+      if(fe)fe.style.display='block';
+      _playVFrames(data.frames);
+      showToast('Video generated!');
+    }
+  }catch(err){
+    clearInterval(mt);
+    if(genBtn)genBtn.style.display='flex';
+    if(loadDiv)loadDiv.style.display='none';
+    showToast('Generation failed. Try again.');
+    console.error('Video:',err.message);
+  }
+}
+
+function _playVFrames(frames){
+  if(_vTimer)clearInterval(_vTimer);
+  var img=document.getElementById('framesImg');
+  var prg=document.getElementById('framesProg');
+  var i=0;
+  if(img&&frames[0])img.src=frames[0];
+  _vTimer=setInterval(function(){
+    i=(i+1)%frames.length;
+    if(img){img.style.opacity='0';setTimeout(function(){img.src=frames[i];img.style.opacity='1';},140);}
+    if(prg)prg.style.width=((i+1)/frames.length*100)+'%';
+  },900);
+}
+
+function doDownloadVideo(){
+  if(!_vCurUrl)return;
+  var a=document.createElement('a');
+  a.href=_vCurUrl; a.download='ilyassai-video-'+Date.now()+'.mp4';
+  a.target='_blank'; a.click();
+}
+
