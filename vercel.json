@@ -2,9 +2,6 @@
   "outputDirectory": "public",
   "functions": {
     "api/*.js": {
-      "maxDuration": 30
-    },
-    "api/video.js": {
       "maxDuration": 60
     }
   },
