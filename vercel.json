@@ -18,5 +18,6 @@
       "source": "/auth",
       "destination": "/auth.html"
     }
-  ]
+  ],
+  "buildCommand": ""
 }
