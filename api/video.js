@@ -1,1 +1,218 @@
-Ly8gSWx5YXNzQUkg4oCUIC9hcGkvdmlkZW8gIChUZXh0LXRvLVZpZGVvICYgSW1hZ2UtdG8tVmlkZW8gdjQuMCkKLy8gUHJpb3JpdHk6IFBvbGxpbmF0aW9ucyDihpIgSEYgaTJ2Z2VuLXhsIOKGkiBIRiBkYW1vLXZpbGFiIOKGkiBaZXJvc2NvcGUg4oaSIEFuaW1hdGVEaWZmIOKGkiBBbmltYXRlZCBGcmFtZXMKLy8gRW52IHZhcnM6IFBPTExJTkFUSU9OU19BUElfS0VZIChvcHRpb25hbCksIEhGX0FQSV9LRVkgb3IgSEZfVE9LRU5fVjIgKG9wdGlvbmFsKQovLyBtYXhEdXJhdGlvbjogNjBzCgpleHBvcnQgY29uc3QgY29uZmlnID0gewogIGFwaTogeyBib2R5UGFyc2VyOiB7IHNpemVMaW1pdDogJzhtYicgfSB9LAogIG1heER1cmF0aW9uOiA2MAp9OwoKZXhwb3J0IGRlZmF1bHQgYXN5bmMgZnVuY3Rpb24gaGFuZGxlcihyZXEsIHJlcykgewogIHJlcy5zZXRIZWFkZXIoJ0FjY2Vzcy1Db250cm9sLUFsbG93LU9yaWdpbicsICcqJyk7CiAgcmVzLnNldEhlYWRlcignQWNjZXNzLUNvbnRyb2wtQWxsb3ctTWV0aG9kcycsICdQT1NULCBPUFRJT05TJyk7CiAgcmVzLnNldEhlYWRlcignQWNjZXNzLUNvbnRyb2wtQWxsb3ctSGVhZGVycycsICdDb250ZW50LVR5cGUnKTsKICBpZiAocmVxLm1ldGhvZCA9PT0gJ09QVElPTlMnKSByZXR1cm4gcmVzLnN0YXR1cygyMDApLmVuZCgpOwogIGlmIChyZXEubWV0aG9kICE9PSAnUE9TVCcpIHJldHVybiByZXMuc3RhdHVzKDQwNSkuanNvbih7IGVycm9yOiAnTWV0aG9kIG5vdCBhbGxvd2VkJyB9KTsKCiAgY29uc3QgewogICAgcHJvbXB0ID0gJycsCiAgICBzdHlsZSAgPSAnY2luZW1hdGljJywKICAgIGltYWdlVXJsICAgID0gbnVsbCwKICAgIGltYWdlQmFzZTY0ID0gbnVsbCwKICAgIHByb3ZpZGVyICAgID0gJ2F1dG8nCiAgfSA9IHJlcS5ib2R5IHx8IHt9OwoKICBpZiAoIXByb21wdCAmJiAhaW1hZ2VVcmwgJiYgIWltYWdlQmFzZTY0KQogICAgcmV0dXJuIHJlcy5zdGF0dXMoNDAwKS5qc29uKHsgZXJyb3I6ICdwcm9tcHQgaXMgcmVxdWlyZWQnIH0pOwoKICAvLyBFbnYgdmFycyDigJQgbmV2ZXIgaGFyZGNvZGVkCiAgY29uc3QgcG9sbGluYXRpb25zS2V5ID0gcHJvY2Vzcy5lbnYuUE9MTElOQVRJT05TX0FQSV9LRVk7CiAgY29uc3QgaGZLZXkgPSBwcm9jZXNzLmVudi5IRl9BUElfS0VZIHx8IHByb2Nlc3MuZW52LkhGX1RPS0VOX1YyOwogIGNvbnN0IGVycm9ycyA9IFtdOwogIGNvbnN0IHNlZWQgICA9IE1hdGguZmxvb3IoTWF0aC5yYW5kb20oKSAqIDk5OTk5KTsKICBjb25zdCBoYXNJbWFnZSA9ICEhKGltYWdlVXJsIHx8IGltYWdlQmFzZTY0KTsKCiAgY29uc3Qgc3R5bGVNYXAgPSB7CiAgICBjaW5lbWF0aWM6ICAgICAnY2luZW1hdGljIGNhbWVyYSBtb3ZlbWVudCwgZHJhbWF0aWMgbGlnaHRpbmcsIGZpbG0gZ3JhaW4sIDRrIHVsdHJhIGhkJywKICAgIHNtb290aDogICAgICAgICdzbW9vdGggZ2VudGxlIG1vdGlvbiwgc29mdCBib2tlaCwgZHJlYW15IGF0bW9zcGhlcmUsIGhpZ2ggcXVhbGl0eScsCiAgICBkeW5hbWljOiAgICAgICAnZHluYW1pYyB6b29tLCBmYXN0IG1vdGlvbiwgZW5lcmdldGljLCBzaGFycCwgYWN0aW9uJywKICAgICdzbG93LW1vdGlvbic6ICdzbG93IG1vdGlvbiwgZ3JhY2VmdWwgbW92ZW1lbnQsIGVsZWdhbnQsIGV0aGVyZWFsLCBjaW5lbWF0aWMnLAogICAgJ3pvb20taW4nOiAgICAgJ3Nsb3cgem9vbSBpbiwgY2luZW1hdGljIHB1c2gsIGZvY3VzIHB1bGwsIHNoYWxsb3cgZGVwdGggb2YgZmllbGQnLAogICAgJ3pvb20tb3V0JzogICAgJ3Nsb3cgem9vbSBvdXQsIHdpZGUgcmV2ZWFsLCBjaW5lbWF0aWMgcHVsbGJhY2ssIGVwaWMgc2NhbGUnCiAgfTsKICBjb25zdCBmdWxsUHJvbXB0ID0gYCR7cHJvbXB0fSR7c3R5bGVNYXBbc3R5bGVdID8gJywgJyArIHN0eWxlTWFwW3N0eWxlXSA6ICcnfWA7CgogIC8vIOKUgOKUgCBIZWxwZXI6IEh1Z2dpbmdGYWNlIEluZmVyZW5jZSBBUEkg4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSACiAgYXN5bmMgZnVuY3Rpb24gY2FsbEhGKG1vZGVsLCBpbnB1dHMsIHBhcmFtcyA9IHt9KSB7CiAgICBjb25zdCByID0gYXdhaXQgZmV0Y2goYGh0dHBzOi8vYXBpLWluZmVyZW5jZS5odWdnaW5nZmFjZS5jby9tb2RlbHMvJHttb2RlbH1gLCB7CiAgICAgIG1ldGhvZDogICdQT1NUJywKICAgICAgaGVhZGVyczogewogICAgICAgIC4uLihoZktleSA/IHsgJ0F1dGhvcml6YXRpb24nOiBgQmVhcmVyICR7aGZLZXl9YCB9IDoge30pLAogICAgICAgICdDb250ZW50LVR5cGUnOiAgJ2FwcGxpY2F0aW9uL2pzb24nLAogICAgICAgICd4LXdhaXQtZm9yLW1vZGVsJzogJ3RydWUnCiAgICAgIH0sCiAgICAgIGJvZHk6ICAgSlNPTi5zdHJpbmdpZnkoeyBpbnB1dHMsIHBhcmFtZXRlcnM6IHBhcmFtcyB9KSwKICAgICAgc2lnbmFsOiBBYm9ydFNpZ25hbC50aW1lb3V0KDUwMDAwKQogICAgfSk7CiAgICByZXR1cm4gcjsKICB9CgogIC8vIOKUgOKUgCAxLiBQb2xsaW5hdGlvbnMuYWkgKHByaW1hcnkg4oCUIGFsd2F5cyBhdmFpbGFibGUsIGtleSBvcHRpb25hbCkg4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSACiAgaWYgKCFoYXNJbWFnZSB8fCBwcm92aWRlciA9PT0gJ1BvbGxpbmF0aW9ucycpIHsKICAgIHRyeSB7CiAgICAgIGNvbnN0IGVuYyA9IGVuY29kZVVSSUNvbXBvbmVudChmdWxsUHJvbXB0KTsKICAgICAgY29uc3QgcEhlYWRlcnMgPSBwb2xsaW5hdGlvbnNLZXkKICAgICAgICA/IHsgJ0F1dGhvcml6YXRpb24nOiBgQmVhcmVyICR7cG9sbGluYXRpb25zS2V5fWAgfQogICAgICAgIDoge307CgogICAgICAvLyBQb2xsaW5hdGlvbnMgdmlkZW8gZW5kcG9pbnQgKGlmIGF2YWlsYWJsZSkKICAgICAgY29uc3QgcFZpZGVvVXJsID0gYGh0dHBzOi8vaW1hZ2UucG9sbGluYXRpb25zLmFpL3Byb21wdC8ke2VuY30/bW9kZWw9dmlkZW8md2lkdGg9NzY4JmhlaWdodD00MzImbm9sb2dvPXRydWUmc2VlZD0ke3NlZWR9YDsKICAgICAgY29uc3QgclYgPSBhd2FpdCBmZXRjaChwVmlkZW9VcmwsIHsKICAgICAgICBoZWFkZXJzOiBwSGVhZGVycywKICAgICAgICBzaWduYWw6IEFib3J0U2lnbmFsLnRpbWVvdXQoMjUwMDApCiAgICAgIH0pLmNhdGNoKCgpID0+IG51bGwpOwoKICAgICAgaWYgKHJWPy5vaykgewogICAgICAgIGNvbnN0IGN0ID0gclYuaGVhZGVycy5nZXQoJ2NvbnRlbnQtdHlwZScpIHx8ICcnOwogICAgICAgIGlmIChjdC5pbmNsdWRlcygndmlkZW8nKSB8fCBjdC5pbmNsdWRlcygnbXA0JykpIHsKICAgICAgICAgIGNvbnN0IGJ1ZiA9IGF3YWl0IHJWLmFycmF5QnVmZmVyKCk7CiAgICAgICAgICBpZiAoYnVmLmJ5dGVMZW5ndGggPiA1MDAwKSB7CiAgICAgICAgICAgIGNvbnN0IGI2NCA9IEJ1ZmZlci5mcm9tKGJ1ZikudG9TdHJpbmcoJ2Jhc2U2NCcpOwogICAgICAgICAgICByZXR1cm4gcmVzLnN0YXR1cygyMDApLmpzb24oewogICAgICAgICAgICAgIHN1Y2Nlc3M6IHRydWUsCiAgICAgICAgICAgICAgdmlkZW9CYXNlNjQ6IGBkYXRhOiR7Y3R9O2Jhc2U2NCwke2I2NH1gLAogICAgICAgICAgICAgIHByb3ZpZGVyOiAnUG9sbGluYXRpb25zIFZpZGVvJywKICAgICAgICAgICAgICB0eXBlOiAndmlkZW8nLCBwcm9tcHQKICAgICAgICAgICAgfSk7CiAgICAgICAgICB9CiAgICAgICAgfQogICAgICB9CiAgICB9IGNhdGNoKGUpIHsgZXJyb3JzLnB1c2goYFBvbGxpbmF0aW9ucyB2aWRlbzogJHtlLm1lc3NhZ2V9YCk7IH0KICB9CgogIC8vIOKUgOKUgCAyLiBIRiBpMnZnZW4teGwgKEltYWdlIHRvIFZpZGVvIOKAlCBleGNlbGxlbnQgd2l0aCBpbnB1dCBpbWFnZSkg4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSACiAgaWYgKGhhc0ltYWdlICYmIGhmS2V5KSB7CiAgICB0cnkgewogICAgICBjb25zdCBpbnB1dERhdGEgPSBpbWFnZUJhc2U2NCB8fCBpbWFnZVVybCB8fCBmdWxsUHJvbXB0OwogICAgICBjb25zdCByID0gYXdhaXQgY2FsbEhGKAogICAgICAgICdhbGktdmlsYWIvaTJ2Z2VuLXhsJywKICAgICAgICBpbnB1dERhdGEsCiAgICAgICAgeyBwcm9tcHQ6IGZ1bGxQcm9tcHQsIG51bV9pbmZlcmVuY2Vfc3RlcHM6IDIwIH0KICAgICAgKTsKICAgICAgaWYgKHIub2spIHsKICAgICAgICBjb25zdCBidWYgPSBhd2FpdCByLmFycmF5QnVmZmVyKCk7CiAgICAgICAgaWYgKGJ1Zi5ieXRlTGVuZ3RoID4gNTAwMCkgewogICAgICAgICAgY29uc3QgYjY0ID0gQnVmZmVyLmZyb20oYnVmKS50b1N0cmluZygnYmFzZTY0Jyk7CiAgICAgICAgICByZXR1cm4gcmVzLnN0YXR1cygyMDApLmpzb24oewogICAgICAgICAgICBzdWNjZXNzOiB0cnVlLAogICAgICAgICAgICB2aWRlb0Jhc2U2NDogYGRhdGE6dmlkZW8vbXA0O2Jhc2U2NCwke2I2NH1gLAogICAgICAgICAgICBwcm92aWRlcjogJ0h1Z2dpbmdGYWNlIGkydmdlbi14bCAoSW1hZ2XihpJWaWRlbyknLAogICAgICAgICAgICB0eXBlOiAndmlkZW8nLCBwcm9tcHQKICAgICAgICAgIH0pOwogICAgICAgIH0KICAgICAgfSBlbHNlIGVycm9ycy5wdXNoKGBpMnZnZW4teGw6ICR7ci5zdGF0dXN9YCk7CiAgICB9IGNhdGNoKGUpIHsgZXJyb3JzLnB1c2goYGkydmdlbi14bDogJHtlLm1lc3NhZ2V9YCk7IH0KICB9CgogIC8vIOKUgOKUgCAzLiBkYW1vLXZpbGFiIHRleHQtdG8tdmlkZW8gKEhGIGtleSByZXF1aXJlZCkg4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSACiAgaWYgKGhmS2V5KSB7CiAgICB0cnkgewogICAgICBjb25zdCByID0gYXdhaXQgY2FsbEhGKAogICAgICAgICdkYW1vLXZpbGFiL3RleHQtdG8tdmlkZW8tbXMtMS43YicsCiAgICAgICAgZnVsbFByb21wdCwKICAgICAgICB7IG51bV9pbmZlcmVuY2Vfc3RlcHM6IDI1LCBudW1fZnJhbWVzOiAxNiB9CiAgICAgICk7CiAgICAgIGlmIChyLm9rKSB7CiAgICAgICAgY29uc3QgYnVmID0gYXdhaXQgci5hcnJheUJ1ZmZlcigpOwogICAgICAgIGlmIChidWYuYnl0ZUxlbmd0aCA+IDUwMDApIHsKICAgICAgICAgIGNvbnN0IGN0ICA9IHIuaGVhZGVycy5nZXQoJ2NvbnRlbnQtdHlwZScpIHx8ICd2aWRlby9tcDQnOwogICAgICAgICAgY29uc3QgYjY0ID0gQnVmZmVyLmZyb20oYnVmKS50b1N0cmluZygnYmFzZTY0Jyk7CiAgICAgICAgICByZXR1cm4gcmVzLnN0YXR1cygyMDApLmpzb24oewogICAgICAgICAgICBzdWNjZXNzOiB0cnVlLAogICAgICAgICAgICB2aWRlb0Jhc2U2NDogYGRhdGE6JHtjdH07YmFzZTY0LCR7YjY0fWAsCiAgICAgICAgICAgIHByb3ZpZGVyOiAnSHVnZ2luZ0ZhY2UgZGFtby12aWxhYicsCiAgICAgICAgICAgIHR5cGU6ICd2aWRlbycsIHByb21wdAogICAgICAgICAgfSk7CiAgICAgICAgfQogICAgICB9IGVsc2UgZXJyb3JzLnB1c2goYGRhbW8tdmlsYWI6ICR7ci5zdGF0dXN9YCk7CiAgICB9IGNhdGNoKGUpIHsgZXJyb3JzLnB1c2goYGRhbW8tdmlsYWI6ICR7ZS5tZXNzYWdlfWApOyB9CiAgfQoKICAvLyDilIDilIAgNC4gWmVyb3Njb3BlIHYyIFhMIHZpYSBIRiBTcGFjZSAoRlJFRSwgbm8ga2V5KSDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIAKICBjb25zdCBzcGFjZUVuZHBvaW50cyA9IFsKICAgICdodHRwczovL2h5c3RzLXplcm9zY29wZS12Mi5oZi5zcGFjZScsCiAgICAnaHR0cHM6Ly9mZmZpbG9uaS16ZXJvc2NvcGUtdjIteGwuaGYuc3BhY2UnCiAgXTsKICBmb3IgKGNvbnN0IGJhc2Ugb2Ygc3BhY2VFbmRwb2ludHMpIHsKICAgIHRyeSB7CiAgICAgIGNvbnN0IHIgPSBhd2FpdCBmZXRjaChgJHtiYXNlfS9ydW4vcHJlZGljdGAsIHsKICAgICAgICBtZXRob2Q6ICAnUE9TVCcsCiAgICAgICAgaGVhZGVyczogeyAnQ29udGVudC1UeXBlJzogJ2FwcGxpY2F0aW9uL2pzb24nIH0sCiAgICAgICAgYm9keTogICAgSlNPTi5zdHJpbmdpZnkoeyBkYXRhOiBbZnVsbFByb21wdCwgMjQsIDcuNSwgNTc2LCAzMjAsIDI0LCBzZWVkXSB9KSwKICAgICAgICBzaWduYWw6IEFib3J0U2lnbmFsLnRpbWVvdXQoNDUwMDApCiAgICAgIH0pOwogICAgICBpZiAoci5vaykgewogICAgICAgIGNvbnN0IGpzb24gPSBhd2FpdCByLmpzb24oKTsKICAgICAgICBjb25zdCB2ID0ganNvbj8uZGF0YT8uWzBdPy52aWRlbz8udXJsIHx8IGpzb24/LmRhdGE/LlswXTsKICAgICAgICBpZiAodiAmJiB0eXBlb2YgdiA9PT0gJ3N0cmluZycpIHsKICAgICAgICAgIHJldHVybiByZXMuc3RhdHVzKDIwMCkuanNvbih7CiAgICAgICAgICAgIHN1Y2Nlc3M6IHRydWUsCiAgICAgICAgICAgIHZpZGVvVXJsOiB2LnN0YXJ0c1dpdGgoJ2h0dHAnKSA/IHYgOiBgJHtiYXNlfS9maWxlPSR7dn1gLAogICAgICAgICAgICBwcm92aWRlcjogJ1plcm9zY29wZSB2MiBYTCcsCiAgICAgICAgICAgIHR5cGU6ICd2aWRlbycsIHByb21wdAogICAgICAgICAgfSk7CiAgICAgICAgfQogICAgICB9IGVsc2UgZXJyb3JzLnB1c2goYFplcm9zY29wZSAke2Jhc2V9OiAke3Iuc3RhdHVzfWApOwogICAgfSBjYXRjaChlKSB7IGVycm9ycy5wdXNoKGBaZXJvc2NvcGU6ICR7ZS5tZXNzYWdlfWApOyB9CiAgfQoKICAvLyDilIDilIAgNS4gQW5pbWF0ZURpZmYgTGlnaHRuaW5nIHZpYSBIRiBTcGFjZSAoRlJFRSwgbm8ga2V5KSDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIAKICBjb25zdCBhZEVuZHBvaW50cyA9IFsKICAgICdodHRwczovL2d1b3l3dy1hbmltYXRlZGlmZi5oZi5zcGFjZScsCiAgICAnaHR0cHM6Ly9CeXRlRGFuY2UtQW5pbWF0ZURpZmYtTGlnaHRuaW5nLmhmLnNwYWNlJwogIF07CiAgZm9yIChjb25zdCBiYXNlIG9mIGFkRW5kcG9pbnRzKSB7CiAgICB0cnkgewogICAgICBjb25zdCByID0gYXdhaXQgZmV0Y2goYCR7YmFzZX0vcnVuL3ByZWRpY3RgLCB7CiAgICAgICAgbWV0aG9kOiAgJ1BPU1QnLAogICAgICAgIGhlYWRlcnM6IHsgJ0NvbnRlbnQtVHlwZSc6ICdhcHBsaWNhdGlvbi9qc29uJyB9LAogICAgICAgIGJvZHk6ICAgIEpTT04uc3RyaW5naWZ5KHsgZGF0YTogW2Z1bGxQcm9tcHQsICcnLCA4LCAnMTYgZnJhbWVzJywgJzUxMng1MTInLCAnbGlnaHRuaW5nXzRzdGVwJ10gfSksCiAgICAgICAgc2lnbmFsOiBBYm9ydFNpZ25hbC50aW1lb3V0KDQ1MDAwKQogICAgICB9KTsKICAgICAgaWYgKHIub2spIHsKICAgICAgICBjb25zdCBqc29uID0gYXdhaXQgci5qc29uKCk7CiAgICAgICAgY29uc3QgdiA9IGpzb24/LmRhdGE/LlswXT8udmlkZW8/LnVybCB8fCBqc29uPy5kYXRhPy5bMF07CiAgICAgICAgaWYgKHYgJiYgdHlwZW9mIHYgPT09ICdzdHJpbmcnKSB7CiAgICAgICAgICByZXR1cm4gcmVzLnN0YXR1cygyMDApLmpzb24oewogICAgICAgICAgICBzdWNjZXNzOiB0cnVlLAogICAgICAgICAgICB2aWRlb1VybDogdi5zdGFydHNXaXRoKCdodHRwJykgPyB2IDogYCR7YmFzZX0vZmlsZT0ke3Z9YCwKICAgICAgICAgICAgcHJvdmlkZXI6ICdBbmltYXRlRGlmZiBMaWdodG5pbmcnLAogICAgICAgICAgICB0eXBlOiAndmlkZW8nLCBwcm9tcHQKICAgICAgICAgIH0pOwogICAgICAgIH0KICAgICAgfSBlbHNlIGVycm9ycy5wdXNoKGBBbmltYXRlRGlmZjogJHtyLnN0YXR1c31gKTsKICAgIH0gY2F0Y2goZSkgeyBlcnJvcnMucHVzaChgQW5pbWF0ZURpZmY6ICR7ZS5tZXNzYWdlfWApOyB9CiAgfQoKICAvLyDilIDilIAgNi4gQW5pbWF0ZWQgZnJhbWVzIGZhbGxiYWNrIHZpYSBQb2xsaW5hdGlvbnMgKEFMV0FZUyB3b3Jrcykg4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSACiAgY29uc3QgZW5jID0gZW5jb2RlVVJJQ29tcG9uZW50KGZ1bGxQcm9tcHQpOwogIGNvbnN0IGJhc2VJbWFnZVVybCA9IGhhc0ltYWdlICYmIChpbWFnZVVybCB8fCBpbWFnZUJhc2U2NCkKICAgID8gKGltYWdlVXJsIHx8IGBodHRwczovL2ltYWdlLnBvbGxpbmF0aW9ucy5haS9wcm9tcHQvJHtlbmN9P21vZGVsPWZsdXgmc2VlZD0ke3NlZWR9YCkKICAgIDogbnVsbDsKCiAgY29uc3QgZnJhbWVzID0gQXJyYXkuZnJvbSh7IGxlbmd0aDogMTIgfSwgKF8sIGkpID0+CiAgICBgaHR0cHM6Ly9pbWFnZS5wb2xsaW5hdGlvbnMuYWkvcHJvbXB0LyR7ZW5jfT9tb2RlbD1mbHV4JndpZHRoPTc2OCZoZWlnaHQ9NDMyJm5vbG9nbz10cnVlJnNlZWQ9JHtzZWVkICsgaSAqIDE3fSZlbmhhbmNlPXRydWVgCiAgKTsKCiAgcmV0dXJuIHJlcy5zdGF0dXMoMjAwKS5qc29uKHsKICAgIHN1Y2Nlc3M6IHRydWUsCiAgICBmcmFtZXMsCiAgICB2aWRlb1VybDogZnJhbWVzWzBdLAogICAgcHJvdmlkZXI6ICdQb2xsaW5hdGlvbnMgQW5pbWF0ZWQgRnJhbWVzJywKICAgIHR5cGU6ICdmcmFtZXMnLAogICAgcHJvbXB0LAogICAgbm90ZTogJ1ZpZGVvIHByb3ZpZGVycyBidXN5IOKAlCBzaG93aW5nIGFuaW1hdGVkIHByZXZpZXcuICcgKyAoZXJyb3JzLmxlbmd0aCA/ICdUcmllZDogJyArIGVycm9ycy5zbGljZSgwLDMpLmpvaW4oJyB8ICcpIDogJycpLAogICAgZXJyb3JzCiAgfSk7Cn0K
+// IlyassAI — /api/video  (Text-to-Video & Image-to-Video v4.0)
+// Priority: Pollinations → HF i2vgen-xl → HF damo-vilab → Zeroscope → AnimateDiff → Animated Frames
+// Env vars: POLLINATIONS_API_KEY (optional), HF_API_KEY or HF_TOKEN_V2 (optional)
+// maxDuration: 60s
+
+export const config = {
+  api: { bodyParser: { sizeLimit: '8mb' } },
+  maxDuration: 60
+};
+
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  const {
+    prompt = '',
+    style  = 'cinematic',
+    imageUrl    = null,
+    imageBase64 = null,
+    provider    = 'auto'
+  } = req.body || {};
+
+  if (!prompt && !imageUrl && !imageBase64)
+    return res.status(400).json({ error: 'prompt is required' });
+
+  // Env vars — never hardcoded
+  const pollinationsKey = process.env.POLLINATIONS_API_KEY;
+  const hfKey = process.env.HF_API_KEY || process.env.HF_TOKEN_V2;
+  const errors = [];
+  const seed   = Math.floor(Math.random() * 99999);
+  const hasImage = !!(imageUrl || imageBase64);
+
+  const styleMap = {
+    cinematic:     'cinematic camera movement, dramatic lighting, film grain, 4k ultra hd',
+    smooth:        'smooth gentle motion, soft bokeh, dreamy atmosphere, high quality',
+    dynamic:       'dynamic zoom, fast motion, energetic, sharp, action',
+    'slow-motion': 'slow motion, graceful movement, elegant, ethereal, cinematic',
+    'zoom-in':     'slow zoom in, cinematic push, focus pull, shallow depth of field',
+    'zoom-out':    'slow zoom out, wide reveal, cinematic pullback, epic scale'
+  };
+  const fullPrompt = `${prompt}${styleMap[style] ? ', ' + styleMap[style] : ''}`;
+
+  // ── Helper: HuggingFace Inference API ────────────────────────────────────
+  async function callHF(model, inputs, params = {}) {
+    const r = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
+      method:  'POST',
+      headers: {
+        ...(hfKey ? { 'Authorization': `Bearer ${hfKey}` } : {}),
+        'Content-Type':  'application/json',
+        'x-wait-for-model': 'true'
+      },
+      body:   JSON.stringify({ inputs, parameters: params }),
+      signal: AbortSignal.timeout(50000)
+    });
+    return r;
+  }
+
+  // ── 1. Pollinations.ai (primary — always available, key optional) ─────────
+  if (!hasImage || provider === 'Pollinations') {
+    try {
+      const enc = encodeURIComponent(fullPrompt);
+      const pHeaders = pollinationsKey
+        ? { 'Authorization': `Bearer ${pollinationsKey}` }
+        : {};
+
+      // Pollinations video endpoint (if available)
+      const pVideoUrl = `https://image.pollinations.ai/prompt/${enc}?model=video&width=768&height=432&nologo=true&seed=${seed}`;
+      const rV = await fetch(pVideoUrl, {
+        headers: pHeaders,
+        signal: AbortSignal.timeout(25000)
+      }).catch(() => null);
+
+      if (rV?.ok) {
+        const ct = rV.headers.get('content-type') || '';
+        if (ct.includes('video') || ct.includes('mp4')) {
+          const buf = await rV.arrayBuffer();
+          if (buf.byteLength > 5000) {
+            const b64 = Buffer.from(buf).toString('base64');
+            return res.status(200).json({
+              success: true,
+              videoBase64: `data:${ct};base64,${b64}`,
+              provider: 'Pollinations Video',
+              type: 'video', prompt
+            });
+          }
+        }
+      }
+    } catch(e) { errors.push(`Pollinations video: ${e.message}`); }
+  }
+
+  // ── 2. HF i2vgen-xl (Image to Video — excellent with input image) ────────
+  if (hasImage && hfKey) {
+    try {
+      const inputData = imageBase64 || imageUrl || fullPrompt;
+      const r = await callHF(
+        'ali-vilab/i2vgen-xl',
+        inputData,
+        { prompt: fullPrompt, num_inference_steps: 20 }
+      );
+      if (r.ok) {
+        const buf = await r.arrayBuffer();
+        if (buf.byteLength > 5000) {
+          const b64 = Buffer.from(buf).toString('base64');
+          return res.status(200).json({
+            success: true,
+            videoBase64: `data:video/mp4;base64,${b64}`,
+            provider: 'HuggingFace i2vgen-xl (Image→Video)',
+            type: 'video', prompt
+          });
+        }
+      } else errors.push(`i2vgen-xl: ${r.status}`);
+    } catch(e) { errors.push(`i2vgen-xl: ${e.message}`); }
+  }
+
+  // ── 3. damo-vilab text-to-video (HF key required) ────────────────────────
+  if (hfKey) {
+    try {
+      const r = await callHF(
+        'damo-vilab/text-to-video-ms-1.7b',
+        fullPrompt,
+        { num_inference_steps: 25, num_frames: 16 }
+      );
+      if (r.ok) {
+        const buf = await r.arrayBuffer();
+        if (buf.byteLength > 5000) {
+          const ct  = r.headers.get('content-type') || 'video/mp4';
+          const b64 = Buffer.from(buf).toString('base64');
+          return res.status(200).json({
+            success: true,
+            videoBase64: `data:${ct};base64,${b64}`,
+            provider: 'HuggingFace damo-vilab',
+            type: 'video', prompt
+          });
+        }
+      } else errors.push(`damo-vilab: ${r.status}`);
+    } catch(e) { errors.push(`damo-vilab: ${e.message}`); }
+  }
+
+  // ── 4. Zeroscope v2 XL via HF Space (FREE, no key) ───────────────────────
+  const spaceEndpoints = [
+    'https://hysts-zeroscope-v2.hf.space',
+    'https://fffiloni-zeroscope-v2-xl.hf.space'
+  ];
+  for (const base of spaceEndpoints) {
+    try {
+      const r = await fetch(`${base}/run/predict`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ data: [fullPrompt, 24, 7.5, 576, 320, 24, seed] }),
+        signal: AbortSignal.timeout(45000)
+      });
+      if (r.ok) {
+        const json = await r.json();
+        const v = json?.data?.[0]?.video?.url || json?.data?.[0];
+        if (v && typeof v === 'string') {
+          return res.status(200).json({
+            success: true,
+            videoUrl: v.startsWith('http') ? v : `${base}/file=${v}`,
+            provider: 'Zeroscope v2 XL',
+            type: 'video', prompt
+          });
+        }
+      } else errors.push(`Zeroscope ${base}: ${r.status}`);
+    } catch(e) { errors.push(`Zeroscope: ${e.message}`); }
+  }
+
+  // ── 5. AnimateDiff Lightning via HF Space (FREE, no key) ─────────────────
+  const adEndpoints = [
+    'https://guoyww-animatediff.hf.space',
+    'https://ByteDance-AnimateDiff-Lightning.hf.space'
+  ];
+  for (const base of adEndpoints) {
+    try {
+      const r = await fetch(`${base}/run/predict`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ data: [fullPrompt, '', 8, '16 frames', '512x512', 'lightning_4step'] }),
+        signal: AbortSignal.timeout(45000)
+      });
+      if (r.ok) {
+        const json = await r.json();
+        const v = json?.data?.[0]?.video?.url || json?.data?.[0];
+        if (v && typeof v === 'string') {
+          return res.status(200).json({
+            success: true,
+            videoUrl: v.startsWith('http') ? v : `${base}/file=${v}`,
+            provider: 'AnimateDiff Lightning',
+            type: 'video', prompt
+          });
+        }
+      } else errors.push(`AnimateDiff: ${r.status}`);
+    } catch(e) { errors.push(`AnimateDiff: ${e.message}`); }
+  }
+
+  // ── 6. Animated frames fallback via Pollinations (ALWAYS works) ──────────
+  const enc = encodeURIComponent(fullPrompt);
+  const baseImageUrl = hasImage && (imageUrl || imageBase64)
+    ? (imageUrl || `https://image.pollinations.ai/prompt/${enc}?model=flux&seed=${seed}`)
+    : null;
+
+  const frames = Array.from({ length: 12 }, (_, i) =>
+    `https://image.pollinations.ai/prompt/${enc}?model=flux&width=768&height=432&nologo=true&seed=${seed + i * 17}&enhance=true`
+  );
+
+  return res.status(200).json({
+    success: true,
+    frames,
+    videoUrl: frames[0],
+    provider: 'Pollinations Animated Frames',
+    type: 'frames',
+    prompt,
+    note: 'Video providers busy — showing animated preview. ' + (errors.length ? 'Tried: ' + errors.slice(0,3).join(' | ') : ''),
+    errors
+  });
+}
