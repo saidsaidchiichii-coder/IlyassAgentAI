@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IlyassAI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     SIDEBAR
+════════════════════════════════════════ -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="sidebar-header">
+    <button class="sidebar-logo-btn" onclick="goHome()" title="Home">
+      <!-- IlyassAI Logo -->
+      <svg viewBox="0 0 32 32" fill="currentColor" width="26" height="26">
+        <path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm0 3.5c2.006 0 3.89.524 5.522 1.44L7.94 21.522A10.45 10.45 0 0 1 5.5 16C5.5 9.649 10.649 4.5 17 4.5h-1zm0 21c-2.006 0-3.89-.524-5.522-1.44L24.06 10.478A10.45 10.45 0 0 1 26.5 16c0 6.351-5.149 11.5-11.5 11.5h1z"/>
+      </svg>
+    </button>
+
+    <div style="display:flex;align-items:center;gap:4px;">
+      <!-- Collapse button -->
+      <button class="sidebar-collapse-btn" onclick="toggleSidebarCollapse()" title="Collapse sidebar" id="collapseBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <line x1="9" y1="3" x2="9" y2="21"/>
+        </svg>
+      </button>
+      <button class="new-chat-btn" onclick="newChat()" title="New chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="sidebar-search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" placeholder="Search conversations" id="convSearch" oninput="filterConvs(this.value)" />
+  </div>
+
+  <!-- Conversations -->
+  <div class="sidebar-conversations" id="conversationsList">
+    <div class="no-conversations">No conversations yet</div>
+  </div>
+
+  <!-- Footer -->
+  <div class="sidebar-footer">
+    <button class="sidebar-footer-btn" onclick="openSettings()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="15" height="15"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Settings</span>
+    </button>
+    <div class="user-row" id="userRow">
+      <div class="user-avatar" id="userAvatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <span class="user-name" id="sidebarUserName">Guest</span>
+      <button class="signin-link" id="signInBtn" onclick="showAuthModal('login')">Sign in</button>
+    </div>
+  </div>
+</aside>
+
+<!-- SIDEBAR OVERLAY (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- ════════════════════════════════════════
+     MAIN
+════════════════════════════════════════ -->
+<main class="main" id="main">
+
+  <!-- Mobile toggle -->
+  <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleSidebar()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+
+  <!-- TOPBAR WITH TABS -->
+  <div class="topbar" id="topbar">
+    <div class="topbar-tabs">
+      <button class="topbar-tab active" id="tabChat" onclick="switchTab('chat')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chat
+      </button>
+      <button class="topbar-tab" id="tabImagine" onclick="switchTab('imagine')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Imagine
+      </button>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-icon-btn" onclick="newChat()" title="New chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </button>
+      <button class="topbar-icon-btn" onclick="openSettings()" title="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── HOME ── -->
+  <div class="home-view" id="homeView">
+    <div class="home-body">
+      <div class="home-logo">
+        <svg viewBox="0 0 56 56" fill="currentColor" width="52" height="52">
+          <path d="M28 2C13.64 2 2 13.64 2 28s11.64 26 26 26 26-11.64 26-26S42.36 2 28 2zm0 5c3.43 0 6.66.87 9.49 2.4L10.4 37.49A20.93 20.93 0 0 1 7 28C7 15.297 17.297 5 30 5h-2zm0 44c-3.43 0-6.66-.87-9.49-2.4L45.6 18.51A20.93 20.93 0 0 1 49 28C49 40.703 38.703 51 26 51h2z"/>
+        </svg>
+      </div>
+      <h1 class="home-greeting" id="homeGreeting">What do you want to know?</h1>
+      <div class="suggestion-row">
+        <button class="suggestion-pill" onclick="useSuggestion(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="13" height="13"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          Write an essay
+        </button>
+        <button class="suggestion-pill" onclick="useSuggestion(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="13" height="13"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Help me code
+        </button>
+        <button class="suggestion-pill" onclick="useSuggestion(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="13" height="13"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Analyze &amp; research
+        </button>
+        <button class="suggestion-pill" onclick="useSuggestion(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="13" height="13"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Summarize text
+        </button>
+        <button class="suggestion-pill" onclick="useSuggestion(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="13" height="13"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Explain a concept
+        </button>
+        <button class="suggestion-pill" onclick="useSuggestion(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="13" height="13"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Plan a trip
+        </button>
+      </div>
+    </div>
+    <div class="input-zone" id="homeInputZone"></div>
+    <p class="input-hint">IlyassAI can make mistakes. Consider checking important information.</p>
+  </div>
+
+  <!-- ── CHAT ── -->
+  <div class="chat-view" id="chatView">
+    <div class="messages-box" id="messagesBox"></div>
+    <button class="scroll-down-btn" id="scrollDownBtn" onclick="AI.scroll()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="input-zone" id="chatInputZone"></div>
+    <p class="input-hint">IlyassAI can make mistakes. Consider checking important information.</p>
+  </div>
+
+  <!-- ── IMAGINE VIEW ── -->
+  <div class="imagine-view" id="imagineView">
+    <div class="imagine-header">
+      <div class="imagine-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Imagine
+      </div>
+      <div class="imagine-style-tabs" id="imagineStyleTabs">
+        <button class="imagine-style-tab active" onclick="setImagineStyle('standard',this)">Standard</button>
+        <button class="imagine-style-tab" onclick="setImagineStyle('realistic',this)">Realistic</button>
+        <button class="imagine-style-tab" onclick="setImagineStyle('artistic',this)">Artistic</button>
+        <button class="imagine-style-tab" onclick="setImagineStyle('anime',this)">Anime</button>
+        <button class="imagine-style-tab" id="videoModeTab" onclick="setVideoMode(this)" style="display:inline-flex;align-items:center;gap:5px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg> Video</button>
+      </div>
+    </div>
+
+    <!-- Aspect Ratio Row -->
+    <div class="aspect-ratio-row">
+      <span class="aspect-ratio-label">Ratio:</span>
+      <button class="ar-btn active" data-ar="1:1" onclick="setAspectRatio(this,'1:1',768,768)">1:1</button>
+      <button class="ar-btn" data-ar="16:9" onclick="setAspectRatio(this,'16:9',1280,720)">16:9</button>
+      <button class="ar-btn" data-ar="9:16" onclick="setAspectRatio(this,'9:16',720,1280)">9:16</button>
+      <button class="ar-btn" data-ar="4:3" onclick="setAspectRatio(this,'4:3',1024,768)">4:3</button>
+      <button class="ar-btn" data-ar="3:4" onclick="setAspectRatio(this,'3:4',768,1024)">3:4</button>
+    </div>
+
+    <!-- Input -->
+    <div class="imagine-input-wrap">
+      <div class="input-box" id="imagineInputBox">
+        <div class="input-text-row">
+          <textarea
+            id="imagineTA"
+            class="chat-textarea"
+            placeholder="Describe the image you want to create..."
+            rows="1"
+            onkeydown="imagineKey(event)"
+            oninput="onType(this)"
+          ></textarea>
+        </div>
+      </div>
+      <button class="imagine-generate-btn" onclick="generateImagineImage()">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Generate
+      </button>
+    </div>
+
+    <!-- Templates -->
+    <div class="imagine-templates">
+      <div class="templates-label">Templates</div>
+      <div class="templates-scroll" id="templateScroll">
+
+        <div class="template-card" onclick="useTemplate('A breathtaking mountain landscape at golden hour with dramatic clouds','landscape')">
+          <img class="template-img" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=240&h=160&fit=crop&auto=format" alt="Landscape" loading="lazy"/>
+          <div class="template-label">Landscape</div>
+        </div>
+
+        <div class="template-card" onclick="useTemplate('Professional portrait of a person with cinematic lighting and shallow depth of field','portrait')">
+          <img class="template-img" src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=240&h=160&fit=crop&auto=format" alt="Portrait" loading="lazy"/>
+          <div class="template-label">Portrait</div>
+        </div>
+
+        <div class="template-card" onclick="useTemplate('Futuristic cyberpunk city at night with neon lights and rain reflections','cyberpunk')">
+          <img class="template-img" src="https://images.unsplash.com/photo-1555680202-c86f0e12f086?w=240&h=160&fit=crop&auto=format" alt="Cyberpunk" loading="lazy"/>
+          <div class="template-label">Cyberpunk</div>
+        </div>
+
+        <div class="template-card" onclick="useTemplate('Magical fantasy forest with glowing mushrooms and ethereal light beams','fantasy')">
+          <img class="template-img" src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=240&h=160&fit=crop&auto=format" alt="Fantasy" loading="lazy"/>
+          <div class="template-label">Fantasy</div>
+        </div>
+
+        <div class="template-card" onclick="useTemplate('Abstract geometric art with vibrant colors and minimalist composition','abstract')">
+          <img class="template-img" src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=240&h=160&fit=crop&auto=format" alt="Abstract" loading="lazy"/>
+          <div class="template-label">Abstract</div>
+        </div>
+
+        <div class="template-card" onclick="useTemplate('Anime style illustration with detailed character design and soft coloring','anime')">
+          <img class="template-img" src="https://images.unsplash.com/photo-1612487439139-c2d7bac13577?w=240&h=160&fit=crop&auto=format" alt="Anime Style" loading="lazy"/>
+          <div class="template-label">Anime</div>
+        </div>
+
+        <div class="template-card" onclick="useTemplate('Stunning underwater ocean scene with colorful coral reef and tropical fish','ocean')">
+          <img class="template-img" src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=240&h=160&fit=crop&auto=format" alt="Ocean" loading="lazy"/>
+          <div class="template-label">Ocean</div>
+        </div>
+
+        <div class="template-card" onclick="useTemplate('Cozy coffee shop interior with warm lighting, wooden furniture, and rain outside','cozy')">
+          <img class="template-img" src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=240&h=160&fit=crop&auto=format" alt="Cozy" loading="lazy"/>
+          <div class="template-label">Cozy</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Gallery / Discover -->
+    <div class="imagine-gallery" id="imagineGallery">
+      <div class="gallery-section-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Your creations
+      </div>
+      <div class="gallery-grid" id="galleryGrid">
+        <div class="gallery-empty" id="galleryEmpty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <p>Your generated images will appear here</p>
+        </div>
+      </div>
+    </div>
+
+
+  <div id="videoGenSection" style="display:none;flex-direction:column;gap:14px;padding:14px 16px 28px;flex:1;overflow-y:auto;">
+    <div style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--text)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+      Image to Video
+      <span style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;">AI FREE</span>
+    </div>
+    <div id="videoUploadZone" onclick="document.getElementById('videoFileIn').click()"
+      style="border:1.5px dashed var(--border);border-radius:12px;min-height:150px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--input-bg);overflow:hidden;position:relative;">
+      <input type="file" id="videoFileIn" accept="image/*" style="display:none" onchange="onVideoImg(this)">
+      <div id="videoUploadPH" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:24px;text-align:center;color:var(--muted);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="36" height="36"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <p style="margin:0;font-size:13px;color:var(--text-soft)">Click to upload image</p>
+        <span style="font-size:11px">JPG PNG WEBP · max 10MB</span>
+      </div>
+      <img id="videoPreview" style="display:none;width:100%;height:200px;object-fit:cover;border-radius:10px;" alt=""/>
+      <button id="videoChangBtn" onclick="event.stopPropagation();document.getElementById('videoFileIn').click()"
+        style="display:none;position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.7);color:#fff;border:none;border-radius:8px;padding:5px 10px;font-size:11px;cursor:pointer;">✏️ Change</button>
+    </div>
+    <textarea id="videoPromptIn" rows="2" placeholder="Describe the motion... e.g. cinematic zoom, gentle waves, slow motion"
+      style="width:100%;background:var(--input-bg);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text);resize:none;font-family:inherit;box-sizing:border-box;"></textarea>
+    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+      <span style="font-size:12px;color:var(--muted);">Style:</span>
+      <button class="vst-btn active" onclick="setVStyle('cinematic',this)">🎬 Cinematic</button>
+      <button class="vst-btn" onclick="setVStyle('smooth',this)">✨ Smooth</button>
+      <button class="vst-btn" onclick="setVStyle('dynamic',this)">⚡ Dynamic</button>
+      <button class="vst-btn" onclick="setVStyle('slow-motion',this)">🎞️ Slow-Mo</button>
+    </div>
+    <button id="videoGenBtn" onclick="doGenerateVideo()"
+      style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 4px 14px rgba(99,102,241,.35);">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      Generate Video
+    </button>
+    <div id="videoLoadDiv" style="display:none;flex-direction:column;align-items:center;gap:12px;padding:28px;text-align:center;">
+      <div style="width:42px;height:42px;border:3px solid var(--border);border-top-color:#6366f1;border-radius:50%;animation:spin .8s linear infinite;"></div>
+      <p id="videoLoadTxt" style="margin:0;font-size:14px;font-weight:500;">Analyzing image...</p>
+      <span style="font-size:12px;color:var(--muted);">15-60 seconds</span>
+    </div>
+    <div id="videoResultDiv" style="display:none;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;font-weight:500;">
+        <span>🎬 Generated Video</span>
+        <span id="videoProvBadge" style="font-size:10px;background:var(--hover);color:var(--muted);padding:2px 8px;border-radius:10px;">AI</span>
+      </div>
+      <video id="videoEl" controls playsinline loop style="display:none;width:100%;max-height:300px;background:#000;"><source id="videoSrc" src="" type="video/mp4"></video>
+      <div id="framesEl" style="display:none;background:#000;">
+        <img id="framesImg" style="width:100%;max-height:280px;object-fit:contain;display:block;transition:opacity .14s;" alt=""/>
+        <div style="height:3px;background:var(--border);"><div id="framesProg" style="height:100%;background:linear-gradient(90deg,#6366f1,#8b5cf6);width:0%;transition:width .3s;"></div></div>
+      </div>
+      <div style="display:flex;gap:8px;padding:10px 14px;">
+        <button onclick="doDownloadVideo()" style="display:flex;align-items:center;gap:5px;padding:7px 12px;background:var(--hover);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text);cursor:pointer;">⬇️ Download</button>
+        <button onclick="doGenerateVideo()" style="display:flex;align-items:center;gap:5px;padding:7px 12px;background:var(--hover);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text);cursor:pointer;">🔄 Regenerate</button>
+      </div>
+    </div>
+  </div>
+  </div><!-- /imagine-view -->
+
+</main>
+
+<!-- ════════════════════════════════════════
+     AUTH MODAL
+════════════════════════════════════════ -->
+<div class="auth-overlay" id="authModal">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <svg viewBox="0 0 32 32" fill="currentColor" width="32" height="32">
+        <path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm0 3.5c2.006 0 3.89.524 5.522 1.44L7.94 21.522A10.45 10.45 0 0 1 5.5 16C5.5 9.649 10.649 4.5 17 4.5h-1zm0 21c-2.006 0-3.89-.524-5.522-1.44L24.06 10.478A10.45 10.45 0 0 1 26.5 16c0 6.351-5.149 11.5-11.5 11.5h1z"/>
+      </svg>
+    </div>
+    <h2 class="auth-title" id="authTitle">Welcome back</h2>
+    <p class="auth-subtitle">Continue to IlyassAI</p>
+    <input type="email"    id="authEmail"    class="auth-input" placeholder="Email address"    autocomplete="email" />
+    <input type="password" id="authPassword" class="auth-input" placeholder="Password"         autocomplete="current-password" />
+    <div class="auth-error" id="authError"></div>
+    <button class="auth-submit" onclick="handleAuth()">Continue</button>
+    <button class="auth-cancel" onclick="closeAuthModal()">Cancel</button>
+    <p class="auth-switch">Don't have an account? <span id="authSwitchLink" onclick="toggleAuthMode()">Sign up</span></p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     SETTINGS PANEL
+════════════════════════════════════════ -->
+<div class="settings-overlay" id="settingsOverlay" onclick="closeSettings()"></div>
+<aside class="settings-panel" id="settingsPanel">
+  <div class="settings-header">
+    <h3>Settings</h3>
+    <button class="settings-close" onclick="closeSettings()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-label">Appearance</div>
+    <div class="settings-row">
+      <span>Theme</span>
+      <div class="theme-pills">
+        <button class="theme-pill active" onclick="setTheme('dark',this)">Dark</button>
+        <button class="theme-pill" onclick="setTheme('light',this)">Light</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-label">Default Mode</div>
+    <div class="settings-row">
+      <span>Response mode</span>
+      <select id="defaultMode" onchange="setDefaultMode(this.value)" class="settings-select">
+        <option value="auto">Auto</option>
+        <option value="fast">Fast</option>
+        <option value="thinking">Think</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-label">Memory</div>
+    <div class="settings-row">
+      <span>Clear all conversations</span>
+      <button class="danger-btn" onclick="clearAllConvs()">Clear</button>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-label">Account</div>
+    <div class="settings-row" id="settingsUserRow">
+      <span id="settingsEmail">Not signed in</span>
+      <button class="auth-action-btn" id="settingsAuthBtn" onclick="showAuthModal('login')">Sign in</button>
+    </div>
+  </div>
+</aside>
+
+<!-- ════════════════════════════════════════
+     MODE POPUP
+════════════════════════════════════════ -->
+<div class="mode-popup" id="modePopup">
+  <div class="mode-popup-title">Select mode</div>
+  <button class="mode-option active" data-mode="auto"     onclick="selectMode('auto')">
+    <div class="mode-icon auto-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+    </div>
+    <div class="mode-info">
+      <span class="mode-name">Auto</span>
+      <span class="mode-desc">Best model for each task</span>
+    </div>
+    <svg class="mode-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+  </button>
+  <button class="mode-option" data-mode="fast"      onclick="selectMode('fast')">
+    <div class="mode-icon fast-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    </div>
+    <div class="mode-info">
+      <span class="mode-name">Fast</span>
+      <span class="mode-desc">Quick responses</span>
+    </div>
+    <svg class="mode-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+  </button>
+  <button class="mode-option" data-mode="thinking"  onclick="selectMode('thinking')">
+    <div class="mode-icon think-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </div>
+    <div class="mode-info">
+      <span class="mode-name">Think</span>
+      <span class="mode-desc">Deep reasoning mode</span>
+    </div>
+    <svg class="mode-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+  </button>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- ════════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════ -->
+<script src="firebase.js" type="module"></script>
+<script src="ControleAi.js"></script>
+<script>
+/* ===== INPUT HTML ===== */
+const INPUT_HTML = `
+  <div class="input-box" id="inputBox">
+    <div class="input-text-row">
+      <textarea
+        id="chatTextarea"
+        class="chat-textarea"
+        placeholder="Ask anything"
+        rows="1"
+        onkeydown="onKey(event)"
+        oninput="onType(this)"
+      ></textarea>
+    </div>
+    <div class="input-actions-row">
+      <div class="input-left-actions">
+        <label class="icon-action attach-action" title="Attach files">
+          <input type="file" id="chatFileInput" multiple accept="image/*,.pdf,.txt,.js,.py,.html,.css,.md,.json" style="display:none" onchange="onFilePick(this)" />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+          </svg>
+        </label>
+        <button class="mode-trigger icon-action" id="modeTrigger" onclick="toggleModePopup(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          <span id="modeTriggerLabel">Auto</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+      <div class="input-right-actions">
+        <button class="icon-action mic-action" onclick="startVoice()" title="Voice input">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+        </button>
+        <button class="img-gen-btn icon-action" id="imgGenBtn" onclick="generateImage()" title="Generate Image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+          </svg>
+        </button>
+        <button class="voice-mode-btn" id="voiceModeBtn" onclick="toggleVoiceMode()" title="Use Voice Mode">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" stroke-linecap="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          </svg>
+          Voice
+        </button>
+        <button class="send-btn"  id="sendBtn"  onclick="sendMessage()">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M12 2l-7.5 19.5 7.5-4.5 7.5 4.5z"/></svg>
+        </button>
+        <button class="stop-btn"  id="stopBtn"  onclick="AI.stop()" style="display:none;" title="Stop generating">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="file-preview-row" id="filePreviewRow" style="display:none"></div>
+  </div>
+`;
+
+/* ===== CURRENT STATE ===== */
+let _currentTab = 'chat'; // 'chat' | 'imagine'
+let _imagineWidth = 768, _imagineHeight = 768;
+let _imagineStyle = 'standard';
+let _galleryImages = [];
+
+/* ===== BOOT ===== */
+document.addEventListener('DOMContentLoaded', () => {
+  AI.init('messagesBox', '/api/chat');
+  injectInput();
+  setGreeting();
+  loadSavedSettings();
+
+  // Close mode popup on outside click
+  document.addEventListener('click', e => {
+    const popup    = document.getElementById('modePopup');
+    const triggers = document.querySelectorAll('.mode-trigger');
+    const clickedTrigger = [...triggers].some(t => t.contains(e.target));
+    if (popup && !popup.contains(e.target) && !clickedTrigger) {
+      popup.classList.remove('open');
+    }
+  });
+});
+
+function loadSavedSettings() {
+  try {
+    const savedTheme = localStorage.getItem('aiTheme');
+    if (savedTheme) {
+      document.body.setAttribute('data-theme', savedTheme);
+      document.querySelectorAll('.theme-pill').forEach(p => {
+        p.classList.toggle('active', p.textContent.toLowerCase() === savedTheme);
+      });
+    }
+    const savedMode = localStorage.getItem('aiDefaultMode');
+    if (savedMode) selectMode(savedMode);
+
+    // Restore gallery
+    const savedGallery = localStorage.getItem('aiGallery');
+    if (savedGallery) {
+      _galleryImages = JSON.parse(savedGallery);
+      renderGallery();
+    }
+  } catch(e) {}
+}
+
+function injectInput() {
+  const hz = document.getElementById('homeInputZone');
+  const cz = document.getElementById('chatInputZone');
+  const replaceIds = (str, suffix) => str
+    .replace('id="chatTextarea"',    `id="ta-${suffix}"`)
+    .replace('id="chatFileInput"',   `id="fi-${suffix}"`)
+    .replace('id="inputBox"',        `id="ib-${suffix}"`)
+    .replace('id="filePreviewRow"',  `id="fp-${suffix}"`)
+    .replace('id="sendBtn"',         `id="sb-${suffix}"`)
+    .replace('id="stopBtn"',         `id="st-${suffix}"`)
+    .replace('id="imgGenBtn"',       `id="ig-${suffix}"`)
+    .replace('id="modeTrigger"',     `id="mt-${suffix}"`)
+    .replace('id="modeTriggerLabel"',`id="ml-${suffix}"`)
+    .replace('id="voiceModeBtn"',    `id="vm-${suffix}"`);
+
+  if (hz) hz.innerHTML = replaceIds(INPUT_HTML, 'home');
+  if (cz) cz.innerHTML = replaceIds(INPUT_HTML, 'chat');
+}
+
+function setGreeting() {
+  const h = new Date().getHours();
+  const greet = h < 12 ? 'Good morning.' : h < 17 ? 'Good afternoon.' : 'Good evening.';
+  const el = document.getElementById('homeGreeting');
+  if (el) el.textContent = greet;
+}
+
+/* ===== TAB SWITCHING ===== */
+function switchTab(tab) {
+  _currentTab = tab;
+
+  // Update tab buttons
+  document.getElementById('tabChat')?.classList.toggle('active', tab === 'chat');
+  document.getElementById('tabImagine')?.classList.toggle('active', tab === 'imagine');
+
+  // Show/hide views
+  const homeView    = document.getElementById('homeView');
+  const chatView    = document.getElementById('chatView');
+  const imagineView = document.getElementById('imagineView');
+
+  if (tab === 'chat') {
+    if (chatView && chatView.style.display === 'flex') {
+      // Already in chat
+      homeView && (homeView.style.display = 'none');
+      chatView && (chatView.style.display = 'flex');
+    } else {
+      homeView && (homeView.style.display = 'flex');
+      chatView && (chatView.style.display = 'none');
+    }
+    imagineView && (imagineView.style.display = 'none');
+  } else {
+    homeView    && (homeView.style.display    = 'none');
+    chatView    && (chatView.style.display    = 'none');
+    imagineView && (imagineView.style.display = 'flex');
+    imagineView && (imagineView.style.flexDirection = 'column');
+    // Focus the imagine textarea
+    setTimeout(() => document.getElementById('imagineTA')?.focus(), 100);
+  }
+}
+
+/* ===== IMAGINE CONTROLS ===== */
+function setImagineStyle(style, btn) {
+  _imagineStyle = style;
+  document.querySelectorAll('.imagine-style-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function setAspectRatio(btn, ar, w, h) {
+  _imagineWidth  = w;
+  _imagineHeight = h;
+  document.querySelectorAll('.ar-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function useTemplate(prompt, style) {
+  const ta = document.getElementById('imagineTA');
+  if (ta) { ta.value = prompt; onType(ta); ta.focus(); }
+  // Highlight the clicked card
+  document.querySelectorAll('.template-card').forEach(c => c.classList.remove('active'));
+  event?.currentTarget?.classList.add('active');
+}
+
+function imagineKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); generateImagineImage(); }
+}
+
+async function generateImagineImage() {
+  const ta = document.getElementById('imagineTA');
+  if (!ta) return;
+  const prompt = ta.value.trim();
+  if (!prompt) { showToast('Write a description for your image'); return; }
+
+  // Style suffix
+  const styleSuffix = {
+    standard:  '',
+    realistic: ', photorealistic, 8k, detailed',
+    artistic:  ', digital art, painterly, vibrant colors',
+    anime:     ', anime style, manga illustration, detailed'
+  }[_imagineStyle] || '';
+
+  const fullPrompt = prompt + styleSuffix;
+
+  // Add to gallery as loading
+  const imgId = 'gimg-' + Date.now();
+  const galleryGrid = document.getElementById('galleryGrid');
+  const galleryEmpty = document.getElementById('galleryEmpty');
+  if (galleryEmpty) galleryEmpty.style.display = 'none';
+
+  const loadItem = document.createElement('div');
+  loadItem.className = 'gallery-item';
+  loadItem.id = imgId;
+  loadItem.innerHTML = `
+    <div class="template-img-placeholder" style="height:160px;">
+      <div class="skeleton-loader" style="width:80%;padding:0">
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line"></div>
+      </div>
+    </div>`;
+  galleryGrid.prepend(loadItem);
+
+  showToast('Generating image...');
+  ta.value = '';
+  ta.style.height = 'auto';
+
+  try {
+    const res = await fetch('/api/image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: fullPrompt, width: _imagineWidth, height: _imagineHeight })
+    });
+    const data = await res.json();
+
+    const loadEl = document.getElementById(imgId);
+    if (loadEl) {
+      if (data.imageUrl) {
+        loadEl.innerHTML = `
+          <img src="${data.imageUrl}" alt="${prompt}" loading="lazy"
+               onload="this.style.opacity=1" style="opacity:0;transition:opacity 0.4s;width:100%;display:block;"/>
+          <div class="gallery-item-overlay">
+            <div class="gallery-item-label">${escapeHtml(prompt)}</div>
+          </div>`;
+        loadEl.onclick = () => viewGalleryImage(data.imageUrl, prompt);
+
+        // Save to gallery history
+        _galleryImages.unshift({ url: data.imageUrl, prompt, ts: Date.now() });
+        try { localStorage.setItem('aiGallery', JSON.stringify(_galleryImages.slice(0,50))); } catch(e) {}
+
+        showToast('Image generated!');
+      } else {
+        loadEl.innerHTML = `<div class="template-img-placeholder" style="height:100px;color:var(--red);font-size:12px;">Failed: ${data.error || 'Unknown error'}</div>`;
+        showToast('Generation failed');
+      }
+    }
+  } catch(err) {
+    const loadEl = document.getElementById(imgId);
+    if (loadEl) loadEl.innerHTML = `<div class="template-img-placeholder" style="height:100px;color:var(--red);font-size:12px;">Error: ${err.message}</div>`;
+    showToast('Network error');
+  }
+}
+
+function renderGallery() {
+  if (!_galleryImages.length) return;
+  const galleryGrid  = document.getElementById('galleryGrid');
+  const galleryEmpty = document.getElementById('galleryEmpty');
+  if (!galleryGrid) return;
+  if (galleryEmpty) galleryEmpty.style.display = 'none';
+  galleryGrid.innerHTML = '';
+  _galleryImages.forEach(img => {
+    const item = document.createElement('div');
+    item.className = 'gallery-item';
+    item.innerHTML = `
+      <img src="${img.url}" alt="${img.prompt}" loading="lazy"
+           style="width:100%;display:block;" />
+      <div class="gallery-item-overlay">
+        <div class="gallery-item-label">${escapeHtml(img.prompt)}</div>
+      </div>`;
+    item.onclick = () => viewGalleryImage(img.url, img.prompt);
+    galleryGrid.appendChild(item);
+  });
+}
+
+function viewGalleryImage(url, prompt) {
+  // Open in new tab / lightbox
+  window.open(url, '_blank');
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ===== SEND (CHAT) ===== */
+function sendMessage() {
+  const ta = getTextarea();
+  if (!ta) return;
+  const msg = ta.value.trim();
+  if (!msg) return;
+
+  // Auto-detect image generation
+  const msgLower = msg.toLowerCase();
+  const imgTriggers = ['generate image', 'create image', 'draw ', 'paint ', 'make image', 'image of ', 'picture of ', 'photo of ', '/img ', '/image '];
+  if (imgTriggers.some(t => msgLower.startsWith(t) || msgLower.includes(t))) {
+    return generateImage();
+  }
+
+  document.getElementById('homeView').style.display = 'none';
+  document.getElementById('chatView').style.display = 'flex';
+
+  ta.value = '';
+  ta.style.height = 'auto';
+
+  AI.user(msg);
+  AI.ask(msg, { onComplete: (text) => {
+    if (window.voiceModeActive) speakText(text);
+  }});
+}
+
+function onKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+function onType(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 200) + 'px';
+}
+
+function getTextarea() {
+  const chatView = document.getElementById('chatView');
+  const inChat   = chatView && chatView.style.display === 'flex';
+  if (inChat) return document.getElementById('ta-chat') || document.getElementById('chatTA');
+  return document.getElementById('ta-home') || document.getElementById('homeTA');
+}
+
+/* ===== SUGGESTIONS ===== */
+function useSuggestion(btn) {
+  const ta = getTextarea();
+  if (!ta) return;
+  ta.value = btn.textContent.trim();
+  ta.focus();
+  onType(ta);
+}
+
+/* ===== FILE PICK ===== */
+function onFilePick(input) {
+  const row = input.closest('.input-box')?.querySelector('[id^="fp-"]')
+           || input.closest('.input-box')?.querySelector('.file-preview-row');
+  if (!row) return;
+  if (!input.files.length) { row.style.display = 'none'; return; }
+  row.style.display = 'flex';
+  row.innerHTML = Array.from(input.files).map(f => {
+    const isImg = f.type.startsWith('image/');
+    if (isImg) {
+      const url = URL.createObjectURL(f);
+      return `<div class="file-chip img-chip"><img src="${url}" alt="${f.name}" /></div>`;
+    }
+    return `<div class="file-chip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span>${f.name}</span>
+    </div>`;
+  }).join('');
+}
+
+/* ===== VOICE ===== */
+function startVoice() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { showToast('Voice not supported in this browser'); return; }
+  const r = new SR();
+  r.lang = 'en-US';
+  r.onresult = e => {
+    const ta = getTextarea();
+    if (ta) { ta.value += e.results[0][0].transcript; onType(ta); }
+  };
+  r.onerror = () => showToast('Voice input failed');
+  r.start();
+  showToast('Listening…');
+}
+
+/* ===== MODE ===== */
+let currentMode = 'auto';
+function toggleModePopup(btn) {
+  const popup = document.getElementById('modePopup');
+  if (!popup) return;
+  const rect = btn.getBoundingClientRect();
+  popup.style.bottom = (window.innerHeight - rect.top + 10) + 'px';
+  popup.style.left   = rect.left + 'px';
+  popup.classList.toggle('open');
+}
+function selectMode(mode) {
+  currentMode = mode;
+  AI.currentMode = mode;
+  const labels = { auto: 'Auto', fast: 'Fast', thinking: 'Think' };
+  // Update all mode trigger labels
+  document.querySelectorAll('[id^="ml-"],[id="modeTriggerLabel"]').forEach(el => {
+    el.textContent = labels[mode] || mode;
+  });
+  document.querySelectorAll('.mode-option').forEach(o => {
+    o.classList.toggle('active', o.dataset.mode === mode);
+  });
+  document.getElementById('modePopup')?.classList.remove('open');
+}
+
+/* ===== NAVIGATION ===== */
+function goHome() {
+  AI.currentConvId = null;
+  _currentTab = 'chat';
+  document.getElementById('tabChat')?.classList.add('active');
+  document.getElementById('tabImagine')?.classList.remove('active');
+  document.getElementById('homeView').style.display = 'flex';
+  document.getElementById('chatView').style.display = 'none';
+  document.getElementById('imagineView').style.display = 'none';
+  if (AI.messagesBox) AI.messagesBox.innerHTML = '';
+  injectInput();
+  setGreeting();
+}
+function newChat() {
+  goHome();
+  showToast('New conversation');
+}
+function filterConvs(q) {
+  document.querySelectorAll('.conv-item').forEach(el => {
+    const title = el.querySelector('.conv-item-text')?.textContent || '';
+    el.style.display = title.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+  });
+}
+function toggleSidebar() {
+  const sb  = document.getElementById('sidebar');
+  const ov  = document.getElementById('sidebarOverlay');
+  const open = sb?.classList.toggle('open');
+  ov?.classList.toggle('open', open);
+}
+
+let _sidebarCollapsed = false;
+function toggleSidebarCollapse() {
+  _sidebarCollapsed = !_sidebarCollapsed;
+  document.getElementById('sidebar')?.classList.toggle('collapsed', _sidebarCollapsed);
+  document.getElementById('main')?.classList.toggle('sidebar-collapsed', _sidebarCollapsed);
+  try { localStorage.setItem('sidebarCollapsed', _sidebarCollapsed); } catch(e) {}
+}
+
+/* ===== SETTINGS ===== */
+function openSettings() {
+  document.getElementById('settingsPanel')?.classList.add('open');
+  document.getElementById('settingsOverlay')?.classList.add('open');
+}
+function closeSettings() {
+  document.getElementById('settingsPanel')?.classList.remove('open');
+  document.getElementById('settingsOverlay')?.classList.remove('open');
+}
+function setTheme(t, btn) {
+  document.body.setAttribute('data-theme', t);
+  document.querySelectorAll('.theme-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  localStorage.setItem('aiTheme', t);
+  showToast(`${t.charAt(0).toUpperCase()+t.slice(1)} theme`);
+}
+function setDefaultMode(mode) {
+  selectMode(mode);
+  localStorage.setItem('aiDefaultMode', mode);
+}
+function clearAllConvs() {
+  if (!confirm('Clear all conversations?')) return;
+  AI.conversations = [];
+  AI._saveToStorage?.();
+  AI._renderSidebar?.();
+  goHome();
+  showToast('All conversations cleared');
+}
+
+/* ===== AUTH ===== */
+let _authMode = 'login';
+function showAuthModal(mode = 'login') {
+  _authMode = mode;
+  window.setAuthMode?.(mode);
+  document.getElementById('authTitle').textContent     = mode === 'login' ? 'Welcome back'   : 'Create account';
+  document.getElementById('authSwitchLink').textContent = mode === 'login' ? 'Sign up'        : 'Sign in';
+  document.getElementById('authModal').classList.add('open');
+  document.getElementById('authError').textContent = '';
+}
+function closeAuthModal() {
+  document.getElementById('authModal').classList.remove('open');
+}
+function toggleAuthMode() {
+  showAuthModal(_authMode === 'login' ? 'signup' : 'login');
+}
+
+/* ===== TOAST ===== */
+function showToast(msg, duration = 2800) {
+  const container = document.getElementById('toastContainer');
+  if (!container) return;
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = msg;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add('out');
+    setTimeout(() => toast.remove(), 300);
+  }, duration);
+}
+window.showToast = showToast;
+window.generateImage = generateImage;
+window.regenerateImage = regenerateImage;
+
+/* ===== DRAG & DROP ===== */
+document.addEventListener('dragover', e => e.preventDefault());
+document.addEventListener('drop', e => {
+  e.preventDefault();
+  const files = e.dataTransfer.files;
+  if (!files.length) return;
+  const input = document.querySelector('[id^="fi-"]');
+  if (input) {
+    const dt = new DataTransfer();
+    Array.from(files).forEach(f => dt.items.add(f));
+    input.files = dt.files;
+    onFilePick(input);
+    showToast(`${files.length} file${files.length > 1 ? 's' : ''} attached`);
+  }
+});
+
+/* ===== IMAGE GENERATION (Chat mode) ===== */
+async function generateImage() {
+  const ta = getTextarea();
+  if (!ta) return;
+  const prompt = ta.value.trim();
+  if (!prompt) { showToast('Write a prompt to generate an image'); return; }
+
+  document.getElementById('homeView').style.display = 'none';
+  document.getElementById('chatView').style.display = 'flex';
+
+  ta.value = '';
+  ta.style.height = 'auto';
+
+  // Show user message (without emoji)
+  AI.user('Generate image: ' + prompt);
+
+  const loadId  = 'img-load-' + Date.now();
+  const box     = document.getElementById('messagesBox');
+  if (box) {
+    const loadDiv = document.createElement('div');
+    loadDiv.id    = loadId;
+    loadDiv.className = 'msg-row ai-row-msg';
+    loadDiv.innerHTML = `
+      <div class="msg-wrapper">
+        <div class="ai-avatar">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
+            <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z"/>
+          </svg>
+        </div>
+        <div class="msg-content">
+          <div class="img-loading">
+            <div class="skeleton-loader" style="width:200px">
+              <div class="skeleton-line"></div>
+              <div class="skeleton-line"></div>
+              <div class="skeleton-line"></div>
+              <div class="skeleton-line"></div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    box.appendChild(loadDiv);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  try {
+    const res  = await fetch('/api/image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt, width: 768, height: 768 })
+    });
+    const data = await res.json();
+    const loadEl = document.getElementById(loadId);
+    if (loadEl) {
+      if (data.imageUrl) {
+        loadEl.innerHTML = `
+          <div class="msg-wrapper">
+            <div class="ai-avatar">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z"/></svg>
+            </div>
+            <div class="msg-content">
+              <div class="img-prompt-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                ${escapeHtml(prompt)}
+              </div>
+              <div class="generated-img-wrap">
+                <img
+                  src="${data.imageUrl}"
+                  alt="${escapeHtml(prompt)}"
+                  class="generated-img"
+                  onload="this.classList.add('loaded')"
+                  onerror="this.parentElement.innerHTML='<p style=color:var(--red)>Failed to load image. Please try again.</p>'"
+                />
+                <div class="img-actions">
+                  <a href="${data.imageUrl}" target="_blank" download class="img-action-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download
+                  </a>
+                  <button onclick="regenerateImage('${escapeHtml(prompt).replace(/'/g,"\\'")}')" class="img-action-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                    Regenerate
+                  </button>
+                </div>
+              </div>
+              <div class="img-credit">Powered by Pollinations.ai</div>
+            </div>
+          </div>`;
+      } else {
+        loadEl.innerHTML = `<div class="msg-wrapper"><div class="msg-content" style="color:var(--red)">Error: ${data.error || 'Unknown error'}</div></div>`;
+      }
+      box.scrollTop = box.scrollHeight;
+    }
+  } catch(err) {
+    const loadEl = document.getElementById(loadId);
+    if (loadEl) loadEl.innerHTML = `<div class="msg-wrapper"><div class="msg-content" style="color:var(--red)">Network error: ${err.message}</div></div>`;
+  }
+}
+
+function regenerateImage(prompt) {
+  const ta = getTextarea();
+  if (ta) { ta.value = prompt; onType(ta); }
+  generateImage();
+}
+
+/* ===== VOICE MODE ===== */
+window.voiceModeActive = false;
+let voiceRecognition = null;
+let isListeningContinuous = false;
+
+function toggleVoiceMode() {
+  const btn = document.querySelectorAll('[id^="vm-"]')[0];
+  window.voiceModeActive = !window.voiceModeActive;
+
+  if (window.voiceModeActive) {
+    document.querySelectorAll('[id^="vm-"]').forEach(b => {
+      b.classList.add('voice-mode-on');
+      b.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg> Live`;
+    });
+    showToast('Voice Mode ON — speak to the AI');
+    startContinuousListening();
+  } else {
+    document.querySelectorAll('[id^="vm-"]').forEach(b => {
+      b.classList.remove('voice-mode-on');
+      b.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg> Voice`;
+    });
+    showToast('Voice Mode OFF');
+    stopContinuousListening();
+    window.speechSynthesis && window.speechSynthesis.cancel();
+  }
+}
+
+function startContinuousListening() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    showToast('Voice not supported. Use Chrome.');
+    window.voiceModeActive = false;
+    return;
+  }
+  voiceRecognition = new SR();
+  voiceRecognition.continuous = false;
+  voiceRecognition.interimResults = false;
+  voiceRecognition.lang = 'ar-MA';
+  isListeningContinuous = true;
+
+  voiceRecognition.onstart = () => {
+    showToast('Listening...');
+    document.querySelectorAll('[id^="vm-"]').forEach(b => b.classList.add('listening'));
+  };
+  voiceRecognition.onresult = (e) => {
+    const transcript = e.results[0][0].transcript;
+    const ta = getTextarea();
+    if (ta && transcript.trim()) {
+      ta.value = transcript;
+      onType(ta);
+      setTimeout(() => sendMessage(), 500);
+    }
+  };
+  voiceRecognition.onend = () => {
+    document.querySelectorAll('[id^="vm-"]').forEach(b => b.classList.remove('listening'));
+    if (isListeningContinuous && window.voiceModeActive) {
+      setTimeout(() => {
+        if (window.voiceModeActive && !AI.isStreaming) voiceRecognition?.start();
+      }, 1500);
+    }
+  };
+  voiceRecognition.onerror = (e) => {
+    if (e.error !== 'aborted' && e.error !== 'no-speech') {
+      showToast('Voice error: ' + e.error);
+    }
+    document.querySelectorAll('[id^="vm-"]').forEach(b => b.classList.remove('listening'));
+    if (isListeningContinuous && window.voiceModeActive && e.error === 'no-speech') {
+      setTimeout(() => { if (window.voiceModeActive) voiceRecognition?.start(); }, 1000);
+    }
+  };
+  voiceRecognition.start();
+}
+
+function stopContinuousListening() {
+  isListeningContinuous = false;
+  if (voiceRecognition) {
+    try { voiceRecognition.stop(); } catch(e) {}
+    voiceRecognition = null;
+  }
+}
+
+function speakText(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const clean = text
+    .replace(/```[\s\S]*?```/g, ' code block ')
+    .replace(/`[^`]+`/g, '')
+    .replace(/[*_#>\-]+/g, '')
+    .replace(/https?:\/\/\S+/g, ' link ')
+    .trim()
+    .substring(0, 500);
+  if (!clean) return;
+  const utt   = new SpeechSynthesisUtterance(clean);
+  utt.rate    = 0.95;
+  utt.pitch   = 1.0;
+  const voices = window.speechSynthesis.getVoices();
+  const arVoice = voices.find(v => v.lang.startsWith('ar'));
+  const enVoice = voices.find(v => v.lang.startsWith('en'));
+  utt.voice   = arVoice || enVoice || null;
+  utt.lang    = arVoice ? 'ar' : 'en-US';
+  utt.onstart = () => showToast('Reading response...');
+  utt.onend   = () => {
+    if (window.voiceModeActive && isListeningContinuous) {
+      setTimeout(() => {
+        if (window.voiceModeActive) {
+          if (voiceRecognition) { try { voiceRecognition.start(); } catch(e) {} }
+          else startContinuousListening();
+        }
+      }, 800);
+    }
+  };
+  window.speechSynthesis.speak(utt);
+}
+
+// Override AI.ask to intercept final response for TTS
+const _origAsk = AI.ask.bind(AI);
+AI.ask = function(msg, opts) {
+  return _origAsk(msg, {
+    ...opts,
+    onComplete: (text) => {
+      opts?.onComplete?.(text);
+      if (window.voiceModeActive) speakText(text);
+    }
+  });
+};
+
+window.speakText       = speakText;
+window.toggleVoiceMode = toggleVoiceMode;
+</script>
+</body>
+</html>
