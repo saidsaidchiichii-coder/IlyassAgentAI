@@ -18,7 +18,7 @@ export default async function handler(req, res) {
   }
 
   const braveKey = process.env.BRAVE_API_KEY;
-  const serpKey  = process.env.SERP_API_KEY;
+  const serpKey = process.env.SERP_API_KEY;
 
   // ── Brave Search (primary) ──
   if (braveKey) {
@@ -30,8 +30,7 @@ export default async function handler(req, res) {
             'Accept': 'application/json',
             'Accept-Encoding': 'gzip',
             'X-Subscription-Token': braveKey
-          },
-          signal: AbortSignal.timeout(10000)  // FIX: added timeout
+          }
         }
       );
 
@@ -54,8 +53,7 @@ export default async function handler(req, res) {
   if (serpKey) {
     try {
       const serpRes = await fetch(
-        `https://serpapi.com/search.json?q=${encodeURIComponent(query)}&api_key=${serpKey}&num=10`,
-        { signal: AbortSignal.timeout(10000) }  // FIX: added timeout
+        `https://serpapi.com/search.json?q=${encodeURIComponent(query)}&api_key=${serpKey}&num=10`
       );
 
       if (serpRes.ok) {
@@ -74,11 +72,9 @@ export default async function handler(req, res) {
   }
 
   // ── DuckDuckGo Instant Answer (free fallback) ──
-  // FIX: Added timeout to prevent Vercel 30s timeout
   try {
     const ddgRes = await fetch(
-      `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`,
-      { signal: AbortSignal.timeout(8000) }
+      `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`
     );
 
     if (ddgRes.ok) {
@@ -105,7 +101,6 @@ export default async function handler(req, res) {
         }
       });
 
-      // Even if no results, return success (DDG may have no instant answers)
       return res.status(200).json({ success: true, provider: 'DuckDuckGo', query, results });
     }
   } catch (e) {
