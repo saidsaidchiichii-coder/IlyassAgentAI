@@ -19,5 +19,5 @@
       "destination": "/auth.html"
     }
   ],
-  "buildCommand": "echo 'IlyassAI build v2.2'"
+  "buildCommand": "echo 'IlyassAI build v2.3-hotfix'"
 }
