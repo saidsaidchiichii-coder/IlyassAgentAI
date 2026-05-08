@@ -12,7 +12,6 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // FIX: Set SSE headers BEFORE any writes (was set after first sendEvent call)
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
@@ -32,87 +31,8 @@ export default async function handler(req, res) {
   sendEvent('thinking', { message: 'Analyzing task and creating execution plan…', step: 0 });
 
   const groqKey = process.env.GROQ_API_KEY;
-  const orKey   = process.env.OPENROUTER_API_KEY;
-  const geminiKey = process.env.GEMINI_API_KEY;
 
-  // Helper: call any available LLM
-  async function callLLM(messages, maxTokens = 512, jsonMode = false) {
-    // FIX: Groq model name corrected (no slash prefix)
-    if (groqKey) {
-      try {
-        const body = {
-          model: 'llama-3.3-70b-versatile',  // FIX: was 'llama-3.3-70b-versatile'
-          messages,
-          max_tokens: maxTokens,
-          temperature: 0.3
-        };
-        if (jsonMode) body.response_format = { type: 'json_object' };
-
-        const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${groqKey}` },
-          body: JSON.stringify(body),
-          signal: AbortSignal.timeout(20000)
-        });
-        if (r.ok) {
-          const d = await r.json();
-          return d.choices?.[0]?.message?.content || '';
-        }
-      } catch (e) { console.error('LLM Groq error:', e.message); }
-    }
-
-    // Fallback to OpenRouter
-    if (orKey) {
-      try {
-        const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${orKey}`,
-            'HTTP-Referer': req.headers.host ? `https://${req.headers.host}` : 'https://ilyassagentai.vercel.app',
-            'X-Title': 'IlyassAI'
-          },
-          body: JSON.stringify({
-            model: 'meta-llama/llama-3.3-70b-instruct:free',
-            messages,
-            max_tokens: maxTokens,
-            temperature: 0.3
-          }),
-          signal: AbortSignal.timeout(20000)
-        });
-        if (r.ok) {
-          const d = await r.json();
-          return d.choices?.[0]?.message?.content || '';
-        }
-      } catch (e) { console.error('LLM OpenRouter error:', e.message); }
-    }
-
-    // Fallback to Gemini
-    if (geminiKey) {
-      try {
-        const gemMsgs = messages.filter(m => m.role !== 'system').map(m => ({
-          role: m.role === 'assistant' ? 'model' : 'user',
-          parts: [{ text: m.content }]
-        }));
-        const r = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiKey}`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contents: gemMsgs, generationConfig: { maxOutputTokens: maxTokens } }),
-            signal: AbortSignal.timeout(20000)
-          }
-        );
-        if (r.ok) {
-          const d = await r.json();
-          return d.candidates?.[0]?.content?.parts?.[0]?.text || '';
-        }
-      } catch (e) { console.error('LLM Gemini error:', e.message); }
-    }
-
-    return '';
-  }
-
+  // Fixed: planning prompt wraps the array in an object so json_object mode works correctly
   const planningPrompt = `You are IlyassAI, an autonomous agent. Analyze this task and create a numbered execution plan (max 6 steps). Be specific and actionable.
 
 Task: ${task}
@@ -125,19 +45,38 @@ Respond with ONLY valid JSON in this exact format:
 ]}`;
 
   let plan = [];
+  
+  if (groqKey) {
+    try {
+      const planRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${groqKey}`
+        },
+        body: JSON.stringify({
+          model: 'meta-llama/llama-3.3-70b-versatile',
+          messages: [{ role: 'user', content: planningPrompt }],
+          max_tokens: 512,
+          temperature: 0.3,
+          response_format: { type: 'json_object' }
+        })
+      });
 
-  try {
-    const planContent = await callLLM(
-      [{ role: 'user', content: planningPrompt }],
-      512,
-      true  // json mode
-    );
-    if (planContent) {
-      const parsed = JSON.parse(planContent);
-      plan = Array.isArray(parsed) ? parsed : (parsed.steps || parsed.plan || []);
+      if (planRes.ok) {
+        const planData = await planRes.json();
+        const content = planData.choices?.[0]?.message?.content || '{}';
+        try {
+          const parsed = JSON.parse(content);
+          // Handle both {steps: [...]} and direct array formats
+          plan = Array.isArray(parsed) ? parsed : (parsed.steps || parsed.plan || []);
+        } catch {
+          plan = [];
+        }
+      }
+    } catch (e) {
+      console.error('Planning error:', e.message);
     }
-  } catch (e) {
-    console.error('Planning parse error:', e.message);
   }
 
   if (plan.length === 0) {
@@ -154,18 +93,18 @@ Respond with ONLY valid JSON in this exact format:
   let results = [];
   for (const step of plan) {
     sendEvent('step_start', { step: step.step, action: step.action, description: step.description });
-
+    
     await new Promise(r => setTimeout(r, 300));
 
     try {
       let stepResult = null;
 
       if (step.action === 'search' && tools.includes('search')) {
+        // Fixed: call search logic inline instead of using unstable VERCEL_URL self-call
         try {
           const query = task.slice(0, 100);
           const ddgRes = await fetch(
-            `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`,
-            { signal: AbortSignal.timeout(8000) }
+            `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`
           );
           if (ddgRes.ok) {
             const data = await ddgRes.json();
@@ -196,21 +135,36 @@ Respond with ONLY valid JSON in this exact format:
       }
 
       if (!stepResult) {
+        // Generate content using LLM
         const messages = [
           { role: 'system', content: 'You are IlyassAI, an autonomous AI agent. Execute the assigned step thoroughly.' },
           ...context,
           { role: 'user', content: `Task: ${task}\n\nExecute step ${step.step}: ${step.description}\n\nProvide a complete, detailed response.` }
         ];
 
-        const content = await callLLM(messages, 2048);
-        if (content) {
-          stepResult = { type: 'text', content };
-          results.push({ step: step.step, ...stepResult });
+        if (groqKey) {
+          const execRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${groqKey}` },
+            body: JSON.stringify({
+              model: 'meta-llama/llama-3.3-70b-versatile',
+              messages,
+              max_tokens: 2048,
+              temperature: 0.7
+            })
+          });
+
+          if (execRes.ok) {
+            const execData = await execRes.json();
+            const content = execData.choices?.[0]?.message?.content || '';
+            stepResult = { type: 'text', content };
+            results.push({ step: step.step, ...stepResult });
+          }
         }
       }
 
-      sendEvent('step_done', {
-        step: step.step,
+      sendEvent('step_done', { 
+        step: step.step, 
         description: step.description,
         result: stepResult,
         status: 'success'
@@ -225,7 +179,7 @@ Respond with ONLY valid JSON in this exact format:
   sendEvent('synthesizing', { message: 'Combining results into final response…' });
 
   let finalResponse = '';
-  if (results.length > 0) {
+  if (groqKey && results.length > 0) {
     try {
       const synthesisPrompt = `Task: ${task}
 
@@ -234,14 +188,24 @@ ${results.map(r => `Step ${r.step}: ${JSON.stringify(r).slice(0, 500)}`).join('\
 
 Synthesize these results into a comprehensive, well-formatted final response. Use markdown formatting.`;
 
-      finalResponse = await callLLM(
-        [{ role: 'user', content: synthesisPrompt }],
-        3000
-      );
+      const synthRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${groqKey}` },
+        body: JSON.stringify({
+          model: 'meta-llama/llama-3.3-70b-versatile',
+          messages: [{ role: 'user', content: synthesisPrompt }],
+          max_tokens: 3000
+        })
+      });
+
+      if (synthRes.ok) {
+        const synthData = await synthRes.json();
+        finalResponse = synthData.choices?.[0]?.message?.content || '';
+      }
     } catch {}
   }
 
-  sendEvent('complete', {
+  sendEvent('complete', { 
     message: 'Task completed',
     response: finalResponse || results.map(r => r.content || JSON.stringify(r)).join('\n\n'),
     steps: plan.length,
