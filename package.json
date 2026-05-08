@@ -1,11 +1,1 @@
-{
-  "name": "ilyass-agent-ai",
-  "version": "2.0.0",
-  "private": true,
-  "description": "IlyassAI — Autonomous AI Agent Platform with Manus-like capabilities",
-  "engines": {
-    "node": ">=18"
-  },
-  "dependencies": {},
-  "devDependencies": {}
-}
+ewogICJuYW1lIjogImlseWFzcy1hZ2VudC1haSIsCiAgInZlcnNpb24iOiAiMi4wLjAiLAogICJwcml2YXRlIjogdHJ1ZSwKICAiZGVzY3JpcHRpb24iOiAiSWx5YXNzQUkg4oCUIEF1dG9ub21vdXMgQUkgQWdlbnQgUGxhdGZvcm0gd2l0aCBNYW51cy1saWtlIGNhcGFiaWxpdGllcyIsCiAgInR5cGUiOiAibW9kdWxlIiwKICAiZW5naW5lcyI6IHsKICAgICJub2RlIjogIj49MTgiCiAgfSwKICAiZGVwZW5kZW5jaWVzIjoge30sCiAgImRldkRlcGVuZGVuY2llcyI6IHt9Cn0K
