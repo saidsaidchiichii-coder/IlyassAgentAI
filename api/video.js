@@ -1,9 +1,9 @@
-// IlyassAI — /api/video
-// Image-to-Video: HuggingFace SVD + i2vgen-xl + Pollinations.ai frames fallback
-// maxDuration: 60s (set in vercel.json per-function override)
+// IlyassAI — /api/video  (Text-to-Video v3.0)
+// Providers: HF damo-vilab → HF zeroscope-xl → HF AnimateDiff → Frames fallback
+// maxDuration: 60s
 
 export const config = {
-  api: { bodyParser: { sizeLimit: '12mb' } },
+  api: { bodyParser: { sizeLimit: '4mb' } },
   maxDuration: 60
 };
 
@@ -15,84 +15,78 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const {
-    imageBase64,
-    imageUrl,
-    prompt = 'cinematic smooth motion, high quality',
-    style = 'cinematic'
+    prompt = '',
+    style  = 'cinematic',
+    imageUrl   = null,
+    imageBase64 = null
   } = req.body || {};
 
-  if (!imageBase64 && !imageUrl)
-    return res.status(400).json({ error: 'imageBase64 or imageUrl is required' });
+  if (!prompt && !imageUrl && !imageBase64)
+    return res.status(400).json({ error: 'prompt is required' });
 
-  const hfKey = process.env.HF_API_KEY;
+  const hfKey = process.env.HF_API_KEY || process.env.HF_TOKEN_V2;
   const errors = [];
+  const seed   = Math.floor(Math.random() * 99999);
+
   const styleMap = {
-    cinematic: 'cinematic camera movement, dramatic lighting, film grain, 4k',
-    smooth:    'gentle smooth motion, soft bokeh, dreamy atmosphere',
-    dynamic:   'dynamic zoom, fast motion, energetic, sharp',
-    'slow-motion': 'slow motion, graceful, elegant, ethereal'
+    cinematic:     'cinematic camera movement, dramatic lighting, film grain, 4k ultra hd',
+    smooth:        'smooth gentle motion, soft bokeh, dreamy atmosphere, high quality',
+    dynamic:       'dynamic zoom, fast motion, energetic, sharp, action',
+    'slow-motion': 'slow motion, graceful movement, elegant, ethereal, cinematic'
   };
   const fullPrompt = `${prompt}, ${styleMap[style] || styleMap.cinematic}`;
-  const seed = Math.floor(Math.random() * 99999);
 
-  // ── Helper: call HuggingFace Inference API ──────────────────────────────────
-  async function hfPost(model, body) {
-    return fetch(`https://api-inference.huggingface.co/models/${model}`, {
-      method: 'POST',
+  // ── Helper: HuggingFace Inference API ─────────────────────────────────────
+  async function callHF(model, inputs, params = {}) {
+    const r = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
+      method:  'POST',
       headers: {
-        Authorization: `Bearer ${hfKey}`,
-        'Content-Type': 'application/json'
+        'Authorization': `Bearer ${hfKey}`,
+        'Content-Type':  'application/json',
+        'x-wait-for-model': 'true'
       },
-      body: JSON.stringify(body),
+      body:   JSON.stringify({ inputs, parameters: params }),
       signal: AbortSignal.timeout(55000)
     });
+    return r;
   }
 
-  // ── Helper: call HuggingFace Space via REST (free, no key needed) ───────────
-  async function hfSpacePost(spaceUrl, payload) {
-    return fetch(`${spaceUrl}/run/predict`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(55000)
-    });
-  }
-
-  // ── 1. HuggingFace SVD (requires HF_API_KEY) ────────────────────────────────
+  // ── 1. damo-vilab/text-to-video-ms-1.7b  (HF key, text→video) ────────────
   if (hfKey) {
     try {
-      const r = await hfPost('stabilityai/stable-video-diffusion-img2vid-xt', {
-        inputs: imageUrl || imageBase64,
-        parameters: { num_frames: 14, fps: 7, motion_bucket_id: 127 }
-      });
+      const r = await callHF(
+        'damo-vilab/text-to-video-ms-1.7b',
+        fullPrompt,
+        { num_inference_steps: 25, num_frames: 16 }
+      );
       if (r.ok) {
-        const ct = r.headers.get('content-type') || '';
         const buf = await r.arrayBuffer();
         if (buf.byteLength > 5000) {
+          const ct  = r.headers.get('content-type') || 'video/mp4';
           const b64 = Buffer.from(buf).toString('base64');
-          const mime = ct.includes('gif') ? 'image/gif' : 'video/mp4';
           return res.status(200).json({
             success: true,
-            videoBase64: `data:${mime};base64,${b64}`,
-            provider: 'HuggingFace SVD',
-            type: 'video',
-            prompt
+            videoBase64: `data:${ct};base64,${b64}`,
+            provider: 'HuggingFace Text-to-Video (damo-vilab)',
+            type: 'video', prompt
           });
         }
       } else {
-        const txt = await r.text().catch(() => r.status);
-        errors.push(`SVD: ${r.status} – ${String(txt).slice(0, 100)}`);
+        const txt = await r.text().catch(() => String(r.status));
+        errors.push(`damo-vilab: ${r.status} – ${txt.slice(0, 120)}`);
       }
-    } catch (e) { errors.push(`SVD: ${e.message}`); }
+    } catch (e) { errors.push(`damo-vilab: ${e.message}`); }
   }
 
-  // ── 2. HuggingFace i2vgen-xl (requires HF_API_KEY) ─────────────────────────
+  // ── 2. ali-vilab/i2vgen-xl  (HF key, works text+image or text-only) ───────
   if (hfKey) {
     try {
-      const r = await hfPost('ali-vilab/i2vgen-xl', {
-        inputs: imageUrl || imageBase64,
-        parameters: { prompt: fullPrompt, num_inference_steps: 20 }
-      });
+      const inputData = imageUrl || imageBase64 || fullPrompt;
+      const r = await callHF(
+        'ali-vilab/i2vgen-xl',
+        inputData,
+        { prompt: fullPrompt, num_inference_steps: 20 }
+      );
       if (r.ok) {
         const buf = await r.arrayBuffer();
         if (buf.byteLength > 5000) {
@@ -101,8 +95,7 @@ export default async function handler(req, res) {
             success: true,
             videoBase64: `data:video/mp4;base64,${b64}`,
             provider: 'HuggingFace i2vgen-xl',
-            type: 'video',
-            prompt
+            type: 'video', prompt
           });
         }
       } else {
@@ -111,51 +104,111 @@ export default async function handler(req, res) {
     } catch (e) { errors.push(`i2vgen-xl: ${e.message}`); }
   }
 
-  // ── 3. HuggingFace Spaces – Wan2.1 (FREE, no key needed) ───────────────────
-  // Uses public Gradio Space REST endpoint
+  // ── 3. Zeroscope v2 XL via HF Space  (FREE, no key needed) ───────────────
   try {
-    const spaceUrl = 'https://wan-ai-wan2-1.hf.space';
-    const payload = { data: [imageUrl || imageBase64, fullPrompt, 16, 8] };
-    const r = await hfSpacePost(spaceUrl, payload);
-    if (r.ok) {
-      const json = await r.json();
-      const videoData = json?.data?.[0];
-      if (videoData) {
-        // Gradio returns either a URL or base64
-        const isUrl = typeof videoData === 'string' && videoData.startsWith('http');
-        return res.status(200).json({
-          success: true,
-          ...(isUrl ? { videoUrl: videoData } : { videoBase64: videoData }),
-          provider: 'HuggingFace Wan2.1 Space',
-          type: 'video',
-          prompt
+    const spaceEndpoints = [
+      'https://hysts-zeroscope-v2.hf.space',
+      'https://fffiloni-zeroscope-v2-xl.hf.space'
+    ];
+    for (const base of spaceEndpoints) {
+      try {
+        const r = await fetch(`${base}/run/predict`, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({
+            data: [fullPrompt, 24, 7.5, 576, 320, 24, seed]
+          }),
+          signal: AbortSignal.timeout(50000)
         });
-      }
-    } else {
-      errors.push(`Wan2.1: ${r.status}`);
+        if (r.ok) {
+          const json = await r.json();
+          const v = json?.data?.[0]?.video?.url || json?.data?.[0];
+          if (v && typeof v === 'string') {
+            return res.status(200).json({
+              success: true,
+              videoUrl: v.startsWith('http') ? v : `${base}/file=${v}`,
+              provider: 'Zeroscope v2 XL (Free HF Space)',
+              type: 'video', prompt
+            });
+          }
+        } else {
+          errors.push(`Zeroscope ${base}: ${r.status}`);
+        }
+      } catch(e) { errors.push(`Zeroscope ${base}: ${e.message}`); }
     }
-  } catch (e) { errors.push(`Wan2.1: ${e.message}`); }
+  } catch(e) { errors.push(`Zeroscope: ${e.message}`); }
 
-  // ── 4. Pollinations.ai – animated frames fallback (ALWAYS FREE) ─────────────
-  // Generates a sequence of unique images simulating motion
+  // ── 4. AnimateDiff Lightning via HF Space  (FREE, no key) ─────────────────
   try {
-    const encodedPrompt = encodeURIComponent(fullPrompt);
-    const frames = Array.from({ length: 8 }, (_, i) =>
-      `https://image.pollinations.ai/prompt/${encodedPrompt}?model=flux&width=768&height=432&nologo=true&seed=${seed + i * 11}&enhance=true`
-    );
-    return res.status(200).json({
-      success: true,
-      frames,
-      videoUrl: frames[0],
-      provider: 'Pollinations.ai (animated frames)',
-      type: 'frames',
-      prompt,
-      note: 'No HF_API_KEY found – using animated frames fallback. Add HF_API_KEY in Vercel env vars for real video.',
-      errors
-    });
-  } catch (e) {
-    errors.push(`Pollinations: ${e.message}`);
+    const adEndpoints = [
+      'https://guoyww-animatediff.hf.space',
+      'https://ByteDance-AnimateDiff-Lightning.hf.space'
+    ];
+    for (const base of adEndpoints) {
+      try {
+        const r = await fetch(`${base}/run/predict`, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({
+            data: [fullPrompt, '', 8, '16 frames', '512x512', 'lightning_4step']
+          }),
+          signal: AbortSignal.timeout(50000)
+        });
+        if (r.ok) {
+          const json = await r.json();
+          const v = json?.data?.[0]?.video?.url || json?.data?.[0];
+          if (v && typeof v === 'string') {
+            return res.status(200).json({
+              success: true,
+              videoUrl: v.startsWith('http') ? v : `${base}/file=${v}`,
+              provider: 'AnimateDiff Lightning (Free HF Space)',
+              type: 'video', prompt
+            });
+          }
+        } else {
+          errors.push(`AnimateDiff: ${r.status}`);
+        }
+      } catch(e) { errors.push(`AnimateDiff ${base}: ${e.message}`); }
+    }
+  } catch(e) { errors.push(`AnimateDiff: ${e.message}`); }
+
+  // ── 5. Stable Diffusion Video via HF  (HF key fallback) ───────────────────
+  if (hfKey) {
+    try {
+      const r = await callHF(
+        'stabilityai/stable-video-diffusion-img2vid-xt-1-1',
+        fullPrompt,
+        { num_frames: 14, fps: 7, motion_bucket_id: 100 }
+      );
+      if (r.ok) {
+        const buf = await r.arrayBuffer();
+        if (buf.byteLength > 5000) {
+          const b64  = Buffer.from(buf).toString('base64');
+          const mime = r.headers.get('content-type')?.includes('gif') ? 'image/gif' : 'video/mp4';
+          return res.status(200).json({
+            success: true,
+            videoBase64: `data:${mime};base64,${b64}`,
+            provider: 'HuggingFace SVD XT',
+            type: 'video', prompt
+          });
+        }
+      } else { errors.push(`SVD-XT: ${r.status}`); }
+    } catch(e) { errors.push(`SVD-XT: ${e.message}`); }
   }
 
-  return res.status(503).json({ error: 'All video providers failed', details: errors });
+  // ── 6. Animated frames fallback  (ALWAYS works) ───────────────────────────
+  const enc = encodeURIComponent(fullPrompt);
+  const frames = Array.from({ length: 12 }, (_, i) =>
+    `https://image.pollinations.ai/prompt/${enc}?model=flux&width=768&height=432&nologo=true&seed=${seed + i * 13}&enhance=true`
+  );
+  return res.status(200).json({
+    success: true,
+    frames,
+    videoUrl: frames[0],
+    provider: 'Animated Preview',
+    type: 'frames',
+    prompt,
+    note: 'Providers busy — showing animated preview. Real video providers: ' + errors.slice(0,3).join(' | '),
+    errors
+  });
 }
