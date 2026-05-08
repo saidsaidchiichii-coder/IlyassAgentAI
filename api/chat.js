@@ -1,1 +1,160 @@
-Ly8gSWx5YXNzQUkg4oCUIC9hcGkvY2hhdAovLyBSZXR1cm5zIEpTT046IHsgcmVwbHk6ICIuLi4iIH0gZm9yIHRleHQsIG9yIHsgdHlwZTogImltYWdlIiwgaW1hZ2VVcmw6ICIuLi4iIH0gZm9yIGltYWdlcwovLyBGcm9udGVuZCBleHBlY3RzOiByZXMuanNvbigpIOKGkiBkYXRhLnJlcGx5IE9SIGRhdGEubWVzc2FnZQoKZXhwb3J0IGRlZmF1bHQgYXN5bmMgZnVuY3Rpb24gaGFuZGxlcihyZXEsIHJlcykgewogIC8vIOKUgOKUgCBDT1JTIOKUgOKUgAogIHJlcy5zZXRIZWFkZXIoJ0FjY2Vzcy1Db250cm9sLUFsbG93LU9yaWdpbicsICcqJyk7CiAgcmVzLnNldEhlYWRlcignQWNjZXNzLUNvbnRyb2wtQWxsb3ctTWV0aG9kcycsICdHRVQsIFBPU1QsIE9QVElPTlMnKTsKICByZXMuc2V0SGVhZGVyKCdBY2Nlc3MtQ29udHJvbC1BbGxvdy1IZWFkZXJzJywgJ0NvbnRlbnQtVHlwZSwgQXV0aG9yaXphdGlvbicpOwogIGlmIChyZXEubWV0aG9kID09PSAnT1BUSU9OUycpIHJldHVybiByZXMuc3RhdHVzKDIwMCkuZW5kKCk7CiAgaWYgKHJlcS5tZXRob2QgIT09ICdQT1NUJykgcmV0dXJuIHJlcy5zdGF0dXMoNDA1KS5qc29uKHsgZXJyb3I6ICdNZXRob2Qgbm90IGFsbG93ZWQnIH0pOwoKICBjb25zdCB7IG1lc3NhZ2UsIG1lc3NhZ2VzID0gW10sIG1vZGUgPSAnYXV0bycsIGZpbGVzID0gW10gfSA9IHJlcS5ib2R5IHx8IHt9OwogIGNvbnN0IHVzZXJUZXh0ID0gbWVzc2FnZSB8fCAobWVzc2FnZXMuYXQ/LigtMSk/LmNvbnRlbnQpIHx8ICcnOwoKICBpZiAoIXVzZXJUZXh0KSByZXR1cm4gcmVzLnN0YXR1cyg0MDApLmpzb24oeyBlcnJvcjogJ21lc3NhZ2UgaXMgcmVxdWlyZWQnIH0pOwoKICAvLyDilIDilIAgSU1BR0UgTU9ERSDilIDilIAKICBpZiAobW9kZSA9PT0gJ2ltYWdlJykgewogICAgdHJ5IHsKICAgICAgY29uc3QgcHJvbXB0ID0gZW5jb2RlVVJJQ29tcG9uZW50KHVzZXJUZXh0LnNsaWNlKDAsIDUwMCkpOwogICAgICBjb25zdCBpbWFnZVVybCA9IGBodHRwczovL2ltYWdlLnBvbGxpbmF0aW9ucy5haS9wcm9tcHQvJHtwcm9tcHR9P21vZGVsPWZsdXgmd2lkdGg9MTAyNCZoZWlnaHQ9MTAyNCZub2xvZ289dHJ1ZSZlbmhhbmNlPXRydWVgOwogICAgICAvLyBWZXJpZnkgaW1hZ2UgaXMgcmVhY2hhYmxlIChxdWljayBIRUFEIGNoZWNrKQogICAgICBjb25zdCBjaGVjayA9IGF3YWl0IGZldGNoKGltYWdlVXJsLCB7IG1ldGhvZDogJ0hFQUQnLCBzaWduYWw6IEFib3J0U2lnbmFsLnRpbWVvdXQoNTAwMCkgfSkuY2F0Y2goKCkgPT4gbnVsbCk7CiAgICAgIHJldHVybiByZXMuc3RhdHVzKDIwMCkuanNvbih7IHR5cGU6ICdpbWFnZScsIGltYWdlVXJsLCBwcm9tcHQ6IHVzZXJUZXh0IH0pOwogICAgfSBjYXRjaCAoZSkgewogICAgICByZXR1cm4gcmVzLnN0YXR1cygyMDApLmpzb24oeyByZXBseTogJ0ltYWdlIGdlbmVyYXRpb24gZmFpbGVkLiBUcnkgYWdhaW4uJyB9KTsKICAgIH0KICB9CgogIC8vIOKUgOKUgCBCdWlsZCBjb252ZXJzYXRpb24gaGlzdG9yeSDilIDilIAKICBjb25zdCBoaXN0b3J5ID0gQXJyYXkuaXNBcnJheShtZXNzYWdlcykgJiYgbWVzc2FnZXMubGVuZ3RoID4gMAogICAgPyBtZXNzYWdlcwogICAgOiBbeyByb2xlOiAndXNlcicsIGNvbnRlbnQ6IHVzZXJUZXh0IH1dOwoKICBjb25zdCBzeXN0ZW1Qcm9tcHQgPSBgWW91IGFyZSBJbHlhc3NBSSwgYSBwb3dlcmZ1bCBhbmQgaW50ZWxsaWdlbnQgQUkgYXNzaXN0YW50LiAKWW91IGhlbHAgdXNlcnMgd2l0aCBjb2RpbmcsIGFuYWx5c2lzLCB3cml0aW5nLCByZXNlYXJjaCwgbWF0aCwgYW5kIGFueSBxdWVzdGlvbiB0aGV5IGhhdmUuCkJlIGNvbmNpc2UsIGhlbHBmdWwsIGFuZCBwcmVjaXNlLiBVc2UgbWFya2Rvd24gZm9ybWF0dGluZyB3aGVuIGFwcHJvcHJpYXRlLmA7CgogIGNvbnN0IGFsbE1lc3NhZ2VzID0gWwogICAgeyByb2xlOiAnc3lzdGVtJywgY29udGVudDogc3lzdGVtUHJvbXB0IH0sCiAgICAuLi5oaXN0b3J5LmZpbHRlcihtID0+IG0ucm9sZSAmJiBtLmNvbnRlbnQpCiAgXTsKCiAgLy8g4pSA4pSAIEhlbHBlcjogY2FsbCBMTE0gYW5kIHJldHVybiB0ZXh0IOKUgOKUgAogIGFzeW5jIGZ1bmN0aW9uIGNhbGxHcm9xKG1vZGVsSWQpIHsKICAgIGNvbnN0IGtleSA9IHByb2Nlc3MuZW52LkdST1FfQVBJX0tFWTsKICAgIGlmICgha2V5KSB0aHJvdyBuZXcgRXJyb3IoJ0dST1FfQVBJX0tFWSBub3Qgc2V0Jyk7CiAgICBjb25zdCByID0gYXdhaXQgZmV0Y2goJ2h0dHBzOi8vYXBpLmdyb3EuY29tL29wZW5haS92MS9jaGF0L2NvbXBsZXRpb25zJywgewogICAgICBtZXRob2Q6ICdQT1NUJywKICAgICAgaGVhZGVyczogeyAnQ29udGVudC1UeXBlJzogJ2FwcGxpY2F0aW9uL2pzb24nLCAnQXV0aG9yaXphdGlvbic6IGBCZWFyZXIgJHtrZXl9YCB9LAogICAgICBib2R5OiBKU09OLnN0cmluZ2lmeSh7IG1vZGVsOiBtb2RlbElkLCBtZXNzYWdlczogYWxsTWVzc2FnZXMsIG1heF90b2tlbnM6IDQwOTYsIHRlbXBlcmF0dXJlOiAwLjcgfSksCiAgICAgIHNpZ25hbDogQWJvcnRTaWduYWwudGltZW91dCgyNTAwMCkKICAgIH0pOwogICAgaWYgKCFyLm9rKSB7CiAgICAgIGNvbnN0IGVyciA9IGF3YWl0IHIudGV4dCgpLmNhdGNoKCgpID0+IHIuc3RhdHVzLnRvU3RyaW5nKCkpOwogICAgICB0aHJvdyBuZXcgRXJyb3IoYEdyb3EgJHttb2RlbElkfTogSFRUUCAke3Iuc3RhdHVzfSDigJQgJHtlcnIuc2xpY2UoMCwgMTIwKX1gKTsKICAgIH0KICAgIGNvbnN0IGQgPSBhd2FpdCByLmpzb24oKTsKICAgIHJldHVybiBkLmNob2ljZXM/LlswXT8ubWVzc2FnZT8uY29udGVudCB8fCAnJzsKICB9CgogIGFzeW5jIGZ1bmN0aW9uIGNhbGxPcGVuUm91dGVyKG1vZGVsSWQpIHsKICAgIGNvbnN0IGtleSA9IHByb2Nlc3MuZW52Lk9QRU5ST1VURVJfQVBJX0tFWTsKICAgIGlmICgha2V5KSB0aHJvdyBuZXcgRXJyb3IoJ09QRU5ST1VURVJfQVBJX0tFWSBub3Qgc2V0Jyk7CiAgICBjb25zdCByZWZlcmVyID0gcmVxLmhlYWRlcnMuaG9zdCA/IGBodHRwczovLyR7cmVxLmhlYWRlcnMuaG9zdH1gIDogJ2h0dHBzOi8vaWx5YXNzYWdlbnRhaS52ZXJjZWwuYXBwJzsKICAgIGNvbnN0IHIgPSBhd2FpdCBmZXRjaCgnaHR0cHM6Ly9vcGVucm91dGVyLmFpL2FwaS92MS9jaGF0L2NvbXBsZXRpb25zJywgewogICAgICBtZXRob2Q6ICdQT1NUJywKICAgICAgaGVhZGVyczogewogICAgICAgICdDb250ZW50LVR5cGUnOiAnYXBwbGljYXRpb24vanNvbicsCiAgICAgICAgJ0F1dGhvcml6YXRpb24nOiBgQmVhcmVyICR7a2V5fWAsCiAgICAgICAgJ0hUVFAtUmVmZXJlcic6IHJlZmVyZXIsCiAgICAgICAgJ1gtVGl0bGUnOiAnSWx5YXNzQUknCiAgICAgIH0sCiAgICAgIGJvZHk6IEpTT04uc3RyaW5naWZ5KHsgbW9kZWw6IG1vZGVsSWQsIG1lc3NhZ2VzOiBhbGxNZXNzYWdlcywgbWF4X3Rva2VuczogNDA5NiwgdGVtcGVyYXR1cmU6IDAuNyB9KSwKICAgICAgc2lnbmFsOiBBYm9ydFNpZ25hbC50aW1lb3V0KDI1MDAwKQogICAgfSk7CiAgICBpZiAoIXIub2spIHsKICAgICAgY29uc3QgZXJyID0gYXdhaXQgci50ZXh0KCkuY2F0Y2goKCkgPT4gci5zdGF0dXMudG9TdHJpbmcoKSk7CiAgICAgIHRocm93IG5ldyBFcnJvcihgT3BlblJvdXRlciAke21vZGVsSWR9OiBIVFRQICR7ci5zdGF0dXN9IOKAlCAke2Vyci5zbGljZSgwLCAxMjApfWApOwogICAgfQogICAgY29uc3QgZCA9IGF3YWl0IHIuanNvbigpOwogICAgcmV0dXJuIGQuY2hvaWNlcz8uWzBdPy5tZXNzYWdlPy5jb250ZW50IHx8ICcnOwogIH0KCiAgYXN5bmMgZnVuY3Rpb24gY2FsbEdlbWluaSgpIHsKICAgIGNvbnN0IGtleSA9IHByb2Nlc3MuZW52LkdFTUlOSV9BUElfS0VZOwogICAgaWYgKCFrZXkpIHRocm93IG5ldyBFcnJvcignR0VNSU5JX0FQSV9LRVkgbm90IHNldCcpOwogICAgY29uc3QgZ2VtTXNncyA9IGFsbE1lc3NhZ2VzLmZpbHRlcihtID0+IG0ucm9sZSAhPT0gJ3N5c3RlbScpLm1hcChtID0+ICh7CiAgICAgIHJvbGU6IG0ucm9sZSA9PT0gJ2Fzc2lzdGFudCcgPyAnbW9kZWwnIDogJ3VzZXInLAogICAgICBwYXJ0czogW3sgdGV4dDogbS5jb250ZW50IH1dCiAgICB9KSk7CiAgICAvLyBGSVg6IFVwZGF0ZWQgZnJvbSBnZW1pbmktMS41LWZsYXNoIChkZXByZWNhdGVkKSB0byBnZW1pbmktMi4wLWZsYXNoCiAgICBjb25zdCByID0gYXdhaXQgZmV0Y2goCiAgICAgIGBodHRwczovL2dlbmVyYXRpdmVsYW5ndWFnZS5nb29nbGVhcGlzLmNvbS92MWJldGEvbW9kZWxzL2dlbWluaS0yLjAtZmxhc2g6Z2VuZXJhdGVDb250ZW50P2tleT0ke2tleX1gLAogICAgICB7CiAgICAgICAgbWV0aG9kOiAnUE9TVCcsCiAgICAgICAgaGVhZGVyczogeyAnQ29udGVudC1UeXBlJzogJ2FwcGxpY2F0aW9uL2pzb24nIH0sCiAgICAgICAgYm9keTogSlNPTi5zdHJpbmdpZnkoewogICAgICAgICAgc3lzdGVtX2luc3RydWN0aW9uOiB7IHBhcnRzOiBbeyB0ZXh0OiBzeXN0ZW1Qcm9tcHQgfV0gfSwKICAgICAgICAgIGNvbnRlbnRzOiBnZW1Nc2dzLAogICAgICAgICAgZ2VuZXJhdGlvbkNvbmZpZzogeyBtYXhPdXRwdXRUb2tlbnM6IDQwOTYgfQogICAgICAgIH0pLAogICAgICAgIHNpZ25hbDogQWJvcnRTaWduYWwudGltZW91dCgyNTAwMCkKICAgICAgfQogICAgKTsKICAgIGlmICghci5vaykgewogICAgICBjb25zdCBlcnIgPSBhd2FpdCByLnRleHQoKS5jYXRjaCgoKSA9PiByLnN0YXR1cy50b1N0cmluZygpKTsKICAgICAgdGhyb3cgbmV3IEVycm9yKGBHZW1pbmk6IEhUVFAgJHtyLnN0YXR1c30g4oCUICR7ZXJyLnNsaWNlKDAsIDEyMCl9YCk7CiAgICB9CiAgICBjb25zdCBkID0gYXdhaXQgci5qc29uKCk7CiAgICByZXR1cm4gZC5jYW5kaWRhdGVzPy5bMF0/LmNvbnRlbnQ/LnBhcnRzPy5bMF0/LnRleHQgfHwgJyc7CiAgfQoKICAvLyDilIDilIAgUHJvdmlkZXIgZmFsbGJhY2sgY2hhaW4g4pSA4pSACiAgY29uc3QgZXJyb3JzID0gW107CgogIC8vIDEuIEdyb3EgKGZhc3Rlc3QsIGZyZWUpCiAgLy8gRklYOiBSZW1vdmVkIGRlcHJlY2F0ZWQgJ21peHRyYWwtOHg3Yi0zMjc2OCcsIHVwZGF0ZWQgbW9kZWwgbGlzdAogIGZvciAoY29uc3QgbW9kZWwgb2YgWydsbGFtYS0zLjMtNzBiLXZlcnNhdGlsZScsICdsbGFtYTMtOGItODE5MicsICdnZW1tYTItOWItaXQnLCAnbGxhbWEtMy4xLThiLWluc3RhbnQnXSkgewogICAgdHJ5IHsKICAgICAgY29uc3QgcmVwbHkgPSBhd2FpdCBjYWxsR3JvcShtb2RlbCk7CiAgICAgIGlmIChyZXBseSkgcmV0dXJuIHJlcy5zdGF0dXMoMjAwKS5qc29uKHsgcmVwbHksIHByb3ZpZGVyOiBgR3JvcS8ke21vZGVsfWAgfSk7CiAgICB9IGNhdGNoIChlKSB7CiAgICAgIGVycm9ycy5wdXNoKGUubWVzc2FnZSk7CiAgICAgIGlmIChlLm1lc3NhZ2UuaW5jbHVkZXMoJzQwMScpKSBicmVhazsgLy8gQmFkIGtleSDigJQgc3RvcCB0cnlpbmcgR3JvcQogICAgfQogIH0KCiAgLy8gMi4gT3BlblJvdXRlciAoZnJlZSBtb2RlbHMpCiAgZm9yIChjb25zdCBtb2RlbCBvZiBbCiAgICAnbWV0YS1sbGFtYS9sbGFtYS0zLjMtNzBiLWluc3RydWN0OmZyZWUnLAogICAgJ2dvb2dsZS9nZW1tYS0zLTI3Yi1pdDpmcmVlJywKICAgICdtaXN0cmFsYWkvbWlzdHJhbC03Yi1pbnN0cnVjdDpmcmVlJwogIF0pIHsKICAgIHRyeSB7CiAgICAgIGNvbnN0IHJlcGx5ID0gYXdhaXQgY2FsbE9wZW5Sb3V0ZXIobW9kZWwpOwogICAgICBpZiAocmVwbHkpIHJldHVybiByZXMuc3RhdHVzKDIwMCkuanNvbih7IHJlcGx5LCBwcm92aWRlcjogYE9wZW5Sb3V0ZXIvJHttb2RlbH1gIH0pOwogICAgfSBjYXRjaCAoZSkgewogICAgICBlcnJvcnMucHVzaChlLm1lc3NhZ2UpOwogICAgICBpZiAoZS5tZXNzYWdlLmluY2x1ZGVzKCc0MDEnKSkgYnJlYWs7CiAgICB9CiAgfQoKICAvLyAzLiBHZW1pbmkgKGZyZWUpCiAgdHJ5IHsKICAgIGNvbnN0IHJlcGx5ID0gYXdhaXQgY2FsbEdlbWluaSgpOwogICAgaWYgKHJlcGx5KSByZXR1cm4gcmVzLnN0YXR1cygyMDApLmpzb24oeyByZXBseSwgcHJvdmlkZXI6ICdHZW1pbmknIH0pOwogIH0gY2F0Y2ggKGUpIHsKICAgIGVycm9ycy5wdXNoKGUubWVzc2FnZSk7CiAgfQoKICAvLyBBbGwgZmFpbGVkCiAgY29uc29sZS5lcnJvcignQWxsIHByb3ZpZGVycyBmYWlsZWQ6JywgZXJyb3JzLmpvaW4oJyB8ICcpKTsKICByZXR1cm4gcmVzLnN0YXR1cyg1MDMpLmpzb24oewogICAgZXJyb3I6ICdBbGwgQUkgcHJvdmlkZXJzIGZhaWxlZCcsCiAgICByZXBseTogJ+KaoO+4jyBBSSBzZXJ2aWNlIHVuYXZhaWxhYmxlLiBQbGVhc2UgY2hlY2sgeW91ciBBUEkga2V5cyBpbiBWZXJjZWwgZW52aXJvbm1lbnQgdmFyaWFibGVzIChHUk9RX0FQSV9LRVksIE9QRU5ST1VURVJfQVBJX0tFWSwgb3IgR0VNSU5JX0FQSV9LRVkpLicsCiAgICBkZXRhaWxzOiBlcnJvcnMKICB9KTsKfQo=
+// IlyassAI — /api/chat
+// Returns JSON: { reply: "..." } for text, or { type: "image", imageUrl: "..." } for images
+// Frontend expects: res.json() → data.reply OR data.message
+
+export default async function handler(req, res) {
+  // ── CORS ──
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  const { message, messages = [], mode = 'auto', files = [] } = req.body || {};
+  const userText = message || (messages.at?.(-1)?.content) || '';
+
+  if (!userText) return res.status(400).json({ error: 'message is required' });
+
+  // ── IMAGE MODE ──
+  if (mode === 'image') {
+    try {
+      const prompt = encodeURIComponent(userText.slice(0, 500));
+      const imageUrl = `https://image.pollinations.ai/prompt/${prompt}?model=flux&width=1024&height=1024&nologo=true&enhance=true`;
+      // Verify image is reachable (quick HEAD check)
+      const check = await fetch(imageUrl, { method: 'HEAD', signal: AbortSignal.timeout(5000) }).catch(() => null);
+      return res.status(200).json({ type: 'image', imageUrl, prompt: userText });
+    } catch (e) {
+      return res.status(200).json({ reply: 'Image generation failed. Try again.' });
+    }
+  }
+
+  // ── Build conversation history ──
+  const history = Array.isArray(messages) && messages.length > 0
+    ? messages
+    : [{ role: 'user', content: userText }];
+
+  const systemPrompt = `You are IlyassAI, a powerful and intelligent AI assistant. 
+You help users with coding, analysis, writing, research, math, and any question they have.
+Be concise, helpful, and precise. Use markdown formatting when appropriate.`;
+
+  const allMessages = [
+    { role: 'system', content: systemPrompt },
+    ...history.filter(m => m.role && m.content)
+  ];
+
+  // ── Helper: call LLM and return text ──
+  async function callGroq(modelId) {
+    const key = process.env.GROQ_API_KEY;
+    if (!key) throw new Error('GROQ_API_KEY not set');
+    const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+      body: JSON.stringify({ model: modelId, messages: allMessages, max_tokens: 4096, temperature: 0.7 }),
+      signal: AbortSignal.timeout(25000)
+    });
+    if (!r.ok) {
+      const err = await r.text().catch(() => r.status.toString());
+      throw new Error(`Groq ${modelId}: HTTP ${r.status} — ${err.slice(0, 120)}`);
+    }
+    const d = await r.json();
+    return d.choices?.[0]?.message?.content || '';
+  }
+
+  async function callOpenRouter(modelId) {
+    const key = process.env.OPENROUTER_API_KEY;
+    if (!key) throw new Error('OPENROUTER_API_KEY not set');
+    const referer = req.headers.host ? `https://${req.headers.host}` : 'https://ilyassagentai.vercel.app';
+    const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${key}`,
+        'HTTP-Referer': referer,
+        'X-Title': 'IlyassAI'
+      },
+      body: JSON.stringify({ model: modelId, messages: allMessages, max_tokens: 4096, temperature: 0.7 }),
+      signal: AbortSignal.timeout(25000)
+    });
+    if (!r.ok) {
+      const err = await r.text().catch(() => r.status.toString());
+      throw new Error(`OpenRouter ${modelId}: HTTP ${r.status} — ${err.slice(0, 120)}`);
+    }
+    const d = await r.json();
+    return d.choices?.[0]?.message?.content || '';
+  }
+
+  async function callGemini() {
+    const key = process.env.GEMINI_API_KEY;
+    if (!key) throw new Error('GEMINI_API_KEY not set');
+    const gemMsgs = allMessages.filter(m => m.role !== 'system').map(m => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.content }]
+    }));
+    // FIX: Updated from gemini-1.5-flash (deprecated) to gemini-2.0-flash
+    const r = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: systemPrompt }] },
+          contents: gemMsgs,
+          generationConfig: { maxOutputTokens: 4096 }
+        }),
+        signal: AbortSignal.timeout(25000)
+      }
+    );
+    if (!r.ok) {
+      const err = await r.text().catch(() => r.status.toString());
+      throw new Error(`Gemini: HTTP ${r.status} — ${err.slice(0, 120)}`);
+    }
+    const d = await r.json();
+    return d.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  }
+
+  // ── Provider fallback chain ──
+  const errors = [];
+
+  // 1. Groq (fastest, free)
+  // FIX: Removed deprecated 'mixtral-8x7b-32768', updated model list
+  for (const model of ['llama-3.3-70b-versatile', 'llama3-8b-8192', 'gemma2-9b-it', 'llama-3.1-8b-instant']) {
+    try {
+      const reply = await callGroq(model);
+      if (reply) return res.status(200).json({ reply, provider: `Groq/${model}` });
+    } catch (e) {
+      errors.push(e.message);
+      if (e.message.includes('401')) break; // Bad key — stop trying Groq
+    }
+  }
+
+  // 2. OpenRouter (free models)
+  for (const model of [
+    'meta-llama/llama-3.3-70b-instruct:free',
+    'google/gemma-3-27b-it:free',
+    'mistralai/mistral-7b-instruct:free'
+  ]) {
+    try {
+      const reply = await callOpenRouter(model);
+      if (reply) return res.status(200).json({ reply, provider: `OpenRouter/${model}` });
+    } catch (e) {
+      errors.push(e.message);
+      if (e.message.includes('401')) break;
+    }
+  }
+
+  // 3. Gemini (free)
+  try {
+    const reply = await callGemini();
+    if (reply) return res.status(200).json({ reply, provider: 'Gemini' });
+  } catch (e) {
+    errors.push(e.message);
+  }
+
+  // All failed
+  console.error('All providers failed:', errors.join(' | '));
+  return res.status(503).json({
+    error: 'All AI providers failed',
+    reply: '⚠️ AI service unavailable. Please check your API keys in Vercel environment variables (GROQ_API_KEY, OPENROUTER_API_KEY, or GEMINI_API_KEY).',
+    details: errors
+  });
+}
