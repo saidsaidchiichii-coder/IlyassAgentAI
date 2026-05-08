@@ -1,5 +1,5 @@
-// IlyassAI — /api/chat
-// OpenRouter (primary) → Groq → Gemini fallback chain — returns JSON
+// IlyassAI — /api/chat  
+// OpenRouter → Groq → Gemini — returns JSON {reply}
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -8,143 +8,110 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { messages = [], model = 'auto' } = req.body || {};
-  if (!messages || messages.length === 0) return res.status(400).json({ error: 'messages array is required' });
+  const { messages = [] } = req.body || {};
+  if (!messages || messages.length === 0)
+    return res.status(400).json({ error: 'messages array is required' });
 
-  const systemPrompt = {
+  const systemMsg = {
     role: 'system',
-    content: `You are IlyassAI, a powerful autonomous AI agent. You are intelligent, proactive, and capable of complex multi-step reasoning.
-
-You can:
-- Search the web for real-time information
-- Write, debug, and explain code in any language
-- Analyze images and documents
-- Generate creative content
-- Solve complex problems step by step
-
-Be concise, helpful, and accurate. Format responses with markdown when helpful.`
+    content: 'You are IlyassAI, a powerful AI assistant. Be helpful, concise, and accurate.'
   };
-
-  const fullMessages = [systemPrompt, ...messages];
+  const fullMessages = [systemMsg, ...messages];
   const errors = [];
 
-  // ═══════════════════════════════════════════════
-  // 1. OpenRouter (primary — 300+ free models)
-  // ═══════════════════════════════════════════════
-  const orKey = process.env.OPENROUTER_API_KEY;
-  if (orKey) {
-    try {
-      const orModel = model === 'auto' ? 'meta-llama/llama-3.3-70b-instruct:free' : model;
-      const orRes = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${orKey}`,
-          'HTTP-Referer': 'https://my-webxyu.vercel.app',
-          'X-Title': 'IlyassAI'
-        },
-        body: JSON.stringify({
-          model: orModel,
-          messages: fullMessages,
-          max_tokens: 2048,
-          temperature: 0.7
-        }),
-        signal: AbortSignal.timeout(25000)
-      });
-
-      if (orRes.ok) {
-        const data = await orRes.json();
-        const reply = data.choices?.[0]?.message?.content;
-        if (reply) {
-          return res.status(200).json({ reply, model: orModel, provider: 'OpenRouter' });
-        }
-      }
-      const errText = await orRes.text().catch(() => '');
-      errors.push(`OpenRouter: HTTP ${orRes.status} — ${errText.slice(0, 100)}`);
-    } catch (e) { errors.push(`OpenRouter: ${e.message}`); }
-  } else {
-    errors.push('OpenRouter: OPENROUTER_API_KEY not set');
-  }
-
-  // ═══════════════════════════════════════════════
-  // 2. Groq (fast, free)
-  // ═══════════════════════════════════════════════
+  // 1. Groq — try multiple models on 429
   const groqKey = process.env.GROQ_API_KEY;
   if (groqKey) {
-    try {
-      const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${groqKey}`
-        },
-        body: JSON.stringify({
-          model: 'llama-3.3-70b-versatile',
-          messages: fullMessages,
-          max_tokens: 2048,
-          temperature: 0.7
-        }),
-        signal: AbortSignal.timeout(20000)
-      });
-
-      if (groqRes.ok) {
-        const data = await groqRes.json();
-        const reply = data.choices?.[0]?.message?.content;
-        if (reply) {
-          return res.status(200).json({ reply, model: 'llama-3.3-70b-versatile', provider: 'Groq' });
+    const groqModels = [
+      'llama-3.3-70b-versatile',
+      'llama-3.1-8b-instant',
+      'gemma2-9b-it',
+      'mixtral-8x7b-32768'
+    ];
+    for (const gModel of groqModels) {
+      try {
+        const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${groqKey}` },
+          body: JSON.stringify({ model: gModel, messages: fullMessages, max_tokens: 2048, temperature: 0.7 }),
+          signal: AbortSignal.timeout(20000)
+        });
+        if (r.ok) {
+          const data = await r.json();
+          const reply = data.choices?.[0]?.message?.content;
+          if (reply) return res.status(200).json({ reply, model: gModel, provider: 'Groq' });
         }
-      }
-      const errText = await groqRes.text().catch(() => '');
-      errors.push(`Groq: HTTP ${groqRes.status} — ${errText.slice(0, 100)}`);
-    } catch (e) { errors.push(`Groq: ${e.message}`); }
-  } else {
-    errors.push('Groq: GROQ_API_KEY not set');
+        if (r.status !== 429) break; // only retry on rate limit
+        errors.push(`Groq ${gModel}: 429 rate limit`);
+      } catch (e) { errors.push(`Groq ${gModel}: ${e.message}`); break; }
+    }
   }
 
-  // ═══════════════════════════════════════════════
-  // 3. Gemini (Google, free tier)
-  // ═══════════════════════════════════════════════
+  // 2. Gemini — use stable models
   const geminiKey = process.env.GEMINI_API_KEY;
   if (geminiKey) {
-    try {
-      const geminiMessages = messages.map(m => ({
-        role: m.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: m.content }]
-      }));
-
-      const geminiRes = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${geminiKey}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: geminiMessages,
-            systemInstruction: { parts: [{ text: systemPrompt.content }] },
-            generationConfig: { maxOutputTokens: 2048, temperature: 0.7 }
-          }),
-          signal: AbortSignal.timeout(20000)
+    const geminiModels = ['gemini-1.5-flash', 'gemini-1.5-flash-8b', 'gemini-1.5-pro'];
+    for (const gModel of geminiModels) {
+      try {
+        const geminiMessages = messages.map(m => ({
+          role: m.role === 'assistant' ? 'model' : 'user',
+          parts: [{ text: m.content }]
+        }));
+        const r = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${gModel}:generateContent?key=${geminiKey}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: geminiMessages,
+              systemInstruction: { parts: [{ text: systemMsg.content }] },
+              generationConfig: { maxOutputTokens: 2048, temperature: 0.7 }
+            }),
+            signal: AbortSignal.timeout(20000)
+          }
+        );
+        if (r.ok) {
+          const data = await r.json();
+          const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (reply) return res.status(200).json({ reply, model: gModel, provider: 'Gemini' });
         }
-      );
-
-      if (geminiRes.ok) {
-        const data = await geminiRes.json();
-        const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (reply) {
-          return res.status(200).json({ reply, model: 'gemini-2.0-flash-exp', provider: 'Gemini' });
-        }
-      }
-      const errText = await geminiRes.text().catch(() => '');
-      errors.push(`Gemini: HTTP ${geminiRes.status} — ${errText.slice(0, 100)}`);
-    } catch (e) { errors.push(`Gemini: ${e.message}`); }
-  } else {
-    errors.push('Gemini: GEMINI_API_KEY not set');
+        errors.push(`Gemini ${gModel}: HTTP ${r.status}`);
+      } catch (e) { errors.push(`Gemini ${gModel}: ${e.message}`); }
+    }
   }
 
-  // All providers failed
-  console.error('All AI providers failed:', errors.join(' | '));
-  return res.status(503).json({
-    error: 'All AI providers failed.',
-    details: errors,
-    fix: 'Add OPENROUTER_API_KEY at openrouter.ai/settings/keys (free account)'
-  });
+  // 3. OpenRouter — try multiple free models
+  const orKey = process.env.OPENROUTER_API_KEY;
+  if (orKey) {
+    const orModels = [
+      'google/gemma-3-27b-it:free',
+      'microsoft/phi-3-mini-128k-instruct:free',
+      'qwen/qwen-2-7b-instruct:free',
+      'meta-llama/llama-3.2-3b-instruct:free'
+    ];
+    for (const orModel of orModels) {
+      try {
+        const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${orKey}`,
+            'HTTP-Referer': 'https://my-webxyu.vercel.app',
+            'X-Title': 'IlyassAI'
+          },
+          body: JSON.stringify({ model: orModel, messages: fullMessages, max_tokens: 2048 }),
+          signal: AbortSignal.timeout(25000)
+        });
+        if (r.ok) {
+          const data = await r.json();
+          const reply = data.choices?.[0]?.message?.content;
+          if (reply) return res.status(200).json({ reply, model: orModel, provider: 'OpenRouter' });
+        }
+        if (r.status !== 429) break;
+        errors.push(`OpenRouter ${orModel}: 429`);
+      } catch (e) { errors.push(`OpenRouter ${orModel}: ${e.message}`); break; }
+    }
+  }
+
+  return res.status(503).json({ error: 'All AI providers failed.', details: errors });
 }
