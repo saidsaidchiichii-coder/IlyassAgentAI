@@ -23,7 +23,7 @@ export default async function handler(req, res) {
       endpoint: 'https://api.groq.com/openai/v1/models',
       authHeader: groqKey ? `Bearer ${groqKey}` : null,
       type: 'llm',
-      models: ['llama-3.3-70b-versatile', 'gemma2-9b-it', 'llama-3.1-8b-instant', 'deepseek-r1-distill-llama-70b']
+      models: ['llama-3.3-70b-versatile', 'gemma2-9b-it', 'mixtral-8x7b-32768', 'deepseek-r1-distill-llama-70b']
     },
     {
       name: 'HuggingFace',
@@ -37,7 +37,7 @@ export default async function handler(req, res) {
       name: 'Google Gemini',
       endpoint: `https://generativelanguage.googleapis.com/v1beta/models?key=${geminiKey}`,
       type: 'llm',
-      models: ['gemini-2.0-flash-exp', 'gemini-2.0-flash', 'gemini-2.0-flash']
+      models: ['gemini-2.0-flash-exp', 'gemini-1.5-flash', 'gemini-1.5-pro']
     }] : []),
     {
       name: 'Pollinations.ai',
