@@ -1,1 +1,126 @@
-Ly8gSWx5YXNzQUkg4oCUIC9hcGkvZGlzY292ZXIKLy8gU2VsZi1pbXByb3ZlbWVudCBlbmdpbmU6IGF1dG8tZGlzY292ZXJzIGFuZCBldmFsdWF0ZXMgbmV3IGZyZWUgQUkgQVBJcwoKZXhwb3J0IGRlZmF1bHQgYXN5bmMgZnVuY3Rpb24gaGFuZGxlcihyZXEsIHJlcykgewogIC8vIOKUgOKUgCBDT1JTIHByZWZsaWdodCDilIDilIAKICByZXMuc2V0SGVhZGVyKCdBY2Nlc3MtQ29udHJvbC1BbGxvdy1PcmlnaW4nLCAnKicpOwogIHJlcy5zZXRIZWFkZXIoJ0FjY2Vzcy1Db250cm9sLUFsbG93LU1ldGhvZHMnLCAnR0VULCBQT1NULCBPUFRJT05TJyk7CiAgcmVzLnNldEhlYWRlcignQWNjZXNzLUNvbnRyb2wtQWxsb3ctSGVhZGVycycsICdDb250ZW50LVR5cGUsIEF1dGhvcml6YXRpb24nKTsKICBpZiAocmVxLm1ldGhvZCA9PT0gJ09QVElPTlMnKSByZXR1cm4gcmVzLnN0YXR1cygyMDApLmVuZCgpOwoKICBpZiAocmVxLm1ldGhvZCAhPT0gJ0dFVCcgJiYgcmVxLm1ldGhvZCAhPT0gJ1BPU1QnKSB7CiAgICByZXR1cm4gcmVzLnN0YXR1cyg0MDUpLmpzb24oeyBlcnJvcjogJ01ldGhvZCBub3QgYWxsb3dlZCcgfSk7CiAgfQoKICBjb25zdCBncm9xS2V5ID0gcHJvY2Vzcy5lbnYuR1JPUV9BUElfS0VZOwogIGNvbnN0IGhmS2V5ID0gcHJvY2Vzcy5lbnYuSEZfQVBJX0tFWTsKICBjb25zdCBnZW1pbmlLZXkgPSBwcm9jZXNzLmVudi5HRU1JTklfQVBJX0tFWTsKCiAgLy8gRml4ZWQ6IG9ubHkgaW5jbHVkZSBHZW1pbmkgZW5kcG9pbnQgd2hlbiB0aGUga2V5IGlzIGFjdHVhbGx5IHNldCAoYXZvaWQgJ3VuZGVmaW5lZCcgaW4gVVJMKQogIGNvbnN0IGFwaVNvdXJjZXMgPSBbCiAgICB7CiAgICAgIG5hbWU6ICdHcm9xJywKICAgICAgZW5kcG9pbnQ6ICdodHRwczovL2FwaS5ncm9xLmNvbS9vcGVuYWkvdjEvbW9kZWxzJywKICAgICAgYXV0aEhlYWRlcjogZ3JvcUtleSA/IGBCZWFyZXIgJHtncm9xS2V5fWAgOiBudWxsLAogICAgICB0eXBlOiAnbGxtJywKICAgICAgbW9kZWxzOiBbJ2xsYW1hLTMuMy03MGItdmVyc2F0aWxlJywgJ2dlbW1hMi05Yi1pdCcsICdsbGFtYS0zLjEtOGItaW5zdGFudCcsICdkZWVwc2Vlay1yMS1kaXN0aWxsLWxsYW1hLTcwYiddCiAgICB9LAogICAgewogICAgICBuYW1lOiAnSHVnZ2luZ0ZhY2UnLAogICAgICBlbmRwb2ludDogJ2h0dHBzOi8vaHVnZ2luZ2ZhY2UuY28vYXBpL21vZGVscz9maWx0ZXI9dGV4dC1nZW5lcmF0aW9uJnNvcnQ9ZG93bmxvYWRzJmxpbWl0PTUnLAogICAgICBhdXRoSGVhZGVyOiBoZktleSA/IGBCZWFyZXIgJHtoZktleX1gIDogbnVsbCwKICAgICAgdHlwZTogJ2xsbScsCiAgICAgIG1vZGVsczogWydNZXRhLUxsYW1hLTMtOEItSW5zdHJ1Y3QnLCAnUXdlbjIuNS03MkItSW5zdHJ1Y3QnLCAncGhpLTMuNS1taW5pLWluc3RydWN0J10KICAgIH0sCiAgICAvLyBGaXhlZDogb25seSBhZGQgR2VtaW5pIGVudHJ5IHdoZW4ga2V5IGlzIHByZXNlbnQKICAgIC4uLihnZW1pbmlLZXkgPyBbewogICAgICBuYW1lOiAnR29vZ2xlIEdlbWluaScsCiAgICAgIGVuZHBvaW50OiBgaHR0cHM6Ly9nZW5lcmF0aXZlbGFuZ3VhZ2UuZ29vZ2xlYXBpcy5jb20vdjFiZXRhL21vZGVscz9rZXk9JHtnZW1pbmlLZXl9YCwKICAgICAgdHlwZTogJ2xsbScsCiAgICAgIG1vZGVsczogWydnZW1pbmktMi4wLWZsYXNoLWV4cCcsICdnZW1pbmktMi4wLWZsYXNoJywgJ2dlbWluaS0yLjAtZmxhc2gnXQogICAgfV0gOiBbXSksCiAgICB7CiAgICAgIG5hbWU6ICdQb2xsaW5hdGlvbnMuYWknLAogICAgICBlbmRwb2ludDogJ2h0dHBzOi8vaW1hZ2UucG9sbGluYXRpb25zLmFpL21vZGVscycsCiAgICAgIHR5cGU6ICdpbWFnZScsCiAgICAgIG1vZGVsczogWydmbHV4JywgJ3R1cmJvJywgJ2ZsdXgtcmVhbGlzbSddCiAgICB9LAogICAgewogICAgICBuYW1lOiAnRHVja0R1Y2tHbyBTZWFyY2gnLAogICAgICBlbmRwb2ludDogJ2h0dHBzOi8vZHVja2R1Y2tnby5jb20vJywKICAgICAgdHlwZTogJ3NlYXJjaCcsCiAgICAgIG1vZGVsczogWydpbnN0YW50LWFuc3dlcnMnLCAnd2ViLXNlYXJjaCddCiAgICB9CiAgXTsKCiAgY29uc3QgcmVzdWx0cyA9IFtdOwogIGNvbnN0IG5vdyA9IG5ldyBEYXRlKCkudG9JU09TdHJpbmcoKTsKCiAgZm9yIChjb25zdCBzb3VyY2Ugb2YgYXBpU291cmNlcykgewogICAgY29uc3QgcmVzdWx0ID0gewogICAgICBuYW1lOiBzb3VyY2UubmFtZSwKICAgICAgdHlwZTogc291cmNlLnR5cGUsCiAgICAgIG1vZGVsczogc291cmNlLm1vZGVscywKICAgICAgc3RhdHVzOiAndW5rbm93bicsCiAgICAgIGxhdGVuY3k6IG51bGwsCiAgICAgIGNoZWNrZWRBdDogbm93CiAgICB9OwoKICAgIGNvbnN0IHN0YXJ0ID0gRGF0ZS5ub3coKTsKICAgIHRyeSB7CiAgICAgIGNvbnN0IGhlYWRlcnMgPSB7fTsKICAgICAgaWYgKHNvdXJjZS5hdXRoSGVhZGVyKSB7CiAgICAgICAgaGVhZGVyc1snQXV0aG9yaXphdGlvbiddID0gc291cmNlLmF1dGhIZWFkZXI7CiAgICAgIH0KCiAgICAgIGNvbnN0IHIgPSBhd2FpdCBmZXRjaChzb3VyY2UuZW5kcG9pbnQsIHsgCiAgICAgICAgaGVhZGVycywgCiAgICAgICAgc2lnbmFsOiBBYm9ydFNpZ25hbC50aW1lb3V0KDQwMDApCiAgICAgIH0pOwogICAgICAKICAgICAgcmVzdWx0LmxhdGVuY3kgPSBEYXRlLm5vdygpIC0gc3RhcnQ7CiAgICAgIHJlc3VsdC5zdGF0dXMgPSByLm9rID8gJ29ubGluZScgOiAnZXJyb3InOwogICAgICByZXN1bHQuaHR0cFN0YXR1cyA9IHIuc3RhdHVzOwoKICAgICAgaWYgKHIub2sgJiYgc291cmNlLm5hbWUgPT09ICdHcm9xJykgewogICAgICAgIHRyeSB7CiAgICAgICAgICBjb25zdCBkYXRhID0gYXdhaXQgci5qc29uKCk7CiAgICAgICAgICBpZiAoZGF0YS5kYXRhKSB7CiAgICAgICAgICAgIHJlc3VsdC5kaXNjb3ZlcmVkTW9kZWxzID0gZGF0YS5kYXRhLm1hcChtID0+IG0uaWQpOwogICAgICAgICAgfQogICAgICAgIH0gY2F0Y2gge30KICAgICAgfQoKICAgIH0gY2F0Y2ggKGUpIHsKICAgICAgcmVzdWx0LnN0YXR1cyA9ICdvZmZsaW5lJzsKICAgICAgcmVzdWx0LmVycm9yID0gZS5tZXNzYWdlOwogICAgICByZXN1bHQubGF0ZW5jeSA9IERhdGUubm93KCkgLSBzdGFydDsKICAgIH0KCiAgICByZXN1bHRzLnB1c2gocmVzdWx0KTsKICB9CgogIC8vIFNvcnQ6IG9ubGluZSBmaXJzdCwgdGhlbiBieSBsYXRlbmN5CiAgcmVzdWx0cy5zb3J0KChhLCBiKSA9PiB7CiAgICBpZiAoYS5zdGF0dXMgPT09ICdvbmxpbmUnICYmIGIuc3RhdHVzICE9PSAnb25saW5lJykgcmV0dXJuIC0xOwogICAgaWYgKGIuc3RhdHVzID09PSAnb25saW5lJyAmJiBhLnN0YXR1cyAhPT0gJ29ubGluZScpIHJldHVybiAxOwogICAgcmV0dXJuIChhLmxhdGVuY3kgfHwgOTk5OSkgLSAoYi5sYXRlbmN5IHx8IDk5OTkpOwogIH0pOwoKICBjb25zdCBvbmxpbmVDb3VudCA9IHJlc3VsdHMuZmlsdGVyKHIgPT4gci5zdGF0dXMgPT09ICdvbmxpbmUnKS5sZW5ndGg7CiAgY29uc3QgdG90YWxNb2RlbHMgPSByZXN1bHRzLnJlZHVjZSgoc3VtLCByKSA9PiBzdW0gKyAoci5tb2RlbHM/Lmxlbmd0aCB8fCAwKSwgMCk7CgogIHJldHVybiByZXMuc3RhdHVzKDIwMCkuanNvbih7CiAgICBzdWNjZXNzOiB0cnVlLAogICAgZGlzY292ZXJlZEF0OiBub3csCiAgICBzdW1tYXJ5OiB7CiAgICAgIHRvdGFsOiByZXN1bHRzLmxlbmd0aCwKICAgICAgb25saW5lOiBvbmxpbmVDb3VudCwKICAgICAgb2ZmbGluZTogcmVzdWx0cy5sZW5ndGggLSBvbmxpbmVDb3VudCwKICAgICAgdG90YWxNb2RlbHMsCiAgICAgIHJlY29tbWVuZGF0aW9uOiByZXN1bHRzLmZpbmQociA9PiByLnN0YXR1cyA9PT0gJ29ubGluZScgJiYgci50eXBlID09PSAnbGxtJyk/Lm5hbWUgfHwgJ05vbmUgYXZhaWxhYmxlJwogICAgfSwKICAgIGFwaXM6IHJlc3VsdHMsCiAgICBuZXh0Q2hlY2tJbjogJzEgaG91cicKICB9KTsKfQo=
+// IlyassAI — /api/discover
+// Self-improvement engine: auto-discovers and evaluates new free AI APIs
+
+export default async function handler(req, res) {
+  // ── CORS preflight ──
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
+  if (req.method !== 'GET' && req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const groqKey = process.env.GROQ_API_KEY;
+  const hfKey = process.env.HF_API_KEY;
+  const geminiKey = process.env.GEMINI_API_KEY;
+
+  // Fixed: only include Gemini endpoint when the key is actually set (avoid 'undefined' in URL)
+  const apiSources = [
+    {
+      name: 'Groq',
+      endpoint: 'https://api.groq.com/openai/v1/models',
+      authHeader: groqKey ? `Bearer ${groqKey}` : null,
+      type: 'llm',
+      models: ['llama-3.3-70b-versatile', 'gemma2-9b-it', 'llama-3.1-8b-instant', 'deepseek-r1-distill-llama-70b']
+    },
+    {
+      name: 'HuggingFace',
+      endpoint: 'https://huggingface.co/api/models?filter=text-generation&sort=downloads&limit=5',
+      authHeader: hfKey ? `Bearer ${hfKey}` : null,
+      type: 'llm',
+      models: ['Meta-Llama-3-8B-Instruct', 'Qwen2.5-72B-Instruct', 'phi-3.5-mini-instruct']
+    },
+    // Fixed: only add Gemini entry when key is present
+    ...(geminiKey ? [{
+      name: 'Google Gemini',
+      endpoint: `https://generativelanguage.googleapis.com/v1beta/models?key=${geminiKey}`,
+      type: 'llm',
+      models: ['gemini-2.0-flash-exp', 'gemini-2.0-flash', 'gemini-2.0-flash']
+    }] : []),
+    {
+      name: 'Pollinations.ai',
+      endpoint: 'https://image.pollinations.ai/models',
+      type: 'image',
+      models: ['flux', 'turbo', 'flux-realism']
+    },
+    {
+      name: 'DuckDuckGo Search',
+      endpoint: 'https://duckduckgo.com/',
+      type: 'search',
+      models: ['instant-answers', 'web-search']
+    }
+  ];
+
+  const results = [];
+  const now = new Date().toISOString();
+
+  for (const source of apiSources) {
+    const result = {
+      name: source.name,
+      type: source.type,
+      models: source.models,
+      status: 'unknown',
+      latency: null,
+      checkedAt: now
+    };
+
+    const start = Date.now();
+    try {
+      const headers = {};
+      if (source.authHeader) {
+        headers['Authorization'] = source.authHeader;
+      }
+
+      const r = await fetch(source.endpoint, { 
+        headers, 
+        signal: AbortSignal.timeout(4000)
+      });
+      
+      result.latency = Date.now() - start;
+      result.status = r.ok ? 'online' : 'error';
+      result.httpStatus = r.status;
+
+      if (r.ok && source.name === 'Groq') {
+        try {
+          const data = await r.json();
+          if (data.data) {
+            result.discoveredModels = data.data.map(m => m.id);
+          }
+        } catch {}
+      }
+
+    } catch (e) {
+      result.status = 'offline';
+      result.error = e.message;
+      result.latency = Date.now() - start;
+    }
+
+    results.push(result);
+  }
+
+  // Sort: online first, then by latency
+  results.sort((a, b) => {
+    if (a.status === 'online' && b.status !== 'online') return -1;
+    if (b.status === 'online' && a.status !== 'online') return 1;
+    return (a.latency || 9999) - (b.latency || 9999);
+  });
+
+  const onlineCount = results.filter(r => r.status === 'online').length;
+  const totalModels = results.reduce((sum, r) => sum + (r.models?.length || 0), 0);
+
+  return res.status(200).json({
+    success: true,
+    discoveredAt: now,
+    summary: {
+      total: results.length,
+      online: onlineCount,
+      offline: results.length - onlineCount,
+      totalModels,
+      recommendation: results.find(r => r.status === 'online' && r.type === 'llm')?.name || 'None available'
+    },
+    apis: results,
+    nextCheckIn: '1 hour'
+  });
+}
