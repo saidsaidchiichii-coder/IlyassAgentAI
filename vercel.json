@@ -1,1 +1,22 @@
-ewogICJvdXRwdXREaXJlY3RvcnkiOiAicHVibGljIiwKICAiZnVuY3Rpb25zIjogewogICAgImFwaS8qLmpzIjogewogICAgICAibWF4RHVyYXRpb24iOiAzMAogICAgfQogIH0sCiAgInJld3JpdGVzIjogWwogICAgewogICAgICAic291cmNlIjogIi9hcHAiLAogICAgICAiZGVzdGluYXRpb24iOiAiL2FwcC5odG1sIgogICAgfSwKICAgIHsKICAgICAgInNvdXJjZSI6ICIvYWdlbnQiLAogICAgICAiZGVzdGluYXRpb24iOiAiL2FnZW50Lmh0bWwiCiAgICB9LAogICAgewogICAgICAic291cmNlIjogIi9hdXRoIiwKICAgICAgImRlc3RpbmF0aW9uIjogIi9hdXRoLmh0bWwiCiAgICB9CiAgXQp9
+{
+  "outputDirectory": "public",
+  "functions": {
+    "api/*.js": {
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/app",
+      "destination": "/app.html"
+    },
+    {
+      "source": "/agent",
+      "destination": "/agent.html"
+    },
+    {
+      "source": "/auth",
+      "destination": "/auth.html"
+    }
+  ]
+}
