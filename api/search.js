@@ -1,8 +1,7 @@
 // IlyassAI — /api/search
-// Real-time web search using Brave, DuckDuckGo, and SerpAPI
+// Web search: Brave (primary) → Jina AI (free fallback) → SerpAPI → DuckDuckGo
 
 export default async function handler(req, res) {
-  // ── CORS preflight ──
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -18,9 +17,9 @@ export default async function handler(req, res) {
   }
 
   const braveKey = process.env.BRAVE_API_KEY;
-  const serpKey = process.env.SERP_API_KEY;
+  const serpKey  = process.env.SERP_API_KEY;
 
-  // ── Brave Search (primary) ──
+  // ── 1. Brave Search (best results, if key available) ──
   if (braveKey) {
     try {
       const braveRes = await fetch(
@@ -30,10 +29,10 @@ export default async function handler(req, res) {
             'Accept': 'application/json',
             'Accept-Encoding': 'gzip',
             'X-Subscription-Token': braveKey
-          }
+          },
+          signal: AbortSignal.timeout(8000)
         }
       );
-
       if (braveRes.ok) {
         const data = await braveRes.json();
         const results = (data.web?.results || []).map(r => ({
@@ -42,20 +41,47 @@ export default async function handler(req, res) {
           snippet: r.description,
           source: 'Brave'
         }));
-        return res.status(200).json({ success: true, provider: 'Brave', query, results });
+        if (results.length > 0) {
+          return res.status(200).json({ success: true, provider: 'Brave', query, results });
+        }
       }
-    } catch (e) {
-      console.error('Brave search error:', e.message);
-    }
+    } catch (e) { console.error('Brave error:', e.message); }
   }
 
-  // ── SerpAPI fallback ──
+  // ── 2. Jina AI Search (free, no API key needed) ──
+  try {
+    const jinaRes = await fetch(
+      `https://s.jina.ai/${encodeURIComponent(query)}`,
+      {
+        headers: {
+          'Accept': 'application/json',
+          'X-Return-Format': 'json'
+        },
+        signal: AbortSignal.timeout(12000)
+      }
+    );
+    if (jinaRes.ok) {
+      const data = await jinaRes.json();
+      const items = data?.data || [];
+      if (items.length > 0) {
+        const results = items.slice(0, 8).map(r => ({
+          title: r.title || query,
+          url: r.url || '#',
+          snippet: r.description || (r.content || '').slice(0, 200),
+          source: 'Jina AI'
+        }));
+        return res.status(200).json({ success: true, provider: 'Jina AI', query, results });
+      }
+    }
+  } catch (e) { console.error('Jina error:', e.message); }
+
+  // ── 3. SerpAPI fallback ──
   if (serpKey) {
     try {
       const serpRes = await fetch(
-        `https://serpapi.com/search.json?q=${encodeURIComponent(query)}&api_key=${serpKey}&num=10`
+        `https://serpapi.com/search.json?q=${encodeURIComponent(query)}&api_key=${serpKey}&num=10`,
+        { signal: AbortSignal.timeout(10000) }
       );
-
       if (serpRes.ok) {
         const data = await serpRes.json();
         const results = (data.organic_results || []).map(r => ({
@@ -64,23 +90,22 @@ export default async function handler(req, res) {
           snippet: r.snippet,
           source: 'SerpAPI'
         }));
-        return res.status(200).json({ success: true, provider: 'SerpAPI', query, results });
+        if (results.length > 0) {
+          return res.status(200).json({ success: true, provider: 'SerpAPI', query, results });
+        }
       }
-    } catch (e) {
-      console.error('SerpAPI error:', e.message);
-    }
+    } catch (e) { console.error('SerpAPI error:', e.message); }
   }
 
-  // ── DuckDuckGo Instant Answer (free fallback) ──
+  // ── 4. DuckDuckGo Instant Answer (last resort) ──
   try {
     const ddgRes = await fetch(
-      `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`
+      `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`,
+      { signal: AbortSignal.timeout(8000) }
     );
-
     if (ddgRes.ok) {
       const data = await ddgRes.json();
       const results = [];
-
       if (data.AbstractText) {
         results.push({
           title: data.Heading || query,
@@ -89,7 +114,6 @@ export default async function handler(req, res) {
           source: 'DuckDuckGo'
         });
       }
-
       (data.RelatedTopics || []).slice(0, 5).forEach(topic => {
         if (topic.Text) {
           results.push({
@@ -100,12 +124,11 @@ export default async function handler(req, res) {
           });
         }
       });
-
-      return res.status(200).json({ success: true, provider: 'DuckDuckGo', query, results });
+      if (results.length > 0) {
+        return res.status(200).json({ success: true, provider: 'DuckDuckGo', query, results });
+      }
     }
-  } catch (e) {
-    console.error('DuckDuckGo error:', e.message);
-  }
+  } catch (e) { console.error('DDG error:', e.message); }
 
   return res.status(503).json({ error: 'All search providers unavailable.' });
 }
