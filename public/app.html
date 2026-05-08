@@ -91,6 +91,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         Imagine
       </button>
+      <button class="topbar-tab" id="tabVideo" onclick="switchTab('video')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+        Video
+      </button>
     </div>
     <div class="topbar-right">
       <button class="topbar-icon-btn" onclick="newChat()" title="New chat">
@@ -140,6 +144,182 @@
     </div>
     <div class="input-zone" id="homeInputZone"></div>
     <p class="input-hint">IlyassAI can make mistakes. Consider checking important information.</p>
+  </div>
+
+
+  <!-- ── VIDEO GENERATION VIEW ── -->
+  <div class="video-gen-view" id="videoView" style="display:none;">
+    <!-- Background gradient like Pollo AI -->
+    <div class="vgv-bg"></div>
+    
+    <div class="vgv-content">
+      <!-- Header -->
+      <div class="vgv-header">
+        <h1 class="vgv-title">Image to Video</h1>
+        <p class="vgv-subtitle">IlyassAI animates your images into stunning videos using free AI models. Upload a photo and describe the motion.</p>
+      </div>
+
+      <!-- Main input card -->
+      <div class="vgv-card">
+        <!-- Image upload + textarea -->
+        <div class="vgv-input-area">
+          <button class="vgv-upload-btn" id="vgvUploadBtn" onclick="document.getElementById('vgvFileInput').click()" title="Upload image">
+            <input type="file" id="vgvFileInput" accept="image/*" style="display:none" onchange="vgvOnImageSelect(this)">
+            <div id="vgvUploadInner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="22" height="22"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            </div>
+            <img id="vgvThumb" style="display:none;width:48px;height:48px;object-fit:cover;border-radius:8px;" alt=""/>
+          </button>
+          <textarea 
+            id="vgvPromptTA" 
+            class="vgv-textarea" 
+            placeholder="Describe your idea and watch it happen (supports image upload)"
+            rows="1"
+            oninput="vgvAutoResize(this)"
+          ></textarea>
+        </div>
+
+        <!-- Bottom toolbar -->
+        <div class="vgv-toolbar">
+          <div class="vgv-toolbar-left">
+            <!-- Video type dropdown -->
+            <div class="vgv-dropdown" id="vgvTypeDD">
+              <button class="vgv-dd-btn" onclick="vgvToggleDD('vgvTypeDD')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                <span id="vgvTypeLabel">AI Video</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="vgv-dd-menu" id="vgvTypeDDMenu" style="display:none">
+                <div class="vgv-dd-item active" onclick="vgvSelectType('AI Video')">AI Video</div>
+                <div class="vgv-dd-item" onclick="vgvSelectType('Animation')">Animation</div>
+              </div>
+            </div>
+
+            <!-- Mode dropdown -->
+            <div class="vgv-dropdown" id="vgvModeDD">
+              <button class="vgv-dd-btn" onclick="vgvToggleDD('vgvModeDD')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>
+                <span id="vgvModeLabel">Text/Image to Video</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="vgv-dd-menu" id="vgvModeDDMenu" style="display:none">
+                <div class="vgv-dd-item active" onclick="vgvSelectMode('Text/Image to Video')">Text/Image to Video</div>
+                <div class="vgv-dd-item" onclick="vgvSelectMode('Image to Video')">Image to Video</div>
+                <div class="vgv-dd-item" onclick="vgvSelectMode('Text to Video')">Text to Video</div>
+              </div>
+            </div>
+
+            <!-- Model badge -->
+            <div class="vgv-dropdown" id="vgvModelDD">
+              <button class="vgv-dd-btn vgv-model-btn" onclick="vgvToggleDD('vgvModelDD')">
+                <span class="vgv-model-logo">P</span>
+                <span id="vgvModelLabel">Pollinations</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="vgv-dd-menu" id="vgvModelDDMenu" style="display:none">
+                <div class="vgv-dd-item active" onclick="vgvSelectModel('Pollinations','P')">
+                  <span class="vgv-model-logo">P</span> Pollinations (Free)
+                </div>
+                <div class="vgv-dd-item" onclick="vgvSelectModel('HuggingFace','H')">
+                  <span class="vgv-model-logo" style="background:#ff6b35;">H</span> HuggingFace (Free)
+                </div>
+                <div class="vgv-dd-item" onclick="vgvSelectModel('Wan2.1','W')">
+                  <span class="vgv-model-logo" style="background:#10b981;">W</span> Wan2.1 (Free)
+                </div>
+              </div>
+            </div>
+
+            <!-- Duration -->
+            <div class="vgv-dropdown" id="vgvDurDD">
+              <button class="vgv-dd-btn" onclick="vgvToggleDD('vgvDurDD')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span id="vgvDurLabel">5s</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="vgv-dd-menu" id="vgvDurDDMenu" style="display:none">
+                <div class="vgv-dd-item" onclick="vgvSelectDuration('3s')">3s</div>
+                <div class="vgv-dd-item active" onclick="vgvSelectDuration('5s')">5s</div>
+                <div class="vgv-dd-item" onclick="vgvSelectDuration('8s')">8s</div>
+                <div class="vgv-dd-item" onclick="vgvSelectDuration('10s')">10s</div>
+              </div>
+            </div>
+
+            <!-- Quality -->
+            <button class="vgv-badge-btn" id="vgvQualBtn" onclick="vgvCycleQuality()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>
+              <span id="vgvQualLabel">720p</span>
+            </button>
+
+            <!-- Aspect ratio -->
+            <button class="vgv-badge-btn" id="vgvRatioBtn" onclick="vgvCycleRatio()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><rect x="3" y="3" width="18" height="18" rx="1"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+              <span id="vgvRatioLabel">16:9</span>
+            </button>
+
+            <!-- Style -->
+            <div class="vgv-dropdown" id="vgvStyleDD">
+              <button class="vgv-dd-btn" onclick="vgvToggleDD('vgvStyleDD')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+                <span id="vgvStyleLabel">Cinematic</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="vgv-dd-menu" id="vgvStyleDDMenu" style="display:none">
+                <div class="vgv-dd-item active" onclick="vgvSelectStyle('cinematic','Cinematic')">🎬 Cinematic</div>
+                <div class="vgv-dd-item" onclick="vgvSelectStyle('smooth','Smooth')">✨ Smooth</div>
+                <div class="vgv-dd-item" onclick="vgvSelectStyle('dynamic','Dynamic')">⚡ Dynamic</div>
+                <div class="vgv-dd-item" onclick="vgvSelectStyle('slow-motion','Slow-Mo')">🌊 Slow-Motion</div>
+                <div class="vgv-dd-item" onclick="vgvSelectStyle('zoom-in','Zoom In')">🔍 Zoom In</div>
+                <div class="vgv-dd-item" onclick="vgvSelectStyle('zoom-out','Zoom Out')">🔭 Zoom Out</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="vgv-toolbar-right">
+            <button class="vgv-generate-btn" id="vgvGenBtn" onclick="vgvGenerate()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              Generate
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading state -->
+      <div class="vgv-loading" id="vgvLoading" style="display:none">
+        <div class="vgv-spinner"></div>
+        <p class="vgv-load-msg" id="vgvLoadMsg">Analyzing image...</p>
+        <span class="vgv-load-sub">This may take 15–60 seconds</span>
+        <div class="vgv-progress-bar"><div class="vgv-progress-fill" id="vgvProgFill"></div></div>
+      </div>
+
+      <!-- Result -->
+      <div class="vgv-result" id="vgvResult" style="display:none">
+        <div class="vgv-result-header">
+          <span class="vgv-result-badge" id="vgvProvBadge">AI</span>
+          <span style="font-size:13px;color:var(--text-dim)">Generated video</span>
+          <div style="flex:1"></div>
+          <button class="vgv-result-action" onclick="vgvDownload()" title="Download">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </button>
+          <button class="vgv-result-action" onclick="vgvReset()" title="Generate new">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          </button>
+        </div>
+        <!-- Video player -->
+        <div class="vgv-player" id="vgvPlayer" style="display:none">
+          <video id="vgvVideoEl" controls autoplay loop style="width:100%;border-radius:12px;max-height:360px;background:#000;"></video>
+        </div>
+        <!-- Frames player (fallback) -->
+        <div class="vgv-frames" id="vgvFrames" style="display:none">
+          <div class="vgv-frames-badge">🎬 Animated Frames Preview</div>
+          <img id="vgvFrameImg" style="width:100%;border-radius:12px;max-height:360px;object-fit:contain;background:#000;transition:opacity .2s;" alt=""/>
+          <div class="vgv-frames-progress"><div class="vgv-frames-bar" id="vgvFramesBar"></div></div>
+          <p style="font-size:11px;color:var(--text-dim);text-align:center;margin-top:6px;">Add HF_API_KEY in Vercel for real video generation</p>
+        </div>
+      </div>
+
+      <!-- Gallery of recent generations -->
+      <div class="vgv-gallery" id="vgvGallery"></div>
+    </div>
   </div>
 
   <!-- ── CHAT ── -->
@@ -576,29 +756,32 @@ function switchTab(tab) {
   // Update tab buttons
   document.getElementById('tabChat')?.classList.toggle('active', tab === 'chat');
   document.getElementById('tabImagine')?.classList.toggle('active', tab === 'imagine');
+  document.getElementById('tabVideo')?.classList.toggle('active', tab === 'video');
 
   // Show/hide views
   const homeView    = document.getElementById('homeView');
   const chatView    = document.getElementById('chatView');
   const imagineView = document.getElementById('imagineView');
+  const videoView   = document.getElementById('videoView');
+
+  // Hide all first
+  [homeView, chatView, imagineView, videoView].forEach(v => v && (v.style.display = 'none'));
 
   if (tab === 'chat') {
     if (chatView && chatView.style.display === 'flex') {
-      // Already in chat
-      homeView && (homeView.style.display = 'none');
       chatView && (chatView.style.display = 'flex');
     } else {
       homeView && (homeView.style.display = 'flex');
-      chatView && (chatView.style.display = 'none');
     }
-    imagineView && (imagineView.style.display = 'none');
-  } else {
-    homeView    && (homeView.style.display    = 'none');
-    chatView    && (chatView.style.display    = 'none');
+  } else if (tab === 'imagine') {
     imagineView && (imagineView.style.display = 'flex');
     imagineView && (imagineView.style.flexDirection = 'column');
     // Focus the imagine textarea
     setTimeout(() => document.getElementById('imagineTA')?.focus(), 100);
+  } else if (tab === 'video') {
+    videoView && (videoView.style.display = 'flex');
+    videoView && (videoView.style.flexDirection = 'column');
+    setTimeout(() => document.getElementById('vgvPromptTA')?.focus(), 100);
   }
 }
 
@@ -1200,6 +1383,231 @@ function onVideoImg(inp){var f=inp.files[0];if(!f)return;var r=new FileReader();
 async function doGenerateVideo(){if(!_vB64&&!_vImgUrl){showToast('Upload an image first');return;}var prompt=document.getElementById('videoPromptIn').value.trim()||'cinematic motion';var gb=document.getElementById('videoGenBtn');var ld=document.getElementById('videoLoadDiv');var rd=document.getElementById('videoResultDiv');if(gb)gb.style.display='none';if(ld)ld.style.display='flex';if(rd)rd.style.display='none';var msgs=['Analyzing image...','Generating frames...','Rendering motion...','Almost done...'];var mi=0;var mt=setInterval(function(){var el=document.getElementById('videoLoadTxt');if(el)el.textContent=msgs[mi++%msgs.length];},3500);try{var res=await fetch('/api/video',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({imageBase64:_vB64,imageUrl:_vImgUrl,prompt:prompt,style:_vStyle}),signal:AbortSignal.timeout(90000)});var data=await res.json();clearInterval(mt);if(gb)gb.style.display='flex';if(ld)ld.style.display='none';if(!data.success)throw new Error(data.error||'Failed');if(rd)rd.style.display='block';var pb=document.getElementById('videoProvBadge');if(pb)pb.textContent=data.provider||'AI';if(data.videoBase64||data.videoUrl){var src=data.videoBase64||data.videoUrl;var ve=document.getElementById('videoEl');var vs=document.getElementById('videoSrc');var fe=document.getElementById('framesEl');if(vs)vs.src=src;if(ve){ve.style.display='block';ve.load();}if(fe)fe.style.display='none';_vCurUrl=src;showToast('Video ready!');}else if(data.frames&&data.frames.length>0){_vFrames=data.frames;_vCurUrl=data.frames[0];var ve=document.getElementById('videoEl');var fe=document.getElementById('framesEl');if(ve)ve.style.display='none';if(fe)fe.style.display='block';_playVF(data.frames);showToast('Video generated!');}}catch(err){clearInterval(mt);if(gb)gb.style.display='flex';if(ld)ld.style.display='none';showToast('Failed. Try again.');}}
 function _playVF(frames){if(_vTimer)clearInterval(_vTimer);var img=document.getElementById('framesImg');var prg=document.getElementById('framesProg');var i=0;if(img&&frames[0])img.src=frames[0];_vTimer=setInterval(function(){i=(i+1)%frames.length;if(img){img.style.opacity='0';setTimeout(function(){img.src=frames[i];img.style.opacity='1';},140);}if(prg)prg.style.width=((i+1)/frames.length*100)+'%';},900);}
 function doDownloadVideo(){if(!_vCurUrl)return;var a=document.createElement('a');a.href=_vCurUrl;a.download='ilyassai-video-'+Date.now()+'.mp4';a.target='_blank';a.click();}
+
+/* ===== VIDEO GENERATION TAB ===== */
+let _vgvStyle   = 'cinematic';
+let _vgvB64     = null;
+let _vgvImgUrl  = null;
+let _vgvFrames  = [];
+let _vgvTimer   = null;
+let _vgvCurUrl  = null;
+let _vgvQuals   = ['480p','720p','1080p'];
+let _vgvQualIdx = 1;
+let _vgvRatios  = ['16:9','9:16','1:1','4:3'];
+let _vgvRatIdx  = 0;
+let _vgvProgInt = null;
+
+function vgvAutoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 160) + 'px';
+}
+
+function vgvToggleDD(id) {
+  // close all dropdowns first
+  ['vgvTypeDD','vgvModeDD','vgvModelDD','vgvDurDD','vgvStyleDD'].forEach(did => {
+    if (did !== id) {
+      const m = document.getElementById(did + 'Menu');
+      if (m) m.style.display = 'none';
+    }
+  });
+  const menu = document.getElementById(id + 'Menu');
+  if (menu) menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+}
+
+// Close dropdowns on outside click
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.vgv-dropdown')) {
+    document.querySelectorAll('.vgv-dd-menu').forEach(m => m.style.display = 'none');
+  }
+});
+
+function vgvSelectType(v)  { document.getElementById('vgvTypeLabel').textContent = v;  vgvToggleDD('vgvTypeDD'); }
+function vgvSelectMode(v)  { document.getElementById('vgvModeLabel').textContent = v; vgvToggleDD('vgvModeDD'); }
+function vgvSelectDuration(v) { document.getElementById('vgvDurLabel').textContent = v; vgvToggleDD('vgvDurDD'); }
+function vgvSelectStyle(val, label) {
+  _vgvStyle = val;
+  document.getElementById('vgvStyleLabel').textContent = label;
+  document.querySelectorAll('#vgvStyleDDMenu .vgv-dd-item').forEach(i => i.classList.remove('active'));
+  event.target.classList.add('active');
+  vgvToggleDD('vgvStyleDD');
+}
+function vgvSelectModel(label, logo) {
+  document.getElementById('vgvModelLabel').textContent = label;
+  document.querySelector('.vgv-model-logo').textContent = logo;
+  vgvToggleDD('vgvModelDD');
+}
+function vgvCycleQuality() {
+  _vgvQualIdx = (_vgvQualIdx + 1) % _vgvQuals.length;
+  document.getElementById('vgvQualLabel').textContent = _vgvQuals[_vgvQualIdx];
+}
+function vgvCycleRatio() {
+  _vgvRatIdx = (_vgvRatIdx + 1) % _vgvRatios.length;
+  document.getElementById('vgvRatioLabel').textContent = _vgvRatios[_vgvRatIdx];
+}
+
+function vgvOnImageSelect(inp) {
+  const f = inp.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    _vgvB64    = e.target.result;
+    _vgvImgUrl = null;
+    const thumb  = document.getElementById('vgvThumb');
+    const inner  = document.getElementById('vgvUploadInner');
+    if (thumb)  { thumb.src = e.target.result; thumb.style.display = 'block'; }
+    if (inner)  inner.style.display = 'none';
+    const btn = document.getElementById('vgvUploadBtn');
+    if (btn) btn.style.border = '1.5px solid #6366f1';
+    showToast('✅ Image ready! Click Generate.');
+  };
+  reader.readAsDataURL(f);
+}
+
+async function vgvGenerate() {
+  const prompt = (document.getElementById('vgvPromptTA')?.value || '').trim();
+  if (!_vgvB64 && !_vgvImgUrl && !prompt) {
+    showToast('Upload an image or enter a prompt first');
+    return;
+  }
+
+  const genBtn   = document.getElementById('vgvGenBtn');
+  const loading  = document.getElementById('vgvLoading');
+  const result   = document.getElementById('vgvResult');
+
+  if (genBtn)  genBtn.style.display  = 'none';
+  if (loading) loading.style.display = 'flex';
+  if (result)  result.style.display  = 'none';
+
+  // Progress animation
+  const msgs = ['Analyzing image...','Generating frames...','Rendering motion...','Applying style...','Almost done...'];
+  let mi = 0;
+  let prog = 0;
+  const fill = document.getElementById('vgvProgFill');
+  const loadMsg = document.getElementById('vgvLoadMsg');
+  _vgvProgInt = setInterval(() => {
+    mi = (mi + 1) % msgs.length;
+    if (loadMsg) loadMsg.textContent = msgs[mi];
+    prog = Math.min(prog + Math.random() * 18, 90);
+    if (fill) fill.style.width = prog + '%';
+  }, 3000);
+
+  try {
+    const res = await fetch('/api/video', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        imageBase64: _vgvB64,
+        imageUrl:    _vgvImgUrl,
+        prompt:      prompt || 'cinematic motion, smooth animation',
+        style:       _vgvStyle
+      }),
+      signal: AbortSignal.timeout(90000)
+    });
+
+    const data = await res.json();
+    clearInterval(_vgvProgInt);
+    if (fill) fill.style.width = '100%';
+
+    if (genBtn)  genBtn.style.display  = 'flex';
+    if (loading) loading.style.display = 'none';
+
+    if (!data.success) throw new Error(data.error || 'Generation failed');
+
+    if (result) result.style.display = 'block';
+
+    // Update provider badge
+    const badge = document.getElementById('vgvProvBadge');
+    if (badge) badge.textContent = data.provider || 'AI';
+
+    const player = document.getElementById('vgvPlayer');
+    const frames = document.getElementById('vgvFrames');
+
+    if (data.videoBase64 || data.videoUrl) {
+      // Real video
+      const src = data.videoBase64 || data.videoUrl;
+      _vgvCurUrl = src;
+      const ve = document.getElementById('vgvVideoEl');
+      if (ve) { ve.src = src; ve.load(); }
+      if (player) player.style.display = 'block';
+      if (frames) frames.style.display = 'none';
+      showToast('🎬 Video ready!');
+    } else if (data.frames && data.frames.length > 0) {
+      // Animated frames fallback
+      _vgvFrames = data.frames;
+      _vgvCurUrl = data.frames[0];
+      if (player) player.style.display = 'none';
+      if (frames) frames.style.display = 'block';
+      _vgvPlayFrames(data.frames);
+      showToast('🎬 Animation ready!');
+    }
+
+    // Add to gallery
+    _vgvAddToGallery(_vgvCurUrl, prompt || 'Generated video');
+
+  } catch (err) {
+    clearInterval(_vgvProgInt);
+    if (genBtn)  genBtn.style.display  = 'flex';
+    if (loading) loading.style.display = 'none';
+    showToast('❌ ' + (err.message || 'Failed to generate. Try again.'));
+  }
+}
+
+function _vgvPlayFrames(frames) {
+  if (_vgvTimer) clearInterval(_vgvTimer);
+  const img  = document.getElementById('vgvFrameImg');
+  const bar  = document.getElementById('vgvFramesBar');
+  let i = 0;
+  if (img && frames[0]) img.src = frames[0];
+  _vgvTimer = setInterval(() => {
+    i = (i + 1) % frames.length;
+    if (img) {
+      img.style.opacity = '0';
+      setTimeout(() => { img.src = frames[i]; img.style.opacity = '1'; }, 150);
+    }
+    if (bar) bar.style.width = ((i + 1) / frames.length * 100) + '%';
+  }, 800);
+}
+
+function vgvDownload() {
+  if (!_vgvCurUrl) { showToast('Nothing to download'); return; }
+  const a = document.createElement('a');
+  a.href = _vgvCurUrl;
+  a.download = 'ilyassai-video-' + Date.now() + '.mp4';
+  a.target = '_blank';
+  a.click();
+}
+
+function vgvReset() {
+  if (_vgvTimer) clearInterval(_vgvTimer);
+  if (_vgvProgInt) clearInterval(_vgvProgInt);
+  _vgvB64 = null; _vgvImgUrl = null; _vgvCurUrl = null; _vgvFrames = [];
+  document.getElementById('vgvResult')?.style.setProperty('display','none');
+  document.getElementById('vgvGenBtn')?.style.setProperty('display','flex');
+  const thumb = document.getElementById('vgvThumb');
+  const inner = document.getElementById('vgvUploadInner');
+  const btn   = document.getElementById('vgvUploadBtn');
+  if (thumb) { thumb.style.display = 'none'; thumb.src = ''; }
+  if (inner) inner.style.display = 'flex';
+  if (btn)   btn.style.border = '';
+  document.getElementById('vgvPromptTA').value = '';
+  document.getElementById('vgvFileInput').value = '';
+}
+
+function _vgvAddToGallery(url, prompt) {
+  const gallery = document.getElementById('vgvGallery');
+  if (!gallery) return;
+  const item = document.createElement('div');
+  item.className = 'vgv-gallery-item';
+  item.innerHTML = `
+    <img src="${url}" onerror="this.style.display='none'" alt="" style="width:100%;height:80px;object-fit:cover;border-radius:8px;background:#111;"/>
+    <p style="font-size:10px;color:var(--text-dim);margin-top:4px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${prompt.slice(0,40)}</p>
+  `;
+  item.onclick = () => { _vgvCurUrl = url; };
+  gallery.insertBefore(item, gallery.firstChild);
+  // Keep max 8 items
+  while (gallery.children.length > 8) gallery.removeChild(gallery.lastChild);
+}
+
 </script>
 </body>
 </html>
