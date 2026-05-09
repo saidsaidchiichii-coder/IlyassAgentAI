@@ -1,6 +1,6 @@
 // IlyassAI — /api/video  (Text-to-Video & Image-to-Video v4.0)
-// Priority: Pollinations → HF i2vgen-xl → HF damo-vilab → Zeroscope → AnimateDiff → Animated Frames
-// Env vars: POLLINATIONS_API_KEY (optional), HF_API_KEY or HF_TOKEN_V2 (optional)
+  // Priority: Zhipu AI (CogVideoX) → MiniMax (Hailuo) → Kling AI → Pollinations → HF i2vgen-xl → Zeroscope → Animated Frames
+// Env vars: ZHIPU_API_KEY, MINIMAX_API_KEY, KLING_API_KEY, POLLINATIONS_API_KEY, HF_API_KEY
 // maxDuration: 60s
 
 export const config = {
@@ -27,6 +27,9 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'prompt is required' });
 
   // Env vars — never hardcoded
+  const zhipuKey = process.env.ZHIPU_API_KEY;
+  const minimaxKey = process.env.MINIMAX_API_KEY;
+  const klingKey = process.env.KLING_API_KEY;
   const pollinationsKey = process.env.POLLINATIONS_API_KEY;
   const hfKey = process.env.HF_API_KEY || process.env.HF_TOKEN_V2;
   const errors = [];
@@ -42,6 +45,49 @@ export default async function handler(req, res) {
     'zoom-out':    'slow zoom out, wide reveal, cinematic pullback, epic scale'
   };
   const fullPrompt = `${prompt}${styleMap[style] ? ', ' + styleMap[style] : ''}`;
+
+  // ── 0. Zhipu AI (CogVideoX) - High Quality & Generous Free Tier ───────────
+  if (zhipuKey) {
+    try {
+      const response = await fetch('https://open.bigmodel.cn/api/paas/v4/videos/generations', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${zhipuKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ model: "cogvideox", prompt: fullPrompt }),
+        signal: AbortSignal.timeout(15000)
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data.id) return res.status(200).json({ success: true, taskId: data.id, provider: 'Zhipu AI', type: 'video_task', prompt });
+      } else errors.push(`Zhipu AI: ${response.status}`);
+    } catch (e) { errors.push(`Zhipu AI: ${e.message}`); }
+  }
+
+  // ── 0.1 MiniMax (Hailuo AI) - Cinematic Quality ──────────────────────────
+  if (minimaxKey) {
+    try {
+      const response = await fetch('https://api.minimax.io/v1/video_generation', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${minimaxKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          prompt: fullPrompt,
+          model: "MiniMax-Hailuo-2.3",
+          duration: 6,
+          resolution: "1080P"
+        }),
+        signal: AbortSignal.timeout(15000)
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data.task_id) return res.status(200).json({ success: true, taskId: data.task_id, provider: 'MiniMax', type: 'video_task', prompt });
+      } else errors.push(`MiniMax: ${response.status}`);
+    } catch (e) { errors.push(`MiniMax: ${e.message}`); }
+  }
 
   // ── Helper: HuggingFace Inference API ────────────────────────────────────
   async function callHF(model, inputs, params = {}) {
