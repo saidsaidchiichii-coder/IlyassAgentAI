@@ -1,1 +1,112 @@
-<!-- app.html will be uploaded via API -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IlyassAI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+  /* ===== IlyassAI v3.0 - UI Improvements ===== */
+
+  /* --- Video Upload Drag & Drop Zone --- */
+  .vgv-input-area-v2 {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px 16px 12px;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .vgv-dropzone {
+    width: 100%;
+    min-height: 160px;
+    background: rgba(255,255,255,.03);
+    border: 2px dashed rgba(255,255,255,.15);
+    border-radius: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 24px 20px;
+    transition: all .2s ease;
+    position: relative;
+    box-sizing: border-box;
+  }
+  .vgv-dropzone:hover,
+  .vgv-dropzone.drag-over {
+    border-color: rgba(255,107,53,.6);
+    background: rgba(255,107,53,.04);
+    box-shadow: 0 0 30px rgba(255,107,53,.08);
+  }
+  #vgvDropInner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    pointer-events: none;
+  }
+  .vgv-drop-label {
+    font-size: 14px;
+    color: var(--text-dim);
+    margin: 0 0 4px;
+    font-weight: 500;
+  }
+  .vgv-drop-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 0;
+  }
+  .vgv-textarea-v2 {
+    width: 100%;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 14px;
+    outline: none;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+    resize: none;
+    font-family: 'Inter', sans-serif;
+    padding: 14px 16px;
+    transition: border-color .2s;
+    box-sizing: border-box;
+  }
+  .vgv-textarea-v2:focus {
+    border-color: rgba(255,107,53,.5);
+    background: rgba(255,255,255,.06);
+    box-shadow: 0 0 0 3px rgba(255,107,53,.08);
+  }
+  .vgv-textarea-v2::placeholder { color: rgba(255,255,255,.3); }
+
+  .vgv-gen-btn {
+    background: linear-gradient(135deg, #ff6b35, #e05325) !important;
+    box-shadow: 0 4px 16px rgba(255,107,53,.35) !important;
+    border-radius: 50px !important;
+    padding: 10px 28px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    letter-spacing: .02em !important;
+    transition: all .2s ease !important;
+  }
+  .vgv-gen-btn:hover:not(:disabled) {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 24px rgba(255,107,53,.45) !important;
+  }
+  .vgv-gen-btn:disabled { opacity: .6 !important; transform: none !important; }
+
+  .sidebar { transition: width .22s cubic-bezier(0.4,0,0.2,1); }
+  .main    { transition: margin-left .22s cubic-bezier(0.4,0,0.2,1); }
+
+  .topbar-tab { box-shadow: none; transition: all .18s ease; }
+  .topbar-tab:hover:not(.active) { background: rgba(255,255,255,.07); }
+  .topbar-tab.active { box-shadow: 0 2px 8px rgba(255,107,53,.2); }
+
+  .input-box { box-shadow: 0 4px 20px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.07); }
+  .input-box:focus-within { box-shadow: 0 4px 24px rgba(0,0,0,.6), 0 0 0 1.5px rgba(255,107,53,.3); }
+
+  .suggestion-pill { box-shadow: 0 2px 8px rgba(0,0,0,.3); transition: all .18s ease; }
+  .suggestion-pill:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,.4); }
+  </style>
+</head>
