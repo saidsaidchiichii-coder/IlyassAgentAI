@@ -7,19 +7,5 @@
       "maxDuration": 60
     }
   },
-  "rewrites": [
-    {
-      "source": "/app",
-      "destination": "/app.html"
-    },
-    {
-      "source": "/agent",
-      "destination": "/agent.html"
-    },
-    {
-      "source": "/auth",
-      "destination": "/auth.html"
-    }
-  ],
-  "buildCommand": "echo 'IlyassAI build v2.3-hotfix'"
+  "buildCommand": "echo 'IlyassAI build v2.4'"
 }
