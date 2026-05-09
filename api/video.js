@@ -1,5 +1,5 @@
 // IlyassAI — /api/video  (Text-to-Video & Image-to-Video v4.0)
-  // Priority: Zhipu AI (CogVideoX) → MiniMax (Hailuo) → Kling AI → Pollinations → HF i2vgen-xl → Zeroscope → Animated Frames
+  // Priority: Zeroscope (FREE 100%) → AnimateDiff (FREE 100%) → Pollinations → Zhipu AI → MiniMax → Animated Frames
 // Env vars: ZHIPU_API_KEY, MINIMAX_API_KEY, KLING_API_KEY, POLLINATIONS_API_KEY, HF_API_KEY
 // maxDuration: 60s
 
@@ -46,46 +46,91 @@ export default async function handler(req, res) {
   };
   const fullPrompt = `${prompt}${styleMap[style] ? ', ' + styleMap[style] : ''}`;
 
-  // ── 0. Zhipu AI (CogVideoX) - High Quality & Generous Free Tier ───────────
+  // ── 1. Zeroscope v2 XL via HF Space (FREE 100%, no key) ───────────────────
+  const spaceEndpoints = [
+    'https://hysts-zeroscope-v2.hf.space',
+    'https://fffiloni-zeroscope-v2-xl.hf.space'
+  ];
+  for (const base of spaceEndpoints) {
+    try {
+      const r = await fetch(`${base}/run/predict`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ data: [fullPrompt, 24, 7.5, 576, 320, 24, seed] }),
+        signal: AbortSignal.timeout(45000)
+      });
+      if (r.ok) {
+        const json = await r.json();
+        const v = json?.data?.[0]?.video?.url || json?.data?.[0];
+        if (v && typeof v === 'string') {
+          return res.status(200).json({
+            success: true,
+            videoUrl: v.startsWith('http') ? v : `${base}/file=${v}`,
+            provider: 'Zeroscope v2 XL (FREE)',
+            type: 'video', prompt
+          });
+        }
+      }
+    } catch(e) { errors.push(`Zeroscope: ${e.message}`); }
+  }
+
+  // ── 2. AnimateDiff Lightning via HF Space (FREE 100%, no key) ─────────────
+  const adEndpoints = [
+    'https://guoyww-animatediff.hf.space',
+    'https://ByteDance-AnimateDiff-Lightning.hf.space'
+  ];
+  for (const base of adEndpoints) {
+    try {
+      const r = await fetch(`${base}/run/predict`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ data: [fullPrompt, '', 8, '16 frames', '512x512', 'lightning_4step'] }),
+        signal: AbortSignal.timeout(45000)
+      });
+      if (r.ok) {
+        const json = await r.json();
+        const v = json?.data?.[0]?.video?.url || json?.data?.[0];
+        if (v && typeof v === 'string') {
+          return res.status(200).json({
+            success: true,
+            videoUrl: v.startsWith('http') ? v : `${base}/file=${v}`,
+            provider: 'AnimateDiff Lightning (FREE)',
+            type: 'video', prompt
+          });
+        }
+      }
+    } catch(e) { errors.push(`AnimateDiff: ${e.message}`); }
+  }
+
+  // ── 3. Zhipu AI (CogVideoX) - Fallback (Needs Key) ────────────────────────
   if (zhipuKey) {
     try {
       const response = await fetch('https://open.bigmodel.cn/api/paas/v4/videos/generations', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${zhipuKey}`,
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Authorization': `Bearer ${zhipuKey}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ model: "cogvideox", prompt: fullPrompt }),
         signal: AbortSignal.timeout(15000)
       });
       if (response.ok) {
         const data = await response.json();
         if (data.id) return res.status(200).json({ success: true, taskId: data.id, provider: 'Zhipu AI', type: 'video_task', prompt });
-      } else errors.push(`Zhipu AI: ${response.status}`);
+      }
     } catch (e) { errors.push(`Zhipu AI: ${e.message}`); }
   }
 
-  // ── 0.1 MiniMax (Hailuo AI) - Cinematic Quality ──────────────────────────
+  // ── 4. MiniMax (Hailuo AI) - Fallback (Needs Key) ─────────────────────────
   if (minimaxKey) {
     try {
       const response = await fetch('https://api.minimax.io/v1/video_generation', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${minimaxKey}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          prompt: fullPrompt,
-          model: "MiniMax-Hailuo-2.3",
-          duration: 6,
-          resolution: "1080P"
-        }),
+        headers: { 'Authorization': `Bearer ${minimaxKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: fullPrompt, model: "MiniMax-Hailuo-2.3", duration: 6, resolution: "1080P" }),
         signal: AbortSignal.timeout(15000)
       });
       if (response.ok) {
         const data = await response.json();
         if (data.task_id) return res.status(200).json({ success: true, taskId: data.task_id, provider: 'MiniMax', type: 'video_task', prompt });
-      } else errors.push(`MiniMax: ${response.status}`);
+      }
     } catch (e) { errors.push(`MiniMax: ${e.message}`); }
   }
 
@@ -185,60 +230,17 @@ export default async function handler(req, res) {
     } catch(e) { errors.push(`damo-vilab: ${e.message}`); }
   }
 
-  // ── 4. Zeroscope v2 XL via HF Space (FREE, no key) ───────────────────────
-  const spaceEndpoints = [
-    'https://hysts-zeroscope-v2.hf.space',
-    'https://fffiloni-zeroscope-v2-xl.hf.space'
-  ];
-  for (const base of spaceEndpoints) {
+  // ── 5. Hugging Face Fallback (i2vgen-xl) ───────────────────────────
+  if (hfKey) {
     try {
-      const r = await fetch(`${base}/run/predict`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ data: [fullPrompt, 24, 7.5, 576, 320, 24, seed] }),
-        signal: AbortSignal.timeout(45000)
-      });
+      const r = await callHF('ali-vilab/i2vgen-xl', imageBase64 || imageUrl || fullPrompt, { prompt: fullPrompt });
       if (r.ok) {
-        const json = await r.json();
-        const v = json?.data?.[0]?.video?.url || json?.data?.[0];
-        if (v && typeof v === 'string') {
-          return res.status(200).json({
-            success: true,
-            videoUrl: v.startsWith('http') ? v : `${base}/file=${v}`,
-            provider: 'Zeroscope v2 XL',
-            type: 'video', prompt
-          });
+        const buf = await r.arrayBuffer();
+        if (buf.byteLength > 5000) {
+          return res.status(200).json({ success: true, videoBase64: `data:video/mp4;base64,${Buffer.from(buf).toString('base64')}`, provider: 'HF i2vgen-xl', type: 'video', prompt });
         }
-      } else errors.push(`Zeroscope ${base}: ${r.status}`);
-    } catch(e) { errors.push(`Zeroscope: ${e.message}`); }
-  }
-
-  // ── 5. AnimateDiff Lightning via HF Space (FREE, no key) ─────────────────
-  const adEndpoints = [
-    'https://guoyww-animatediff.hf.space',
-    'https://ByteDance-AnimateDiff-Lightning.hf.space'
-  ];
-  for (const base of adEndpoints) {
-    try {
-      const r = await fetch(`${base}/run/predict`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ data: [fullPrompt, '', 8, '16 frames', '512x512', 'lightning_4step'] }),
-        signal: AbortSignal.timeout(45000)
-      });
-      if (r.ok) {
-        const json = await r.json();
-        const v = json?.data?.[0]?.video?.url || json?.data?.[0];
-        if (v && typeof v === 'string') {
-          return res.status(200).json({
-            success: true,
-            videoUrl: v.startsWith('http') ? v : `${base}/file=${v}`,
-            provider: 'AnimateDiff Lightning',
-            type: 'video', prompt
-          });
-        }
-      } else errors.push(`AnimateDiff: ${r.status}`);
-    } catch(e) { errors.push(`AnimateDiff: ${e.message}`); }
+      }
+    } catch(e) { errors.push(`HF Fallback: ${e.message}`); }
   }
 
   // ── 6. Animated frames fallback via Pollinations (ALWAYS works) ──────────
