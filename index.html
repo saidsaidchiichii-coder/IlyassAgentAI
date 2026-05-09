@@ -641,11 +641,11 @@ async function generateImagineImage() {
   loadItem.className = 'gallery-item';
   loadItem.id = imgId;
   loadItem.innerHTML = `
-    <div class="template-img-placeholder" style="height:160px;">
-      <div class="skeleton-loader" style="width:80%;padding:0">
-        <div class="skeleton-line"></div>
-        <div class="skeleton-line"></div>
-        <div class="skeleton-line"></div>
+    <div class="gallery-loading-placeholder">
+      <div class="gallery-loading-shimmer"></div>
+      <div class="gallery-loading-text">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" class="gallery-loading-icon"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Generating...
       </div>
     </div>`;
   galleryGrid.prepend(loadItem);
@@ -667,17 +667,29 @@ async function generateImagineImage() {
       if (data.imageUrl) {
         loadEl.innerHTML = `
           <img src="${data.imageUrl}" alt="${prompt}" loading="lazy"
-               onload="this.style.opacity=1" style="opacity:0;transition:opacity 0.4s;width:100%;display:block;"/>
+               onload="this.style.opacity=1" style="opacity:0;transition:opacity 0.5s;width:100%;display:block;"/>
           <div class="gallery-item-overlay">
             <div class="gallery-item-label">${escapeHtml(prompt)}</div>
+            <div class="gallery-item-actions">
+              <a href="${data.imageUrl}" target="_blank" download class="gallery-action-btn" onclick="event.stopPropagation()" title="Download">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Save
+              </a>
+              <button class="gallery-action-btn" onclick="event.stopPropagation();viewGalleryImage('${data.imageUrl}','${escapeHtml(prompt).replace(/'/g,"\'")}')" title="View full">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                View
+              </button>
+            </div>
           </div>`;
         loadEl.onclick = () => viewGalleryImage(data.imageUrl, prompt);
 
         // Save to gallery history
         _galleryImages.unshift({ url: data.imageUrl, prompt, ts: Date.now() });
         try { localStorage.setItem('aiGallery', JSON.stringify(_galleryImages.slice(0,50))); } catch(e) {}
+        const clearBtn = document.getElementById('galleryClearBtn');
+        if (clearBtn) clearBtn.style.display = '';
 
-        showToast('Image generated!');
+        showToast('✨ Image generated!');
       } else {
         loadEl.innerHTML = `<div class="template-img-placeholder" style="height:100px;color:var(--red);font-size:12px;">Failed: ${data.error || 'Unknown error'}</div>`;
         showToast('Generation failed');
@@ -929,6 +941,7 @@ function showToast(msg, duration = 2800) {
 window.showToast = showToast;
 window.generateImage = generateImage;
 window.regenerateImage = regenerateImage;
+window.clearGallery = clearGallery;
 
 /* ===== DRAG & DROP ===== */
 document.addEventListener('dragover', e => e.preventDefault());
