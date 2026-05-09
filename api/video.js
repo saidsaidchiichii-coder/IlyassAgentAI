@@ -118,7 +118,7 @@ export default async function handler(req, res) {
     } catch (e) { errors.push(`Zhipu AI: ${e.message}`); }
   }
 
-  // ── 4. MiniMax (Hailuo AI) - Fallback (Needs Key) ─────────────────────────
+  // ── 4. MiniMax (Hailuo AI) - PRIMARY (Needs Key) ─────────────────────────
   if (minimaxKey) {
     try {
       const response = await fetch('https://api.minimax.io/v1/video_generation', {
@@ -129,8 +129,8 @@ export default async function handler(req, res) {
       });
       if (response.ok) {
         const data = await response.json();
-        if (data.task_id) return res.status(200).json({ success: true, taskId: data.task_id, provider: 'MiniMax', type: 'video_task', prompt });
-      }
+        if (data.task_id) return res.status(200).json({ success: true, taskId: data.task_id, provider: 'MiniMax', type: 'video_task', prompt, videoUrl: null });
+      } else errors.push(`MiniMax: ${response.status}`);
     } catch (e) { errors.push(`MiniMax: ${e.message}`); }
   }
 
