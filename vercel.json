@@ -1,1 +1,11 @@
-ewogICJidWlsZENvbW1hbmQiOiAiZWNobyAnSWx5YXNzQUkgYnVpbGQgdjIuNiAtIFN0cmlwZSBlbmFibGVkJyIsCiAgIm91dHB1dERpcmVjdG9yeSI6ICJwdWJsaWMiLAogICJjbGVhblVybHMiOiB0cnVlLAogICJ0cmFpbGluZ1NsYXNoIjogZmFsc2UsCiAgImZ1bmN0aW9ucyI6IHsKICAgICJhcGkvKi5qcyI6IHsKICAgICAgIm1heER1cmF0aW9uIjogNjAKICAgIH0KICB9Cn0=
+{
+  "buildCommand": "echo 'IlyassAI build v2.6 - Stripe enabled'",
+  "outputDirectory": "public",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "functions": {
+    "api/*.js": {
+      "maxDuration": 60
+    }
+  }
+}
