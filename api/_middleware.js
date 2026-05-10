@@ -13,7 +13,8 @@ function initFirebase() {
 }
 
 export async function verifyApiKey(req) {
-  const apiKey = req.headers['x-api-key'] || req.headers['authorization']?.replace('Bearer ', '');
+  const apiKey = req.headers['x-api-key'] ||
+                 req.headers['authorization']?.replace('Bearer ', '');
   if (!apiKey) return { error: 'API key required. Add x-api-key header.', status: 401 };
 
   try {
@@ -25,7 +26,10 @@ export async function verifyApiKey(req) {
     const userDoc  = snap.docs[0];
     const userData = userDoc.data();
     if ((userData.credits ?? 0) <= 0) {
-      return { error: 'Insufficient credits. Buy more at https://my-webxyu.vercel.app/api-dashboard', status: 402 };
+      return {
+        error: 'Insufficient credits. Buy more at https://my-webxyu.vercel.app/api-dashboard',
+        status: 402
+      };
     }
     return { user: { id: userDoc.id, ...userData }, error: null };
   } catch (err) {

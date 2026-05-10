@@ -7,15 +7,19 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
+  if (!process.env.STRIPE_SECRET_KEY) {
+    return res.status(503).json({ error: 'Stripe not configured yet.' });
+  }
+
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
   const PACKAGES = {
-    starter:    { credits: 500,  price: 499,  name: 'Starter Pack — 500 Credits',     description: '~500 chat requests or 100 images' },
-    pro:        { credits: 2000, price: 1499, name: 'Pro Pack — 2,000 Credits',        description: '~2000 chat requests or 400 images' },
-    enterprise: { credits: 6000, price: 3999, name: 'Enterprise Pack — 6,000 Credits', description: '~6000 chat requests or 1200 images' },
+    starter:    { credits: 500,  price: 499,  name: 'Starter Pack — 500 Credits' },
+    pro:        { credits: 2000, price: 1499, name: 'Pro Pack — 2,000 Credits' },
+    enterprise: { credits: 6000, price: 3999, name: 'Enterprise Pack — 6,000 Credits' },
   };
 
-  const { pkg, userId, email } = req.body;
+  const { pkg, userId, email } = req.body || {};
   const selected = PACKAGES[pkg];
   if (!selected) return res.status(400).json({ error: 'Invalid package' });
   if (!userId)   return res.status(400).json({ error: 'userId required' });
@@ -27,7 +31,7 @@ export default async function handler(req, res) {
       line_items: [{
         price_data: {
           currency: 'usd',
-          product_data: { name: selected.name, description: selected.description },
+          product_data: { name: selected.name },
           unit_amount: selected.price,
         },
         quantity: 1,
@@ -35,11 +39,10 @@ export default async function handler(req, res) {
       mode: 'payment',
       success_url: `https://my-webxyu.vercel.app/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `https://my-webxyu.vercel.app/api-dashboard`,
-      metadata: { userId, credits: String(selected.credits), pkg, email: email || '' },
+      metadata: { userId, credits: String(selected.credits), pkg },
     });
     return res.status(200).json({ url: session.url });
   } catch (err) {
-    console.error('Stripe error:', err);
     return res.status(500).json({ error: err.message });
   }
 }

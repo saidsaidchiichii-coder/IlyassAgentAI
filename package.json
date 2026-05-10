@@ -2,13 +2,12 @@
   "name": "ilyass-agent-ai",
   "version": "2.0.0",
   "private": true,
-  "description": "IlyassAI — Autonomous AI Agent Platform with Manus-like capabilities",
+  "description": "IlyassAI — Autonomous AI Agent Platform",
   "type": "module",
-  "engines": {
-    "node": ">=18"
-  },
+  "engines": { "node": ">=18" },
   "dependencies": {
-    "firebase-admin": "^12.0.0"
-  },
-  "devDependencies": {}
+    "firebase-admin": "^12.0.0",
+    "stripe": "^14.0.0",
+    "micro": "^10.0.1"
+  }
 }

@@ -12,8 +12,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // ── Detect if external API call ──
-  const isExternal = !!(req.headers['x-api-key'] || req.headers['authorization']);
+  const isExternal = !!(req.headers['x-api-key'] ||
+    (req.headers['authorization'] && !req.headers['authorization'].includes('Bearer undefined')));
   let userId = null;
 
   if (isExternal) {
@@ -25,30 +25,15 @@ export default async function handler(req, res) {
   const { prompt, model = 'flux', width = 1024, height = 1024, seed, enhance = true } =
     req.method === 'GET' ? req.query : (req.body || {});
 
-  if (!prompt) {
-    return res.status(400).json({ error: 'prompt is required' });
-  }
+  if (!prompt) return res.status(400).json({ error: 'prompt is required' });
 
   const encodedPrompt = encodeURIComponent(prompt);
-  const seedParam     = seed ? `&seed=${seed}` : `&seed=${Math.floor(Math.random() * 999999)}`;
-  const enhanceParam  = enhance ? '&enhance=true' : '';
-  const noLogoParam   = '&nologo=true';
-
-  const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?model=${model}&width=${width}&height=${height}${noLogoParam}${seedParam}${enhanceParam}`;
-
-  try {
-    await fetch(imageUrl, { method: 'HEAD', signal: AbortSignal.timeout(8000), redirect: 'follow' });
-  } catch (e) { /* HEAD timeout OK, URL still valid */ }
+  const seedParam    = seed ? `&seed=${seed}` : `&seed=${Math.floor(Math.random() * 999999)}`;
+  const imageUrl     = `https://image.pollinations.ai/prompt/${encodedPrompt}?model=${model}&width=${width}&height=${height}&nologo=true${seedParam}${enhance ? '&enhance=true' : ''}`;
 
   if (isExternal && userId) await deductCredits(userId, 5);
 
   return res.status(200).json({
-    success:  true,
-    imageUrl,
-    prompt,
-    model,
-    provider: 'Pollinations.ai',
-    width,
-    height
+    success: true, imageUrl, prompt, model, provider: 'Pollinations.ai', width, height
   });
 }
