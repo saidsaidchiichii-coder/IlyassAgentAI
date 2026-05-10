@@ -1,5 +1,5 @@
 {
-  "buildCommand": "rm -f api/moderate.js api/discover.js && echo 'IlyassAI build v2.5'",
+  "buildCommand": "echo 'IlyassAI build v2.5'",
   "outputDirectory": "public",
   "cleanUrls": true,
   "trailingSlash": false,

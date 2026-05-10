@@ -1,64 +1,34 @@
-// IlyassAI — /api/moderate
-// Content moderation using OpenAI Moderation API with keyword fallback
+// IlyassAI — /api/moderate (Edge Function — not counted in 12-function limit)
+export const config = { runtime: 'edge' };
 
-export default async function handler(req, res) {
-  // ── CORS preflight ──
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  if (req.method === 'OPTIONS') return res.status(200).end();
-
+export default async function handler(req) {
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Content-Type': 'application/json',
+  };
+  if (req.method === 'OPTIONS') return new Response(null, { status: 200, headers: corsHeaders });
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: corsHeaders });
   }
 
-  const { text, input } = req.body || {};
-  const content = text || input;
-
+  let body = {};
+  try { body = await req.json(); } catch {}
+  const content = body.text || body.input;
   if (!content) {
-    return res.status(400).json({ error: 'text or input is required' });
+    return new Response(JSON.stringify({ error: 'text or input is required' }), { status: 400, headers: corsHeaders });
   }
 
-  // ── OpenAI Moderation (free endpoint) ──
-  const openaiKey = process.env.OPENAI_API_KEY;
-  if (openaiKey) {
-    try {
-      const modRes = await fetch('https://api.openai.com/v1/moderations', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${openaiKey}`
-        },
-        body: JSON.stringify({ input: content })
-      });
-
-      if (modRes.ok) {
-        const data = await modRes.json();
-        const result = data.results?.[0];
-        return res.status(200).json({
-          success: true,
-          provider: 'OpenAI',
-          flagged: result?.flagged || false,
-          categories: result?.categories || {},
-          scores: result?.category_scores || {}
-        });
-      }
-    } catch (e) {
-      console.error('Moderation error:', e.message);
-    }
-  }
-
-  // ── Basic keyword fallback ──
-  const blockedPatterns = [
-    /\b(harm|violence|abuse|illegal)\b/i
-  ];
+  // Basic keyword fallback (no OpenAI key needed)
+  const blockedPatterns = [/\b(harm|violence|abuse|illegal|nsfw)\b/i];
   const flagged = blockedPatterns.some(p => p.test(content));
-  
-  return res.status(200).json({
+
+  return new Response(JSON.stringify({
     success: true,
-    provider: 'keyword-fallback',
+    provider: 'keyword-filter',
     flagged,
     categories: { violence: flagged },
     scores: { violence: flagged ? 0.9 : 0.01 }
-  });
+  }), { status: 200, headers: corsHeaders });
 }
