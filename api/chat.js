@@ -1,24 +1,30 @@
 // IlyassAI — /api/chat
-// Accepts { message, mode } from frontend OR { messages } from direct API calls
+// DUAL MODE:
+//   1. Internal (no x-api-key): free for the website's own UI
+//   2. External (x-api-key present): verify key + deduct credits
 
 import { verifyApiKey, deductCredits } from './_middleware.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-api-key');
   if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
-
-  // Verify API Key
-  const { user, error, status } = await verifyApiKey(req);
-  if (error) return res.status(status).json({ error });
+  if (req.method !== 'POST')   return res.status(405).json({ error: 'Method not allowed' });
 
   const body = req.body || {};
 
-  // Support BOTH formats:
-  // 1. Frontend format: { message: "hi", mode: "auto", files: [] }
-  // 2. Direct API format: { messages: [{role, content}] }
+  // ── Detect if external API call ──
+  const isExternal = !!(req.headers['x-api-key'] || req.headers['authorization']);
+  let userId = null;
+
+  if (isExternal) {
+    const { user, error, status } = await verifyApiKey(req);
+    if (error) return res.status(status).json({ error });
+    userId = user.id;
+  }
+
+  // Build messages array
   let messages;
   if (body.messages && Array.isArray(body.messages)) {
     messages = body.messages;
@@ -28,8 +34,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'message or messages array is required' });
   }
 
-  const mode = body.mode || 'auto'; // auto | fast | thinking
-
+  const mode = body.mode || 'auto';
   const systemMsg = {
     role: 'system',
     content: `You are IlyassAI, a powerful and intelligent AI assistant. Be helpful, concise, and accurate. Format responses with markdown when helpful. Current mode: ${mode}.`
@@ -37,7 +42,7 @@ export default async function handler(req, res) {
   const fullMessages = [systemMsg, ...messages];
   const errors = [];
 
-  // ═══ 1. Groq — fastest, try multiple models on 429 ═══
+  // ══ 1. Groq ══
   const groqKey = process.env.GROQ_API_KEY;
   if (groqKey) {
     const groqModels = [
@@ -58,18 +63,17 @@ export default async function handler(req, res) {
           const data = await r.json();
           const reply = data.choices?.[0]?.message?.content;
           if (reply) {
-            await deductCredits(user.id, 1);
-            return res.status(200).json({ reply, model: gModel, provider: 'Groq' });
+            if (isExternal && userId) await deductCredits(userId, 1);
+            return res.status(200).json({ reply, model: gModel, provider: 'Groq', success: true });
           }
         }
-        const status = r.status;
-        errors.push(`Groq/${gModel}: ${status}`);
-        if (status !== 429) break;
+        errors.push(`Groq/${gModel}: ${r.status}`);
+        if (r.status !== 429) break;
       } catch (e) { errors.push(`Groq/${gModel}: ${e.message}`); break; }
     }
   }
 
-  // ═══ 2. Gemini — reliable fallback ═══
+  // ══ 2. Gemini ══
   const geminiKey = process.env.GEMINI_API_KEY;
   if (geminiKey) {
     const geminiModels = ['gemini-1.5-flash', 'gemini-1.5-flash-8b', 'gemini-1.5-pro'];
@@ -96,8 +100,8 @@ export default async function handler(req, res) {
           const data = await r.json();
           const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
           if (reply) {
-            await deductCredits(user.id, 1);
-            return res.status(200).json({ reply, model: gModel, provider: 'Gemini' });
+            if (isExternal && userId) await deductCredits(userId, 1);
+            return res.status(200).json({ reply, model: gModel, provider: 'Gemini', success: true });
           }
         }
         errors.push(`Gemini/${gModel}: ${r.status}`);
@@ -105,7 +109,7 @@ export default async function handler(req, res) {
     }
   }
 
-  // ═══ 3. OpenRouter — many free models ═══
+  // ══ 3. OpenRouter ══
   const orKey = process.env.OPENROUTER_API_KEY;
   if (orKey) {
     const orModels = [
@@ -131,8 +135,8 @@ export default async function handler(req, res) {
           const data = await r.json();
           const reply = data.choices?.[0]?.message?.content;
           if (reply) {
-            await deductCredits(user.id, 1);
-            return res.status(200).json({ reply, model: gModel, provider: 'OpenRouter' });
+            if (isExternal && userId) await deductCredits(userId, 1);
+            return res.status(200).json({ reply, model: orModel, provider: 'OpenRouter', success: true });
           }
         }
         errors.push(`OpenRouter/${orModel}: ${r.status}`);
@@ -141,5 +145,5 @@ export default async function handler(req, res) {
     }
   }
 
-  return res.status(503).json({ error: 'All AI providers failed.', details: errors });
+  return res.status(503).json({ error: 'All AI providers failed.', details: errors, success: false });
 }
