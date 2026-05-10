@@ -18,13 +18,13 @@ import {
 
 // 🔥 Firebase Config (ديالك)
 const firebaseConfig = {
-  apiKey: "AIzaSyDWch9gK12sGD7awxmRibU6jBspd-tjr6E",
-  authDomain: "my-website-17f99.firebaseapp.com",
-  projectId: "my-website-17f99",
-  storageBucket: "my-website-17f99.firebasestorage.app",
-  messagingSenderId: "799668604107",
-  appId: "1:799668604107:web:adc03ea5fd66c58af09f4e",
-  measurementId: "G-H1SLRSEBTF"
+  apiKey: "AIzaSyDWch9gK12sGD7awxmRibU6jBspd-tjr6E", // Keep existing or update if you have a new web config
+  authDomain: "ilyassagentai.firebaseapp.com",
+  projectId: "ilyassagentai",
+  storageBucket: "ilyassagentai.firebasestorage.app",
+  messagingSenderId: "1070041614552",
+  appId: "1:1070041614552:web:your-app-id", // You might need to update this from Firebase Console
+  measurementId: "G-XXXXXXXXXX"
 };
 
 // init
