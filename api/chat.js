@@ -1,12 +1,18 @@
 // IlyassAI — /api/chat
 // Accepts { message, mode } from frontend OR { messages } from direct API calls
 
+import { verifyApiKey, deductCredits } from './_middleware.js';
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  // Verify API Key
+  const { user, error, status } = await verifyApiKey(req);
+  if (error) return res.status(status).json({ error });
 
   const body = req.body || {};
 
@@ -51,7 +57,10 @@ export default async function handler(req, res) {
         if (r.ok) {
           const data = await r.json();
           const reply = data.choices?.[0]?.message?.content;
-          if (reply) return res.status(200).json({ reply, model: gModel, provider: 'Groq' });
+          if (reply) {
+            await deductCredits(user.id, 1);
+            return res.status(200).json({ reply, model: gModel, provider: 'Groq' });
+          }
         }
         const status = r.status;
         errors.push(`Groq/${gModel}: ${status}`);
@@ -86,7 +95,10 @@ export default async function handler(req, res) {
         if (r.ok) {
           const data = await r.json();
           const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (reply) return res.status(200).json({ reply, model: gModel, provider: 'Gemini' });
+          if (reply) {
+            await deductCredits(user.id, 1);
+            return res.status(200).json({ reply, model: gModel, provider: 'Gemini' });
+          }
         }
         errors.push(`Gemini/${gModel}: ${r.status}`);
       } catch (e) { errors.push(`Gemini/${gModel}: ${e.message}`); }
@@ -118,7 +130,10 @@ export default async function handler(req, res) {
         if (r.ok) {
           const data = await r.json();
           const reply = data.choices?.[0]?.message?.content;
-          if (reply) return res.status(200).json({ reply, model: orModel, provider: 'OpenRouter' });
+          if (reply) {
+            await deductCredits(user.id, 1);
+            return res.status(200).json({ reply, model: gModel, provider: 'OpenRouter' });
+          }
         }
         errors.push(`OpenRouter/${orModel}: ${r.status}`);
         if (r.status !== 429) break;

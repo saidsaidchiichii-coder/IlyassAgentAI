@@ -1,6 +1,8 @@
 // IlyassAI — /api/image
 // Returns JSON { imageUrl } — Pollinations.ai (free, no key) with HF fallback
 
+import { verifyApiKey, deductCredits } from './_middleware.js';
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -10,6 +12,10 @@ export default async function handler(req, res) {
   if (req.method !== 'GET' && req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  // Verify API Key
+  const { user, error, status } = await verifyApiKey(req);
+  if (error) return res.status(status).json({ error });
 
   const { prompt, model = 'flux', width = 1024, height = 1024, seed, enhance = true } =
     req.method === 'GET' ? req.query : (req.body || {});
@@ -35,6 +41,7 @@ export default async function handler(req, res) {
     });
 
     if (check.ok || check.status === 200) {
+      await deductCredits(user.id, 5); // Image generation costs more
       return res.status(200).json({
         success: true,
         imageUrl,

@@ -450,6 +450,7 @@
 
   <script type="module">
     import * as API from './api-integration.js';
+    import { getOrCreateAPIKeyFirebase, getUserData } from './api-integration-firebase.js';
 
     // Global reference
     window.API = API;
@@ -461,29 +462,33 @@
 
     async function loadDashboard() {
       try {
-        // Initialize API integration
-        await API.initializeAPIIntegration();
-
-        // Load credits
-        const credits = await API.getUserCredits();
-        document.getElementById('creditsValue').textContent = credits.toLocaleString();
-
-        // Load API key
-        const apiKey = await API.getOrCreateAPIKey();
-        document.getElementById('apiKeyValue').textContent = API.displayAPIKey(apiKey);
+        // Load API key from Firebase
+        const apiKey = await getOrCreateAPIKeyFirebase();
+        document.getElementById('apiKeyValue').textContent = apiKey;
         window.currentAPIKey = apiKey;
 
-        // Load usage logs
-        const usageLogs = await API.getUserUsageLogs(10);
-        loadUsageTable(usageLogs);
+        // Load user data (credits) from Firebase
+        const userData = await getUserData();
+        if (userData) {
+          document.getElementById('creditsValue').textContent = (userData.credits || 0).toLocaleString();
+        }
 
-        // Load stats
-        loadStats(usageLogs);
+        // Load usage logs (Optional: can still use existing API if needed)
+        // const usageLogs = await API.getUserUsageLogs(10);
+        // loadUsageTable(usageLogs);
+        
+        document.getElementById('callsValue').textContent = "0";
+        document.getElementById('tokensValue').textContent = "0";
 
         showMessage('Dashboard loaded successfully!', 'success');
       } catch (error) {
         console.error('Error loading dashboard:', error);
-        showMessage(`Error: ${error.message}`, 'error');
+        if (error.message === 'User not logged in') {
+          showMessage('Please sign in to access the API Dashboard', 'error');
+          setTimeout(() => window.location.href = 'auth.html', 2000);
+        } else {
+          showMessage(`Error: ${error.message}`, 'error');
+        }
       }
     }
 

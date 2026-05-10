@@ -2,8 +2,19 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import {
   getAuth,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { 
+  getFirestore, 
+  doc, 
+  setDoc, 
+  getDoc, 
+  collection, 
+  query, 
+  where, 
+  getDocs 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // 🔥 Firebase Config (ديالك)
 const firebaseConfig = {
@@ -19,6 +30,9 @@ const firebaseConfig = {
 // init
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
+
+export { auth, db, doc, setDoc, getDoc, collection, query, where, getDocs, onAuthStateChanged };
 
 // ================= TOAST =================
 function showMsg(text) {
