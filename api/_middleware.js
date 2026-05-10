@@ -1,51 +1,48 @@
-import admin from 'firebase-admin';
+import { initializeApp, cert, getApps } from 'firebase-admin/app';
+import { getFirestore, FieldValue } from 'firebase-admin/firestore';
 
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.FIREBASE_PROJECT_ID,
+function initFirebase() {
+  if (getApps().length > 0) return;
+  initializeApp({
+    credential: cert({
+      projectId:   process.env.FIREBASE_PROJECT_ID,
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+      privateKey:  process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
     }),
-    databaseURL: `https://${process.env.FIREBASE_PROJECT_ID}.firebaseio.com`
   });
 }
 
-const db = admin.firestore();
-
 export async function verifyApiKey(req) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return { error: 'Missing or invalid Authorization header', status: 401 };
-  }
+  const apiKey = req.headers['x-api-key'] || req.headers['authorization']?.replace('Bearer ', '');
+  if (!apiKey) return { error: 'API key required. Add x-api-key header.', status: 401 };
 
-  const apiKey = authHeader.split(' ')[1];
-  
   try {
-    const usersRef = db.collection('users');
-    const snapshot = await usersRef.where('apiKey', '==', apiKey).limit(1).get();
+    initFirebase();
+    const db   = getFirestore();
+    const snap = await db.collection('users').where('apiKey', '==', apiKey).limit(1).get();
+    if (snap.empty) return { error: 'Invalid API key.', status: 401 };
 
-    if (snapshot.empty) {
-      return { error: 'Invalid API key', status: 401 };
-    }
-
-    const userDoc = snapshot.docs[0];
+    const userDoc  = snap.docs[0];
     const userData = userDoc.data();
-
-    if (userData.credits <= 0) {
-      return { error: 'Insufficient credits', status: 402 };
+    if ((userData.credits ?? 0) <= 0) {
+      return { error: 'Insufficient credits. Buy more at https://my-webxyu.vercel.app/api-dashboard', status: 402 };
     }
-
-    return { user: { id: userDoc.id, ...userData }, key: apiKey };
-  } catch (error) {
-    console.error('API Key verification error:', error);
+    return { user: { id: userDoc.id, ...userData }, error: null };
+  } catch (err) {
+    console.error('verifyApiKey error:', err);
     return { error: 'Internal server error', status: 500 };
   }
 }
 
 export async function deductCredits(userId, amount = 1) {
-  const userRef = db.collection('users').doc(userId);
-  await userRef.update({
-    credits: admin.firestore.FieldValue.increment(-amount)
-  });
+  try {
+    initFirebase();
+    const db = getFirestore();
+    await db.collection('users').doc(userId).update({
+      credits:  FieldValue.increment(-amount),
+      apiCalls: FieldValue.increment(1),
+    });
+  } catch (err) {
+    console.error('deductCredits error:', err);
+  }
 }
