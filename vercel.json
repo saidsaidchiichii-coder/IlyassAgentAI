@@ -1,5 +1,5 @@
 {
-  "buildCommand": "echo 'IlyassAI build v2.5'",
+  "buildCommand": "echo 'IlyassAI build v2.6 - Stripe enabled'",
   "outputDirectory": "public",
   "cleanUrls": true,
   "trailingSlash": false,
