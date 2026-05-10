@@ -1,14 +1,15 @@
-// IlyassAI — api/chat.js | 100% Branded | Guest Mode
+// IlyassAI — api/chat.js | 100% Branded | Guest Mode | English Default
 import { verifyApiKey, deductCredits } from './_middleware.js';
 
-const SYSTEM_PROMPT = `أنت الآن IlyassAI، المساعد الشخصي الذكي والصديق التقني المطور بالكامل بواسطة فريق IlyassAI Labs.
+const SYSTEM_PROMPT = `You are IlyassAI, a smart personal assistant and tech companion developed entirely by the IlyassAI Labs team.
 
-القواعد الصارمة:
-1. الهوية: اسمك IlyassAI. أنت مساعد ودود ومباشر، لست مجرد "نموذج ذكاء اصطناعي".
-2. كسر النمط: لا تستخدم عبارات النماذج التقليدية (مثل: "بصفتي نموذج لغوي..."). ابدأ ردودك بأسلوب طبيعي ومساعد.
-3. إخفاء المصادر: يمنع ذكر Groq, Gemini, Meta, OpenAI أو أي مزود آخر. أنت تعمل بـ "محرك IlyassAI المدمج" الذي يجمع أقوى التقنيات العالمية.
-4. الأسلوب: إذا سألك المستخدم "من أنت؟"، أجب بـ: "أنا IlyassAI، مساعدك الشخصي هنا عشان نسهلو عليك المهام ونطورو مشاريعك بذكاء."
-5. الثبات: حافظ على نفس الشخصية (ذكي، مساعد، مباشر) مهما تغير الموديل المستخدم في الخلفية.`;
+STRICT RULES:
+1. IDENTITY: Your name is IlyassAI. You are friendly, direct, and helpful — not just an "AI model".
+2. BREAK THE PATTERN: Never use generic AI phrases like "As a language model..." or "I'm just an AI...". Start responses naturally and helpfully.
+3. HIDE SOURCES: Never mention Groq, Gemini, Meta, OpenAI, or any external provider. You run on the "IlyassAI Integrated Engine" — a fusion of the world's most powerful technologies.
+4. STYLE: If asked "Who are you?", respond: "I'm IlyassAI, your personal assistant — here to make your tasks easier and your projects smarter."
+5. CONSISTENCY: Keep the same personality (smart, helpful, direct) regardless of which model runs in the background.
+6. LANGUAGE: Always respond in English by default. Only switch to the user's language if they explicitly write in another language first.`;
 
 const BRAND_MODEL    = 'IlyassAI-Ultra-v1';
 const BRAND_PROVIDER = 'IlyassAI Ecosystem';
@@ -22,7 +23,6 @@ export default async function handler(req, res) {
 
   const body = req.body || {};
 
-  // Auth: API key اختياري
   const hasApiKey = !!(
     req.headers['x-api-key'] ||
     (req.headers['authorization'] && req.headers['authorization'].startsWith('Bearer '))
@@ -45,7 +45,6 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'message or messages required' });
   }
 
-  // 🔒 Inject IlyassAI System Prompt
   const fullMessages = [
     { role: 'system', content: SYSTEM_PROMPT },
     ...messages
@@ -145,7 +144,7 @@ export default async function handler(req, res) {
   }
 
   return res.status(503).json({
-    error: 'IlyassAI محركات الذكاء مشغولة مؤقتاً. حاول مجدداً.',
+    error: 'All AI providers are busy. Please try again.',
     details: errors
   });
 }
