@@ -1,569 +1,382 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>API Dashboard - IlyassAI</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>API Dashboard — IlyassAI</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',-apple-system,sans-serif;background:#080810;color:#e0e0e0;min-height:100vh}
+    nav{display:flex;align-items:center;justify-content:space-between;padding:16px 40px;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+    .logo{font-size:18px;font-weight:700;background:linear-gradient(135deg,#6c63ff,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .nav-right{display:flex;align-items:center;gap:12px}
+    .nav-email{font-size:13px;color:#555}
+    .btn-sm{padding:7px 16px;border-radius:8px;font-size:13px;cursor:pointer;transition:all .2s;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#aaa}
+    .btn-sm:hover{background:rgba(255,60,60,.15);color:#ff6b6b;border-color:rgba(255,60,60,.3)}
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
-      color: #e0e0e0;
-      min-height: 100vh;
-      padding: 20px;
-    }
+    /* AUTH */
+    #authOverlay{position:fixed;inset:0;z-index:999;background:#080810;display:flex;align-items:center;justify-content:center}
+    .auth-card{background:#111118;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:44px 40px;width:420px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+    .auth-card h2{font-size:26px;font-weight:700;margin-bottom:6px;background:linear-gradient(135deg,#6c63ff,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .auth-card p{color:#555;font-size:13px;margin-bottom:28px}
+    .tabs{display:flex;gap:8px;margin-bottom:24px}
+    .tab{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:#555;cursor:pointer;font-size:14px;font-weight:500;transition:all .2s}
+    .tab.active{background:linear-gradient(135deg,#6c63ff,#7c3aed);border-color:transparent;color:#fff}
+    .inp{width:100%;padding:13px 16px;margin-bottom:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;color:#e0e0e0;font-size:14px;outline:none;transition:border-color .2s}
+    .inp:focus{border-color:#6c63ff}
+    .btn-auth{width:100%;padding:14px;background:linear-gradient(135deg,#6c63ff,#7c3aed);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:opacity .2s;margin-top:4px}
+    .btn-auth:hover{opacity:.88}
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+    /* MAIN */
+    #main{display:none}
+    .wrap{max-width:1080px;margin:0 auto;padding:40px 24px}
 
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 40px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
+    /* STATS */
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:24px}
+    .stat{background:#111118;border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:22px}
+    .stat:hover{border-color:rgba(108,99,255,.25)}
+    .stat-label{font-size:11px;color:#444;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+    .stat-val{font-size:34px;font-weight:700;color:#fff}
+    .stat-val.purple{background:linear-gradient(135deg,#6c63ff,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .stat-sub{font-size:11px;color:#333;margin-top:4px}
 
-    .header h1 {
-      font-size: 28px;
-      font-weight: 700;
-      background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+    /* API KEY */
+    .card{background:#111118;border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:26px;margin-bottom:20px}
+    .card h3{font-size:17px;font-weight:600;margin-bottom:6px}
+    .card p{font-size:13px;color:#444;margin-bottom:20px}
+    .key-box{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px 16px}
+    .key-txt{flex:1;font-family:'Courier New',monospace;font-size:13px;color:#a78bfa;word-break:break-all;cursor:pointer}
+    .btn-outline{background:transparent;border:1px solid rgba(255,255,255,0.1);color:#666;padding:9px 14px;border-radius:8px;cursor:pointer;font-size:13px;transition:all .2s;white-space:nowrap}
+    .btn-outline:hover{border-color:rgba(255,100,100,.4);color:#ff6b6b}
+    .btn-purple{background:linear-gradient(135deg,#6c63ff,#7c3aed);border:none;color:#fff;padding:9px 18px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap;transition:opacity .2s}
+    .btn-purple:hover{opacity:.85}
 
-    .header-actions {
-      display: flex;
-      gap: 12px;
-    }
+    /* PRICING */
+    .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:4px}
+    .plan{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:24px;position:relative;transition:all .2s}
+    .plan:hover{border-color:rgba(108,99,255,.35);transform:translateY(-2px)}
+    .plan.popular{border-color:rgba(108,99,255,.5);background:rgba(108,99,255,.05)}
+    .plan-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#6c63ff,#7c3aed);color:#fff;font-size:10px;font-weight:700;padding:3px 12px;border-radius:20px;letter-spacing:.5px;white-space:nowrap}
+    .plan-name{font-size:14px;font-weight:600;color:#888;margin-bottom:12px}
+    .plan-price{font-size:36px;font-weight:700;color:#fff;margin-bottom:2px}
+    .plan-price span{font-size:16px;color:#555}
+    .plan-credits{font-size:13px;color:#a78bfa;font-weight:600;margin-bottom:4px}
+    .plan-desc{font-size:12px;color:#444;margin-bottom:20px}
+    .plan ul{list-style:none;margin-bottom:22px}
+    .plan ul li{font-size:13px;color:#555;padding:4px 0;display:flex;align-items:center;gap:8px}
+    .plan ul li::before{content:"✓";color:#6c63ff;font-weight:700}
+    .btn-buy{width:100%;padding:12px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;border:none}
+    .btn-buy.outline{background:transparent;border:1px solid rgba(255,255,255,0.1);color:#aaa}
+    .btn-buy.outline:hover{border-color:#6c63ff;color:#a78bfa}
+    .btn-buy.filled{background:linear-gradient(135deg,#6c63ff,#7c3aed);color:#fff}
+    .btn-buy.filled:hover{opacity:.88}
 
-    .btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    /* DOCS */
+    .code{background:#0c0c14;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:18px;margin-bottom:14px;overflow-x:auto}
+    .code pre{font-family:'Courier New',monospace;font-size:13px;color:#a78bfa;line-height:1.7}
+    .c{color:#333}.s{color:#7ec68a}.k{color:#c792ea}
 
-    .btn-primary {
-      background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-      color: white;
-    }
+    /* ENDPOINTS */
+    .ep-list{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+    .ep{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05)}
+    .ep-l{display:flex;align-items:center;gap:12px}
+    .method{font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;font-family:monospace}
+    .post{background:rgba(108,99,255,.15);color:#a78bfa}
+    .get{background:rgba(39,174,96,.15);color:#6dd98a}
+    .ep-path{font-family:monospace;font-size:13px;color:#ccc}
+    .ep-desc{font-size:12px;color:#444;margin-top:1px}
+    .ep-cost{font-size:12px;color:#555;background:rgba(255,255,255,.04);padding:4px 10px;border-radius:20px}
 
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(255, 107, 53, 0.3);
-    }
+    /* TOAST */
+    .toast{position:fixed;bottom:24px;right:24px;padding:13px 20px;border-radius:12px;color:#fff;font-size:14px;z-index:9999;transition:.3s;opacity:0;border:1px solid rgba(255,255,255,.1);box-shadow:0 8px 30px rgba(0,0,0,.5)}
 
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.1);
-      color: #e0e0e0;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      margin-bottom: 40px;
-    }
-
-    .card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 24px;
-      backdrop-filter: blur(10px);
-      transition: all 0.3s ease;
-    }
-
-    .card:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 107, 53, 0.3);
-    }
-
-    .card-title {
-      font-size: 14px;
-      font-weight: 600;
-      text-transform: uppercase;
-      color: #999;
-      margin-bottom: 12px;
-      letter-spacing: 0.5px;
-    }
-
-    .card-value {
-      font-size: 32px;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 8px;
-    }
-
-    .card-subtitle {
-      font-size: 12px;
-      color: #666;
-    }
-
-    .api-key-section {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 40px;
-    }
-
-    .api-key-section h2 {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 20px;
-      color: #fff;
-    }
-
-    .api-key-display {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 107, 53, 0.3);
-      border-radius: 8px;
-      padding: 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .api-key-value {
-      font-family: 'Monaco', 'Courier New', monospace;
-      font-size: 14px;
-      color: #ff6b35;
-      word-break: break-all;
-      flex: 1;
-    }
-
-    .copy-btn {
-      background: rgba(255, 107, 53, 0.2);
-      border: 1px solid rgba(255, 107, 53, 0.4);
-      color: #ff6b35;
-      padding: 8px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 600;
-      margin-left: 12px;
-      transition: all 0.3s ease;
-    }
-
-    .copy-btn:hover {
-      background: rgba(255, 107, 53, 0.3);
-    }
-
-    .usage-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    .usage-table thead {
-      background: rgba(255, 255, 255, 0.05);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .usage-table th {
-      padding: 12px;
-      text-align: left;
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-      color: #999;
-      letter-spacing: 0.5px;
-    }
-
-    .usage-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      font-size: 13px;
-    }
-
-    .usage-table tbody tr:hover {
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    .status-badge {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-
-    .status-success {
-      background: rgba(76, 175, 80, 0.2);
-      color: #4caf50;
-    }
-
-    .status-pending {
-      background: rgba(255, 193, 7, 0.2);
-      color: #ffc107;
-    }
-
-    .loading {
-      text-align: center;
-      padding: 40px;
-      color: #666;
-    }
-
-    .spinner {
-      border: 3px solid rgba(255, 255, 255, 0.1);
-      border-top: 3px solid #ff6b35;
-      border-radius: 50%;
-      width: 32px;
-      height: 32px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 16px;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .error {
-      background: rgba(244, 67, 54, 0.2);
-      border: 1px solid rgba(244, 67, 54, 0.4);
-      color: #f44336;
-      padding: 16px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-    }
-
-    .success {
-      background: rgba(76, 175, 80, 0.2);
-      border: 1px solid rgba(76, 175, 80, 0.4);
-      color: #4caf50;
-      padding: 16px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-    }
-
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .pricing-card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 24px;
-      text-align: center;
-    }
-
-    .pricing-card.featured {
-      border-color: rgba(255, 107, 53, 0.3);
-      background: rgba(255, 107, 53, 0.05);
-    }
-
-    .pricing-card h3 {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: #fff;
-    }
-
-    .pricing-card .price {
-      font-size: 28px;
-      font-weight: 700;
-      color: #ff6b35;
-      margin-bottom: 12px;
-    }
-
-    .pricing-card .credits {
-      font-size: 14px;
-      color: #999;
-      margin-bottom: 20px;
-    }
-
-    .pricing-card .buy-btn {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .pricing-card .buy-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(255, 107, 53, 0.3);
-    }
-
-    @media (max-width: 768px) {
-      .header {
-        flex-direction: column;
-        gap: 16px;
-        align-items: flex-start;
-      }
-
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      .card-value {
-        font-size: 24px;
-      }
-
-      .api-key-display {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .copy-btn {
-        margin-left: 0;
-        margin-top: 12px;
-        width: 100%;
-      }
-    }
+    @media(max-width:768px){.stats,.pricing-grid{grid-template-columns:1fr}.wrap{padding:20px 14px}.auth-card{width:92%;padding:32px 22px}nav{padding:14px 18px}}
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Header -->
-    <div class="header">
-      <h1>API Dashboard</h1>
-      <div class="header-actions">
-        <button class="btn btn-secondary" onclick="goBack()">← Back</button>
-        <button class="btn btn-primary" onclick="refreshDashboard()">
-          <span>↻</span> Refresh
-        </button>
-      </div>
-    </div>
 
-    <!-- Messages -->
-    <div id="messageContainer"></div>
-
-    <!-- Stats Grid -->
-    <div class="grid">
-      <div class="card">
-        <div class="card-title">Available Credits</div>
-        <div class="card-value" id="creditsValue">-</div>
-        <div class="card-subtitle">Credits remaining</div>
-      </div>
-      <div class="card">
-        <div class="card-title">API Calls (30d)</div>
-        <div class="card-value" id="callsValue">-</div>
-        <div class="card-subtitle">Total API calls</div>
-      </div>
-      <div class="card">
-        <div class="card-title">Tokens Used (30d)</div>
-        <div class="card-value" id="tokensValue">-</div>
-        <div class="card-subtitle">Total tokens consumed</div>
-      </div>
+<!-- AUTH -->
+<div id="authOverlay">
+  <div class="auth-card">
+    <h2>IlyassAI API</h2>
+    <p>Sign in to get your free API key and start building</p>
+    <div class="tabs">
+      <button class="tab active" id="tLogin" onclick="swTab('login')">Login</button>
+      <button class="tab" id="tSignup" onclick="swTab('signup')">Sign Up — Free</button>
     </div>
-
-    <!-- API Key Section -->
-    <div class="api-key-section">
-      <h2>Your API Key</h2>
-      <p style="color: #999; margin-bottom: 16px; font-size: 14px;">
-        Use this key to authenticate requests to the API Gateway. Keep it secret!
-      </p>
-      <div class="api-key-display">
-        <div class="api-key-value" id="apiKeyValue">Loading...</div>
-        <button class="copy-btn" onclick="copyAPIKey()">Copy</button>
-      </div>
-      <p style="color: #666; font-size: 12px;">
-        📖 <a href="https://docs.example.com/api" style="color: #ff6b35; text-decoration: none;">View API Documentation</a>
-      </p>
-    </div>
-
-    <!-- Pricing Section -->
-    <div class="api-key-section">
-      <h2>Buy Credits</h2>
-      <p style="color: #999; margin-bottom: 20px; font-size: 14px;">
-        Choose a package to purchase credits for your API usage.
-      </p>
-      <div class="pricing-grid">
-        <div class="pricing-card">
-          <h3>Starter</h3>
-          <div class="price">$10</div>
-          <div class="credits">1,000 Credits</div>
-          <button class="buy-btn" onclick="buyCredits('starter')">Buy Now</button>
-        </div>
-        <div class="pricing-card featured">
-          <h3>Professional</h3>
-          <div class="price">$40</div>
-          <div class="credits">5,000 Credits</div>
-          <button class="buy-btn" onclick="buyCredits('professional')">Buy Now</button>
-        </div>
-        <div class="pricing-card">
-          <h3>Enterprise</h3>
-          <div class="price">$120</div>
-          <div class="credits">20,000 Credits</div>
-          <button class="buy-btn" onclick="buyCredits('enterprise')">Buy Now</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Usage Logs -->
-    <div class="api-key-section">
-      <h2>Recent Usage</h2>
-      <table class="usage-table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Endpoint</th>
-            <th>Tokens</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="usageTableBody">
-          <tr>
-            <td colspan="4" style="text-align: center; padding: 40px;">Loading...</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <input type="email" id="aEmail" class="inp" placeholder="Email address"/>
+    <input type="password" id="aPass" class="inp" placeholder="Password (min 6 chars)"/>
+    <button class="btn-auth" onclick="doAuth()">Continue →</button>
   </div>
+</div>
 
-  <script type="module">
-    import * as API from './api-integration.js';
-    import { getOrCreateAPIKeyFirebase, getUserData } from './api-integration-firebase.js';
+<!-- NAV -->
+<nav>
+  <div class="logo">⚡ IlyassAI API</div>
+  <div class="nav-right">
+    <span class="nav-email" id="navEmail"></span>
+    <button class="btn-sm" onclick="doLogout()">Logout</button>
+  </div>
+</nav>
 
-    // Global reference
-    window.API = API;
+<!-- MAIN -->
+<div id="main">
+  <div class="wrap">
 
-    // Initialize on page load
-    document.addEventListener('DOMContentLoaded', async () => {
-      await loadDashboard();
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Available Credits</div>
+        <div class="stat-val purple" id="sCredits">—</div>
+        <div class="stat-sub">Free on signup</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">API Calls</div>
+        <div class="stat-val" id="sCalls">—</div>
+        <div class="stat-sub">Total requests</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Member Since</div>
+        <div class="stat-val" style="font-size:20px;padding-top:6px" id="sJoined">—</div>
+        <div class="stat-sub">Account created</div>
+      </div>
+    </div>
+
+    <!-- API KEY -->
+    <div class="card">
+      <h3>🔑 Your API Key</h3>
+      <p>Use this key in the <code style="color:#a78bfa;font-size:12px">x-api-key</code> header. Never share it publicly.</p>
+      <div class="key-box">
+        <div class="key-txt" id="keyTxt" onclick="toggleKey()">sk_live_••••••••••••••••••••••••</div>
+        <button class="btn-outline" onclick="regenKey()">↺ New Key</button>
+        <button class="btn-purple" onclick="copyKey()">Copy</button>
+      </div>
+    </div>
+
+    <!-- PRICING -->
+    <div class="card">
+      <h3>💳 Buy More Credits</h3>
+      <p>One-time payment. Credits never expire. Processed securely by Stripe.</p>
+      <div class="pricing-grid">
+
+        <div class="plan">
+          <div class="plan-name">STARTER</div>
+          <div class="plan-price">$4<span>.99</span></div>
+          <div class="plan-credits">500 Credits</div>
+          <div class="plan-desc">~500 chat calls or 100 images</div>
+          <ul>
+            <li>All AI models</li>
+            <li>Image generation</li>
+            <li>No expiry</li>
+          </ul>
+          <button class="btn-buy outline" onclick="buyPkg('starter')">Buy Starter</button>
+        </div>
+
+        <div class="plan popular">
+          <div class="plan-badge">MOST POPULAR</div>
+          <div class="plan-name">PRO</div>
+          <div class="plan-price">$14<span>.99</span></div>
+          <div class="plan-credits">2,000 Credits</div>
+          <div class="plan-desc">~2000 chat calls or 400 images</div>
+          <ul>
+            <li>All AI models</li>
+            <li>Image generation</li>
+            <li>Priority support</li>
+          </ul>
+          <button class="btn-buy filled" onclick="buyPkg('pro')">Buy Pro</button>
+        </div>
+
+        <div class="plan">
+          <div class="plan-name">ENTERPRISE</div>
+          <div class="plan-price">$39<span>.99</span></div>
+          <div class="plan-credits">6,000 Credits</div>
+          <div class="plan-desc">~6000 chat calls or 1200 images</div>
+          <ul>
+            <li>All AI models</li>
+            <li>Image generation</li>
+            <li>Best value (33% off)</li>
+          </ul>
+          <button class="btn-buy outline" onclick="buyPkg('enterprise')">Buy Enterprise</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- QUICK START -->
+    <div class="card">
+      <h3>🚀 Quick Start</h3>
+      <p>Two endpoints, one API key</p>
+
+      <div class="code"><pre><span class="c">// Chat — 1 credit per request</span>
+<span class="k">fetch</span>(<span class="s">'https://my-webxyu.vercel.app/api/chat'</span>, {
+  method: <span class="s">'POST'</span>,
+  headers: {
+    <span class="s">'Content-Type'</span>: <span class="s">'application/json'</span>,
+    <span class="s">'x-api-key'</span>: <span class="s">'YOUR_API_KEY_HERE'</span>
+  },
+  body: JSON.stringify({ message: <span class="s">'Hello IlyassAI!'</span> })
+})</pre></div>
+
+      <div class="code"><pre><span class="c">// Image Generation — 5 credits per request</span>
+<span class="k">fetch</span>(<span class="s">'https://my-webxyu.vercel.app/api/image'</span>, {
+  method: <span class="s">'POST'</span>,
+  headers: {
+    <span class="s">'Content-Type'</span>: <span class="s">'application/json'</span>,
+    <span class="s">'x-api-key'</span>: <span class="s">'YOUR_API_KEY_HERE'</span>
+  },
+  body: JSON.stringify({ prompt: <span class="s">'A futuristic city at night'</span> })
+})</pre></div>
+
+      <div class="ep-list">
+        <div class="ep">
+          <div class="ep-l">
+            <span class="method post">POST</span>
+            <div><div class="ep-path">/api/chat</div><div class="ep-desc">Groq / Gemini / OpenRouter — auto fallback</div></div>
+          </div>
+          <span class="ep-cost">1 credit</span>
+        </div>
+        <div class="ep">
+          <div class="ep-l">
+            <span class="method post">POST</span>
+            <div><div class="ep-path">/api/image</div><div class="ep-desc">Pollinations.ai image generation</div></div>
+          </div>
+          <span class="ep-cost">5 credits</span>
+        </div>
+        <div class="ep">
+          <div class="ep-l">
+            <span class="method get">GET</span>
+            <div><div class="ep-path">/api/models</div><div class="ep-desc">List available AI models</div></div>
+          </div>
+          <span class="ep-cost">Free</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ⚠️ IMPORTANT: Replace appId with your real Firebase Web App ID from Firebase Console
+const cfg = {
+  apiKey:            "AIzaSyDWch9gK12sGD7awxmRibU6jBspd-tjr6E",
+  authDomain:        "ilyassagentai.firebaseapp.com",
+  projectId:         "ilyassagentai",
+  storageBucket:     "ilyassagentai.firebasestorage.app",
+  messagingSenderId: "1070041614552",
+  appId:             "REPLACE_WITH_YOUR_WEB_APP_ID"
+};
+
+const app  = initializeApp(cfg);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+let uid = null, apiKey = null, visible = false;
+
+// ---- KEY GEN ----
+const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+function genKey(){ let k="sk_live_"; for(let i=0;i<32;i++) k+=chars[Math.floor(Math.random()*chars.length)]; return k; }
+function mask(k){ return k ? k.slice(0,10)+"•".repeat(k.length-14)+k.slice(-4) : "—"; }
+
+// ---- TOAST ----
+function toast(msg, type="info"){
+  const colors={info:"#141420",success:"#0d3a22",error:"#2a0d0d"};
+  const t=document.createElement("div");
+  t.className="toast"; t.textContent=msg;
+  t.style.background=colors[type]||colors.info;
+  document.body.appendChild(t);
+  setTimeout(()=>t.style.opacity=1,10);
+  setTimeout(()=>{t.style.opacity=0;setTimeout(()=>t.remove(),300)},3500);
+}
+
+// ---- AUTH STATE ----
+onAuthStateChanged(auth, async (user) => {
+  if(user){
+    uid = user.uid;
+    document.getElementById("authOverlay").style.display="none";
+    document.getElementById("main").style.display="block";
+    document.getElementById("navEmail").textContent=user.email;
+    await loadData(user);
+  } else {
+    document.getElementById("authOverlay").style.display="flex";
+    document.getElementById("main").style.display="none";
+    uid=null; apiKey=null;
+  }
+});
+
+async function loadData(user){
+  const ref  = doc(db,"users",user.uid);
+  let snap   = await getDoc(ref);
+  if(!snap.exists() || !snap.data().apiKey){
+    const k = genKey();
+    await setDoc(ref,{ apiKey:k, email:user.email, createdAt:new Date().toISOString(), credits:1000, apiCalls:0 },{merge:true});
+    snap = await getDoc(ref);
+  }
+  const d = snap.data();
+  apiKey = d.apiKey;
+  document.getElementById("sCredits").textContent = d.credits??1000;
+  document.getElementById("sCalls").textContent   = d.apiCalls??0;
+  document.getElementById("sJoined").textContent  = d.createdAt ? new Date(d.createdAt).toLocaleDateString("en-US",{month:"short",year:"numeric"}) : "—";
+  document.getElementById("keyTxt").textContent   = mask(apiKey);
+}
+
+// ---- GLOBALS ----
+window._tab="login";
+window.swTab = m => {
+  window._tab=m;
+  document.getElementById("tLogin").classList.toggle("active",m==="login");
+  document.getElementById("tSignup").classList.toggle("active",m==="signup");
+};
+window.doAuth = async () => {
+  const e=document.getElementById("aEmail").value.trim();
+  const p=document.getElementById("aPass").value.trim();
+  if(!e||!p){toast("❌ Fill all fields","error");return;}
+  try{
+    if(window._tab==="signup"){ await createUserWithEmailAndPassword(auth,e,p); toast("🎉 Account created! 1000 free credits added","success"); }
+    else { await signInWithEmailAndPassword(auth,e,p); toast("🔥 Welcome back!","success"); }
+  }catch(err){toast("❌ "+err.message,"error");}
+};
+window.doLogout = () => signOut(auth).then(()=>toast("👋 Logged out"));
+window.toggleKey = () => {
+  visible=!visible;
+  document.getElementById("keyTxt").textContent = visible ? apiKey : mask(apiKey);
+};
+window.copyKey = () => {
+  if(!apiKey)return;
+  navigator.clipboard.writeText(apiKey).then(()=>toast("✅ Copied to clipboard!","success"));
+};
+window.regenKey = async () => {
+  if(!uid)return;
+  if(!confirm("Generate a new key? Your current key will stop working immediately."))return;
+  const k=genKey();
+  await updateDoc(doc(db,"users",uid),{apiKey:k});
+  apiKey=k; visible=false;
+  document.getElementById("keyTxt").textContent=mask(k);
+  toast("🔑 New key generated!","success");
+};
+window.buyPkg = async (pkg) => {
+  if(!uid){ toast("❌ Please login first","error"); return; }
+  const user = auth.currentUser;
+  toast("⏳ Opening Stripe checkout...");
+  try {
+    const r = await fetch("/api/create-checkout", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ pkg, userId: uid, email: user?.email })
     });
+    const data = await r.json();
+    if(data.url) window.location.href = data.url;
+    else toast("❌ "+(data.error||"Checkout failed"),"error");
+  } catch(e) {
+    toast("❌ "+e.message,"error");
+  }
+};
+</script>
 
-    async function loadDashboard() {
-      try {
-        // Load API key from Firebase
-        const apiKey = await getOrCreateAPIKeyFirebase();
-        document.getElementById('apiKeyValue').textContent = apiKey;
-        window.currentAPIKey = apiKey;
-
-        // Load user data (credits) from Firebase
-        const userData = await getUserData();
-        if (userData) {
-          document.getElementById('creditsValue').textContent = (userData.credits || 0).toLocaleString();
-        }
-
-        // Load usage logs (Optional: can still use existing API if needed)
-        // const usageLogs = await API.getUserUsageLogs(10);
-        // loadUsageTable(usageLogs);
-        
-        document.getElementById('callsValue').textContent = "0";
-        document.getElementById('tokensValue').textContent = "0";
-
-        showMessage('Dashboard loaded successfully!', 'success');
-      } catch (error) {
-        console.error('Error loading dashboard:', error);
-        if (error.message === 'User not logged in') {
-          showMessage('Please sign in to access the API Dashboard', 'error');
-          setTimeout(() => window.location.href = 'auth.html', 2000);
-        } else {
-          showMessage(`Error: ${error.message}`, 'error');
-        }
-      }
-    }
-
-    function loadUsageTable(logs) {
-      const tbody = document.getElementById('usageTableBody');
-      
-      if (logs.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 40px; color: #666;">No usage data yet</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = logs.map(log => `
-        <tr>
-          <td>${new Date(log.createdAt).toLocaleDateString()}</td>
-          <td><code style="color: #ff6b35; font-size: 12px;">${log.endpoint}</code></td>
-          <td>${log.tokensUsed}</td>
-          <td><span class="status-badge status-success">Success</span></td>
-        </tr>
-      `).join('');
-    }
-
-    function loadStats(logs) {
-      const callsCount = logs.length;
-      const tokensTotal = logs.reduce((sum, log) => sum + (log.tokensUsed || 0), 0);
-
-      document.getElementById('callsValue').textContent = callsCount;
-      document.getElementById('tokensValue').textContent = tokensTotal.toLocaleString();
-    }
-
-    window.copyAPIKey = function() {
-      if (window.currentAPIKey) {
-        API.copyAPIKeyToClipboard(window.currentAPIKey);
-        showMessage('API key copied to clipboard!', 'success');
-      }
-    };
-
-    window.buyCredits = async function(packageType) {
-      try {
-        const returnUrl = window.location.href;
-        const checkoutUrl = await API.createCheckoutSession(packageType, returnUrl);
-        
-        if (checkoutUrl) {
-          window.location.href = checkoutUrl;
-        } else {
-          showMessage('Failed to create checkout session', 'error');
-        }
-      } catch (error) {
-        console.error('Error buying credits:', error);
-        showMessage(`Error: ${error.message}`, 'error');
-      }
-    };
-
-    window.refreshDashboard = async function() {
-      document.getElementById('messageContainer').innerHTML = '';
-      await loadDashboard();
-    };
-
-    window.goBack = function() {
-      window.history.back();
-    };
-
-    function showMessage(message, type) {
-      const container = document.getElementById('messageContainer');
-      const div = document.createElement('div');
-      div.className = type;
-      div.textContent = message;
-      container.innerHTML = '';
-      container.appendChild(div);
-
-      if (type === 'success') {
-        setTimeout(() => {
-          div.remove();
-        }, 3000);
-      }
-    }
-  </script>
 </body>
 </html>
