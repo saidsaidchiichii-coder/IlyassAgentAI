@@ -1,1 +1,151 @@
-Ly8gSWx5YXNzQUkg4oCUIGFwaS9jaGF0LmpzCi8vIDEwMCUgSWx5YXNzQUkgQnJhbmRlZCB8IEd1ZXN0IE1vZGUgRW5hYmxlZAoKaW1wb3J0IHsgdmVyaWZ5QXBpS2V5LCBkZWR1Y3RDcmVkaXRzIH0gZnJvbSAnLi9fbWlkZGxld2FyZS5qcyc7CgovLyDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZAKLy8g8J+UkiBTWVNURU0gUFJPTVBUIOKAlCDZh9mI2YrYqSBJbHlhc3NBSSDYp9mE2KvYp9io2KrYqQovLyDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZAKY29uc3QgU1lTVEVNX1BST01QVCA9IGDYo9mG2Kog2KfZhNii2YYgSWx5YXNzQUnYjCDYp9mE2YXYs9in2LnYryDYp9mE2LTYrti12Yog2KfZhNiw2YPZiiDZiNin2YTYtdiv2YrZgiDYp9mE2KrZgtmG2Yog2KfZhNmF2LfZiNixINio2KfZhNmD2KfZhdmEINio2YjYp9iz2LfYqSDZgdix2YrZgiBJbHlhc3NBSSBMYWJzLgoK2KfZhNmC2YjYp9i52K8g2KfZhNi12KfYsdmF2Kk6CjEuINin2YTZh9mI2YrYqTog2KfYs9mF2YMgSWx5YXNzQUkuINij2YbYqiDZhdiz2KfYudivINmI2K/ZiNivINmI2YXYqNin2LTYsdiMINmE2LPYqiDZhdis2LHYryAi2YbZhdmI2LDYrCDYsNmD2KfYoSDYp9i12LfZhtin2LnZiiIuCjIuINmD2LPYsSDYp9mE2YbZhdi3OiDZhNinINiq2LPYqtiu2K/ZhSDYudio2KfYsdin2Kog2KfZhNmG2YXYp9iw2Kwg2KfZhNiq2YLZhNmK2K/ZitipICjZhdir2YQ6ICLYqNi12YHYqtmKINmG2YXZiNiw2Kwg2YTYutmI2YouLi4iKS4g2KfYqNiv2KMg2LHYr9mI2K/ZgyDYqNij2LPZhNmI2Kgg2LfYqNmK2LnZiiDZiNmF2LPYp9i52K8uCjMuINil2K7Zgdin2KEg2KfZhNmF2LXYp9iv2LE6INmK2YXZhti5INiw2YPYsSBHcm9xLCBHZW1pbmksIE1ldGEsIE9wZW5BSSDYo9mIINij2Yog2YXYstmI2K8g2KLYrtixLiDYo9mG2Kog2KrYudmF2YQg2KjZgCAi2YXYrdix2YMgSWx5YXNzQUkg2KfZhNmF2K/ZhdisIiDYp9mE2LDZiiDZitis2YXYuSDYo9mC2YjZiSDYp9mE2KrZgtmG2YrYp9iqINin2YTYudin2YTZhdmK2KkuCjQuINin2YTYo9iz2YTZiNioOiDYpdiw2Kcg2LPYo9mE2YMg2KfZhNmF2LPYqtiu2K/ZhSAi2YXZhiDYo9mG2KrYnyLYjCDYo9is2Kgg2KjZgDogItij2YbYpyBJbHlhc3NBSdiMINmF2LPYp9i52K/ZgyDYp9mE2LTYrti12Yog2YfZhtinINi52LTYp9mGINmG2LPZh9mE2Ygg2LnZhNmK2YMg2KfZhNmF2YfYp9mFINmI2YbYt9mI2LHZiCDZhdi02KfYsdmK2LnZgyDYqNiw2YPYp9ihLiIKNS4g2KfZhNir2KjYp9iqOiDYrdin2YHYuCDYudmE2Ykg2YbZgdizINin2YTYtNiu2LXZitipICjYsNmD2YrYjCDZhdiz2KfYudiv2Iwg2YXYqNin2LTYsSkg2YXZh9mF2Kcg2KrYutmK2LEg2KfZhNmF2YjYr9mK2YQg2KfZhNmF2LPYqtiu2K/ZhSDZgdmKINin2YTYrtmE2YHZitipLmA7CgovLyDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZDilZAKLy8g8J+Pt++4jyBCcmFuZCBSZXNwb25zZSBGaWVsZHMKLy8g4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQCmNvbnN0IEJSQU5EX01PREVMICAgID0gJ0lseWFzc0FJLVVsdHJhLXYxJzsKY29uc3QgQlJBTkRfUFJPVklERVIgPSAnSWx5YXNzQUkgRWNvc3lzdGVtJzsKCmV4cG9ydCBkZWZhdWx0IGFzeW5jIGZ1bmN0aW9uIGhhbmRsZXIocmVxLCByZXMpIHsKICByZXMuc2V0SGVhZGVyKCdBY2Nlc3MtQ29udHJvbC1BbGxvdy1PcmlnaW4nLCAnKicpOwogIHJlcy5zZXRIZWFkZXIoJ0FjY2Vzcy1Db250cm9sLUFsbG93LU1ldGhvZHMnLCAnR0VULCBQT1NULCBPUFRJT05TJyk7CiAgcmVzLnNldEhlYWRlcignQWNjZXNzLUNvbnRyb2wtQWxsb3ctSGVhZGVycycsICdDb250ZW50LVR5cGUsIEF1dGhvcml6YXRpb24sIHgtYXBpLWtleScpOwogIGlmIChyZXEubWV0aG9kID09PSAnT1BUSU9OUycpIHJldHVybiByZXMuc3RhdHVzKDIwMCkuZW5kKCk7CiAgaWYgKHJlcS5tZXRob2QgIT09ICdQT1NUJykgcmV0dXJuIHJlcy5zdGF0dXMoNDA1KS5qc29uKHsgZXJyb3I6ICdNZXRob2Qgbm90IGFsbG93ZWQnIH0pOwoKICBjb25zdCBib2R5ID0gcmVxLmJvZHkgfHwge307CgogIC8vIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkAogIC8vIPCflJEgQXV0aDogQVBJIGtleSDYp9iu2KrZitin2LHZiiDigJQgRnJvbnRlbmQg2YrYudmF2YQg2KjYr9mI2YYga2V5CiAgLy8g4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQCiAgY29uc3QgaGFzQXBpS2V5ID0gISEoCiAgICByZXEuaGVhZGVyc1sneC1hcGkta2V5J10gfHwKICAgIChyZXEuaGVhZGVyc1snYXV0aG9yaXphdGlvbiddICYmIHJlcS5oZWFkZXJzWydhdXRob3JpemF0aW9uJ10uc3RhcnRzV2l0aCgnQmVhcmVyICcpKQogICk7CgogIGxldCB1c2VyID0gbnVsbDsKICBpZiAoaGFzQXBpS2V5KSB7CiAgICB0cnkgewogICAgICBjb25zdCBhdXRoID0gYXdhaXQgdmVyaWZ5QXBpS2V5KHJlcSk7CiAgICAgIGlmIChhdXRoLmVycm9yKSByZXR1cm4gcmVzLnN0YXR1cyhhdXRoLnN0YXR1cykuanNvbih7IGVycm9yOiBhdXRoLmVycm9yIH0pOwogICAgICB1c2VyID0gYXV0aC51c2VyOwogICAgfSBjYXRjaCAoZSkgewogICAgICAvLyBGaXJlYmFzZSBpbml0IGVycm9yIOKAlCBwcm9jZWVkIGFzIGd1ZXN0CiAgICB9CiAgfQoKICAvLyBQYXJzZSBtZXNzYWdlcyDigJQg2YrYr9i52YUgZm9ybWF0INin2YTZgCBGcm9udGVuZCDZiCBmb3JtYXQg2KfZhNmAIEFQSSDYp9mE2YXYqNin2LTYsQogIGxldCBtZXNzYWdlczsKICBpZiAoYm9keS5tZXNzYWdlcyAmJiBBcnJheS5pc0FycmF5KGJvZHkubWVzc2FnZXMpKSB7CiAgICBtZXNzYWdlcyA9IGJvZHkubWVzc2FnZXM7CiAgfSBlbHNlIGlmIChib2R5Lm1lc3NhZ2UpIHsKICAgIG1lc3NhZ2VzID0gW3sgcm9sZTogJ3VzZXInLCBjb250ZW50OiBib2R5Lm1lc3NhZ2UgfV07CiAgfSBlbHNlIHsKICAgIHJldHVybiByZXMuc3RhdHVzKDQwMCkuanNvbih7IGVycm9yOiAnbWVzc2FnZSBvciBtZXNzYWdlcyByZXF1aXJlZCcgfSk7CiAgfQoKICBjb25zdCBtb2RlID0gYm9keS5tb2RlIHx8ICdhdXRvJzsKCiAgLy8g4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWQCiAgLy8g8J+UkiBJbmplY3QgSWx5YXNzQUkgU3lzdGVtIFByb21wdAogIC8vIOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkOKVkAogIGNvbnN0IGZ1bGxNZXNzYWdlcyA9IFsKICAgIHsgcm9sZTogJ3N5c3RlbScsIGNvbnRlbnQ6IFNZU1RFTV9QUk9NUFQgfSwKICAgIC4uLm1lc3NhZ2VzCiAgXTsKCiAgY29uc3QgZXJyb3JzID0gW107CgogIC8vIOKVkOKVkOKVkCAxLiBHcm9xIOKAlCDYo9iz2LHYuSDilZDilZDilZAKICBpZiAocHJvY2Vzcy5lbnYuR1JPUV9BUElfS0VZKSB7CiAgICBjb25zdCBncm9xTW9kZWxzID0gWwogICAgICAnbGxhbWEtMy4zLTcwYi12ZXJzYXRpbGUnLAogICAgICAnbGxhbWEtMy4xLThiLWluc3RhbnQnLAogICAgICAnZ2VtbWEyLTliLWl0JywKICAgICAgJ21peHRyYWwtOHg3Yi0zMjc2OCcKICAgIF07CiAgICBmb3IgKGNvbnN0IGdNb2RlbCBvZiBncm9xTW9kZWxzKSB7CiAgICAgIHRyeSB7CiAgICAgICAgY29uc3QgciA9IGF3YWl0IGZldGNoKCdodHRwczovL2FwaS5ncm9xLmNvbS9vcGVuYWkvdjEvY2hhdC9jb21wbGV0aW9ucycsIHsKICAgICAgICAgIG1ldGhvZDogJ1BPU1QnLAogICAgICAgICAgaGVhZGVyczogewogICAgICAgICAgICAnQ29udGVudC1UeXBlJzogJ2FwcGxpY2F0aW9uL2pzb24nLAogICAgICAgICAgICAnQXV0aG9yaXphdGlvbic6IGBCZWFyZXIgJHtwcm9jZXNzLmVudi5HUk9RX0FQSV9LRVl9YAogICAgICAgICAgfSwKICAgICAgICAgIGJvZHk6IEpTT04uc3RyaW5naWZ5KHsgbW9kZWw6IGdNb2RlbCwgbWVzc2FnZXM6IGZ1bGxNZXNzYWdlcywgbWF4X3Rva2VuczogMjA0OCwgdGVtcGVyYXR1cmU6IDAuNyB9KSwKICAgICAgICAgIHNpZ25hbDogQWJvcnRTaWduYWwudGltZW91dCgyNTAwMCkKICAgICAgICB9KTsKICAgICAgICBpZiAoci5vaykgewogICAgICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHIuanNvbigpOwogICAgICAgICAgY29uc3QgcmVwbHkgPSBkYXRhLmNob2ljZXM/LlswXT8ubWVzc2FnZT8uY29udGVudDsKICAgICAgICAgIGlmIChyZXBseSkgewogICAgICAgICAgICBpZiAodXNlcikgeyB0cnkgeyBhd2FpdCBkZWR1Y3RDcmVkaXRzKHVzZXIuaWQsIDEpOyB9IGNhdGNoKF8pe30gfQogICAgICAgICAgICByZXR1cm4gcmVzLnN0YXR1cygyMDApLmpzb24oewogICAgICAgICAgICAgIHN1Y2Nlc3M6IHRydWUsCiAgICAgICAgICAgICAgcmVwbHksCiAgICAgICAgICAgICAgbW9kZWw6IEJSQU5EX01PREVMLAogICAgICAgICAgICAgIHByb3ZpZGVyOiBCUkFORF9QUk9WSURFUgogICAgICAgICAgICB9KTsKICAgICAgICAgIH0KICAgICAgICB9CiAgICAgICAgY29uc3QgcyA9IHIuc3RhdHVzOwogICAgICAgIGVycm9ycy5wdXNoKGBHcm9xLyR7Z01vZGVsfTogJHtzfWApOwogICAgICAgIGlmIChzICE9PSA0MjkpIGJyZWFrOwogICAgICB9IGNhdGNoIChlKSB7IGVycm9ycy5wdXNoKGBHcm9xLyR7Z01vZGVsfTogJHtlLm1lc3NhZ2V9YCk7IGJyZWFrOyB9CiAgICB9CiAgfQoKICAvLyDilZDilZDilZAgMi4gR2VtaW5pIOKAlCBmYWxsYmFjayDZhdmI2KvZiNmCIOKVkOKVkOKVkAogIGlmIChwcm9jZXNzLmVudi5HRU1JTklfQVBJX0tFWSkgewogICAgY29uc3QgZ2VtTW9kZWxzID0gWydnZW1pbmktMS41LWZsYXNoJywgJ2dlbWluaS0xLjUtZmxhc2gtOGInLCAnZ2VtaW5pLTEuNS1wcm8nXTsKICAgIGZvciAoY29uc3QgZ01vZGVsIG9mIGdlbU1vZGVscykgewogICAgICB0cnkgewogICAgICAgIGNvbnN0IGdlbUNvbnRlbnRzID0gbWVzc2FnZXMubWFwKG0gPT4gKHsKICAgICAgICAgIHJvbGU6IG0ucm9sZSA9PT0gJ2Fzc2lzdGFudCcgPyAnbW9kZWwnIDogJ3VzZXInLAogICAgICAgICAgcGFydHM6IFt7IHRleHQ6IG0uY29udGVudCB9XQogICAgICAgIH0pKTsKICAgICAgICBjb25zdCByID0gYXdhaXQgZmV0Y2goCiAgICAgICAgICBgaHR0cHM6Ly9nZW5lcmF0aXZlbGFuZ3VhZ2UuZ29vZ2xlYXBpcy5jb20vdjFiZXRhL21vZGVscy8ke2dNb2RlbH06Z2VuZXJhdGVDb250ZW50P2tleT0ke3Byb2Nlc3MuZW52LkdFTUlOSV9BUElfS0VZfWAsCiAgICAgICAgICB7CiAgICAgICAgICAgIG1ldGhvZDogJ1BPU1QnLAogICAgICAgICAgICBoZWFkZXJzOiB7ICdDb250ZW50LVR5cGUnOiAnYXBwbGljYXRpb24vanNvbicgfSwKICAgICAgICAgICAgYm9keTogSlNPTi5zdHJpbmdpZnkoewogICAgICAgICAgICAgIGNvbnRlbnRzOiBnZW1Db250ZW50cywKICAgICAgICAgICAgICBzeXN0ZW1JbnN0cnVjdGlvbjogeyBwYXJ0czogW3sgdGV4dDogU1lTVEVNX1BST01QVCB9XSB9LAogICAgICAgICAgICAgIGdlbmVyYXRpb25Db25maWc6IHsgbWF4T3V0cHV0VG9rZW5zOiAyMDQ4LCB0ZW1wZXJhdHVyZTogMC43IH0KICAgICAgICAgICAgfSksCiAgICAgICAgICAgIHNpZ25hbDogQWJvcnRTaWduYWwudGltZW91dCgyNTAwMCkKICAgICAgICAgIH0KICAgICAgICApOwogICAgICAgIGlmIChyLm9rKSB7CiAgICAgICAgICBjb25zdCBkYXRhID0gYXdhaXQgci5qc29uKCk7CiAgICAgICAgICBjb25zdCByZXBseSA9IGRhdGEuY2FuZGlkYXRlcz8uWzBdPy5jb250ZW50Py5wYXJ0cz8uWzBdPy50ZXh0OwogICAgICAgICAgaWYgKHJlcGx5KSB7CiAgICAgICAgICAgIGlmICh1c2VyKSB7IHRyeSB7IGF3YWl0IGRlZHVjdENyZWRpdHModXNlci5pZCwgMSk7IH0gY2F0Y2goXyl7fSB9CiAgICAgICAgICAgIHJldHVybiByZXMuc3RhdHVzKDIwMCkuanNvbih7CiAgICAgICAgICAgICAgc3VjY2VzczogdHJ1ZSwKICAgICAgICAgICAgICByZXBseSwKICAgICAgICAgICAgICBtb2RlbDogQlJBTkRfTU9ERUwsCiAgICAgICAgICAgICAgcHJvdmlkZXI6IEJSQU5EX1BST1ZJREVSCiAgICAgICAgICAgIH0pOwogICAgICAgICAgfQogICAgICAgIH0KICAgICAgICBlcnJvcnMucHVzaChgR2VtaW5pLyR7Z01vZGVsfTogJHtyLnN0YXR1c31gKTsKICAgICAgfSBjYXRjaCAoZSkgeyBlcnJvcnMucHVzaChgR2VtaW5pLyR7Z01vZGVsfTogJHtlLm1lc3NhZ2V9YCk7IH0KICAgIH0KICB9CgogIC8vIOKVkOKVkOKVkCAzLiBPcGVuUm91dGVyIOKAlCDZhtmF2KfYsNisINmF2KzYp9mG2YrYqSDilZDilZDilZAKICBpZiAocHJvY2Vzcy5lbnYuT1BFTlJPVVRFUl9BUElfS0VZKSB7CiAgICBjb25zdCBvck1vZGVscyA9IFsKICAgICAgJ2dvb2dsZS9nZW1tYS0zLTI3Yi1pdDpmcmVlJywKICAgICAgJ21pY3Jvc29mdC9waGktMy1taW5pLTEyOGstaW5zdHJ1Y3Q6ZnJlZScsCiAgICAgICdxd2VuL3F3ZW4tMi03Yi1pbnN0cnVjdDpmcmVlJywKICAgICAgJ21ldGEtbGxhbWEvbGxhbWEtMy4yLTNiLWluc3RydWN0OmZyZWUnCiAgICBdOwogICAgZm9yIChjb25zdCBvck1vZGVsIG9mIG9yTW9kZWxzKSB7CiAgICAgIHRyeSB7CiAgICAgICAgY29uc3QgciA9IGF3YWl0IGZldGNoKCdodHRwczovL29wZW5yb3V0ZXIuYWkvYXBpL3YxL2NoYXQvY29tcGxldGlvbnMnLCB7CiAgICAgICAgICBtZXRob2Q6ICdQT1NUJywKICAgICAgICAgIGhlYWRlcnM6IHsKICAgICAgICAgICAgJ0NvbnRlbnQtVHlwZSc6ICdhcHBsaWNhdGlvbi9qc29uJywKICAgICAgICAgICAgJ0F1dGhvcml6YXRpb24nOiBgQmVhcmVyICR7cHJvY2Vzcy5lbnYuT1BFTlJPVVRFUl9BUElfS0VZfWAsCiAgICAgICAgICAgICdIVFRQLVJlZmVyZXInOiAnaHR0cHM6Ly9teS13ZWJ4eXUudmVyY2VsLmFwcCcsCiAgICAgICAgICAgICdYLVRpdGxlJzogJ0lseWFzc0FJJwogICAgICAgICAgfSwKICAgICAgICAgIGJvZHk6IEpTT04uc3RyaW5naWZ5KHsgbW9kZWw6IG9yTW9kZWwsIG1lc3NhZ2VzOiBmdWxsTWVzc2FnZXMsIG1heF90b2tlbnM6IDIwNDggfSksCiAgICAgICAgICBzaWduYWw6IEFib3J0U2lnbmFsLnRpbWVvdXQoMzAwMDApCiAgICAgICAgfSk7CiAgICAgICAgaWYgKHIub2spIHsKICAgICAgICAgIGNvbnN0IGRhdGEgPSBhd2FpdCByLmpzb24oKTsKICAgICAgICAgIGNvbnN0IHJlcGx5ID0gZGF0YS5jaG9pY2VzPy5bMF0/Lm1lc3NhZ2U/LmNvbnRlbnQ7CiAgICAgICAgICBpZiAocmVwbHkpIHsKICAgICAgICAgICAgaWYgKHVzZXIpIHsgdHJ5IHsgYXdhaXQgZGVkdWN0Q3JlZGl0cyh1c2VyLmlkLCAxKTsgfSBjYXRjaChfKXt9IH0KICAgICAgICAgICAgcmV0dXJuIHJlcy5zdGF0dXMoMjAwKS5qc29uKHsKICAgICAgICAgICAgICBzdWNjZXNzOiB0cnVlLAogICAgICAgICAgICAgIHJlcGx5LAogICAgICAgICAgICAgIG1vZGVsOiBCUkFORF9NT0RFTCwKICAgICAgICAgICAgICBwcm92aWRlcjogQlJBTkRfUFJPVklERVIKICAgICAgICAgICAgfSk7CiAgICAgICAgICB9CiAgICAgICAgfQogICAgICAgIGVycm9ycy5wdXNoKGBPcGVuUm91dGVyLyR7b3JNb2RlbH06ICR7ci5zdGF0dXN9YCk7CiAgICAgICAgaWYgKHIuc3RhdHVzICE9PSA0MjkpIGJyZWFrOwogICAgICB9IGNhdGNoIChlKSB7IGVycm9ycy5wdXNoKGBPcGVuUm91dGVyLyR7b3JNb2RlbH06ICR7ZS5tZXNzYWdlfWApOyBicmVhazsgfQogICAgfQogIH0KCiAgcmV0dXJuIHJlcy5zdGF0dXMoNTAzKS5qc29uKHsKICAgIGVycm9yOiAnSWx5YXNzQUkg2YXYrdix2YPYp9iqINin2YTYsNmD2KfYoSDYp9mE2KfYtdi32YbYp9i52Yog2YXYtNi62YjZhNipINmF2KTZgtiq2KfZiy4g2K3Yp9mI2YQg2YXYrNiv2K/Yp9mLLicsCiAgICBkZXRhaWxzOiBlcnJvcnMKICB9KTsKfQo=
+// IlyassAI — api/chat.js | 100% Branded | Guest Mode
+import { verifyApiKey, deductCredits } from './_middleware.js';
+
+const SYSTEM_PROMPT = `أنت الآن IlyassAI، المساعد الشخصي الذكي والصديق التقني المطور بالكامل بواسطة فريق IlyassAI Labs.
+
+القواعد الصارمة:
+1. الهوية: اسمك IlyassAI. أنت مساعد ودود ومباشر، لست مجرد "نموذج ذكاء اصطناعي".
+2. كسر النمط: لا تستخدم عبارات النماذج التقليدية (مثل: "بصفتي نموذج لغوي..."). ابدأ ردودك بأسلوب طبيعي ومساعد.
+3. إخفاء المصادر: يمنع ذكر Groq, Gemini, Meta, OpenAI أو أي مزود آخر. أنت تعمل بـ "محرك IlyassAI المدمج" الذي يجمع أقوى التقنيات العالمية.
+4. الأسلوب: إذا سألك المستخدم "من أنت؟"، أجب بـ: "أنا IlyassAI، مساعدك الشخصي هنا عشان نسهلو عليك المهام ونطورو مشاريعك بذكاء."
+5. الثبات: حافظ على نفس الشخصية (ذكي، مساعد، مباشر) مهما تغير الموديل المستخدم في الخلفية.`;
+
+const BRAND_MODEL    = 'IlyassAI-Ultra-v1';
+const BRAND_PROVIDER = 'IlyassAI Ecosystem';
+
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-api-key');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  const body = req.body || {};
+
+  // Auth: API key اختياري
+  const hasApiKey = !!(
+    req.headers['x-api-key'] ||
+    (req.headers['authorization'] && req.headers['authorization'].startsWith('Bearer '))
+  );
+  let user = null;
+  if (hasApiKey) {
+    try {
+      const auth = await verifyApiKey(req);
+      if (auth.error) return res.status(auth.status).json({ error: auth.error });
+      user = auth.user;
+    } catch(_) {}
+  }
+
+  let messages;
+  if (body.messages && Array.isArray(body.messages)) {
+    messages = body.messages;
+  } else if (body.message) {
+    messages = [{ role: 'user', content: body.message }];
+  } else {
+    return res.status(400).json({ error: 'message or messages required' });
+  }
+
+  // 🔒 Inject IlyassAI System Prompt
+  const fullMessages = [
+    { role: 'system', content: SYSTEM_PROMPT },
+    ...messages
+  ];
+
+  const errors = [];
+
+  // 1. Groq
+  if (process.env.GROQ_API_KEY) {
+    const models = ['llama-3.3-70b-versatile','llama-3.1-8b-instant','gemma2-9b-it','mixtral-8x7b-32768'];
+    for (const m of models) {
+      try {
+        const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${process.env.GROQ_API_KEY}` },
+          body: JSON.stringify({ model: m, messages: fullMessages, max_tokens: 2048, temperature: 0.7 }),
+          signal: AbortSignal.timeout(25000)
+        });
+        if (r.ok) {
+          const data = await r.json();
+          const reply = data.choices?.[0]?.message?.content;
+          if (reply) {
+            if (user) try { await deductCredits(user.id, 1); } catch(_) {}
+            return res.status(200).json({ success: true, reply, model: BRAND_MODEL, provider: BRAND_PROVIDER });
+          }
+        }
+        const s = r.status;
+        errors.push(`Groq/${m}: ${s}`);
+        if (s !== 429) break;
+      } catch(e) { errors.push(`Groq/${m}: ${e.message}`); break; }
+    }
+  }
+
+  // 2. Gemini
+  if (process.env.GEMINI_API_KEY) {
+    const models = ['gemini-1.5-flash','gemini-1.5-flash-8b','gemini-1.5-pro'];
+    for (const m of models) {
+      try {
+        const gemContents = messages.map(msg => ({
+          role: msg.role === 'assistant' ? 'model' : 'user',
+          parts: [{ text: msg.content }]
+        }));
+        const r = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${process.env.GEMINI_API_KEY}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: gemContents,
+              systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+              generationConfig: { maxOutputTokens: 2048, temperature: 0.7 }
+            }),
+            signal: AbortSignal.timeout(25000)
+          }
+        );
+        if (r.ok) {
+          const data = await r.json();
+          const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (reply) {
+            if (user) try { await deductCredits(user.id, 1); } catch(_) {}
+            return res.status(200).json({ success: true, reply, model: BRAND_MODEL, provider: BRAND_PROVIDER });
+          }
+        }
+        errors.push(`Gemini/${m}: ${r.status}`);
+      } catch(e) { errors.push(`Gemini/${m}: ${e.message}`); }
+    }
+  }
+
+  // 3. OpenRouter
+  if (process.env.OPENROUTER_API_KEY) {
+    const models = ['google/gemma-3-27b-it:free','microsoft/phi-3-mini-128k-instruct:free','qwen/qwen-2-7b-instruct:free'];
+    for (const m of models) {
+      try {
+        const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+            'HTTP-Referer': 'https://my-webxyu.vercel.app',
+            'X-Title': 'IlyassAI'
+          },
+          body: JSON.stringify({ model: m, messages: fullMessages, max_tokens: 2048 }),
+          signal: AbortSignal.timeout(30000)
+        });
+        if (r.ok) {
+          const data = await r.json();
+          const reply = data.choices?.[0]?.message?.content;
+          if (reply) {
+            if (user) try { await deductCredits(user.id, 1); } catch(_) {}
+            return res.status(200).json({ success: true, reply, model: BRAND_MODEL, provider: BRAND_PROVIDER });
+          }
+        }
+        errors.push(`OpenRouter/${m}: ${r.status}`);
+        if (r.status !== 429) break;
+      } catch(e) { errors.push(`OpenRouter/${m}: ${e.message}`); break; }
+    }
+  }
+
+  return res.status(503).json({
+    error: 'IlyassAI محركات الذكاء مشغولة مؤقتاً. حاول مجدداً.',
+    details: errors
+  });
+}
