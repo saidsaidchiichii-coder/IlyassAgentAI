@@ -12,29 +12,29 @@
   --surface-2:     #1a1a1a;
   --surface-3:     #242424;
   --surface-4:     #2e2e2e;
-  --border:        rgba(255,255,255,0.06);
-  --border-md:     rgba(255,255,255,0.10);
-  --border-hi:     rgba(255,255,255,0.18);
-  --text:          #ececec;
-  --text-dim:      #8a8f98;
-  --text-muted:    #3e4248;
+  --border:        rgba(255,255,255,0.08);
+  --border-md:     rgba(255,255,255,0.12);
+  --border-hi:     rgba(255,255,255,0.22);
+  --text:          #f9f9f9;
+  --text-dim:      #a1a1aa;
+  --text-muted:    #52525b;
   --accent:        #ff6b35;
-  --accent-dim:    rgba(255,107,53,0.15);
-  --red:           #f87171;
-  --green:         #4ade80;
-  --blue:          #60a5fa;
-  --sidebar-w:     260px;
-  --input-max:     760px;
-  --r-sm:          6px;
-  --r-md:          10px;
-  --r-lg:          14px;
-  --r-xl:          20px;
+  --accent-dim:    rgba(255,107,53,0.12);
+  --red:           #ef4444;
+  --green:         #22c55e;
+  --blue:          #3b82f6;
+  --sidebar-w:     280px;
+  --input-max:     800px;
+  --r-sm:          8px;
+  --r-md:          12px;
+  --r-lg:          16px;
+  --r-xl:          24px;
   --r-full:        9999px;
-  --transition:    0.18s cubic-bezier(0.4,0,0.2,1);
-  --shadow-sm:     0 1px 3px rgba(0,0,0,0.4);
-  --shadow-md:     0 4px 16px rgba(0,0,0,0.5);
-  --shadow-lg:     0 8px 32px rgba(0,0,0,0.6);
-  --shadow-glow:   0 0 20px rgba(255,107,53,0.15);
+  --transition:    0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-sm:     0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md:     0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg:     0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-glow:   0 0 25px rgba(255,107,53,0.1);
 }
 
 [data-theme="light"] {
@@ -61,9 +61,10 @@ html, body { width:100%; height:100%; overflow:hidden; }
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-size: 15px;
-  line-height: 1.65;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -210,9 +211,10 @@ body { display: flex; }
   scrollbar-color: var(--surface-3) transparent;
   transition: opacity var(--transition);
 }
-.sidebar-conversations::-webkit-scrollbar { width: 3px; }
+.sidebar-conversations::-webkit-scrollbar { width: 4px; }
 .sidebar-conversations::-webkit-scrollbar-track { background: transparent; }
-.sidebar-conversations::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 999px; }
+.sidebar-conversations::-webkit-scrollbar-thumb { background: var(--border-md); border-radius: 10px; }
+.sidebar-conversations::-webkit-scrollbar-thumb:hover { background: var(--border-hi); }
 
 .no-conversations {
   color: var(--text-muted);
@@ -246,8 +248,8 @@ body { display: flex; }
   overflow: hidden;
   white-space: nowrap;
 }
-.conv-item:hover { background: var(--surface-2); color: var(--text); }
-.conv-item.active { background: var(--surface-3); color: var(--text); }
+.conv-item:hover { background: var(--surface-2); color: var(--text); transform: translateX(2px); }
+.conv-item.active { background: var(--surface-3); color: var(--text); border-left: 2px solid var(--accent); }
 .conv-item svg { flex-shrink: 0; color: var(--text-muted); }
 .conv-item-text { flex: 1; overflow: hidden; text-overflow: ellipsis; }
 .conv-item-actions {
@@ -435,24 +437,24 @@ body { display: flex; }
 .suggestion-pill {
   display: flex;
   align-items: center;
-  gap: 6px;
-  background: var(--surface);
-  border: 1px solid var(--border-md);
+  gap: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
   color: var(--text-dim);
   cursor: pointer;
-  font-size: 13px;
-  padding: 8px 14px;
-  border-radius: var(--r-full);
-  transition: background var(--transition), border-color var(--transition),
-              color var(--transition), transform var(--transition), box-shadow var(--transition);
+  font-size: 13.5px;
+  padding: 10px 16px;
+  border-radius: var(--r-md);
+  transition: all var(--transition);
   white-space: nowrap;
+  box-shadow: var(--shadow-sm);
 }
 .suggestion-pill:hover {
   background: var(--surface-3);
-  border-color: var(--border-hi);
+  border-color: var(--accent);
   color: var(--text);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 .suggestion-pill svg { flex-shrink: 0; }
 
@@ -533,18 +535,21 @@ body { display: flex; }
 
 .user-bubble {
   background: var(--surface-2);
-  border: 1px solid var(--border-md);
-  border-radius: 18px 18px 4px 18px;
-  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 20px 20px 4px 20px;
+  padding: 12px 18px;
   font-size: 14.5px;
   line-height: 1.6;
   color: var(--text);
-  max-width: 600px;
+  max-width: 650px;
   word-break: break-word;
   box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--transition);
+  transition: all var(--transition);
 }
-.user-bubble:hover { box-shadow: var(--shadow-md); }
+.user-bubble:hover {
+  border-color: var(--border-md);
+  box-shadow: var(--shadow-md);
+}
 
 .ai-bubble {
   font-size: 14.5px;
@@ -867,8 +872,8 @@ body { display: flex; }
   box-shadow: var(--shadow-sm);
 }
 .input-box:focus-within {
-  border-color: var(--border-hi);
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.05), var(--shadow-md);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-dim), var(--shadow-lg);
 }
 
 .input-text-row { padding: 2px 4px; }
@@ -1301,20 +1306,30 @@ body { display: flex; }
 .topbar-tab {
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: var(--text-dim);
   cursor: pointer;
-  padding: 5px 14px;
-  border-radius: var(--r-full);
-  font-size: 13px;
+  padding: 8px 16px;
+  border-radius: var(--r-md);
+  font-size: 14px;
   font-weight: 500;
-  display: flex; align-items: center; gap: 6px;
+  display: flex; align-items: center; gap: 8px;
   transition: all var(--transition);
+  position: relative;
 }
-.topbar-tab:hover { background: var(--surface-2); color: var(--text); }
+.topbar-tab:hover { color: var(--text); background: var(--surface-2); }
 .topbar-tab.active {
-  background: var(--surface-3);
-  color: var(--text);
-  box-shadow: var(--shadow-sm);
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+.topbar-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
 }
 .topbar-tab svg { flex-shrink: 0; }
 
