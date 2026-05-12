@@ -741,53 +741,153 @@
      SETTINGS PANEL
 ════════════════════════════════════════ -->
 <div class="settings-overlay" id="settingsOverlay" onclick="closeSettings()"></div>
-<aside class="settings-panel" id="settingsPanel">
-  <div class="settings-header">
-    <h3>Settings</h3>
-    <button class="settings-close" onclick="closeSettings()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-  </div>
+<div class="settings-modal" id="settingsPanel">
+  <div class="settings-container">
+    <aside class="settings-sidebar">
+      <div class="settings-sidebar-header">
+        <div class="settings-user-info">
+          <div class="settings-user-avatar" id="settingsUserAvatar">G</div>
+          <div class="settings-user-details">
+            <span class="settings-user-name" id="settingsUserName">Guest</span>
+            <span class="settings-user-type">Personal</span>
+          </div>
+        </div>
+      </div>
+      
+      <nav class="settings-nav">
+        <div class="settings-nav-group">
+          <div class="settings-nav-label">Account</div>
+          <button class="settings-nav-item active" onclick="switchSettingsTab('general', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            General
+          </button>
+        </div>
+        
+        <div class="settings-nav-group">
+          <div class="settings-nav-label">Features</div>
+          <button class="settings-nav-item" onclick="switchSettingsTab('connectors', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            Connectors
+          </button>
+        </div>
+      </nav>
+      
+      <div class="settings-sidebar-footer">
+        <button class="settings-nav-item" onclick="window.open('https://help.manus.im', '_blank')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Get help
+        </button>
+      </div>
+    </aside>
+    
+    <main class="settings-content">
+      <button class="settings-modal-close" onclick="closeSettings()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      
+      <div id="settings-tab-general" class="settings-tab-content active">
+        <div class="settings-content-header">
+          <h2>General Settings</h2>
+          <p>Manage your account preferences and appearance.</p>
+        </div>
+        
+        <div class="settings-section">
+          <div class="settings-label">Appearance</div>
+          <div class="settings-row">
+            <span>Theme</span>
+            <div class="theme-pills">
+              <button class="theme-pill active" onclick="setTheme('dark',this)">Dark</button>
+              <button class="theme-pill" onclick="setTheme('light',this)">Light</button>
+            </div>
+          </div>
+        </div>
 
-  <div class="settings-section">
-    <div class="settings-label">Appearance</div>
-    <div class="settings-row">
-      <span>Theme</span>
-      <div class="theme-pills">
-        <button class="theme-pill active" onclick="setTheme('dark',this)">Dark</button>
-        <button class="theme-pill" onclick="setTheme('light',this)">Light</button>
+        <div class="settings-section">
+          <div class="settings-label">Default Mode</div>
+          <div class="settings-row">
+            <span>Response mode</span>
+            <select id="defaultMode" onchange="setDefaultMode(this.value)" class="settings-select">
+              <option value="auto">Auto</option>
+              <option value="fast">Fast</option>
+              <option value="thinking">Think</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-label">Memory</div>
+          <div class="settings-row">
+            <span>Clear all conversations</span>
+            <button class="danger-btn" onclick="clearAllConvs()">Clear</button>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-label">Account</div>
+          <div class="settings-row" id="settingsUserRow">
+            <span id="settingsEmail">Not signed in</span>
+            <button class="auth-action-btn" id="settingsAuthBtn" onclick="showAuthModal('login')">Sign in</button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="settings-tab-connectors" class="settings-tab-content">
+        <div class="settings-content-header">
+          <h2>Connectors</h2>
+          <p>Connect your favorite tools and let IlyassAI work with them.</p>
+        </div>
+        
+        <div class="connectors-grid" id="connectorsGrid">
+          <button class="add-connector-card" onclick="showConnectorPicker()">
+            <div class="add-icon">+</div>
+            <span>Add connectors</span>
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- CONNECTOR PICKER MODAL -->
+<div class="connector-picker-overlay" id="connectorPickerOverlay" onclick="hideConnectorPicker()">
+  <div class="connector-picker-modal" onclick="event.stopPropagation()">
+    <div class="connector-picker-header">
+      <h3>Select a Connector</h3>
+      <button class="picker-close" onclick="hideConnectorPicker()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="connector-options">
+      <div class="connector-option-item" onclick="addConnector('github')">
+        <div class="connector-logo github-logo">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </div>
+        <div class="connector-info">
+          <div class="connector-name">GitHub</div>
+          <div class="connector-desc">Manage repositories and track code changes.</div>
+        </div>
+      </div>
+      <div class="connector-option-item" onclick="addConnector('gmail')">
+        <div class="connector-logo gmail-logo">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L12 9.573l8.073-6.08c1.618-1.214 3.927-.059 3.927 1.964z"/></svg>
+        </div>
+        <div class="connector-info">
+          <div class="connector-name">Gmail</div>
+          <div class="connector-desc">Access and manage your emails.</div>
+        </div>
+      </div>
+      <div class="connector-option-item" onclick="addConnector('calendar')">
+        <div class="connector-logo calendar-logo">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5v-5z"/></svg>
+        </div>
+        <div class="connector-info">
+          <div class="connector-name">Google Calendar</div>
+          <div class="connector-desc">Manage your schedule and events.</div>
+        </div>
       </div>
     </div>
   </div>
-
-  <div class="settings-section">
-    <div class="settings-label">Default Mode</div>
-    <div class="settings-row">
-      <span>Response mode</span>
-      <select id="defaultMode" onchange="setDefaultMode(this.value)" class="settings-select">
-        <option value="auto">Auto</option>
-        <option value="fast">Fast</option>
-        <option value="thinking">Think</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="settings-section">
-    <div class="settings-label">Memory</div>
-    <div class="settings-row">
-      <span>Clear all conversations</span>
-      <button class="danger-btn" onclick="clearAllConvs()">Clear</button>
-    </div>
-  </div>
-
-  <div class="settings-section">
-    <div class="settings-label">Account</div>
-    <div class="settings-row" id="settingsUserRow">
-      <span id="settingsEmail">Not signed in</span>
-      <button class="auth-action-btn" id="settingsAuthBtn" onclick="showAuthModal('login')">Sign in</button>
-    </div>
-  </div>
-</aside>
+</div>
 
 <!-- ════════════════════════════════════════
      MODE POPUP
@@ -1296,6 +1396,93 @@ function openSettings() {
 function closeSettings() {
   document.getElementById('settingsPanel')?.classList.remove('open');
   document.getElementById('settingsOverlay')?.classList.remove('open');
+  hideConnectorPicker();
+}
+
+function switchSettingsTab(tabId, btn) {
+  // Update nav items
+  document.querySelectorAll('.settings-nav-item').forEach(item => item.classList.remove('active'));
+  btn.classList.add('active');
+  
+  // Update content
+  document.querySelectorAll('.settings-tab-content').forEach(content => content.classList.remove('active'));
+  document.getElementById(`settings-tab-${tabId}`).classList.add('active');
+}
+
+function showConnectorPicker() {
+  document.getElementById('connectorPickerOverlay').classList.add('open');
+}
+
+function hideConnectorPicker() {
+  document.getElementById('connectorPickerOverlay').classList.remove('open');
+}
+
+let _connectedPlatforms = [];
+function addConnector(platform) {
+  if (_connectedPlatforms.includes(platform)) {
+    showToast(`${platform.charAt(0).toUpperCase() + platform.slice(1)} is already connected`);
+    hideConnectorPicker();
+    return;
+  }
+  
+  _connectedPlatforms.push(platform);
+  renderConnectors();
+  hideConnectorPicker();
+  showToast(`${platform.charAt(0).toUpperCase() + platform.slice(1)} connected successfully`);
+}
+
+function removeConnector(platform) {
+  _connectedPlatforms = _connectedPlatforms.filter(p => p !== platform);
+  renderConnectors();
+  showToast(`${platform.charAt(0).toUpperCase() + platform.slice(1)} removed`);
+}
+
+function renderConnectors() {
+  const grid = document.getElementById('connectorsGrid');
+  if (!grid) return;
+  
+  // Keep the "Add connectors" card
+  grid.innerHTML = `
+    <button class="add-connector-card" onclick="showConnectorPicker()">
+      <div class="add-icon">+</div>
+      <span>Add connectors</span>
+    </button>
+  `;
+  
+  _connectedPlatforms.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'connector-card';
+    
+    let logoSvg = '';
+    let name = '';
+    let desc = '';
+    
+    if (p === 'github') {
+      name = 'GitHub';
+      desc = 'Manage repositories, track code changes, and collaborate on team projects';
+      logoSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>`;
+    } else if (p === 'gmail') {
+      name = 'Gmail';
+      desc = 'Draft replies, search your inbox, and summarize email threads instantly';
+      logoSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L12 9.573l8.073-6.08c1.618-1.214 3.927-.059 3.927 1.964z"/></svg>`;
+    } else if (p === 'calendar') {
+      name = 'Google Calendar';
+      desc = 'Understand your schedule, manage events, and optimize your time effectively';
+      logoSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5v-5z"/></svg>`;
+    }
+    
+    card.innerHTML = `
+      <div class="connector-card-logo ${p}-logo">${logoSvg}</div>
+      <div class="connector-card-info">
+        <div class="connector-card-name">${name}</div>
+        <div class="connector-card-desc">${desc}</div>
+      </div>
+      <button class="connector-card-remove" onclick="removeConnector('${p}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    `;
+    grid.prepend(card);
+  });
 }
 function setTheme(t, btn) {
   document.body.setAttribute('data-theme', t);
