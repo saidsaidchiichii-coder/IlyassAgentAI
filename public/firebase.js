@@ -13,7 +13,8 @@ import {
   collection, 
   query, 
   where, 
-  getDocs 
+  getDocs,
+  arrayUnion
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // 🔥 Firebase Config (ديالك)
@@ -32,7 +33,12 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export { auth, db, doc, setDoc, getDoc, collection, query, where, getDocs, onAuthStateChanged };
+export { auth, db, doc, setDoc, getDoc, collection, query, where, getDocs, onAuthStateChanged, arrayUnion };
+
+// Expose to window for app.html to use
+window.auth = auth;
+window.db = db;
+window.FirebaseFirestore = { doc, setDoc, arrayUnion, getDoc, collection, query, where, getDocs };
 
 // ================= TOAST =================
 function showMsg(text) {
