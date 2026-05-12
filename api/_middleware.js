@@ -50,3 +50,31 @@ export async function deductCredits(userId, amount = 1) {
     console.error('deductCredits error:', err);
   }
 }
+
+
+export async function getConnectors(userId) {
+  try {
+    initFirebase();
+    const db = getFirestore();
+    const userDoc = await db.collection('users').doc(userId).get();
+    if (!userDoc.exists()) return [];
+    return userDoc.data().connectors || [];
+  } catch (err) {
+    console.error('getConnectors error:', err);
+    return [];
+  }
+}
+
+export async function getConnectorByPlatform(userId, platform) {
+  try {
+    initFirebase();
+    const db = getFirestore();
+    const userDoc = await db.collection('users').doc(userId).get();
+    if (!userDoc.exists()) return null;
+    const connectors = userDoc.data().connectors || [];
+    return connectors.find(c => c.platform === platform) || null;
+  } catch (err) {
+    console.error('getConnectorByPlatform error:', err);
+    return null;
+  }
+}

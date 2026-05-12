@@ -82,3 +82,82 @@ export async function getUserData() {
 
 window.getOrCreateAPIKeyFirebase = getOrCreateAPIKeyFirebase;
 window.getUserData = getUserData;
+
+/**
+ * Get all connectors for current user
+ */
+export async function getConnectors() {
+    return new Promise((resolve, reject) => {
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                resolve([]);
+                return;
+            }
+            try {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                const connectors = userDoc.exists() ? (userDoc.data().connectors || []) : [];
+                resolve(connectors);
+            } catch (e) {
+                reject(e);
+            }
+        });
+    });
+}
+
+/**
+ * Get connector by platform
+ */
+export async function getConnectorByPlatform(platform) {
+    return new Promise((resolve, reject) => {
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                resolve(null);
+                return;
+            }
+            try {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                const connectors = userDoc.exists() ? (userDoc.data().connectors || []) : [];
+                const connector = connectors.find(c => c.platform === platform);
+                resolve(connector || null);
+            } catch (e) {
+                reject(e);
+            }
+        });
+    });
+}
+
+/**
+ * Update connector website URL
+ */
+export async function updateConnectorWebsite(platform, websiteUrl) {
+    return new Promise((resolve, reject) => {
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                reject(new Error('User not logged in'));
+                return;
+            }
+            try {
+                const userDocRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userDocRef);
+                
+                if (userDoc.exists()) {
+                    const connectors = userDoc.data().connectors || [];
+                    const updatedConnectors = connectors.map(c => 
+                        c.platform === platform 
+                            ? { ...c, websiteUrl, updatedAt: new Date().toISOString() }
+                            : c
+                    );
+                    
+                    await setDoc(userDocRef, { connectors: updatedConnectors }, { merge: true });
+                    resolve(updatedConnectors.find(c => c.platform === platform));
+                }
+            } catch (e) {
+                reject(e);
+            }
+        });
+    });
+}
+
+window.getConnectors = getConnectors;
+window.getConnectorByPlatform = getConnectorByPlatform;
+window.updateConnectorWebsite = updateConnectorWebsite;
