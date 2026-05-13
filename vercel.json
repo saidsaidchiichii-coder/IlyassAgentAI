@@ -17,6 +17,7 @@
     { "source": "/pricing", "destination": "/pricing.html" },
     { "source": "/success", "destination": "/success.html" },
     { "source": "/app", "destination": "/index.html" },
+    { "source": "/connectors", "destination": "/connectors.html" },
     { "source": "/api/subscription-status", "destination": "/api/subscription?action=status" },
     { "source": "/api/cancel-subscription", "destination": "/api/subscription?action=cancel" },
     { "source": "/api/billing-portal", "destination": "/api/subscription?action=portal" },
