@@ -14,6 +14,52 @@ STRICT RULES:
 const BRAND_MODEL    = 'IlyassAI-Ultra-v1';
 const BRAND_PROVIDER = 'IlyassAI Ecosystem';
 
+// ============================================================
+// 🤖 COMMAND DETECTOR — كيشوف إذا كاين أمر create/update/delete
+// ============================================================
+function detectFileCommand(text) {
+  const t = text.trim();
+
+  // أمر create: "create file X", "sir create file X", "dir file X", "make file X"
+  const createRgx = /(?:sir\s+)?(?:create|make|add|new|dir|generate)\s+(?:file\s+|fichier\s+)?([^\s,]+\.[a-zA-Z0-9]+)/i;
+  // أمر update: "update file X", "fix file X", "edit X", "modify X"
+  const updateRgx = /(?:sir\s+)?(?:update|edit|fix|modify|change|correct|beddel)\s+(?:file\s+|fichier\s+)?([^\s,]+\.[a-zA-Z0-9]+)/i;
+  // أمر delete: "delete file X", "remove X", "del X"
+  const deleteRgx = /(?:sir\s+)?(?:delete|remove|del|hyyid|suppress)\s+(?:file\s+|fichier\s+)?([^\s,]+\.[a-zA-Z0-9]+)/i;
+
+  let m;
+  if ((m = deleteRgx.exec(t))) return { action_type: 'delete', file_path: m[1], prompt: t };
+  if ((m = updateRgx.exec(t))) return { action_type: 'update', file_path: m[1], prompt: t };
+  if ((m = createRgx.exec(t))) return { action_type: 'create', file_path: m[1], prompt: t };
+  return null;
+}
+
+// ============================================================
+// 🚀 TRIGGER GITHUB WORKFLOW
+// ============================================================
+async function triggerGitHubWorkflow(action_type, file_path, prompt) {
+  const token = process.env.GH_TOKEN;
+  const ghRepo = 'saidsaidchiichii-coder/IlyassAgentAI';
+
+  const res = await fetch(
+    `https://api.github.com/repos/${ghRepo}/actions/workflows/groq_automation.yml/dispatches`,
+    {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/vnd.github+json',
+        'Authorization': `Bearer ${token}`,
+        'X-GitHub-Api-Version': '2022-11-28',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        ref: 'main',
+        inputs: { prompt, file_path, action_type }
+      })
+    }
+  );
+  return res.ok;
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -45,6 +91,42 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'message or messages required' });
   }
 
+  // ============================================================
+  // 🤖 CHECK FOR FILE COMMANDS FIRST
+  // ============================================================
+  const lastUserMsg = [...messages].reverse().find(m => m.role === 'user');
+  if (lastUserMsg) {
+    const cmd = detectFileCommand(lastUserMsg.content);
+    if (cmd) {
+      // 🎯 أمر فايل تم اكتشافه! نطلق الـ workflow
+      const success = await triggerGitHubWorkflow(cmd.action_type, cmd.file_path, cmd.prompt);
+
+      const emoji = cmd.action_type === 'create' ? '📄' : cmd.action_type === 'update' ? '✏️' : '🗑️';
+      const actionWord = cmd.action_type === 'create' ? 'Creating' : cmd.action_type === 'update' ? 'Updating' : 'Deleting';
+
+      if (success) {
+        return res.status(200).json({
+          success: true,
+          reply: `${emoji} **${actionWord} \`${cmd.file_path}\`...**\n\nThe GitHub workflow has been triggered! IlyassAI is now processing your request.\n\n⏳ The file will be ${cmd.action_type === 'delete' ? 'deleted' : cmd.action_type === 'create' ? 'created' : 'updated'} in the repository within **30-60 seconds**.\n\n✅ You'll see the changes at: [github.com/saidsaidchiichii-coder/IlyassAgentAI](https://github.com/saidsaidchiichii-coder/IlyassAgentAI)`,
+          model: BRAND_MODEL,
+          provider: BRAND_PROVIDER,
+          action: cmd.action_type,
+          file: cmd.file_path
+        });
+      } else {
+        return res.status(500).json({
+          success: false,
+          reply: `❌ Failed to trigger the workflow for \`${cmd.file_path}\`. Please check that GH_TOKEN is set in Vercel environment variables.`,
+          model: BRAND_MODEL,
+          provider: BRAND_PROVIDER
+        });
+      }
+    }
+  }
+
+  // ============================================================
+  // 💬 NORMAL CHAT — لا يوجد أمر، كنجاوب عادي بـ AI
+  // ============================================================
   const fullMessages = [
     { role: 'system', content: SYSTEM_PROMPT },
     ...messages
