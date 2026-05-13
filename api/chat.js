@@ -15,12 +15,18 @@ const BRAND_MODEL = 'IlyassAI-Ultra-v1';
 function parseCommand(text) {
   const t = text.trim();
 
+  // ===== MISSION COMMANDS =====
+  const missionRgx = /(?:sir\s+)?(?:mission|task|project|repo|repository)\s+(.+)/i;
+  
   // ===== FILE COMMANDS =====
   const createRgx = /(?:sir\s+)?(?:create|make|add|new|dir|dirli|ddir|write|generate|khleq|dir)\s+(?:file\s+|fichier\s+)?([^\s,]+\.[a-zA-Z0-9]+)/i;
   const updateRgx = /(?:sir\s+)?(?:update|edit|fix|modify|change|correct|beddel|sali7|correct|improve)\s+(?:file\s+|fichier\s+)?([^\s,]+\.[a-zA-Z0-9]+)/i;
   const deleteRgx = /(?:sir\s+)?(?:delete|remove|del|hyyid|suppress|msa7)\s+(?:file\s+|fichier\s+)?([^\s,]+\.[a-zA-Z0-9]+)/i;
 
   let m;
+  if ((m = missionRgx.exec(t))) {
+    return { type: 'mission', action_type: 'mission', file_path: 'mission.md', prompt: m[1] };
+  }
   if ((m = deleteRgx.exec(t))) {
     return { type: 'file', action_type: 'delete', file_path: m[1], prompt: t };
   }
@@ -116,6 +122,24 @@ export default async function handler(req, res) {
   const cmd = parseCommand(lastUserMsg.content);
 
   if (cmd) {
+    // MISSION COMMAND
+    if (cmd.type === 'mission') {
+      const result = await triggerWorkflow(cmd.action_type, cmd.file_path, cmd.prompt);
+      if (result.ok) {
+        return res.status(200).json({
+          success: true,
+          reply: `🚀 **Mission Started!**\n\nI'm executing your mission: *"${cmd.prompt}"*\n\n✅ GitHub workflow triggered. I'll handle everything on GitHub and report back when finished.\n\n🔗 [View Progress](https://github.com/saidsaidchiichii-coder/IlyassAgentAI/actions)`,
+          model: BRAND_MODEL
+        });
+      } else {
+        return res.status(500).json({
+          success: false,
+          reply: `❌ Mission trigger failed (${result.error || result.status}).`,
+          model: BRAND_MODEL
+        });
+      }
+    }
+
     // FILE COMMAND
     if (cmd.type === 'file') {
       const result = await triggerWorkflow(cmd.action_type, cmd.file_path, cmd.prompt);

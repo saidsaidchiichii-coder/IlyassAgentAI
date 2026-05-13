@@ -13,16 +13,20 @@ module.exports = async function handler(req, res) {
     // ===== تحليل الأمر من المستخدم =====
     const lowerPrompt = prompt.toLowerCase().trim();
     let action_type = 'create';
-    let file_path = '';
+    let file_path = 'mission_log.txt'; // Default for missions
     let aiPrompt = prompt;
 
     // ===== كشف نوع الأمر =====
-    // "sir create file X" أو "sir dir file X" أو "sir create X.js"
+    const missionMatch = lowerPrompt.match(/(?:sir\s+)?(?:mission|task|project|repo|repository)\s+(.+)/i);
     const createMatch = lowerPrompt.match(/(?:sir\s+)?(?:create|dir|new|ddir|dirf)\s+(?:file\s+)?([\w\-\/\.]+)/i);
     const updateMatch = lowerPrompt.match(/(?:sir\s+)?(?:update|edit|fix|modify|beddel|correct)\s+(?:file\s+)?([\w\-\/\.]+)/i);
     const deleteMatch = lowerPrompt.match(/(?:sir\s+)?(?:delete|remove|del|hyyid)\s+(?:file\s+)?([\w\-\/\.]+)/i);
 
-    if (deleteMatch) {
+    if (missionMatch) {
+      action_type = 'mission';
+      file_path = 'mission.md';
+      aiPrompt = missionMatch[1];
+    } else if (deleteMatch) {
       action_type = 'delete';
       file_path = deleteMatch[1];
       aiPrompt = `Delete the file: ${file_path}`;
@@ -33,16 +37,21 @@ module.exports = async function handler(req, res) {
     } else if (createMatch) {
       action_type = 'create';
       file_path = createMatch[1];
-      // إذا ماعندوش extension، نضيفوها
       if (!file_path.includes('.')) file_path = file_path + '.js';
-      aiPrompt = `Create a new JavaScript file named ${file_path}. Content: ${prompt}`;
+      aiPrompt = `Create a new file named ${file_path}. Content: ${prompt}`;
     } else {
-      // أمر عام - نستعمل Groq مباشرة
-      return res.status(200).json({
-        success: true,
-        message: 'Please specify a file. Example: "sir create file hello.js"',
-        hint: 'Commands: create / update / delete + filename'
-      });
+      // If no specific match, treat as a general mission if it's long enough
+      if (lowerPrompt.length > 10) {
+          action_type = 'mission';
+          file_path = 'mission.md';
+          aiPrompt = prompt;
+      } else {
+          return res.status(200).json({
+            success: true,
+            message: 'Please specify a mission or file. Example: "mission create a new repo for a grok website"',
+            hint: 'Commands: mission / create / update / delete'
+          });
+      }
     }
 
     // ===== trigger GitHub Workflow =====
