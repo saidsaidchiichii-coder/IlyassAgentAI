@@ -3678,12 +3678,7 @@ window.onUserAuthChange = function(user) {
     document.getElementById('onboarding-overlay').style.display = 'none';
   };
 
-  // Auto-init when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', window.initOnboarding);
-  } else {
-    window.initOnboarding();
-  }
+  // ✅ Onboarding triggered by firebase.js after signup only
 })();
 </script>
 
