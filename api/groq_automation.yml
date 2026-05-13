@@ -25,7 +25,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      pull-requests: write # Required for git-auto-commit-action to create PRs if needed
 
     steps:
       - name: Checkout repository
@@ -62,58 +61,25 @@ jobs:
           output_content = ""
 
           if ACTION_TYPE == "create" or ACTION_TYPE == "update":
-              print(f"Generating content for {FILE_PATH} with prompt: {PROMPT}")
               try:
                   chat_completion = client.chat.completions.create(
-                      messages=[
-                          {
-                              "role": "user",
-                              "content": PROMPT,
-                          }
-                      ],
-                      model="llama3-8b-8192", # يمكنك اختيار نماذج أخرى مثل "mixtral-8x7b-32768" أو "llama3-70b-8192"
+                      messages=[{"role": "user", "content": PROMPT}],
+                      model="llama3-8b-8192",
                   )
                   output_content = chat_completion.choices[0].message.content
-                  print("Content generated successfully.")
+                  with open(FILE_PATH, "w") as f:
+                      f.write(output_content)
+                  file_changed = True
               except Exception as e:
-                  print(f"Error generating content from Groq: {e}")
-                  output_content = f"Error: Could not generate content. {e}"
-
-              if ACTION_TYPE == "create":
-                  try:
-                      with open(FILE_PATH, "w") as f:
-                          f.write(output_content)
-                      file_changed = True
-                      print(f"File {FILE_PATH} created/overwritten successfully.")
-                  except Exception as e:
-                      print(f"Error creating file {FILE_PATH}: {e}")
-                      file_changed = False
-              elif ACTION_TYPE == "update":
-                  try:
-                      with open(FILE_PATH, "w") as f:
-                          f.write(output_content)
-                      file_changed = True
-                      print(f"File {FILE_PATH} updated successfully.")
-                  except FileNotFoundError:
-                      print(f"Error: File {FILE_PATH} not found for update.")
-                      file_changed = False
-                  except Exception as e:
-                      print(f"Error updating file {FILE_PATH}: {e}")
-                      file_changed = False
+                  print(f"Error: {e}")
+                  file_changed = False
           elif ACTION_TYPE == "delete":
-              print(f"Attempting to delete file: {FILE_PATH}")
               try:
                   os.remove(FILE_PATH)
                   file_changed = True
-                  print(f"File {FILE_PATH} deleted successfully.")
               except FileNotFoundError:
-                  print(f"Error: File {FILE_PATH} not found for deletion.")
-                  file_changed = False
-              except Exception as e:
-                  print(f"Error deleting file {FILE_PATH}: {e}")
                   file_changed = False
 
-          # تصدير المتغير file_changed إلى بيئة GitHub Actions
           with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
               print(f'file_changed={str(file_changed).lower()}', file=fh)
 
@@ -121,8 +87,5 @@ jobs:
         if: steps.process.outputs.file_changed == 'true'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "AI Update: ${{ github.event.inputs.file_path }} (Action: ${{ github.event.inputs.action_type }})"
-          branch: main # تأكد من استخدام اسم الفرع الافتراضي لمستودعك (عادةً main أو master)
-          # يمكنك إضافة author_name و author_email إذا كنت تريد تخصيص معلومات الـ commit
-          # author_name: 'Groq AI Bot'
-          # author_email: 'groq-ai-bot@example.com'
+          commit_message: "AI Update: ${{ github.event.inputs.file_path }}"
+          branch: main
