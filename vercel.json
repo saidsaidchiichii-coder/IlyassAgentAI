@@ -30,9 +30,6 @@
     },
     "api/utilities.js": {
       "maxDuration": 60
-    },
-    "api/_middleware.js": {
-      "maxDuration": 10
     }
   },
   "rewrites": [
