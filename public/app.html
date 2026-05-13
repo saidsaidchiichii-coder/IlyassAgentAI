@@ -667,6 +667,109 @@
   border-color: rgba(248,113,113,0.3);
 }
 .profile-auth-btn.signout:hover { background: rgba(248,113,113,0.1); }
+
+/* ===== BILLING TAB ===== */
+.billing-plan-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-md);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.billing-plan-card.pro {
+  border-color: rgba(74,222,128,0.25);
+  background: rgba(74,222,128,0.04);
+}
+.billing-plan-badge {
+  display: inline-block;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 9999px;
+  background: var(--surface-3);
+  color: var(--text-dim);
+  border: 1px solid var(--border-md);
+  margin-bottom: 8px;
+}
+.billing-plan-badge.pro {
+  background: rgba(74,222,128,0.1);
+  color: #4ade80;
+  border-color: rgba(74,222,128,0.3);
+}
+.billing-plan-price {
+  font-size: 32px; font-weight: 800; color: var(--text);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.billing-plan-price span {
+  font-size: 14px; font-weight: 400; color: var(--text-dim);
+}
+.billing-plan-desc {
+  font-size: 12px; color: var(--text-dim);
+}
+.billing-upgrade-btn {
+  background: var(--accent);
+  color: #fff; border: none;
+  border-radius: var(--r-lg);
+  font-size: 13px; font-weight: 600;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+.billing-upgrade-btn:hover {
+  background: #ff7a4a; transform: translateY(-1px);
+}
+.billing-upgrade-btn.manage {
+  background: var(--surface-3);
+  color: var(--text);
+  border: 1px solid var(--border-md);
+}
+.billing-upgrade-btn.manage:hover {
+  background: var(--surface-4);
+}
+.billing-features-box {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 16px;
+  margin-bottom: 20px;
+}
+.billing-features-title {
+  font-size: 12px; font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  margin-bottom: 12px;
+}
+.billing-features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.billing-feature-item {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 12px; color: var(--text-dim);
+}
+.billing-section-title {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+.billing-history-empty {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center;
+  padding: 28px;
+  background: var(--surface-2);
+  border: 1px dashed var(--border);
+  border-radius: var(--r-lg);
+  font-size: 13px; color: var(--text-muted);
+  text-align: center;
+}
 </style>
 </head>
 <body>
@@ -1230,6 +1333,10 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
             Connectors
           </button>
+          <button class="settings-nav-item" onclick="switchSettingsTab('billing', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            Billing
+          </button>
         </div>
       </nav>
       
@@ -1323,6 +1430,69 @@
           </button>
         </div>
       </div>
+
+      <!-- ======= BILLING TAB ======= -->
+      <div id="settings-tab-billing" class="settings-tab-content">
+        <div class="settings-content-header">
+          <h2>Billing & Plan</h2>
+          <p>Manage your subscription and payment methods.</p>
+        </div>
+
+        <!-- Current Plan Card -->
+        <div class="billing-plan-card" id="billingPlanCard">
+          <div class="billing-plan-left">
+            <div class="billing-plan-badge" id="billingPlanBadge">Free Plan</div>
+            <div class="billing-plan-price" id="billingPlanPrice">$0<span>/mo</span></div>
+            <div class="billing-plan-desc" id="billingPlanDesc">100 messages/day • All free AI models</div>
+          </div>
+          <div class="billing-plan-right">
+            <button class="billing-upgrade-btn" id="billingActionBtn" onclick="handleBillingAction()">
+              Upgrade to Pro — $12/mo
+            </button>
+          </div>
+        </div>
+
+        <!-- Pro Features (shown when on free plan) -->
+        <div id="billingProFeatures" class="billing-features-box">
+          <div class="billing-features-title">What you get with Pro:</div>
+          <div class="billing-features-grid">
+            <div class="billing-feature-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+              Unlimited messages
+            </div>
+            <div class="billing-feature-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+              GPT-4o &amp; Claude models
+            </div>
+            <div class="billing-feature-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+              Unlimited image generation
+            </div>
+            <div class="billing-feature-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+              GitHub &amp; Vercel deploy
+            </div>
+            <div class="billing-feature-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+              Memory &amp; context persistence
+            </div>
+            <div class="billing-feature-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+              Priority model routing
+            </div>
+          </div>
+        </div>
+
+        <!-- Invoice history placeholder -->
+        <div class="billing-section-title">Payment History</div>
+        <div class="billing-history-empty" id="billingHistory">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28" style="color:var(--text-muted);margin-bottom:8px;">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+          </svg>
+          No payment history yet
+        </div>
+      </div>
+
     </main>
   </div>
 </div>
@@ -2690,6 +2860,117 @@ function switchImagineMode(mode,btn){var isVideo=(mode==='video');document.query
 function setVideoStyle(style,btn){_videoStyle=style;document.querySelectorAll('#videoGenSection .ar-btn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');}
 async function generateImagineVideo(){var ta=document.getElementById('videoPromptTA');if(!ta)return;var prompt=ta.value.trim();if(!prompt){if(typeof showToast==='function')showToast('اكتب وصف الفيديو');return;}var btn=document.getElementById('videoGenBtn');var resultArea=document.getElementById('videoResultArea');var videoOutput=document.getElementById('videoOutput');if(!btn||!resultArea||!videoOutput)return;btn.disabled=true;btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Generating...';resultArea.style.display='block';videoOutput.innerHTML='<div style="padding:28px;text-align:center;background:var(--surface);border-radius:12px;"><div style="font-size:32px;margin-bottom:8px;">&#127916;</div><div style="font-weight:600;color:var(--text);">Generating video...</div><div style="font-size:12px;color:var(--text2);margin-top:4px;">30-60 seconds</div></div>';if(typeof showToast==='function')showToast('جاري إنشاء الفيديو…');try{var res=await fetch('/api/video',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:prompt,style:_videoStyle})});var data=await res.json();if(!data.success){videoOutput.innerHTML='<div style="padding:20px;color:var(--red);">&#10060; '+(data.error||'فشل')+'</div>';if(typeof showToast==='function')showToast('حدث خطأ');return;}if(data.type==='video'){var src=data.videoBase64||data.videoUrl;videoOutput.innerHTML='<video controls autoplay loop muted playsinline style="width:100%;border-radius:12px;max-height:420px;" src="'+src+'"></video><div style="padding:10px 12px;font-size:12px;color:var(--text2);display:flex;justify-content:space-between;"><span>&#127916; '+(data.provider||'AI')+'</span><a href="'+src+'" download="video.mp4" style="color:var(--accent);">&#8659; Download</a></div>';if(typeof showToast==='function')showToast('تم الفيديو!');}else if(data.type==='frames'&&data.frames&&data.frames.length){var frames=data.frames;var idx=0;videoOutput.innerHTML='<div style="border-radius:12px;overflow:hidden;background:#000;position:relative;"><img id="vFrameImg" src="'+frames[0]+'" style="width:100%;max-height:420px;object-fit:contain;display:block;" alt=""/><div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.85));padding:10px 12px;font-size:12px;color:rgba(255,255,255,.8);">&#127902; Animated preview &middot; '+(data.provider||'')+'</div></div><div style="padding:8px 12px;font-size:11px;color:var(--text2);">'+(data.note||'')+'</div>';var imgEl=document.getElementById('vFrameImg');if(imgEl){setInterval(function(){idx=(idx+1)%frames.length;imgEl.style.opacity='0.4';setTimeout(function(){imgEl.src=frames[idx];imgEl.style.opacity='1';},150);},700);}if(typeof showToast==='function')showToast('معاينة جاهزة!');}}catch(err){videoOutput.innerHTML='<div style="padding:20px;color:var(--red);">&#10060; '+err.message+'</div>';if(typeof showToast==='function')showToast('حدث خطأ');}finally{btn.disabled=false;btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> Generate Video';}}
 window.switchImagineMode=switchImagineMode;window.setVideoStyle=setVideoStyle;window.generateImagineVideo=generateImagineVideo;
+
+
+/* ===== BILLING SYSTEM ===== */
+window._userPlan = 'free';
+
+async function handleBillingAction() {
+  const user = window._currentUser;
+  if (!user || user.isAnonymous) {
+    showAuthModal?.('login');
+    return;
+  }
+
+  if (window._userPlan === 'pro') {
+    // Open Stripe billing portal
+    const btn = document.getElementById('billingActionBtn');
+    if (btn) { btn.textContent = 'Loading...'; btn.disabled = true; }
+    try {
+      const resp = await fetch('/api/billing-portal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.uid })
+      });
+      const data = await resp.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        showToast?.('❌ ' + (data.error || 'Error opening billing portal'));
+      }
+    } catch(e) {
+      showToast?.('❌ Network error');
+    } finally {
+      if (btn) { btn.textContent = 'Manage Billing'; btn.disabled = false; }
+    }
+  } else {
+    // Upgrade to Pro - open Stripe checkout
+    const btn = document.getElementById('billingActionBtn');
+    if (btn) { btn.textContent = 'Loading...'; btn.disabled = true; }
+    try {
+      const resp = await fetch('/api/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          plan:   'pro',
+          userId: user.uid,
+          email:  user.email || ''
+        })
+      });
+      const data = await resp.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        showToast?.('❌ ' + (data.error || 'Could not start checkout'));
+      }
+    } catch(e) {
+      showToast?.('❌ Network error');
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = 'Upgrade to Pro — $12/mo'; }
+    }
+  }
+}
+
+function updateBillingUI(plan) {
+  window._userPlan = plan || 'free';
+  const isPro = plan === 'pro';
+
+  const card     = document.getElementById('billingPlanCard');
+  const badge    = document.getElementById('billingPlanBadge');
+  const price    = document.getElementById('billingPlanPrice');
+  const desc     = document.getElementById('billingPlanDesc');
+  const btn      = document.getElementById('billingActionBtn');
+  const features = document.getElementById('billingProFeatures');
+  const planBadge = document.getElementById('settingsPlanBadge');
+
+  if (isPro) {
+    card?.classList.add('pro');
+    if (badge) { badge.textContent = '✦ Pro Plan'; badge.className = 'billing-plan-badge pro'; }
+    if (price) price.innerHTML = '$12<span>/mo</span>';
+    if (desc)  desc.textContent = 'Unlimited messages • Premium models • All features';
+    if (btn)   { btn.textContent = 'Manage Billing'; btn.className = 'billing-upgrade-btn manage'; }
+    if (features) features.style.display = 'none';
+    if (planBadge) { planBadge.textContent = '✦ Pro Plan'; planBadge.classList.add('pro'); }
+  } else {
+    card?.classList.remove('pro');
+    if (badge) { badge.textContent = 'Free Plan'; badge.className = 'billing-plan-badge'; }
+    if (price) price.innerHTML = '$0<span>/mo</span>';
+    if (desc)  desc.textContent = '100 messages/day • All free AI models';
+    if (btn)   { btn.textContent = 'Upgrade to Pro — $12/mo'; btn.className = 'billing-upgrade-btn'; }
+    if (features) features.style.display = '';
+    if (planBadge) { planBadge.textContent = 'Free Plan'; planBadge.classList.remove('pro'); }
+  }
+}
+
+// Hook into auth change to load plan
+const _origOnUserAuthChange = window.onUserAuthChange;
+window.onUserAuthChange = function(user) {
+  if (_origOnUserAuthChange) _origOnUserAuthChange(user);
+  if (user && !user.isAnonymous && window.db) {
+    // Load plan from Firestore
+    import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js")
+      .then(({ doc, getDoc }) => getDoc(doc(window.db, "users", user.uid)))
+      .then(snap => {
+        if (snap.exists()) {
+          const plan = snap.data()?.plan || 'free';
+          updateBillingUI(plan);
+        }
+      }).catch(() => {});
+  } else {
+    updateBillingUI('free');
+  }
+};
+
 </script>
 </body>
 </html>

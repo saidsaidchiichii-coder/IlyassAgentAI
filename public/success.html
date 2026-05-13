@@ -3,26 +3,148 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Payment Successful — IlyassAI</title>
+  <title>IlyassAI — Welcome to Pro!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:'Inter',-apple-system,sans-serif;background:#080810;color:#e0e0e0;min-height:100vh;display:flex;align-items:center;justify-content:center}
-    .card{background:#111118;border:1px solid rgba(108,99,255,.3);border-radius:20px;padding:56px 48px;text-align:center;max-width:480px;width:90%;box-shadow:0 40px 80px rgba(0,0,0,.6)}
-    .icon{font-size:64px;margin-bottom:20px;animation:pop .5s ease}
-    @keyframes pop{0%{transform:scale(0)}100%{transform:scale(1)}}
-    h1{font-size:28px;font-weight:700;margin-bottom:10px;background:linear-gradient(135deg,#6c63ff,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    p{color:#555;font-size:15px;line-height:1.6;margin-bottom:32px}
-    .btn{display:inline-block;padding:14px 36px;background:linear-gradient(135deg,#6c63ff,#7c3aed);color:#fff;border-radius:12px;text-decoration:none;font-weight:600;font-size:15px;transition:opacity .2s}
-    .btn:hover{opacity:.88}
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #000; color: #ececec;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .glow {
+      position: fixed; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse 50% 40% at 50% 0%, rgba(74,222,128,0.08) 0%, transparent 70%);
+    }
+    .card {
+      position: relative; z-index: 1;
+      background: #111;
+      border: 1px solid rgba(74,222,128,0.25);
+      border-radius: 24px;
+      padding: 52px 48px;
+      max-width: 480px; width: 90%;
+      text-align: center;
+      box-shadow: 0 0 60px rgba(74,222,128,0.08), 0 24px 80px rgba(0,0,0,0.7);
+    }
+    .icon-wrap {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: rgba(74,222,128,0.12);
+      border: 2px solid rgba(74,222,128,0.3);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+      animation: pop 0.5s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes pop { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .icon-wrap svg { color: #4ade80; }
+    .plan-badge {
+      display: inline-block;
+      background: rgba(74,222,128,0.1);
+      border: 1px solid rgba(74,222,128,0.3);
+      color: #4ade80;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 9999px;
+      margin-bottom: 16px;
+    }
+    h1 { font-size: 28px; font-weight: 700; margin-bottom: 10px; }
+    .subtitle { font-size: 14px; color: #8a8f98; margin-bottom: 32px; line-height: 1.6; }
+    .features {
+      background: #1a1a1a;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 28px;
+      text-align: left;
+    }
+    .feature-item {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; color: #ececec;
+      padding: 7px 0;
+    }
+    .feature-item + .feature-item { border-top: 1px solid rgba(255,255,255,0.05); }
+    .feature-icon { color: #4ade80; flex-shrink: 0; }
+    .btn-primary {
+      display: block; width: 100%;
+      background: #ff6b35; color: #fff;
+      border: none; border-radius: 12px;
+      font-size: 15px; font-weight: 600;
+      padding: 14px;
+      cursor: pointer; text-decoration: none;
+      transition: all 0.18s;
+    }
+    .btn-primary:hover { background: #ff7a4a; transform: translateY(-1px); }
+    .footer-note { font-size: 12px; color: #444; margin-top: 16px; }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="icon">🎉</div>
-    <h1>Payment Successful!</h1>
-    <p>Your credits have been added to your account.<br/>You can now use the API right away.</p>
-    <a href="/api-dashboard" class="btn">→ Go to Dashboard</a>
+<div class="glow"></div>
+<div class="card">
+  <div class="icon-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="32" height="32">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
   </div>
-  <script>setTimeout(()=>window.location.href='/api-dashboard', 5000);</script>
+  <span class="plan-badge">✦ Pro Plan Active</span>
+  <h1>You're now Pro! 🎉</h1>
+  <p class="subtitle">Your IlyassAI Pro subscription is active.<br/>Enjoy unlimited access to all premium features.</p>
+
+  <div class="features">
+    <div class="feature-item">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
+      Unlimited messages — no daily limits
+    </div>
+    <div class="feature-item">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
+      Premium models: GPT-4o & Claude
+    </div>
+    <div class="feature-item">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
+      Unlimited image generation
+    </div>
+    <div class="feature-item">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
+      GitHub & Vercel deploy integration
+    </div>
+    <div class="feature-item">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
+      Memory & context persistence
+    </div>
+  </div>
+
+  <a href="/app" class="btn-primary">Start using IlyassAI Pro →</a>
+  <p class="footer-note">A confirmation email has been sent to you. Manage your subscription anytime in Settings → Billing.</p>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDWch9gK12sGD7awxmRibU6jBspd-tjr6E",
+  authDomain: "ilyassagentai.firebaseapp.com",
+  projectId: "ilyassagentai",
+  storageBucket: "ilyassagentai.firebasestorage.app",
+  messagingSenderId: "1070041614552",
+  appId: "1:1070041614552:web:your-app-id"
+};
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+// Update plan in Firestore client-side as backup (webhook handles this too)
+onAuthStateChanged(auth, async user => {
+  if (user && !user.isAnonymous) {
+    try {
+      await updateDoc(doc(db, "users", user.uid), {
+        plan: "pro",
+        planActivatedAt: new Date().toISOString()
+      });
+    } catch(e) {}
+  }
+});
+</script>
 </body>
 </html>
