@@ -142,6 +142,14 @@ window.handleAuth = async () => {
       const name = email.split("@")[0];
       await updateProfile(cred.user, { displayName: name });
       showMsg("✅ Account created! Welcome " + name);
+      // 🎉 Trigger onboarding for new user
+      setTimeout(() => {
+        const authM = document.getElementById('authModal');
+        if (authM) authM.classList.remove('open');
+        if (typeof window.initOnboarding === 'function') {
+          window.initOnboarding();
+        }
+      }, 500);
     } else {
       const cred = await signInWithEmailAndPassword(auth, email, password);
       showMsg("🔥 Welcome back " + (cred.user.displayName || ""));
