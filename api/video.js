@@ -8,7 +8,7 @@
 // Also supports Hugging Face inference endpoints as fallback
 // maxDuration: 60s
 
-export const config = {
+// config skipped
   api: { bodyParser: { sizeLimit: '10mb' } },
   maxDuration: 60
 };
@@ -87,7 +87,6 @@ async function handleGenerateVideo(req, res) {
 // IlyassAI — /api/video-status (Check MiniMax video generation status)
 // Poll this endpoint to get the video URL once ready
 
-export const config = { maxDuration: 30 };
 
 async function handleVideoStatus(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -130,7 +129,6 @@ async function handleVideoStatus(req, res) {
 // Env vars: ZHIPU_API_KEY, MINIMAX_API_KEY, KLING_API_KEY, POLLINATIONS_API_KEY, HF_API_KEY
 // maxDuration: 60s
 
-export const config = {
   api: { bodyParser: { sizeLimit: '8mb' } },
   maxDuration: 60
 };

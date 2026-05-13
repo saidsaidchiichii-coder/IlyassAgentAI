@@ -155,7 +155,7 @@ async function handleMemory(req, res) {
 
 
 // IlyassAI — /api/discover (Edge Function — not counted in 12-function limit)
-export const config = { runtime: 'edge' };
+// config merged below
 
 async function handleDiscover(req) {
   const corsHeaders = {
@@ -212,7 +212,6 @@ async function handleDiscover(req) {
 // IlyassAI — /api/transcribe
 // Speech-to-text using Groq Whisper (primary) and OpenAI Whisper (fallback)
 
-export const config = { api: { bodyParser: false } };
 
 async function handleTranscribe(req, res) {
   // ── CORS preflight ──
