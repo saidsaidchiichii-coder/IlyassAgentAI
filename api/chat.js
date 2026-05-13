@@ -10,14 +10,25 @@ RULES:
 const BRAND_MODEL = 'IlyassAI-Ultra-v1';
 
 // ============================================================
-// 🧠 SMART COMMAND PARSER — يفهم أي أمر "sir ..."
+// 🧠 SMART COMMAND PARSER — يفهم أي أمر "sir ..." أو "create repo"
 // ============================================================
 function parseCommand(text) {
   const t = text.trim();
+  const lowerT = t.toLowerCase();
 
-  // ===== MISSION COMMANDS =====
+  // ===== MISSION COMMANDS (Autonomy Improvements) =====
+  // Detect "create a new repo", "new repository", "make a website", etc.
+  const missionKeywords = [
+    'create a new repo', 'create repo', 'new repository', 'make a website', 
+    'build a website', 'deploy a site', 'new project', 'start a repo',
+    'create a repository', 'make a repo', 'generate a repo'
+  ];
+  
   const missionRgx = /(?:sir\s+)?(?:mission|task|project|repo|repository)\s+(.+)/i;
   
+  // Check for keywords directly if no "sir" or "mission" prefix
+  const isDirectMission = missionKeywords.some(k => lowerT.includes(k));
+
   // ===== FILE COMMANDS =====
   const createRgx = /(?:sir\s+)?(?:create|make|add|new|dir|dirli|ddir|write|generate|khleq|dir)\s+(?:file\s+|fichier\s+)?([^\s,]+\.[a-zA-Z0-9]+)/i;
   const updateRgx = /(?:sir\s+)?(?:update|edit|fix|modify|change|correct|beddel|sali7|correct|improve)\s+(?:file\s+|fichier\s+)?([^\s,]+\.[a-zA-Z0-9]+)/i;
@@ -27,6 +38,11 @@ function parseCommand(text) {
   if ((m = missionRgx.exec(t))) {
     return { type: 'mission', action_type: 'mission', file_path: 'mission.md', prompt: m[1] };
   }
+  
+  if (isDirectMission) {
+    return { type: 'mission', action_type: 'mission', file_path: 'mission.md', prompt: t };
+  }
+
   if ((m = deleteRgx.exec(t))) {
     return { type: 'file', action_type: 'delete', file_path: m[1], prompt: t };
   }
@@ -38,7 +54,6 @@ function parseCommand(text) {
   }
 
   // ===== GENERAL "SIR" COMMANDS — أي شي فيه "sir" =====
-  // "sir write me a poem", "sir translate this", "sir explain X"
   if (/^sir\s+/i.test(t)) {
     return { type: 'general', action_type: 'general', file_path: '', prompt: t };
   }
