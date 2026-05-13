@@ -53,6 +53,38 @@ export async function verifyUser(req) {
   }
 }
 
+// Verify API key from x-api-key header or Authorization Bearer
+export async function verifyApiKey(req) {
+  const apiKey =
+    req.headers['x-api-key'] ||
+    (req.headers['authorization'] || '').replace('Bearer ', '').trim();
+
+  if (!apiKey) return { user: { id: 'guest', plan: 'free' } };
+
+  try {
+    initFirebase();
+    const db = getFirestore();
+    const snapshot = await db
+      .collection('apiKeys')
+      .where('key', '==', apiKey)
+      .where('active', '==', true)
+      .limit(1)
+      .get();
+
+    if (snapshot.empty) return { error: 'Invalid or inactive API key', status: 401 };
+
+    const keyDoc = snapshot.docs[0];
+    const keyData = keyDoc.data();
+
+    await keyDoc.ref.update({ lastUsed: FieldValue.serverTimestamp() });
+
+    return { user: { id: keyData.userId, plan: keyData.plan || 'free' } };
+  } catch (e) {
+    // If Firebase not configured, allow guest access
+    return { user: { id: 'guest', plan: 'free' } };
+  }
+}
+
 // Get user plan data from Firestore
 export async function getUserPlan(userId) {
   try {
@@ -65,6 +97,22 @@ export async function getUserPlan(userId) {
     return { plan, ...(PLAN_LIMITS[plan] || PLAN_LIMITS.free), ...data.planFeatures };
   } catch (e) {
     return { plan: 'free', ...PLAN_LIMITS.free };
+  }
+}
+
+// Deduct credits from user account
+export async function deductCredits(userId, amount = 1) {
+  if (!userId || userId === 'guest') return;
+  try {
+    initFirebase();
+    const db = getFirestore();
+    const userRef = db.collection('users').doc(userId);
+    await userRef.set(
+      { credits: FieldValue.increment(-amount) },
+      { merge: true }
+    );
+  } catch (e) {
+    // Fail silently — don't block the response
   }
 }
 
