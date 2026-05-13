@@ -1,150 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>IlyassAI — Welcome to Pro!</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <style>
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      background: #000; color: #ececec;
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .glow {
-      position: fixed; inset: 0; pointer-events: none;
-      background: radial-gradient(ellipse 50% 40% at 50% 0%, rgba(74,222,128,0.08) 0%, transparent 70%);
-    }
-    .card {
-      position: relative; z-index: 1;
-      background: #111;
-      border: 1px solid rgba(74,222,128,0.25);
-      border-radius: 24px;
-      padding: 52px 48px;
-      max-width: 480px; width: 90%;
-      text-align: center;
-      box-shadow: 0 0 60px rgba(74,222,128,0.08), 0 24px 80px rgba(0,0,0,0.7);
-    }
-    .icon-wrap {
-      width: 72px; height: 72px;
-      border-radius: 50%;
-      background: rgba(74,222,128,0.12);
-      border: 2px solid rgba(74,222,128,0.3);
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 24px;
-      animation: pop 0.5s cubic-bezier(0.34,1.56,0.64,1);
-    }
-    @keyframes pop { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    .icon-wrap svg { color: #4ade80; }
-    .plan-badge {
-      display: inline-block;
-      background: rgba(74,222,128,0.1);
-      border: 1px solid rgba(74,222,128,0.3);
-      color: #4ade80;
-      font-size: 11px; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 4px 12px; border-radius: 9999px;
-      margin-bottom: 16px;
-    }
-    h1 { font-size: 28px; font-weight: 700; margin-bottom: 10px; }
-    .subtitle { font-size: 14px; color: #8a8f98; margin-bottom: 32px; line-height: 1.6; }
-    .features {
-      background: #1a1a1a;
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 14px;
-      padding: 20px;
-      margin-bottom: 28px;
-      text-align: left;
-    }
-    .feature-item {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 13px; color: #ececec;
-      padding: 7px 0;
-    }
-    .feature-item + .feature-item { border-top: 1px solid rgba(255,255,255,0.05); }
-    .feature-icon { color: #4ade80; flex-shrink: 0; }
-    .btn-primary {
-      display: block; width: 100%;
-      background: #ff6b35; color: #fff;
-      border: none; border-radius: 12px;
-      font-size: 15px; font-weight: 600;
-      padding: 14px;
-      cursor: pointer; text-decoration: none;
-      transition: all 0.18s;
-    }
-    .btn-primary:hover { background: #ff7a4a; transform: translateY(-1px); }
-    .footer-note { font-size: 12px; color: #444; margin-top: 16px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Successful — IlyassAI</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0a0a0f;
+    color: #e2e8f0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .container {
+    text-align: center;
+    padding: 40px 24px;
+    max-width: 500px;
+  }
+  .check-circle {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #4ade80, #22c55e);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 32px;
+    animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+  .check-circle svg { width: 40px; height: 40px; color: #fff; }
+  h1 { font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 12px; }
+  .plan-activated {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(167,139,250,0.1));
+    border: 1px solid rgba(124,58,237,0.4);
+    color: #a78bfa;
+    font-size: 0.875rem;
+    font-weight: 700;
+    padding: 6px 20px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  p { color: #94a3b8; line-height: 1.6; margin-bottom: 32px; }
+  .btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #7c3aed, #9333ea);
+    color: #fff;
+    padding: 14px 36px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+  }
+  .btn:hover { transform: translateY(-2px); background: linear-gradient(135deg, #6d28d9, #7c3aed); }
+  .features-unlocked {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 24px;
+    margin: 28px 0;
+    text-align: left;
+  }
+  .features-unlocked h3 { font-size: 0.875rem; color: #7c3aed; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px; }
+  .feat-item { display: flex; align-items: center; gap: 10px; color: #cbd5e1; font-size: 0.9rem; margin-bottom: 10px; }
+  .feat-item svg { color: #4ade80; flex-shrink: 0; }
+</style>
 </head>
 <body>
-<div class="glow"></div>
-<div class="card">
-  <div class="icon-wrap">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="32" height="32">
-      <polyline points="20 6 9 17 4 12"/>
-    </svg>
-  </div>
-  <span class="plan-badge">✦ Pro Plan Active</span>
-  <h1>You're now Pro! 🎉</h1>
-  <p class="subtitle">Your IlyassAI Pro subscription is active.<br/>Enjoy unlimited access to all premium features.</p>
-
-  <div class="features">
-    <div class="feature-item">
-      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
-      Unlimited messages — no daily limits
-    </div>
-    <div class="feature-item">
-      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
-      Premium models: GPT-4o & Claude
-    </div>
-    <div class="feature-item">
-      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
-      Unlimited image generation
-    </div>
-    <div class="feature-item">
-      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
-      GitHub & Vercel deploy integration
-    </div>
-    <div class="feature-item">
-      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
-      Memory & context persistence
-    </div>
+<div class="container">
+  <div class="check-circle">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
   </div>
 
-  <a href="/app" class="btn-primary">Start using IlyassAI Pro →</a>
-  <p class="footer-note">A confirmation email has been sent to you. Manage your subscription anytime in Settings → Billing.</p>
+  <h1>Payment Successful!</h1>
+  <div class="plan-activated" id="planBadge">Plan Activated</div>
+
+  <div class="features-unlocked" id="featuresList">
+    <!-- filled by JS -->
+  </div>
+
+  <p>Your account has been upgraded. All features are now active.</p>
+  <a href="/app" class="btn">Go to IlyassAI →</a>
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const plan = params.get('plan') || 'pro';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDWch9gK12sGD7awxmRibU6jBspd-tjr6E",
-  authDomain: "ilyassagentai.firebaseapp.com",
-  projectId: "ilyassagentai",
-  storageBucket: "ilyassagentai.firebasestorage.app",
-  messagingSenderId: "1070041614552",
-  appId: "1:1070041614552:web:your-app-id"
-};
-const app  = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db   = getFirestore(app);
+  const planBadge = document.getElementById('planBadge');
+  const featuresList = document.getElementById('featuresList');
 
-// Update plan in Firestore client-side as backup (webhook handles this too)
-onAuthStateChanged(auth, async user => {
-  if (user && !user.isAnonymous) {
-    try {
-      await updateDoc(doc(db, "users", user.uid), {
-        plan: "pro",
-        planActivatedAt: new Date().toISOString()
-      });
-    } catch(e) {}
-  }
-});
+  const planNames = { free: 'Free', pro: 'Pro', custom: 'Custom' };
+  planBadge.textContent = `✅ ${planNames[plan] || 'Pro'} Plan Activated`;
+
+  const featuresMap = {
+    free: ['100 messages per day', '1 AI model (GPT-3.5)'],
+    pro: ['Unlimited messages', 'GPT-4o & Claude 3.5 models', 'Unlimited image generation', 'Web search integration', 'Memory & context persistence', 'Priority routing (80% faster)'],
+    custom: ['Everything in Pro', 'Your own API key', 'Custom model integrations', 'White-label options', 'Priority support'],
+  };
+
+  const features = featuresMap[plan] || featuresMap.pro;
+  featuresList.innerHTML = `
+    <h3>🎉 Now Unlocked</h3>
+    ${features.map(f => `
+      <div class="feat-item">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        ${f}
+      </div>
+    `).join('')}
+  `;
 </script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 {
-  "buildCommand": "echo 'IlyassAI build v2.6 - Stripe enabled'",
+  "buildCommand": "echo 'IlyassAI v3.0 - Full Stripe Subscription System'",
   "outputDirectory": "public",
   "cleanUrls": true,
   "trailingSlash": false,
@@ -7,5 +7,20 @@
     "api/*.js": {
       "maxDuration": 60
     }
-  }
+  },
+  "rewrites": [
+    { "source": "/pricing", "destination": "/pricing.html" },
+    { "source": "/success", "destination": "/success.html" },
+    { "source": "/app", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET,POST,OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" }
+      ]
+    }
+  ]
 }
