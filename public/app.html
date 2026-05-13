@@ -359,6 +359,30 @@
 .connector-picker.open {
   display: flex !important;
 }
+
+/* ===== FIX: Connector Picker Hidden by Default ===== */
+.connector-picker-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+  align-items: center;
+  justify-content: center;
+}
+.connector-picker-overlay.open {
+  display: flex;
+}
+.connector-picker-modal {
+  background: var(--surface);
+  border: 1px solid var(--border-md);
+  border-radius: var(--r-lg);
+  width: 400px;
+  max-width: 92vw;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
 </style>
 </head>
 <body>
