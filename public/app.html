@@ -2973,5 +2973,719 @@ window.onUserAuthChange = function(user) {
 
 </script>
 <script src="github-connector.js"></script>
+
+<!-- ============================================================
+     ILYASS AI ONBOARDING FLOW - New User Welcome
+     Inject this before </body> in app.html
+     ============================================================ -->
+
+<!-- Onboarding Overlay -->
+<div id="onboarding-overlay" style="display:none;">
+  <div id="onboarding-modal">
+    <div id="onboarding-left">
+      <div id="onboarding-visual">
+        <!-- Animated visual changes per step -->
+        <div class="ob-visual-inner" id="ob-visual-inner"></div>
+      </div>
+    </div>
+    <div id="onboarding-right">
+      <!-- Step content injected here -->
+      <div id="ob-step-content"></div>
+      <!-- Navigation -->
+      <div id="ob-nav">
+        <button id="ob-btn-back" onclick="obBack()">← Back</button>
+        <div id="ob-dots"></div>
+        <button id="ob-btn-next" onclick="obNext()">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* ===== ONBOARDING STYLES ===== */
+#onboarding-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(6px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: obFadeIn 0.4s ease;
+}
+@keyframes obFadeIn { from{opacity:0} to{opacity:1} }
+#onboarding-modal {
+  background: #fff;
+  border-radius: 20px;
+  width: 820px;
+  max-width: 95vw;
+  min-height: 480px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+  animation: obSlideUp 0.4s cubic-bezier(.22,.68,0,1.2);
+}
+@keyframes obSlideUp { from{transform:translateY(40px);opacity:0} to{transform:translateY(0);opacity:1} }
+
+/* Left visual panel */
+#onboarding-left {
+  width: 320px;
+  min-width: 280px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+#onboarding-left::before {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+  top: -100px;
+  right: -80px;
+}
+.ob-visual-inner {
+  color: white;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.ob-visual-emoji {
+  font-size: 80px;
+  display: block;
+  margin-bottom: 20px;
+  animation: obBounce 2s infinite;
+}
+@keyframes obBounce {
+  0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)}
+}
+.ob-visual-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.3;
+}
+.ob-visual-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.75);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* Right content panel */
+#onboarding-right {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: auto;
+}
+#ob-step-content h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 6px 0;
+}
+#ob-step-content p.ob-sub {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 24px 0;
+}
+
+/* Options list */
+.ob-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.ob-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border: 1.5px solid #e8e8e8;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #fafafa;
+}
+.ob-option:hover { border-color: #667eea; background: #f0f0ff; }
+.ob-option.selected { border-color: #667eea; background: #f0f0ff; }
+.ob-option .ob-opt-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+.ob-option .ob-opt-label .ob-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.ob-radio {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ob-option.selected .ob-radio {
+  border-color: #667eea;
+  background: #667eea;
+}
+.ob-option.selected .ob-radio::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+}
+
+/* Checkbox style for multi-select */
+.ob-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  flex-shrink: 0;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+.ob-option.selected .ob-checkbox {
+  border-color: #667eea;
+  background: #667eea;
+  color: white;
+}
+
+/* Features grid */
+.ob-features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.ob-feature-card {
+  border: 1.5px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #fafafa;
+  position: relative;
+}
+.ob-feature-card:hover { border-color: #667eea; background: #f0f0ff; }
+.ob-feature-card.selected { border-color: #667eea; background: #f0f0ff; }
+.ob-feature-card .ob-feat-icon { font-size: 28px; margin-bottom: 8px; }
+.ob-feature-card .ob-feat-name { font-size: 13px; font-weight: 600; color: #333; }
+.ob-feature-card .ob-feat-desc { font-size: 11px; color: #888; margin-top: 2px; }
+.ob-feature-card .ob-check-badge {
+  position: absolute;
+  top: 8px; right: 8px;
+  width: 20px; height: 20px;
+  background: #667eea;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 11px;
+}
+.ob-feature-card.selected .ob-check-badge { display: flex; }
+
+/* Progress bar */
+#ob-progress-bar {
+  height: 4px;
+  background: #eee;
+  border-radius: 2px;
+  margin-bottom: 28px;
+  overflow: hidden;
+}
+#ob-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+/* Navigation */
+#ob-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+#ob-btn-back {
+  background: none;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+#ob-btn-back:hover { border-color: #667eea; color: #667eea; }
+#ob-btn-back:disabled { opacity: 0.3; cursor: not-allowed; }
+#ob-btn-next {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+#ob-btn-next:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(102,126,234,0.4); }
+#ob-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.ob-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #ddd;
+  transition: all 0.3s;
+}
+.ob-dot.active { background: #667eea; width: 20px; border-radius: 4px; }
+
+/* Skip link */
+.ob-skip {
+  font-size: 12px;
+  color: #aaa;
+  text-align: center;
+  margin-top: 8px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.ob-skip:hover { color: #667eea; }
+
+/* Welcome step */
+.ob-welcome {
+  text-align: center;
+  padding: 20px 0;
+}
+.ob-welcome .ob-logo {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+.ob-welcome h2 { font-size: 28px !important; }
+.ob-welcome .ob-desc {
+  font-size: 15px;
+  color: #555;
+  line-height: 1.6;
+  margin: 16px 0 24px;
+}
+.ob-welcome-feature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f5f5f5;
+  text-align: left;
+}
+.ob-welcome-feature:last-child { border-bottom: none; }
+.ob-welcome-feature .wf-icon { font-size: 20px; }
+.ob-welcome-feature .wf-text { font-size: 14px; color: #555; }
+.ob-welcome-feature .wf-text strong { color: #333; }
+
+/* Final step */
+.ob-final {
+  text-align: center;
+  padding: 10px 0;
+}
+.ob-final .ob-avatar-big {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+}
+.ob-final h2 { font-size: 26px !important; }
+.ob-final .ob-summary {
+  background: #f8f8ff;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+  text-align: left;
+}
+.ob-final .ob-summary-item {
+  display: flex;
+  gap: 10px;
+  padding: 6px 0;
+  font-size: 14px;
+  color: #555;
+}
+.ob-final .ob-summary-item strong { color: #333; min-width: 100px; }
+.ob-launch-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: all 0.2s;
+}
+.ob-launch-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(102,126,234,0.4); }
+
+/* Responsive */
+@media (max-width: 640px) {
+  #onboarding-left { display: none; }
+  #onboarding-modal { width: 95vw; }
+  #onboarding-right { padding: 28px 20px; }
+  .ob-features-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+// ===== ILYASS AI ONBOARDING SYSTEM =====
+(function() {
+  const OB_KEY = 'ilyassai_onboarding_done';
+  const OB_DATA_KEY = 'ilyassai_onboarding_data';
+
+  // Onboarding state
+  let obStep = 0;
+  let obData = {
+    source: '',
+    role: '',
+    features: [],
+    name: ''
+  };
+
+  // Steps config
+  const steps = [
+    { id: 'welcome' },
+    { id: 'source' },
+    { id: 'role' },
+    { id: 'features' },
+    { id: 'final' }
+  ];
+
+  // Visuals per step
+  const visuals = {
+    welcome: { emoji: '🤖', title: 'Welcome to IlyassAI', sub: 'Your autonomous AI agent' },
+    source: { emoji: '🌍', title: 'Help us grow', sub: 'Tell us how you found us' },
+    role: { emoji: '💼', title: 'Personalize your experience', sub: 'We adapt to your workflow' },
+    features: { emoji: '⚡', title: 'Supercharge your agent', sub: 'Pick your superpowers' },
+    final: { emoji: '🚀', title: 'You're all set!', sub: 'Let's build something amazing' }
+  };
+
+  // Check if already done
+  function shouldShowOnboarding() {
+    return !localStorage.getItem(OB_KEY);
+  }
+
+  // Initialize
+  window.initOnboarding = function() {
+    if (!shouldShowOnboarding()) return;
+    // Small delay for page load
+    setTimeout(() => {
+      document.getElementById('onboarding-overlay').style.display = 'flex';
+      renderStep();
+    }, 800);
+  };
+
+  // Render current step
+  function renderStep() {
+    const step = steps[obStep];
+    const visual = visuals[step.id];
+
+    // Update visual panel
+    const vi = document.getElementById('ob-visual-inner');
+    vi.innerHTML = `
+      <span class="ob-visual-emoji">${visual.emoji}</span>
+      <div class="ob-visual-title">${visual.title}</div>
+      <div class="ob-visual-sub">${visual.sub}</div>
+    `;
+
+    // Update progress
+    updateDots();
+    updateNav();
+
+    // Render step content
+    const content = document.getElementById('ob-step-content');
+    const totalSteps = steps.length;
+    const pct = Math.round((obStep / (totalSteps - 1)) * 100);
+
+    let html = `<div id="ob-progress-bar"><div id="ob-progress-fill" style="width:${pct}%"></div></div>`;
+
+    switch(step.id) {
+      case 'welcome':
+        html += renderWelcome();
+        break;
+      case 'source':
+        html += renderSource();
+        break;
+      case 'role':
+        html += renderRole();
+        break;
+      case 'features':
+        html += renderFeatures();
+        break;
+      case 'final':
+        html += renderFinal();
+        break;
+    }
+
+    content.innerHTML = html;
+  }
+
+  function renderWelcome() {
+    return `
+      <div class="ob-welcome">
+        <h2>Welcome to IlyassAI 👋</h2>
+        <p class="ob-desc">Your autonomous AI agent that thinks, acts & builds. Let's get you set up in 30 seconds.</p>
+        <div class="ob-welcome-feature">
+          <span class="wf-icon">🧠</span>
+          <span class="wf-text"><strong>15+ Free AI Models</strong> — Always picks the best for your task</span>
+        </div>
+        <div class="ob-welcome-feature">
+          <span class="wf-icon">🔍</span>
+          <span class="wf-text"><strong>Real-Time Web Search</strong> — Always up-to-date answers</span>
+        </div>
+        <div class="ob-welcome-feature">
+          <span class="wf-icon">💻</span>
+          <span class="wf-text"><strong>Code Generation & Deploy</strong> — Push to GitHub & Vercel</span>
+        </div>
+        <div class="ob-welcome-feature">
+          <span class="wf-icon">🎨</span>
+          <span class="wf-text"><strong>Image & Video Generation</strong> — Free, unlimited creativity</span>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderSource() {
+    const sources = [
+      { id: 'google', label: 'Google Search', icon: '🔍', bg: '#4285F4' },
+      { id: 'chatgpt', label: 'ChatGPT / Claude / Perplexity', icon: '🤖', bg: '#10a37f' },
+      { id: 'youtube', label: 'YouTube', icon: '▶️', bg: '#FF0000' },
+      { id: 'twitter', label: 'X / Twitter', icon: '𝕏', bg: '#000' },
+      { id: 'tiktok', label: 'TikTok / Instagram', icon: '📱', bg: '#ff0050' },
+      { id: 'reddit', label: 'Reddit / Hacker News', icon: '🟠', bg: '#FF4500' },
+      { id: 'friend', label: 'Friend or colleague', icon: '👥', bg: '#667eea' },
+      { id: 'other', label: 'Other', icon: '✨', bg: '#888' },
+    ];
+    return `
+      <h2>How did you hear about IlyassAI?</h2>
+      <p class="ob-sub">We'd love to know what brought you here.</p>
+      <div class="ob-options-list">
+        ${sources.map(s => `
+          <div class="ob-option ${obData.source === s.id ? 'selected' : ''}" onclick="obSelectSource('${s.id}')">
+            <span class="ob-opt-label">
+              <span class="ob-icon" style="background:${s.bg}20;color:${s.bg}">${s.icon}</span>
+              ${s.label}
+            </span>
+            <span class="ob-radio"></span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  function renderRole() {
+    const roles = [
+      { id: 'developer', label: 'Developer / Engineer', icon: '👨‍💻', bg: '#3b82f6' },
+      { id: 'designer', label: 'Designer / Creative', icon: '🎨', bg: '#ec4899' },
+      { id: 'student', label: 'Student / Researcher', icon: '📚', bg: '#8b5cf6' },
+      { id: 'marketer', label: 'Marketing / Content', icon: '📈', bg: '#f59e0b' },
+      { id: 'entrepreneur', label: 'Entrepreneur / Founder', icon: '🚀', bg: '#10b981' },
+      { id: 'product', label: 'Product Manager', icon: '📋', bg: '#6366f1' },
+      { id: 'data', label: 'Data / Analytics', icon: '📊', bg: '#0ea5e9' },
+      { id: 'other', label: 'Other', icon: '✨', bg: '#888' },
+    ];
+    return `
+      <h2>What best describes your role?</h2>
+      <p class="ob-sub">We'll personalize IlyassAI for your workflow.</p>
+      <div class="ob-options-list">
+        ${roles.map(r => `
+          <div class="ob-option ${obData.role === r.id ? 'selected' : ''}" onclick="obSelectRole('${r.id}')">
+            <span class="ob-opt-label">
+              <span class="ob-icon" style="background:${r.bg}20;color:${r.bg}">${r.icon}</span>
+              ${r.label}
+            </span>
+            <span class="ob-radio"></span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  function renderFeatures() {
+    const features = [
+      { id: 'chat', name: 'AI Chat', icon: '💬', desc: 'Intelligent conversations' },
+      { id: 'search', name: 'Web Search', icon: '🔍', desc: 'Real-time information' },
+      { id: 'code', name: 'Code Generation', icon: '💻', desc: 'Write & debug code' },
+      { id: 'image', name: 'Image Generation', icon: '🎨', desc: 'Create stunning images' },
+      { id: 'video', name: 'Video Generation', icon: '🎬', desc: 'Animate & create videos' },
+      { id: 'github', name: 'GitHub Deploy', icon: '🐙', desc: 'Push code directly' },
+      { id: 'memory', name: 'Persistent Memory', icon: '🧠', desc: 'Remembers context' },
+      { id: 'voice', name: 'Voice Input', icon: '🎤', desc: 'Talk to your agent' },
+    ];
+    return `
+      <h2>Enable your superpowers ⚡</h2>
+      <p class="ob-sub">Select features you want to use (you can change this later).</p>
+      <div class="ob-features-grid">
+        ${features.map(f => `
+          <div class="ob-feature-card ${obData.features.includes(f.id) ? 'selected' : ''}" onclick="obToggleFeature('${f.id}')">
+            <div class="ob-check-badge">✓</div>
+            <div class="ob-feat-icon">${f.icon}</div>
+            <div class="ob-feat-name">${f.name}</div>
+            <div class="ob-feat-desc">${f.desc}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  function renderFinal() {
+    const roleLabels = {
+      developer: 'Developer', designer: 'Designer', student: 'Student',
+      marketer: 'Marketer', entrepreneur: 'Entrepreneur', product: 'Product Manager',
+      data: 'Data Analyst', other: 'Other'
+    };
+    const sourceLabels = {
+      google: 'Google Search', chatgpt: 'ChatGPT/Claude', youtube: 'YouTube',
+      twitter: 'X/Twitter', tiktok: 'TikTok/Instagram', reddit: 'Reddit',
+      friend: 'Friend/Colleague', other: 'Other'
+    };
+    return `
+      <div class="ob-final">
+        <div class="ob-avatar-big">🤖</div>
+        <h2>You're all set! 🎉</h2>
+        <p class="ob-sub">IlyassAI is ready to assist you. Here's your profile:</p>
+        <div class="ob-summary">
+          ${obData.role ? `<div class="ob-summary-item"><strong>Role:</strong> ${roleLabels[obData.role] || obData.role}</div>` : ''}
+          ${obData.source ? `<div class="ob-summary-item"><strong>Found us via:</strong> ${sourceLabels[obData.source] || obData.source}</div>` : ''}
+          ${obData.features.length > 0 ? `<div class="ob-summary-item"><strong>Features:</strong> ${obData.features.length} enabled</div>` : ''}
+        </div>
+        <button class="ob-launch-btn" onclick="obFinish()">🚀 Launch IlyassAI</button>
+      </div>
+    `;
+  }
+
+  function updateDots() {
+    const dots = document.getElementById('ob-dots');
+    dots.innerHTML = steps.map((_, i) =>
+      `<div class="ob-dot ${i === obStep ? 'active' : ''}"></div>`
+    ).join('');
+  }
+
+  function updateNav() {
+    const btnBack = document.getElementById('ob-btn-back');
+    const btnNext = document.getElementById('ob-btn-next');
+    const step = steps[obStep];
+
+    btnBack.disabled = obStep === 0;
+
+    if (step.id === 'final') {
+      btnNext.style.display = 'none';
+    } else {
+      btnNext.style.display = 'block';
+      btnNext.textContent = obStep === steps.length - 2 ? 'See Summary →' : 'Continue →';
+    }
+
+    if (obStep === 0) {
+      btnBack.style.display = 'none';
+    } else {
+      btnBack.style.display = 'block';
+    }
+  }
+
+  // Global selection functions
+  window.obSelectSource = function(id) {
+    obData.source = id;
+    renderStep();
+  };
+
+  window.obSelectRole = function(id) {
+    obData.role = id;
+    renderStep();
+  };
+
+  window.obToggleFeature = function(id) {
+    const idx = obData.features.indexOf(id);
+    if (idx === -1) obData.features.push(id);
+    else obData.features.splice(idx, 1);
+    renderStep();
+  };
+
+  window.obNext = function() {
+    if (obStep < steps.length - 1) {
+      obStep++;
+      renderStep();
+    }
+  };
+
+  window.obBack = function() {
+    if (obStep > 0) {
+      obStep--;
+      renderStep();
+    }
+  };
+
+  window.obFinish = function() {
+    // Save onboarding data
+    localStorage.setItem(OB_KEY, '1');
+    localStorage.setItem(OB_DATA_KEY, JSON.stringify(obData));
+    // Hide overlay with animation
+    const overlay = document.getElementById('onboarding-overlay');
+    overlay.style.animation = 'obFadeIn 0.3s ease reverse forwards';
+    setTimeout(() => {
+      overlay.style.display = 'none';
+    }, 300);
+  };
+
+  // Also allow skip
+  window.obSkip = function() {
+    localStorage.setItem(OB_KEY, '1');
+    document.getElementById('onboarding-overlay').style.display = 'none';
+  };
+
+  // Auto-init when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', window.initOnboarding);
+  } else {
+    window.initOnboarding();
+  }
+})();
+</script>
+
 </body>
 </html>
