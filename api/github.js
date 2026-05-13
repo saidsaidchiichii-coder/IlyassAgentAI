@@ -1,5 +1,6 @@
-// api/github.js — GitHub OAuth + AI GitHub Tool for IlyassAI
-// Handles: /api/github?action=auth | callback | repos | files | ai-github
+// api/github.js — GitHub AI Tool for IlyassAI
+// Uses GH_TOKEN from Vercel env to give AI access to GitHub
+// Actions: ?action=repos | ai-github | files
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -7,88 +8,41 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-api-key');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const action = req.query.action || 'auth';
+  const action = req.query.action || 'repos';
 
-  if (action === 'auth') return handleAuth(req, res);
-  if (action === 'callback') return handleCallback(req, res);
-  if (action === 'repos') return handleRepos(req, res);
-  if (action === 'ai-github') return handleAIGitHub(req, res);
+  if (action === 'repos')      return handleRepos(req, res);
+  if (action === 'ai-github')  return handleAIGitHub(req, res);
+  if (action === 'files')      return handleFiles(req, res);
 
-  return res.status(400).json({ error: 'Unknown action. Use ?action=auth|callback|repos|ai-github' });
+  return res.status(400).json({ error: 'Use ?action=repos|ai-github|files' });
 }
 
-// ─── STEP 1: Redirect user to GitHub OAuth ───────────────────────────────────
-function handleAuth(req, res) {
-  const clientId = process.env.GITHUB_CLIENT_ID;
-  if (!clientId) return res.status(500).json({ error: 'GITHUB_CLIENT_ID not set' });
-
-  const redirectUri = process.env.GITHUB_REDIRECT_URI || 
-    'https://my-webxyu.vercel.app/api/github?action=callback';
-
-  const scope = 'repo read:user';
-  const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}`;
-
-  return res.redirect(githubAuthUrl);
-}
-
-// ─── STEP 2: GitHub redirects back with code → exchange for token ─────────────
-async function handleCallback(req, res) {
-  const { code } = req.query;
-  if (!code) return res.status(400).json({ error: 'No code provided' });
-
-  const clientId = process.env.GITHUB_CLIENT_ID;
-  const clientSecret = process.env.GITHUB_CLIENT_SECRET;
-
-  try {
-    // Exchange code for access token
-    const tokenRes = await fetch('https://github.com/login/oauth/access_token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ client_id: clientId, client_secret: clientSecret, code })
-    });
-
-    const tokenData = await tokenRes.json();
-    const accessToken = tokenData.access_token;
-
-    if (!accessToken) return res.status(400).json({ error: 'Failed to get access token', details: tokenData });
-
-    // Get user info
-    const userRes = await fetch('https://api.github.com/user', {
-      headers: { 'Authorization': `Bearer ${accessToken}`, 'Accept': 'application/json' }
-    });
-    const userData = await userRes.json();
-
-    // Redirect back to frontend with token and username
-    const frontendUrl = `https://my-webxyu.vercel.app/?github_token=${accessToken}&github_user=${userData.login}&github_avatar=${encodeURIComponent(userData.avatar_url || '')}`;
-    return res.redirect(frontendUrl);
-
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
-  }
-}
-
-// ─── STEP 3: List repos using stored token ───────────────────────────────────
+// ─── Get list of repos ───────────────────────────────────────────────────────
 async function handleRepos(req, res) {
-  const token = req.headers['x-github-token'] || req.query.token;
-  if (!token) return res.status(401).json({ error: 'No GitHub token. Connect GitHub first.' });
+  const token = process.env.GH_TOKEN;
+  if (!token) return res.status(500).json({ error: 'GH_TOKEN not configured' });
 
   try {
     const r = await fetch('https://api.github.com/user/repos?sort=updated&per_page=50', {
-      headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+      headers: { 
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
     });
 
-    if (!r.ok) return res.status(r.status).json({ error: 'GitHub API error', status: r.status });
+    if (!r.ok) return res.status(r.status).json({ error: 'GitHub API error' });
 
     const repos = await r.json();
     const simplified = repos.map(repo => ({
       name: repo.name,
       full_name: repo.full_name,
-      description: repo.description,
-      language: repo.language,
+      description: repo.description || 'No description',
+      language: repo.language || 'Unknown',
       stars: repo.stargazers_count,
       private: repo.private,
       updated_at: repo.updated_at,
-      url: repo.html_url
+      url: repo.html_url,
+      size: repo.size
     }));
 
     return res.status(200).json({ success: true, count: simplified.length, repos: simplified });
@@ -97,64 +51,103 @@ async function handleRepos(req, res) {
   }
 }
 
-// ─── STEP 4: AI talks to GitHub (the main feature!) ─────────────────────────
+// ─── Get files from a specific repo ─────────────────────────────────────────
+async function handleFiles(req, res) {
+  const token = process.env.GH_TOKEN;
+  const { repo, path } = req.query;
+  if (!repo) return res.status(400).json({ error: 'repo parameter required' });
+
+  try {
+    const apiPath = path ? `contents/${path}` : 'contents';
+    const r = await fetch(`https://api.github.com/repos/${repo}/${apiPath}`, {
+      headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+    });
+
+    if (!r.ok) return res.status(r.status).json({ error: 'GitHub API error' });
+    const data = await r.json();
+    return res.status(200).json({ success: true, data });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+}
+
+// ─── AI talks to GitHub ──────────────────────────────────────────────────────
 async function handleAIGitHub(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'POST only' });
 
-  const { message, github_token } = req.body || {};
-  if (!message) return res.status(400).json({ error: 'message is required' });
-  if (!github_token) return res.status(401).json({ error: 'github_token is required. Connect GitHub first.' });
+  const { message, messages } = req.body || {};
+  if (!message && !messages) return res.status(400).json({ error: 'message required' });
+
+  const token = process.env.GH_TOKEN;
+  const groqKey = process.env.GROQ_API_KEY;
+
+  if (!token) return res.status(500).json({ error: 'GH_TOKEN not configured' });
+  if (!groqKey) return res.status(500).json({ error: 'GROQ_API_KEY not configured' });
 
   try {
-    // 1. Fetch user's repos to give AI context
-    const reposRes = await fetch('https://api.github.com/user/repos?sort=updated&per_page=30', {
-      headers: { 'Authorization': `Bearer ${github_token}`, 'Accept': 'application/vnd.github.v3+json' }
-    });
-    const repos = await reposRes.json();
-    
-    const repoList = Array.isArray(repos) 
-      ? repos.map(r => `- ${r.name} (${r.language || 'Unknown'}) — ${r.description || 'No description'} | Stars: ${r.stargazers_count} | ${r.private ? 'Private' : 'Public'}`).join('\n')
-      : 'Could not fetch repos';
+    // 1. Fetch repos for context
+    const [reposRes, userRes] = await Promise.all([
+      fetch('https://api.github.com/user/repos?sort=updated&per_page=30', {
+        headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+      }),
+      fetch('https://api.github.com/user', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+    ]);
 
-    // Get GitHub username
-    const userRes = await fetch('https://api.github.com/user', {
-      headers: { 'Authorization': `Bearer ${github_token}` }
-    });
+    const repos = await reposRes.json();
     const userData = await userRes.json();
 
-    // 2. Build system prompt with GitHub context
-    const systemPrompt = `You are IlyassAI, a smart personal assistant with access to the user's GitHub account.
+    const repoList = Array.isArray(repos)
+      ? repos.map(r => `• ${r.name} [${r.language || 'Unknown'}] — ${r.description || 'No description'} | ⭐${r.stargazers_count} | ${r.private ? '🔒 Private' : '🌍 Public'} | Updated: ${new Date(r.updated_at).toLocaleDateString()}`).join('\n')
+      : 'Could not fetch repos';
 
-GitHub User: ${userData.login || 'Unknown'}
-GitHub Name: ${userData.name || 'Unknown'}
-Public Repos: ${userData.public_repos || 0}
-Followers: ${userData.followers || 0}
+    // 2. System prompt with full GitHub context
+    const systemPrompt = `You are IlyassAI, a smart assistant with direct access to the user's GitHub account.
 
-USER'S REPOSITORIES (${Array.isArray(repos) ? repos.length : 0} repos):
+GITHUB ACCOUNT:
+👤 Username: ${userData.login || 'Unknown'}
+📛 Name: ${userData.name || 'Unknown'}  
+📁 Public Repos: ${userData.public_repos || 0}
+👥 Followers: ${userData.followers || 0}
+⭐ Following: ${userData.following || 0}
+🌍 Location: ${userData.location || 'Unknown'}
+🔗 Profile: https://github.com/${userData.login}
+
+REPOSITORIES (${Array.isArray(repos) ? repos.length : 0} total):
 ${repoList}
 
-RULES:
-1. Answer questions about the user's GitHub repos using the data above
-2. If asked "what repos do I have?", list them clearly
-3. If asked about a specific repo, provide details from the list
-4. If the user asks to do something (create file, open issue, etc.), say you can help but need more details
-5. Always be helpful and specific about their actual repos
-6. Never mention Groq, OpenAI or any AI provider
-7. Respond in the same language the user uses`;
+YOUR CAPABILITIES:
+- Answer questions about repos, languages, stats
+- Help analyze code structure
+- Suggest improvements
+- Explain what each project does
 
-    // 3. Call Groq AI
+RULES:
+1. Use the GitHub data above to answer accurately
+2. If asked "what repos do I have?" → list them clearly with details
+3. Be specific, helpful, and concise
+4. Respond in the same language as the user
+5. Never mention Groq, GitHub tokens, or internal implementation`;
+
+    // 3. Build messages array
+    let chatMessages;
+    if (messages && Array.isArray(messages)) {
+      chatMessages = messages;
+    } else {
+      chatMessages = [{ role: 'user', content: message }];
+    }
+
+    // 4. Call Groq
     const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json', 
-        'Authorization': `Bearer ${process.env.GROQ_API_KEY}` 
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${groqKey}`
       },
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: message }
-        ],
+        messages: [{ role: 'system', content: systemPrompt }, ...chatMessages],
         max_tokens: 1024,
         temperature: 0.7
       }),
@@ -169,8 +162,8 @@ RULES:
     const groqData = await groqRes.json();
     const reply = groqData.choices?.[0]?.message?.content;
 
-    return res.status(200).json({ 
-      success: true, 
+    return res.status(200).json({
+      success: true,
       reply,
       github_user: userData.login,
       repos_count: Array.isArray(repos) ? repos.length : 0
