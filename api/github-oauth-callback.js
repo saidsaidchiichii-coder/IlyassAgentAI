@@ -41,10 +41,10 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        client_id: process.env.GITHUB_CLIENT_ID,
-        client_secret: process.env.GITHUB_CLIENT_SECRET,
+        client_id: 'Ov23lirMXFp5nCzBIGLz',
+        client_secret: 'e81d6da171e521447fb2a65b6786fd529d683b6c',
         code: code,
-        redirect_uri: `${process.env.VERCEL_URL || 'https://my-webxyu.vercel.app'}/app?github_callback=true`
+        redirect_uri: `https://my-webxyu.vercel.app/app?github_callback=true`
       })
     });
 

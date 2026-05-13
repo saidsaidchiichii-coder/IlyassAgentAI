@@ -23,7 +23,7 @@ window.addConnector = async function(platform) {
     const userId = window.auth.currentUser.uid;
     const redirectUri = `${window.location.origin}/api/github-connector?action=callback&userId=${userId}`;
     const params = new URLSearchParams({
-      client_id: 'Ov23liMCXvJJNqMbVvqN', // GitHub OAuth App ID
+      client_id: 'Ov23lirMXFp5nCzBIGLz', // GitHub OAuth App ID
       redirect_uri: redirectUri,
       scope: 'repo read:user user:email',
       state: userId,
