@@ -655,7 +655,7 @@ section{position:relative;z-index:2}
       <div class="price-card featured">
         <div class="price-badge">Most Popular</div>
         <div class="price-name">Pro</div>
-        <div class="price-amount">$12<span>/mo</span></div>
+        <div class="price-amount">$18<span>/mo</span></div>
         <div class="price-period">Billed monthly</div>
         <ul class="price-features">
           <li>Unlimited messages</li>
@@ -665,12 +665,12 @@ section{position:relative;z-index:2}
           <li>Memory & context persistence</li>
           <li>Priority model routing</li>
         </ul>
-        <button class="btn-hero" style="width:100%;justify-content:center" onclick="window.location.href='/app'">Upgrade to Pro</button>
+        <button class="btn-hero" style="width:100%;justify-content:center" id="btn-upgrade-pro" onclick="handleCheckout('pro')">Upgrade to Pro — $18/mo</button>
       </div>
       <div class="price-card">
-        <div class="price-name">Enterprise</div>
-        <div class="price-amount">Custom</div>
-        <div class="price-period">Contact us</div>
+        <div class="price-name">Custom</div>
+        <div class="price-amount">$80<span>/mo</span></div>
+        <div class="price-period">Your own API key</div>
         <ul class="price-features">
           <li>Unlimited everything</li>
           <li>Custom model hosting</li>
@@ -679,11 +679,39 @@ section{position:relative;z-index:2}
           <li>SLA guarantee</li>
           <li>Custom integrations</li>
         </ul>
-        <button class="btn-hero-ghost" style="width:100%;justify-content:center" onclick="window.location.href='mailto:enterprise@ilyassai.com'">Contact Sales</button>
+        <button class="btn-hero-ghost" style="width:100%;justify-content:center" id="btn-upgrade-custom" onclick="handleCheckout('custom')">Get Custom — $80/mo</button>
       </div>
     </div>
   </div>
+
+    <p id="pricing-msg" style="text-align:center;margin-top:20px;font-size:0.85rem;color:#94a3b8;min-height:22px;"></p>
+  </div>
 </section>
+
+<script type="module">
+  import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+  import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+  const _fbCfg={apiKey:"AIzaSyDWch9gK12sGD7awxmRibU6jBspd-tjr6E",authDomain:"ilyassagentai.firebaseapp.com",projectId:"ilyassagentai",storageBucket:"ilyassagentai.firebasestorage.app",messagingSenderId:"1070041614552",appId:"1:1070041614552:web:your-app-id"};
+  let _user=null;
+  try{const app=getApps().length?getApps()[0]:initializeApp(_fbCfg);onAuthStateChanged(getAuth(app),u=>{_user=u;});}catch(e){}
+  window.handleCheckout=async(plan)=>{
+    const msg=document.getElementById('pricing-msg');
+    const btn=document.getElementById('btn-upgrade-'+plan);
+    if(!_user){if(msg){msg.textContent='Please sign in first';msg.style.color='#f87171';}setTimeout(()=>window.location.href='/auth',1200);return;}
+    if(btn){btn.disabled=true;btn.textContent='Connecting to Stripe...';}
+    if(msg){msg.textContent='Opening secure checkout...';msg.style.color='#a78bfa';}
+    try{
+      const token=await _user.getIdToken();
+      const res=await fetch('/api/create-checkout',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({plan,userId:_user.uid,email:_user.email})});
+      const data=await res.json();
+      if(!res.ok||data.error)throw new Error(data.error||'Checkout failed');
+      window.location.href=data.url;
+    }catch(err){
+      if(msg){msg.textContent='Error: '+err.message;msg.style.color='#f87171';}
+      if(btn){btn.disabled=false;btn.textContent=plan==='pro'?'Upgrade to Pro — $18/mo':'Get Custom — $80/mo';}
+    }
+  };
+</script>
 
 <!-- ══════════════════════ TESTIMONIALS ══════════════════════ -->
 <section class="section" id="testimonials">
