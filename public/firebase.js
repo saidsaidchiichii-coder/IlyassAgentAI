@@ -39,7 +39,7 @@ const auth = getAuth(app);
 const db   = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
-// Expose globally so app.html can use them
+// Expose globally
 window.auth = auth;
 window.db   = db;
 window.FirebaseFirestore = { doc, setDoc, getDoc, collection, query, where, getDocs };
@@ -68,7 +68,6 @@ async function saveUserProfile(user) {
     const ref  = doc(db, "users", user.uid);
     const snap = await getDoc(ref);
     if (!snap.exists()) {
-      // First login — create profile
       await setDoc(ref, {
         uid:         user.uid,
         displayName: user.displayName || user.email?.split("@")[0] || "User",
@@ -87,13 +86,24 @@ async function saveUserProfile(user) {
 
 // ================= AUTH STATE LISTENER =================
 onAuthStateChanged(auth, async (user) => {
-  // Save profile on first login
   if (user && !user.isAnonymous) {
     await saveUserProfile(user);
   }
-  // Notify the app
   if (typeof window.onUserAuthChange === "function") {
     window.onUserAuthChange(user);
+  }
+
+  // 🎉 ONBOARDING — يبان قبل أول رسالة للمستخدم الجديد
+  if (user && !localStorage.getItem("ilyassai_onboarding_done")) {
+    setTimeout(() => {
+      // أخبي login modal
+      const authM = document.getElementById("authModal");
+      if (authM) authM.classList.remove("open");
+      // شغّل onboarding
+      if (typeof window.initOnboarding === "function") {
+        window.initOnboarding();
+      }
+    }, 600);
   }
 });
 
@@ -142,14 +152,6 @@ window.handleAuth = async () => {
       const name = email.split("@")[0];
       await updateProfile(cred.user, { displayName: name });
       showMsg("✅ Account created! Welcome " + name);
-      // 🎉 Trigger onboarding for new user
-      setTimeout(() => {
-        const authM = document.getElementById('authModal');
-        if (authM) authM.classList.remove('open');
-        if (typeof window.initOnboarding === 'function') {
-          window.initOnboarding();
-        }
-      }, 500);
     } else {
       const cred = await signInWithEmailAndPassword(auth, email, password);
       showMsg("🔥 Welcome back " + (cred.user.displayName || ""));
@@ -185,42 +187,3 @@ window.cancel = () => {
   if (box) box.classList.add("hidden");
 };
 window.loginEmail = window.handleAuth;
-
-// ===== ONBOARDING TRIGGER - New User Detection =====
-// يبان الـ onboarding بعد signup مباشرة
-(function() {
-  let _obTriggered = false;
-  
-  function checkAndTriggerOnboarding(user) {
-    if (!user || _obTriggered) return;
-    if (localStorage.getItem('ilyassai_onboarding_done')) return;
-    
-    // هل هو user جديد؟ (وقت الإنشاء قريب من وقت آخر دخول)
-    const createdAt = new Date(user.metadata.creationTime).getTime();
-    const lastSignIn = new Date(user.metadata.lastSignInTime).getTime();
-    const isNewUser = Math.abs(createdAt - lastSignIn) < 60000; // 60 seconds
-    
-    if (isNewUser) {
-      _obTriggered = true;
-      // أخبي authModal أولاً
-      const authModal = document.getElementById('authModal');
-      if (authModal) authModal.style.display = 'none';
-      // بان الـ onboarding
-      setTimeout(function() {
-        if (typeof window.initOnboarding === 'function') {
-          window.initOnboarding();
-        }
-      }, 300);
-    }
-  }
-  
-  // Hook into Firebase auth
-  function waitForFirebase() {
-    if (window.firebase && window.firebase.auth) {
-      window.firebase.auth().onAuthStateChanged(checkAndTriggerOnboarding);
-    } else {
-      setTimeout(waitForFirebase, 200);
-    }
-  }
-  waitForFirebase();
-})();
