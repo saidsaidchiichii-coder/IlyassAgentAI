@@ -599,6 +599,74 @@
   color: var(--text-muted);
   flex-shrink: 0;
 }
+
+/* ===== PROFILE CARD IN SETTINGS ===== */
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-md);
+  border-radius: var(--r-lg);
+  margin-bottom: 4px;
+}
+.profile-avatar-wrap { flex-shrink: 0; }
+.profile-avatar {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: var(--surface-3);
+  border: 2px solid var(--border-md);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-dim);
+  font-size: 18px; font-weight: 700;
+  overflow: hidden;
+}
+.profile-avatar img {
+  width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+}
+.profile-info { flex: 1; min-width: 0; }
+.profile-name {
+  font-size: 15px; font-weight: 600; color: var(--text);
+  margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.profile-email {
+  font-size: 12px; color: var(--text-dim);
+  margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.profile-plan {
+  display: inline-block;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: 1px solid rgba(255,107,53,0.25);
+}
+.profile-plan.pro {
+  background: rgba(74,222,128,0.1);
+  color: var(--green);
+  border-color: rgba(74,222,128,0.25);
+}
+.profile-auth-btn {
+  flex-shrink: 0;
+  background: var(--surface-3);
+  border: 1px solid var(--border-md);
+  border-radius: var(--r-md);
+  color: var(--text-dim);
+  font-size: 12px; font-weight: 500;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.profile-auth-btn:hover { background: var(--surface-4); color: var(--text); }
+.profile-auth-btn.signout {
+  color: var(--red);
+  border-color: rgba(248,113,113,0.3);
+}
+.profile-auth-btn.signout:hover { background: rgba(248,113,113,0.1); }
 </style>
 </head>
 <body>
@@ -1179,7 +1247,25 @@
       </button>
       
       <div id="settings-tab-general" class="settings-tab-content active">
-        <div class="settings-content-header">
+        <!-- PROFILE CARD -->
+        <div class="profile-card" id="profileCard">
+          <div class="profile-avatar-wrap">
+            <div class="profile-avatar" id="settingsAvatar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </div>
+          </div>
+          <div class="profile-info">
+            <div class="profile-name" id="settingsDisplayName">Guest</div>
+            <div class="profile-email" id="settingsEmail">Not signed in</div>
+            <div class="profile-plan" id="settingsPlanBadge">Free Plan</div>
+          </div>
+          <button class="profile-auth-btn" id="settingsAuthBtn" onclick="showAuthModal('login')">Sign in</button>
+        </div>
+
+        <div class="settings-content-header" style="margin-top:20px;">
           <h2>General Settings</h2>
           <p>Manage your account preferences and appearance.</p>
         </div>
@@ -1440,23 +1526,99 @@ function loadSavedSettings() {
 }
 
 async function loadConnectorsFromFirebase() {
-  if (window.auth) {
-    // Wait for auth to initialize
-    window.auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        const { doc, getDoc } = window.FirebaseFirestore;
-        const userDoc = await getDoc(doc(window.db, "users", user.uid));
-        if (userDoc.exists()) {
-          const data = userDoc.data();
-          if (data.connectors) {
-            _connectedPlatforms = data.connectors.map(c => c.platform);
-            renderConnectors();
-          }
-        }
-      }
-    });
+  // Wait for firebase auth state
+  if (!window._firebaseAuthReady) {
+    setTimeout(loadConnectorsFromFirebase, 500);
+    return;
   }
+  const user = window._currentUser;
+  if (!user || user.isAnonymous) return;
+  
+  try {
+    const { doc, getDoc } = window.FirebaseFirestore || {};
+    if (!doc || !getDoc || !window.db) return;
+    const userDoc = await getDoc(doc(window.db, "users", user.uid));
+    if (userDoc.exists()) {
+      const data = userDoc.data();
+      if (data.connectors) {
+        _connectedPlatforms = data.connectors.map(c => c.platform);
+        renderConnectors();
+      }
+    }
+  } catch(e) {}
 }
+
+// Called from firebase.js when auth state changes
+window.onUserAuthChange = function(user) {
+  window._currentUser = user;
+  window._firebaseAuthReady = true;
+  
+  const avatarEl  = document.getElementById('settingsAvatar');
+  const nameEl    = document.getElementById('settingsDisplayName');
+  const emailEl   = document.getElementById('settingsEmail');
+  const planEl    = document.getElementById('settingsPlanBadge');
+  const authBtn   = document.getElementById('settingsAuthBtn');
+
+  // Also update sidebar
+  const sidebarName   = document.getElementById('sidebarUserName');
+  const sidebarAvatar = document.getElementById('userAvatar');
+  const signInBtn     = document.getElementById('signInBtn');
+
+  if (user && !user.isAnonymous) {
+    const name     = user.displayName || user.email?.split('@')[0] || 'User';
+    const email    = user.email || '';
+    const photo    = user.photoURL || '';
+    const initials = name.slice(0,2).toUpperCase();
+    const colors   = ['#6c63ff','#ff6b35','#4ade80','#60a5fa','#f472b6'];
+    const color    = colors[name.charCodeAt(0) % colors.length];
+
+    // Avatar HTML
+    const avatarHTML = photo
+      ? `<img src="${photo}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+      : `<span style="font-size:16px;font-weight:700;color:#fff;">${initials}</span>`;
+    const avatarStyle = photo ? '' : `background:${color};`;
+
+    // Settings profile card
+    if (avatarEl) { avatarEl.innerHTML = avatarHTML; avatarEl.style.cssText = avatarStyle; }
+    if (nameEl)   nameEl.textContent   = name;
+    if (emailEl)  emailEl.textContent  = email;
+    if (planEl)   { planEl.textContent = 'Free Plan'; planEl.classList.remove('pro'); }
+    if (authBtn)  {
+      authBtn.textContent = 'Sign out';
+      authBtn.className   = 'profile-auth-btn signout';
+      authBtn.onclick     = () => window.logoutUser?.();
+    }
+
+    // Sidebar
+    const sidebarAvatarHTML = photo
+      ? `<img src="${photo}" alt="avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">`
+      : `<span style="font-size:11px;font-weight:700;color:#fff;">${initials}</span>`;
+    if (sidebarAvatar) {
+      sidebarAvatar.innerHTML = sidebarAvatarHTML;
+      if (!photo) { sidebarAvatar.style.background = color; sidebarAvatar.style.borderRadius = '50%'; sidebarAvatar.style.display = 'flex'; sidebarAvatar.style.alignItems = 'center'; sidebarAvatar.style.justifyContent = 'center'; sidebarAvatar.style.width = '28px'; sidebarAvatar.style.height = '28px'; }
+    }
+    if (sidebarName) sidebarName.textContent = name;
+    if (signInBtn)   signInBtn.style.display  = 'none';
+
+    // Load per-user data
+    loadConnectorsFromFirebase();
+
+  } else {
+    // Guest / logged out
+    if (avatarEl)  { avatarEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>'; avatarEl.style.cssText = ''; }
+    if (nameEl)    nameEl.textContent   = 'Guest';
+    if (emailEl)   emailEl.textContent  = 'Not signed in';
+    if (planEl)    planEl.textContent   = 'Free Plan';
+    if (authBtn)   {
+      authBtn.textContent = 'Sign in';
+      authBtn.className   = 'profile-auth-btn';
+      authBtn.onclick     = () => showAuthModal?.('login');
+    }
+    if (sidebarName)   sidebarName.textContent = 'Guest';
+    if (sidebarAvatar) { sidebarAvatar.style.background = ''; sidebarAvatar.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>'; }
+    if (signInBtn)     signInBtn.style.display = '';
+  }
+};
 
 function injectInput() {
   const hz = document.getElementById('homeInputZone');
