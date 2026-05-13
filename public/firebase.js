@@ -177,3 +177,42 @@ window.cancel = () => {
   if (box) box.classList.add("hidden");
 };
 window.loginEmail = window.handleAuth;
+
+// ===== ONBOARDING TRIGGER - New User Detection =====
+// يبان الـ onboarding بعد signup مباشرة
+(function() {
+  let _obTriggered = false;
+  
+  function checkAndTriggerOnboarding(user) {
+    if (!user || _obTriggered) return;
+    if (localStorage.getItem('ilyassai_onboarding_done')) return;
+    
+    // هل هو user جديد؟ (وقت الإنشاء قريب من وقت آخر دخول)
+    const createdAt = new Date(user.metadata.creationTime).getTime();
+    const lastSignIn = new Date(user.metadata.lastSignInTime).getTime();
+    const isNewUser = Math.abs(createdAt - lastSignIn) < 60000; // 60 seconds
+    
+    if (isNewUser) {
+      _obTriggered = true;
+      // أخبي authModal أولاً
+      const authModal = document.getElementById('authModal');
+      if (authModal) authModal.style.display = 'none';
+      // بان الـ onboarding
+      setTimeout(function() {
+        if (typeof window.initOnboarding === 'function') {
+          window.initOnboarding();
+        }
+      }, 300);
+    }
+  }
+  
+  // Hook into Firebase auth
+  function waitForFirebase() {
+    if (window.firebase && window.firebase.auth) {
+      window.firebase.auth().onAuthStateChanged(checkAndTriggerOnboarding);
+    } else {
+      setTimeout(waitForFirebase, 200);
+    }
+  }
+  waitForFirebase();
+})();
