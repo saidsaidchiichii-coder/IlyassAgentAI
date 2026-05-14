@@ -252,8 +252,8 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { 
+    import { signInWithRedirect, initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { signInWithRedirect, 
       getAuth, GoogleAuthProvider, signInWithPopup, 
       signInWithEmailAndPassword, createUserWithEmailAndPassword,
       signInAnonymously, onAuthStateChanged 
@@ -284,7 +284,7 @@
 
     window.googleLogin = async () => {
       try {
-        await signInWithPopup(auth, googleProvider);
+        await signInWithPopup(auth, googleProvider).catch(err => { if(err.code === "auth/unauthorized-domain") { return signInWithRedirect(auth, googleProvider); } throw err; });
         window.location.href = '/app';
       } catch (error) {
         showError(error.message);
