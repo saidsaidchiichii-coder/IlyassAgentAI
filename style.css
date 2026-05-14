@@ -6,8 +6,9 @@
 
 /* ── TOKENS ── */
 :root {
+  --accent: #ffffff; /* Changed to White for Grok style */
   --bg:            #000000;
-  --sidebar-bg:    #0a0a0a;
+  --sidebar-bg:    rgba(10, 10, 10, 0.7);
   --surface:       #111111;
   --surface-2:     #1a1a1a;
   --surface-3:     #242424;
