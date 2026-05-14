@@ -1578,6 +1578,21 @@
   </button>
 </div>
 
+<!-- MODEL POPUP -->
+<div id="mdlPopup" style="display:none;position:fixed;z-index:9999;background:#fff;border:1px solid rgba(0,0,0,0.12);border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,0.15);padding:10px;min-width:255px;">
+  <div style="font-size:10.5px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em;padding:2px 6px 8px;">Select model</div>
+  <div style="font-size:10px;color:#ccc;font-weight:600;padding:3px 8px 2px;text-transform:uppercase;">Claude</div>
+  <button class="mdl-opt active" onclick="pickMdl('claude-sonnet-4-5',this)"><span class="mdl-name">claude-sonnet-4-5</span><span class="mdl-desc">Sonnet · Smart</span><svg class="mdl-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></button>
+  <button class="mdl-opt" onclick="pickMdl('claude-opus-4-5',this)"><span class="mdl-name">claude-opus-4-5</span><span class="mdl-desc">Most Powerful</span><svg class="mdl-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></button>
+  <button class="mdl-opt" onclick="pickMdl('claude-haiku-3-5',this)"><span class="mdl-name">claude-haiku-3-5</span><span class="mdl-desc">Ultra Fast</span><svg class="mdl-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></button>
+  <div style="font-size:10px;color:#ccc;font-weight:600;padding:8px 8px 2px;text-transform:uppercase;border-top:1px solid #f0f0f0;margin-top:4px;">Groq (Free)</div>
+  <button class="mdl-opt" onclick="pickMdl('llama-3.3-70b-versatile',this)"><span class="mdl-name">Llama 3.3 70B</span><span class="mdl-desc">Fast · Free</span><svg class="mdl-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></button>
+  <button class="mdl-opt" onclick="pickMdl('gemma2-9b-it',this)"><span class="mdl-name">Gemma 2 9B</span><span class="mdl-desc">Google · Free</span><svg class="mdl-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></button>
+  <div style="font-size:10px;color:#ccc;font-weight:600;padding:8px 8px 2px;text-transform:uppercase;border-top:1px solid #f0f0f0;margin-top:4px;">Gemini</div>
+  <button class="mdl-opt" onclick="pickMdl('gemini-2.0-flash',this)"><span class="mdl-name">Gemini 2.0 Flash</span><span class="mdl-desc">Latest · Fast</span><svg class="mdl-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></button>
+  <button class="mdl-opt" onclick="pickMdl('gemini-1.5-flash',this)"><span class="mdl-name">Gemini 1.5 Flash</span><span class="mdl-desc">Free · Reliable</span><svg class="mdl-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></button>
+</div>
+
 <!-- TOAST CONTAINER -->
 <div id="toastContainer" class="toast-container"></div>
 
@@ -1613,6 +1628,7 @@ const INPUT_HTML = `
           <span id="modeTriggerLabel">Auto</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
+        <button class="mdl-sel-btn" id="mdlSelBtn" onclick="toggleMdlPopup(event)"><span id="mdlSelLabel">claude-sonnet-4-5</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="9" height="9"><polyline points="6 9 12 15 18 9"/></svg></button>
       </div>
       <div class="input-right-actions">
         <button class="icon-action mic-action" onclick="startVoice()" title="Voice input">
@@ -2053,6 +2069,39 @@ function onFilePick(input) {
   }).join('');
 }
 
+/* ===== MODEL SELECTOR ===== */
+var _mdlId = 'claude-sonnet-4-5';
+function toggleMdlPopup(e) {
+  if(e){ e.stopPropagation(); e.preventDefault(); }
+  var p = document.getElementById('mdlPopup');
+  if(!p) return;
+  if(p.style.display !== 'none'){ p.style.display = 'none'; return; }
+  var mp = document.getElementById('modePopup');
+  if(mp) mp.style.display = 'none';
+  var btn = document.getElementById('mdlSelBtn');
+  p.style.display = 'block';
+  if(btn){
+    var rect = btn.getBoundingClientRect();
+    p.style.left = Math.max(8, rect.left - 60) + 'px';
+    requestAnimationFrame(function(){ p.style.top = (rect.top - p.offsetHeight - 10) + 'px'; });
+  }
+}
+function pickMdl(id, btn) {
+  _mdlId = id;
+  var lbl = document.getElementById('mdlSelLabel');
+  if(lbl) lbl.textContent = id.length > 20 ? id.split('-').slice(0,2).join('-') : id;
+  document.querySelectorAll('.mdl-opt').forEach(function(b){ b.classList.remove('active'); });
+  if(btn) btn.classList.add('active');
+  document.getElementById('mdlPopup').style.display = 'none';
+  if(typeof showToast === 'function') showToast('Model: ' + id);
+}
+document.addEventListener('click', function(e){
+  var p = document.getElementById('mdlPopup');
+  var b = document.getElementById('mdlSelBtn');
+  if(p && p.style.display !== 'none' && !p.contains(e.target) && b && !b.contains(e.target)){
+    p.style.display = 'none';
+  }
+});
 /* ===== VOICE ===== */
 function startVoice() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
