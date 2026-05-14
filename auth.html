@@ -14,184 +14,33 @@
       --border: rgba(255, 255, 255, 0.1);
       --accent: #ffffff;
     }
-
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
     body, html { width: 100%; height: 100%; background: #000; color: #fff; overflow: hidden; }
-
-    .split-layout {
-      display: flex;
-      width: 100%;
-      height: 100vh;
-    }
-
-    /* Left Side: The Form */
-    .form-side {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 60px;
-      background: #000;
-      z-index: 10;
-    }
-
-    .form-content {
-      width: 100%;
-      max-width: 380px;
-    }
-
-    .logo-box {
-      margin-bottom: 40px;
-    }
-
-    h1 {
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      letter-spacing: -1px;
-    }
-
-    p.subtitle {
-      color: var(--text-dim);
-      font-size: 15px;
-      margin-bottom: 40px;
-    }
-
-    .social-btns {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .btn {
-      width: 100%;
-      height: 48px;
-      border-radius: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: #fff;
-    }
-
-    .btn-white {
-      background: #fff;
-      color: #000;
-      border: none;
-    }
-
+    .split-layout { display: flex; width: 100%; height: 100vh; }
+    .form-side { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 60px; background: #000; z-index: 10; }
+    .form-content { width: 100%; max-width: 380px; }
+    .logo-box { margin-bottom: 40px; }
+    h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; letter-spacing: -1px; }
+    p.subtitle { color: var(--text-dim); font-size: 15px; margin-bottom: 40px; }
+    .social-btns { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+    .btn { width: 100%; height: 48px; border-radius: 24px; display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: 1px solid var(--border); background: transparent; color: #fff; }
+    .btn-white { background: #fff; color: #000; border: none; }
     .btn-white:hover { background: #e4e4e7; }
     .btn:not(.btn-white):hover { background: rgba(255,255,255,0.05); }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      margin: 24px 0;
-      color: var(--text-dim);
-      font-size: 13px;
-    }
-
-    .divider::before, .divider::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
+    .divider { display: flex; align-items: center; margin: 24px 0; color: var(--text-dim); font-size: 13px; }
+    .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
     .divider span { padding: 0 16px; }
-
     .input-group { margin-bottom: 16px; }
-
-    input {
-      width: 100%;
-      height: 48px;
-      background: #000;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0 16px;
-      color: #fff;
-      font-size: 15px;
-      outline: none;
-    }
-
+    input { width: 100%; height: 48px; background: #000; border: 1px solid var(--border); border-radius: 8px; padding: 0 16px; color: #fff; font-size: 15px; outline: none; }
     input:focus { border-color: #fff; }
-
-    .btn-primary {
-      margin-top: 10px;
-      background: #fff;
-      color: #000;
-      border: none;
-      width: 100%;
-      height: 48px;
-      border-radius: 24px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .footer-text {
-      margin-top: 32px;
-      text-align: center;
-      font-size: 14px;
-      color: var(--text-dim);
-    }
-
-    .footer-text a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .error-box {
-      color: #ff4d4d;
-      font-size: 13px;
-      margin-top: 12px;
-      text-align: center;
-      display: none;
-      padding: 10px;
-      background: rgba(255,77,77,0.1);
-      border-radius: 8px;
-    }
-
-    /* Right Side: Visuals */
-    .visual-side {
-      flex: 1.2;
-      position: relative;
-      background: #000;
-      border-left: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    #particles-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    .visual-logo {
-      position: relative;
-      z-index: 5;
-      width: 280px;
-      height: 280px;
-      opacity: 0.9;
-      filter: drop-shadow(0 0 40px rgba(255,255,255,0.15));
-    }
-
-    @media (max-width: 1024px) {
-      .visual-side { display: none; }
-    }
+    .btn-primary { margin-top: 10px; background: #fff; color: #000; border: none; width: 100%; height: 48px; border-radius: 24px; font-weight: 700; cursor: pointer; }
+    .footer-text { margin-top: 32px; text-align: center; font-size: 14px; color: var(--text-dim); }
+    .footer-text a { color: #fff; text-decoration: none; font-weight: 600; }
+    .error-box { color: #ff4d4d; font-size: 13px; margin-top: 12px; text-align: center; display: none; padding: 10px; background: rgba(255,77,77,0.1); border-radius: 8px; }
+    .visual-side { flex: 1.2; position: relative; background: #000; border-left: 1px solid var(--border); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    #particles-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    .visual-logo { position: relative; z-index: 5; width: 280px; height: 280px; opacity: 0.9; filter: drop-shadow(0 0 40px rgba(255,255,255,0.15)); }
+    @media (max-width: 1024px) { .visual-side { display: none; } }
   </style>
 </head>
 <body>
@@ -203,10 +52,8 @@
             <path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm0 3.5c2.006 0 3.89.524 5.522 1.44L7.94 21.522A10.45 10.45 0 0 1 5.5 16C5.5 9.649 10.649 4.5 17 4.5h-1zm0 21c-2.006 0-3.89-.524-5.522-1.44L24.06 10.478A10.45 10.45 0 0 1 26.5 16c0 6.351-5.149 11.5-11.5 11.5h1z"/>
           </svg>
         </div>
-        
         <h1 id="title">Join IlyassAI</h1>
         <p class="subtitle" id="subtitle">The most advanced AI agent platform.</p>
-
         <div class="social-btns">
           <button class="btn btn-white" onclick="googleLogin()">
             <svg width="20" height="20" viewBox="0 0 24 24">
@@ -217,30 +64,19 @@
             </svg>
             Sign up with Google
           </button>
-          <button class="btn" onclick="continueAsGuest()">
-            Continue as Guest
-          </button>
+          <button class="btn" onclick="continueAsGuest()">Continue as Guest</button>
         </div>
-
         <div class="divider"><span>or</span></div>
-
-        <div class="input-group">
-          <input type="email" id="email" placeholder="Email address">
-        </div>
-        <div class="input-group">
-          <input type="password" id="password" placeholder="Password">
-        </div>
-        
+        <div class="input-group"><input type="email" id="email" placeholder="Email address"></div>
+        <div class="input-group"><input type="password" id="password" placeholder="Password"></div>
         <button class="btn-primary" id="submitBtn" onclick="handleSubmit()">Create account</button>
         <div class="error-box" id="errorBox"></div>
-
         <div class="footer-text">
           <span id="toggleText">Already have an account?</span>
           <a href="#" id="toggleBtn" onclick="toggleMode()">Sign in</a>
         </div>
       </div>
     </div>
-
     <div class="visual-side">
       <canvas id="particles-canvas"></canvas>
       <div class="visual-logo">
@@ -250,15 +86,9 @@
       </div>
     </div>
   </div>
-
   <script type="module">
-    import { signInWithRedirect, initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { signInWithRedirect, 
-      getAuth, GoogleAuthProvider, signInWithPopup, 
-      signInWithEmailAndPassword, createUserWithEmailAndPassword,
-      signInAnonymously, onAuthStateChanged 
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     const firebaseConfig = {
       apiKey: "AIzaSyDWch9gK12sGD7awxmRibU6jBspd-tjr6E",
       authDomain: "ilyassagentai.firebaseapp.com",
@@ -267,13 +97,10 @@
       messagingSenderId: "1070041614552",
       appId: "1:1070041614552:web:your-app-id"
     };
-
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const googleProvider = new GoogleAuthProvider();
-
     let mode = 'signup';
-
     window.toggleMode = () => {
       mode = mode === 'signup' ? 'login' : 'signup';
       document.getElementById('title').innerText = mode === 'signup' ? 'Join IlyassAI' : 'Sign in to IlyassAI';
@@ -281,16 +108,18 @@
       document.getElementById('toggleText').innerText = mode === 'signup' ? 'Already have an account?' : "Don't have an account?";
       document.getElementById('toggleBtn').innerText = mode === 'signup' ? 'Sign in' : 'Sign up';
     };
-
     window.googleLogin = async () => {
       try {
-        await signInWithPopup(auth, googleProvider).catch(err => { if(err.code === "auth/unauthorized-domain") { return signInWithRedirect(auth, googleProvider); } throw err; });
+        await signInWithPopup(auth, googleProvider);
         window.location.href = '/app';
       } catch (error) {
-        showError(error.message);
+        if(error.code === "auth/unauthorized-domain") {
+          await signInWithRedirect(auth, googleProvider);
+        } else {
+          showError(error.message);
+        }
       }
     };
-
     window.continueAsGuest = async () => {
       try {
         await signInAnonymously(auth);
@@ -299,20 +128,15 @@
         showError(error.message);
       }
     };
-
     window.handleSubmit = async () => {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       const btn = document.getElementById('submitBtn');
       if (!email || !password) return showError("Please fill in all fields");
-      btn.disabled = true;
-      btn.innerText = "Loading...";
+      btn.disabled = true; btn.innerText = "Loading...";
       try {
-        if (mode === 'signup') {
-          await createUserWithEmailAndPassword(auth, email, password);
-        } else {
-          await signInWithEmailAndPassword(auth, email, password);
-        }
+        if (mode === 'signup') { await createUserWithEmailAndPassword(auth, email, password); }
+        else { await signInWithEmailAndPassword(auth, email, password); }
         window.location.href = '/app';
       } catch (error) {
         showError(error.message);
@@ -320,20 +144,13 @@
         btn.innerText = mode === 'signup' ? 'Create account' : 'Sign in';
       }
     };
-
     function showError(msg) {
       const box = document.getElementById('errorBox');
-      box.innerText = msg;
-      box.style.display = 'block';
+      box.innerText = msg; box.style.display = 'block';
     }
-
     onAuthStateChanged(auth, (user) => {
-      if (user && !user.isAnonymous) {
-        window.location.href = '/app';
-      }
+      if (user && !user.isAnonymous) { window.location.href = '/app'; }
     });
-
-    // Particles
     class ParticleSystem {
       constructor() {
         this.canvas = document.getElementById('particles-canvas');
@@ -342,8 +159,7 @@
         this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, alpha: true, antialias: true });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.camera.position.z = 5;
-        this.init();
-        this.animate();
+        this.init(); this.animate();
         window.addEventListener('resize', () => this.onResize());
       }
       init() {
