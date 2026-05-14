@@ -1578,24 +1578,6 @@
   </button>
 </div>
 
-<!-- MODEL SELECTOR POPUP -->
-<div class="model-popup" id="modelPopup" style="display:none;">
-  <div class="model-popup-title">Select model</div>
-  <div class="model-popup-group"><div class="model-popup-group-label">Claude</div>
-    <button class="model-option active" onclick="selectModel('claude-sonnet-4-5','claude-sonnet-4-5',event)"><div class="model-option-info"><span class="model-option-name">claude-sonnet-4-5</span><span class="model-option-desc">Latest Sonnet · Fast &amp; Smart</span></div><svg class="model-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><polyline points="20 6 9 17 4 12"/></svg></button>
-    <button class="model-option" onclick="selectModel('claude-opus-4-5','claude-opus-4-5',event)"><div class="model-option-info"><span class="model-option-name">claude-opus-4-5</span><span class="model-option-desc">Most Powerful Claude</span></div><svg class="model-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><polyline points="20 6 9 17 4 12"/></svg></button>
-    <button class="model-option" onclick="selectModel('claude-haiku-3-5','claude-haiku-3-5',event)"><div class="model-option-info"><span class="model-option-name">claude-haiku-3-5</span><span class="model-option-desc">Ultra Fast Claude</span></div><svg class="model-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><polyline points="20 6 9 17 4 12"/></svg></button>
-  </div>
-  <div class="model-popup-group"><div class="model-popup-group-label">Groq (Free)</div>
-    <button class="model-option" onclick="selectModel('Llama 3.3 70B','llama-3.3-70b-versatile',event)"><div class="model-option-info"><span class="model-option-name">Llama 3.3 70B</span><span class="model-option-desc">Fast · Free</span></div><svg class="model-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><polyline points="20 6 9 17 4 12"/></svg></button>
-    <button class="model-option" onclick="selectModel('Gemma 2 9B','gemma2-9b-it',event)"><div class="model-option-info"><span class="model-option-name">Gemma 2 9B</span><span class="model-option-desc">Google · Free</span></div><svg class="model-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><polyline points="20 6 9 17 4 12"/></svg></button>
-  </div>
-  <div class="model-popup-group"><div class="model-popup-group-label">Gemini</div>
-    <button class="model-option" onclick="selectModel('Gemini 2.0 Flash','gemini-2.0-flash',event)"><div class="model-option-info"><span class="model-option-name">Gemini 2.0 Flash</span><span class="model-option-desc">Latest Gemini · Fast</span></div><svg class="model-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><polyline points="20 6 9 17 4 12"/></svg></button>
-    <button class="model-option" onclick="selectModel('Gemini 1.5 Flash','gemini-1.5-flash',event)"><div class="model-option-info"><span class="model-option-name">Gemini 1.5 Flash</span><span class="model-option-desc">Free · Reliable</span></div><svg class="model-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><polyline points="20 6 9 17 4 12"/></svg></button>
-  </div>
-</div>
-
 <!-- TOAST CONTAINER -->
 <div id="toastContainer" class="toast-container"></div>
 
@@ -1605,24 +1587,6 @@
 <script src="firebase.js" type="module"></script>
 <script src="ControleAi.js"></script>
 <script>
-
-/* ===== MODEL SELECTOR ===== */
-.model-selector-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;border:1px solid rgba(0,0,0,0.13);background:transparent;color:#555;font-size:12.5px;font-weight:500;cursor:pointer;transition:background .15s;white-space:nowrap;line-height:1.4;}
-.model-selector-btn:hover{background:rgba(0,0,0,0.06);}
-.model-selector-btn svg{opacity:.6;}
-.model-popup{position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%);background:#fff;border:1px solid rgba(0,0,0,0.12);border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.15);padding:10px;min-width:260px;max-width:300px;z-index:9999;animation:mpFI .15s ease;}
-@keyframes mpFI{from{opacity:0;transform:translateX(-50%) translateY(6px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
-.model-popup-title{font-size:11px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:.06em;padding:2px 6px 8px;}
-.model-popup-group{margin-bottom:4px;}
-.model-popup-group-label{font-size:10.5px;font-weight:600;color:#bbb;padding:4px 8px 2px;text-transform:uppercase;letter-spacing:.05em;}
-.model-option{display:flex;align-items:center;justify-content:space-between;width:100%;padding:7px 8px;border:none;background:transparent;border-radius:8px;cursor:pointer;text-align:left;transition:background .12s;}
-.model-option:hover{background:rgba(0,0,0,0.05);}
-.model-option.active{background:rgba(0,0,0,0.05);}
-.model-option-info{display:flex;flex-direction:column;gap:1px;}
-.model-option-name{font-size:13px;font-weight:500;color:#222;}
-.model-option-desc{font-size:11px;color:#888;}
-.model-check{opacity:0;color:#000;flex-shrink:0;}
-.model-option.active .model-check{opacity:1;}
 /* ===== INPUT HTML ===== */
 const INPUT_HTML = `
   <div class="input-box" id="inputBox">
@@ -1649,7 +1613,6 @@ const INPUT_HTML = `
           <span id="modeTriggerLabel">Auto</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
-        <button class="model-selector-btn" id="modelSelectorBtn" onclick="toggleModelPopup(event)" title="Select AI Model"><span id="modelSelectorLabel">claude-sonnet-4-5</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="10" height="10"><polyline points="6 9 12 15 18 9"/></svg></button>
       </div>
       <div class="input-right-actions">
         <button class="icon-action mic-action" onclick="startVoice()" title="Voice input">
@@ -2090,12 +2053,6 @@ function onFilePick(input) {
   }).join('');
 }
 
-
-/* ===== MODEL SELECTOR ===== */
-let _selectedModel='claude-sonnet-4-5';
-function toggleModelPopup(e){if(e)e.stopPropagation();var p=document.getElementById('modelPopup');if(!p)return;var open=p.style.display!=='none';document.getElementById('modePopup').style.display='none';p.style.display=open?'none':'block';}
-function selectModel(label,modelId,e){if(e)e.stopPropagation();_selectedModel=modelId;var l=document.getElementById('modelSelectorLabel');if(l)l.textContent=label;document.querySelectorAll('.model-option').forEach(function(b){b.classList.remove('active');});if(e&&e.currentTarget)e.currentTarget.classList.add('active');var p=document.getElementById('modelPopup');if(p)p.style.display='none';showToast('Model: '+label);}
-document.addEventListener('click',function(e){var p=document.getElementById('modelPopup');var b=document.getElementById('modelSelectorBtn');if(p&&b&&!p.contains(e.target)&&!b.contains(e.target)){p.style.display='none';}});
 /* ===== VOICE ===== */
 function startVoice() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
