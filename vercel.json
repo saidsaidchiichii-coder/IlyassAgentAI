@@ -1,13 +1,100 @@
 {
   "buildCommand": "echo 'IlyassAI OK'",
-  "outputDirectory": "public",
   "cleanUrls": true,
   "trailingSlash": false,
   "functions": {
-    "api/*.js": {
+    "api/chat.js": {
       "maxDuration": 60
+    },
+    "api/agent.js": {
+      "maxDuration": 60
+    },
+    "api/image.js": {
+      "maxDuration": 60
+    },
+    "api/video.js": {
+      "maxDuration": 60
+    },
+    "api/create-checkout.js": {
+      "maxDuration": 30
+    },
+    "api/webhook.js": {
+      "maxDuration": 30
+    },
+    "api/subscription.js": {
+      "maxDuration": 30
+    },
+    "api/subscription-status.js": {
+      "maxDuration": 30
+    },
+    "api/cancel-subscription.js": {
+      "maxDuration": 30
+    },
+    "api/billing-portal.js": {
+      "maxDuration": 30
+    },
+    "api/tools.js": {
+      "maxDuration": 30
+    },
+    "api/utilities.js": {
+      "maxDuration": 60
+    },
+    "api/search.js": {
+      "maxDuration": 30
+    },
+    "api/transcribe.js": {
+      "maxDuration": 30
+    },
+    "api/moderate.js": {
+      "maxDuration": 30
+    },
+    "api/parse.js": {
+      "maxDuration": 30
+    },
+    "api/memory.js": {
+      "maxDuration": 30
+    },
+    "api/discover.js": {
+      "maxDuration": 30
+    },
+    "api/video-status.js": {
+      "maxDuration": 30
+    },
+    "api/generate-video.js": {
+      "maxDuration": 60
+    },
+    "api/github.js": {
+      "maxDuration": 30
+    },
+    "api/github-connector.js": {
+      "maxDuration": 30
+    },
+    "api/github-oauth-callback.js": {
+      "maxDuration": 30
     }
   },
+  "rewrites": [
+    {
+      "source": "/auth",
+      "destination": "/auth-advanced.html"
+    },
+    {
+      "source": "/pricing",
+      "destination": "/pricing.html"
+    },
+    {
+      "source": "/success",
+      "destination": "/success.html"
+    },
+    {
+      "source": "/app",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/connectors",
+      "destination": "/connectors.html"
+    }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",
