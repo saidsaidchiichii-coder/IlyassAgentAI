@@ -2,38 +2,45 @@
   "buildCommand": "echo ok",
   "cleanUrls": true,
   "trailingSlash": false,
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "source": "/app",
+      "destination": "/public/index.html"
     },
     {
-      "src": "/(.*)\\.html",
-      "dest": "/public/$1.html"
+      "source": "/pricing",
+      "destination": "/public/pricing.html"
     },
     {
-      "src": "/app",
-      "dest": "/public/index.html"
+      "source": "/success",
+      "destination": "/public/success.html"
     },
     {
-      "src": "/pricing",
-      "dest": "/public/pricing.html"
+      "source": "/auth",
+      "destination": "/public/auth-advanced.html"
     },
     {
-      "src": "/success",
-      "dest": "/public/success.html"
-    },
+      "source": "/connectors",
+      "destination": "/public/connectors.html"
+    }
+  ],
+  "headers": [
     {
-      "src": "/auth",
-      "dest": "/public/auth-advanced.html"
-    },
-    {
-      "src": "/connectors",
-      "dest": "/public/connectors.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/public/$1"
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET,POST,OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization, x-api-key"
+        }
+      ]
     }
   ]
 }
