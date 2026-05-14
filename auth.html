@@ -9,65 +9,56 @@
   <style>
     :root {
       --bg: #000000;
-      --surface: #0a0a0a;
       --text: #ffffff;
-      --text-dim: #a0a0a0;
-      --accent: #ffffff;
+      --text-dim: #71717a;
       --border: rgba(255, 255, 255, 0.1);
-      --error: #ff4d4d;
+      --accent: #ffffff;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body, html { width: 100%; height: 100%; background: #000; color: #fff; overflow: hidden; }
 
-    body, html {
-      width: 100%;
-      height: 100%;
-      background: var(--bg);
-      color: var(--text);
-      overflow: hidden;
-    }
-
-    .container {
+    .split-layout {
       display: flex;
       width: 100%;
-      height: 100%;
+      height: 100vh;
     }
 
-    /* Left Side - Form */
-    .auth-section {
+    /* Left Side: The Form */
+    .form-side {
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 40px;
+      padding: 60px;
+      background: #000;
       z-index: 10;
-      background: var(--bg);
     }
 
-    .auth-container {
+    .form-content {
       width: 100%;
-      max-width: 400px;
+      max-width: 380px;
     }
 
-    .logo-mobile {
-      display: none;
+    .logo-box {
       margin-bottom: 40px;
     }
 
     h1 {
       font-size: 32px;
       font-weight: 700;
-      margin-bottom: 40px;
+      margin-bottom: 8px;
       letter-spacing: -1px;
     }
 
-    .social-buttons {
+    p.subtitle {
+      color: var(--text-dim);
+      font-size: 15px;
+      margin-bottom: 40px;
+    }
+
+    .social-btns {
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -76,8 +67,8 @@
 
     .btn {
       width: 100%;
-      height: 52px;
-      border-radius: 26px;
+      height: 48px;
+      border-radius: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -85,32 +76,27 @@
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.2s;
       border: 1px solid var(--border);
       background: transparent;
-      color: var(--text);
+      color: #fff;
     }
 
     .btn-white {
-      background: #ffffff;
-      color: #000000;
+      background: #fff;
+      color: #000;
       border: none;
     }
 
-    .btn-white:hover {
-      background: #e6e6e6;
-    }
-
-    .btn:not(.btn-white):hover {
-      background: rgba(255, 255, 255, 0.05);
-    }
+    .btn-white:hover { background: #e4e4e7; }
+    .btn:not(.btn-white):hover { background: rgba(255,255,255,0.05); }
 
     .divider {
       display: flex;
       align-items: center;
       margin: 24px 0;
       color: var(--text-dim);
-      font-size: 14px;
+      font-size: 13px;
     }
 
     .divider::before, .divider::after {
@@ -120,75 +106,70 @@
       background: var(--border);
     }
 
-    .divider span {
-      padding: 0 16px;
-    }
+    .divider span { padding: 0 16px; }
 
-    .input-group {
-      margin-bottom: 16px;
-    }
+    .input-group { margin-bottom: 16px; }
 
     input {
       width: 100%;
-      height: 52px;
-      background: transparent;
+      height: 48px;
+      background: #000;
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 0 16px;
-      color: var(--text);
+      color: #fff;
       font-size: 15px;
       outline: none;
-      transition: border-color 0.2s;
     }
 
-    input:focus {
-      border-color: var(--text);
-    }
+    input:focus { border-color: #fff; }
 
-    .btn-submit {
-      margin-top: 8px;
-      background: var(--text);
-      color: var(--bg);
+    .btn-primary {
+      margin-top: 10px;
+      background: #fff;
+      color: #000;
       border: none;
       width: 100%;
-      height: 52px;
-      border-radius: 26px;
-      font-size: 15px;
-      font-weight: 600;
+      height: 48px;
+      border-radius: 24px;
+      font-weight: 700;
       cursor: pointer;
     }
 
-    .auth-footer {
-      margin-top: 24px;
+    .footer-text {
+      margin-top: 32px;
       text-align: center;
       font-size: 14px;
       color: var(--text-dim);
     }
 
-    .auth-footer a {
-      color: var(--text);
+    .footer-text a {
+      color: #fff;
       text-decoration: none;
       font-weight: 600;
     }
 
-    .error-msg {
-      color: var(--error);
+    .error-box {
+      color: #ff4d4d;
       font-size: 13px;
-      margin-top: 8px;
+      margin-top: 12px;
       text-align: center;
       display: none;
+      padding: 10px;
+      background: rgba(255,77,77,0.1);
+      border-radius: 8px;
     }
 
-    /* Right Side - Visual */
-    .visual-section {
+    /* Right Side: Visuals */
+    .visual-side {
       flex: 1.2;
       position: relative;
       background: #000;
+      border-left: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      border-left: 1px solid var(--border);
     }
 
     #particles-canvas {
@@ -199,37 +180,34 @@
       height: 100%;
     }
 
-    .big-logo {
+    .visual-logo {
       position: relative;
       z-index: 5;
-      width: 300px;
-      height: 300px;
-      opacity: 0.8;
-      filter: drop-shadow(0 0 30px rgba(255,255,255,0.1));
+      width: 280px;
+      height: 280px;
+      opacity: 0.9;
+      filter: drop-shadow(0 0 40px rgba(255,255,255,0.15));
     }
 
-    @media (max-width: 900px) {
-      .visual-section {
-        display: none;
-      }
-      .logo-mobile {
-        display: block;
-      }
+    @media (max-width: 1024px) {
+      .visual-side { display: none; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="auth-section">
-      <div class="auth-container">
-        <div class="logo-mobile">
-           <svg viewBox="0 0 32 32" fill="white" width="40" height="40">
+  <div class="split-layout">
+    <div class="form-side">
+      <div class="form-content">
+        <div class="logo-box">
+          <svg viewBox="0 0 32 32" fill="white" width="40" height="40">
             <path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm0 3.5c2.006 0 3.89.524 5.522 1.44L7.94 21.522A10.45 10.45 0 0 1 5.5 16C5.5 9.649 10.649 4.5 17 4.5h-1zm0 21c-2.006 0-3.89-.524-5.522-1.44L24.06 10.478A10.45 10.45 0 0 1 26.5 16c0 6.351-5.149 11.5-11.5 11.5h1z"/>
           </svg>
         </div>
-        <h1 id="authTitle">Create your account</h1>
         
-        <div class="social-buttons">
+        <h1 id="title">Join IlyassAI</h1>
+        <p class="subtitle" id="subtitle">The most advanced AI agent platform.</p>
+
+        <div class="social-btns">
           <button class="btn btn-white" onclick="googleLogin()">
             <svg width="20" height="20" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -244,31 +222,28 @@
           </button>
         </div>
 
-        <div class="divider">
-          <span>or</span>
-        </div>
+        <div class="divider"><span>or</span></div>
 
-        <div id="loginFields">
-          <div class="input-group">
-            <input type="email" id="email" placeholder="Email address">
-          </div>
-          <div class="input-group">
-            <input type="password" id="password" placeholder="Password">
-          </div>
-          <button class="btn-submit" id="submitBtn" onclick="handleSubmit()">Sign up</button>
-          <div class="error-msg" id="errorMsg"></div>
+        <div class="input-group">
+          <input type="email" id="email" placeholder="Email address">
         </div>
+        <div class="input-group">
+          <input type="password" id="password" placeholder="Password">
+        </div>
+        
+        <button class="btn-primary" id="submitBtn" onclick="handleSubmit()">Create account</button>
+        <div class="error-box" id="errorBox"></div>
 
-        <div class="auth-footer">
+        <div class="footer-text">
           <span id="toggleText">Already have an account?</span>
           <a href="#" id="toggleBtn" onclick="toggleMode()">Sign in</a>
         </div>
       </div>
     </div>
 
-    <div class="visual-section">
+    <div class="visual-side">
       <canvas id="particles-canvas"></canvas>
-      <div class="big-logo">
+      <div class="visual-logo">
         <svg viewBox="0 0 32 32" fill="white" width="100%" height="100%">
           <path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm0 3.5c2.006 0 3.89.524 5.522 1.44L7.94 21.522A10.45 10.45 0 0 1 5.5 16C5.5 9.649 10.649 4.5 17 4.5h-1zm0 21c-2.006 0-3.89-.524-5.522-1.44L24.06 10.478A10.45 10.45 0 0 1 26.5 16c0 6.351-5.149 11.5-11.5 11.5h1z"/>
         </svg>
@@ -301,8 +276,8 @@
 
     window.toggleMode = () => {
       mode = mode === 'signup' ? 'login' : 'signup';
-      document.getElementById('authTitle').innerText = mode === 'signup' ? 'Create your account' : 'Sign in to IlyassAI';
-      document.getElementById('submitBtn').innerText = mode === 'signup' ? 'Sign up' : 'Sign in';
+      document.getElementById('title').innerText = mode === 'signup' ? 'Join IlyassAI' : 'Sign in to IlyassAI';
+      document.getElementById('submitBtn').innerText = mode === 'signup' ? 'Create account' : 'Sign in';
       document.getElementById('toggleText').innerText = mode === 'signup' ? 'Already have an account?' : "Don't have an account?";
       document.getElementById('toggleBtn').innerText = mode === 'signup' ? 'Sign in' : 'Sign up';
     };
@@ -329,12 +304,9 @@
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       const btn = document.getElementById('submitBtn');
-      
       if (!email || !password) return showError("Please fill in all fields");
-      
       btn.disabled = true;
       btn.innerText = "Loading...";
-
       try {
         if (mode === 'signup') {
           await createUserWithEmailAndPassword(auth, email, password);
@@ -345,14 +317,14 @@
       } catch (error) {
         showError(error.message);
         btn.disabled = false;
-        btn.innerText = mode === 'signup' ? 'Sign up' : 'Sign in';
+        btn.innerText = mode === 'signup' ? 'Create account' : 'Sign in';
       }
     };
 
     function showError(msg) {
-      const err = document.getElementById('errorMsg');
-      err.innerText = msg;
-      err.style.display = 'block';
+      const box = document.getElementById('errorBox');
+      box.innerText = msg;
+      box.style.display = 'block';
     }
 
     onAuthStateChanged(auth, (user) => {
@@ -367,15 +339,13 @@
         this.canvas = document.getElementById('particles-canvas');
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, alpha: true });
+        this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, alpha: true, antialias: true });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.camera.position.z = 5;
-
-        this.particles = [];
         this.init();
         this.animate();
+        window.addEventListener('resize', () => this.onResize());
       }
-
       init() {
         const geometry = new THREE.BufferGeometry();
         const vertices = [];
@@ -389,7 +359,11 @@
         this.points = new THREE.Points(geometry, material);
         this.scene.add(this.points);
       }
-
+      onResize() {
+        this.camera.aspect = window.innerWidth / window.innerHeight;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+      }
       animate() {
         requestAnimationFrame(() => this.animate());
         this.points.rotation.y += 0.001;
