@@ -1,25 +1,39 @@
 {
-  "buildCommand": "echo 'IlyassAI build OK'",
-  "outputDirectory": "public",
+  "buildCommand": "echo ok",
   "cleanUrls": true,
   "trailingSlash": false,
-  "headers": [
+  "routes": [
     {
-      "source": "/api/(.*)",
-      "headers": [
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET,POST,OPTIONS"
-        },
-        {
-          "key": "Access-Control-Allow-Headers",
-          "value": "Content-Type, Authorization, x-api-key"
-        }
-      ]
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)\\.html",
+      "dest": "/public/$1.html"
+    },
+    {
+      "src": "/app",
+      "dest": "/public/index.html"
+    },
+    {
+      "src": "/pricing",
+      "dest": "/public/pricing.html"
+    },
+    {
+      "src": "/success",
+      "dest": "/public/success.html"
+    },
+    {
+      "src": "/auth",
+      "dest": "/public/auth-advanced.html"
+    },
+    {
+      "src": "/connectors",
+      "dest": "/public/connectors.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
     }
   ]
 }
