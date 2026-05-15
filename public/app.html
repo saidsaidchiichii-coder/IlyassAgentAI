@@ -1579,16 +1579,16 @@
 </div>
 
 <!-- MODEL POPUP -->
-<div id="mdlPopup" style="display:none;position:fixed;z-index:9999;background:#fff;border:1px solid rgba(0,0,0,0.12);border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,0.15);padding:10px;min-width:255px;">
-  <div style="font-size:10.5px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em;padding:2px 6px 8px;">Select model</div>
-  <div style="font-size:10px;color:#ccc;font-weight:600;padding:3px 8px 2px;text-transform:uppercase;">Claude</div>
+<div id="mdlPopup" class="model-popup">
+  <div class="mdl-popup-title">Select model</div>
+  <div class="mdl-category">Claude</div>
   <button class="mdl-opt active" onclick="pickMdl('claude-sonnet-4-5',this)"><span class="mdl-name">claude-sonnet-4-5</span><span class="mdl-desc">Sonnet · Smart</span><svg class="mdl-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></button>
   <button class="mdl-opt" onclick="pickMdl('claude-opus-4-5',this)"><span class="mdl-name">claude-opus-4-5</span><span class="mdl-desc">Most Powerful</span><svg class="mdl-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></button>
   <button class="mdl-opt" onclick="pickMdl('claude-haiku-3-5',this)"><span class="mdl-name">claude-haiku-3-5</span><span class="mdl-desc">Ultra Fast</span><svg class="mdl-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></button>
-  <div style="font-size:10px;color:#ccc;font-weight:600;padding:8px 8px 2px;text-transform:uppercase;border-top:1px solid #f0f0f0;margin-top:4px;">Groq (Free)</div>
+  <div class="mdl-category">Groq (Free)</div>
   <button class="mdl-opt" onclick="pickMdl('llama-3.3-70b-versatile',this)"><span class="mdl-name">Llama 3.3 70B</span><span class="mdl-desc">Fast · Free</span><svg class="mdl-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></button>
   <button class="mdl-opt" onclick="pickMdl('gemma2-9b-it',this)"><span class="mdl-name">Gemma 2 9B</span><span class="mdl-desc">Google · Free</span><svg class="mdl-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></button>
-  <div style="font-size:10px;color:#ccc;font-weight:600;padding:8px 8px 2px;text-transform:uppercase;border-top:1px solid #f0f0f0;margin-top:4px;">Gemini</div>
+  <div class="mdl-category">Gemini</div>
   <button class="mdl-opt" onclick="pickMdl('gemini-2.0-flash',this)"><span class="mdl-name">Gemini 2.0 Flash</span><span class="mdl-desc">Latest · Fast</span><svg class="mdl-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></button>
   <button class="mdl-opt" onclick="pickMdl('gemini-1.5-flash',this)"><span class="mdl-name">Gemini 1.5 Flash</span><span class="mdl-desc">Free · Reliable</span><svg class="mdl-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg></button>
 </div>
@@ -2086,20 +2086,21 @@ function toggleMdlPopup(e) {
     requestAnimationFrame(function(){ p.style.top = (rect.top - p.offsetHeight - 10) + 'px'; });
   }
 }
+let _mdlId = 'claude-sonnet-4-5';
 function pickMdl(id, btn) {
   _mdlId = id;
   var lbl = document.getElementById('mdlSelLabel');
   if(lbl) lbl.textContent = id.length > 20 ? id.split('-').slice(0,2).join('-') : id;
   document.querySelectorAll('.mdl-opt').forEach(function(b){ b.classList.remove('active'); });
   if(btn) btn.classList.add('active');
-  document.getElementById('mdlPopup').style.display = 'none';
+  document.getElementById('mdlPopup').classList.remove('open');
   if(typeof showToast === 'function') showToast('Model: ' + id);
 }
 document.addEventListener('click', function(e){
   var p = document.getElementById('mdlPopup');
   var b = document.getElementById('mdlSelBtn');
-  if(p && p.style.display !== 'none' && !p.contains(e.target) && b && !b.contains(e.target)){
-    p.style.display = 'none';
+  if(p && p.classList.contains('open') && !p.contains(e.target) && b && !b.contains(e.target)){
+    p.classList.remove('open');
   }
 });
 /* ===== VOICE ===== */
@@ -2119,6 +2120,14 @@ function startVoice() {
 
 /* ===== MODE ===== */
 let currentMode = 'auto';
+function toggleModelPopup(btn) {
+  const popup = document.getElementById('mdlPopup');
+  if (!popup) return;
+  const rect = btn.getBoundingClientRect();
+  popup.style.bottom = (window.innerHeight - rect.top + 10) + 'px';
+  popup.style.left   = rect.left + 'px';
+  popup.classList.toggle('open');
+}
 function toggleModePopup(btn) {
   const popup = document.getElementById('modePopup');
   if (!popup) return;

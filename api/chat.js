@@ -64,7 +64,7 @@ function parseCommand(text) {
 // ============================================================
 // 🚀 TRIGGER GITHUB WORKFLOW
 // ============================================================
-async function triggerWorkflow(action_type, file_path, prompt) {
+async function triggerWorkflow(action_type, file_path, prompt, provider = 'auto') {
   const token = process.env.GH_TOKEN;
   if (!token) return { ok: false, error: 'GH_TOKEN not set' };
 
@@ -81,7 +81,7 @@ async function triggerWorkflow(action_type, file_path, prompt) {
       },
       body: JSON.stringify({
         ref: 'main',
-        inputs: { prompt, file_path, action_type }
+        inputs: { prompt, file_path, action_type, provider }
       })
     }
   );
@@ -92,12 +92,7 @@ async function triggerWorkflow(action_type, file_path, prompt) {
 // 💬 GROQ CHAT
 // ============================================================
 async function askGroq(messages) {
-  // If user selected a Groq model specifically, use it first
-  const groqModelMap = {'llama-3.3-70b':'llama-3.3-70b-versatile','gemma2-9b':'gemma2-9b-it'};
-  const groqSpecific = groqModelMap[selectedModel];
-  const models = groqSpecific 
-    ? [groqSpecific, 'llama-3.3-70b-versatile', 'gemma2-9b-it']
-    : ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'gemma2-9b-it'];
+  const models = ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'gemma2-9b-it'];
   for (const model of models) {
     try {
       const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -114,6 +109,93 @@ async function askGroq(messages) {
     } catch(e) { break; }
   }
   return null;
+}
+
+// ============================================================
+// 💬 CLAUDE API HANDLER
+// ============================================================
+async function askClaude(messages, selectedModel) {
+  if (!process.env.ANTHROPIC_API_KEY) return null;
+  
+  const modelMap = {
+    'claude-sonnet-4-5': 'claude-3-5-sonnet-20241022',
+    'claude-opus-4-5': 'claude-3-5-opus-20241022',
+    'claude-haiku-3-5': 'claude-3-5-haiku-20241022',
+    'claude-sonnet': 'claude-3-5-sonnet-20241022',
+    'claude-opus': 'claude-3-5-opus-20241022',
+    'claude-haiku': 'claude-3-5-haiku-20241022'
+  };
+  
+  const model = modelMap[selectedModel] || 'claude-3-5-sonnet-20241022';
+  
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': process.env.ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model,
+        max_tokens: 2048,
+        system: SYSTEM_PROMPT,
+        messages: messages.filter(m => m.role !== 'system').map(m => ({
+          role: m.role === 'assistant' ? 'assistant' : 'user',
+          content: m.content
+        }))
+      }),
+      signal: AbortSignal.timeout(30000)
+    });
+    
+    if (r.ok) {
+      const d = await r.json();
+      return d.content?.[0]?.text || null;
+    }
+    return null;
+  } catch(e) {
+    console.error('Claude error:', e.message);
+    return null;
+  }
+}
+
+// ============================================================
+// 💬 GEMINI API HANDLER
+// ============================================================
+async function askGemini(messages, selectedModel) {
+  if (!process.env.GEMINI_API_KEY) return null;
+  
+  const modelMap = {
+    'gemini-2.0-flash': 'gemini-2.0-flash',
+    'gemini-1.5-flash': 'gemini-1.5-flash',
+    'gemini-1.5-pro': 'gemini-1.5-pro'
+  };
+  
+  const model = modelMap[selectedModel] || 'gemini-2.0-flash';
+  
+  try {
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: messages.filter(m => m.role !== 'system').map(m => ({
+          role: m.role === 'assistant' ? 'model' : 'user',
+          parts: [{ text: m.content }]
+        })),
+        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] }
+      }),
+      signal: AbortSignal.timeout(30000)
+    });
+    
+    if (r.ok) {
+      const d = await r.json();
+      return d.candidates?.[0]?.content?.parts?.[0]?.text || null;
+    }
+    return null;
+  } catch(e) {
+    console.error('Gemini error:', e.message);
+    return null;
+  }
 }
 
 export default async function handler(req, res) {
@@ -144,13 +226,19 @@ export default async function handler(req, res) {
   const cmd = parseCommand(lastUserMsg.content);
 
   if (cmd) {
+    // Determine provider for workflow
+    let provider = 'auto';
+    if (selectedModel.startsWith('claude')) provider = 'claude';
+    else if (selectedModel.startsWith('gemini')) provider = 'gemini';
+    else if (selectedModel.startsWith('llama') || selectedModel.startsWith('gemma')) provider = 'groq';
+
     // MISSION COMMAND
     if (cmd.type === 'mission') {
-      const result = await triggerWorkflow(cmd.action_type, cmd.file_path, cmd.prompt);
+      const result = await triggerWorkflow(cmd.action_type, cmd.file_path, cmd.prompt, provider);
       if (result.ok) {
         return res.status(200).json({
           success: true,
-          reply: `🚀 **Mission Started!**\n\nI'm executing your mission: *"${cmd.prompt}"*\n\n✅ GitHub workflow triggered. I'll handle everything on GitHub and report back when finished.\n\n🔗 [View Progress](https://github.com/saidsaidchiichii-coder/IlyassAgentAI/actions)`,
+          reply: `🚀 **Mission Started!**\n\nI'm executing your mission: *"${cmd.prompt}"*\n\n✅ GitHub workflow triggered using **${provider}**. I'll handle everything on GitHub and report back when finished.\n\n🔗 [View Progress](https://github.com/saidsaidchiichii-coder/IlyassAgentAI/actions)`,
           model: BRAND_MODEL
         });
       } else {
@@ -164,7 +252,7 @@ export default async function handler(req, res) {
 
     // FILE COMMAND
     if (cmd.type === 'file') {
-      const result = await triggerWorkflow(cmd.action_type, cmd.file_path, cmd.prompt);
+      const result = await triggerWorkflow(cmd.action_type, cmd.file_path, cmd.prompt, provider);
       const emoji = { create: '📄', update: '✏️', delete: '🗑️' }[cmd.action_type] || '🤖';
       const action = { create: 'Creating', update: 'Updating', delete: 'Deleting' }[cmd.action_type];
       const done   = { create: 'created', update: 'updated', delete: 'deleted' }[cmd.action_type];
@@ -172,7 +260,7 @@ export default async function handler(req, res) {
       if (result.ok) {
         return res.status(200).json({
           success: true,
-          reply: `${emoji} **${action} \`${cmd.file_path}\`...**\n\n✅ GitHub workflow triggered! IlyassAI is generating the content now.\n\n⏳ The file will be **${done}** in your repository within **30–60 seconds**.\n\n🔗 [View on GitHub](https://github.com/saidsaidchiichii-coder/IlyassAgentAI)`,
+          reply: `${emoji} **${action} \`${cmd.file_path}\`...**\n\n✅ GitHub workflow triggered using **${provider}**! IlyassAI is generating the content now.\n\n⏳ The file will be **${done}** in your repository within **30–60 seconds**.\n\n🔗 [View on GitHub](https://github.com/saidsaidchiichii-coder/IlyassAgentAI)`,
           model: BRAND_MODEL
         });
       } else {
@@ -199,14 +287,33 @@ export default async function handler(req, res) {
   }
 
   // ============================================================
-  // 💬 NORMAL CHAT
+  // 💬 NORMAL CHAT — SMART ROUTING
   // ============================================================
-  // Skip Groq if user explicitly selected a Claude model
-  const isClaudeSelected = selectedModel && selectedModel.startsWith('claude');
-  const isGroqSelected = selectedModel && (selectedModel.startsWith('llama') || selectedModel.startsWith('gemma'));
   
-  // If groq model selected OR no preference → try groq first (it's free/fast)
-  if (!isClaudeSelected || isGroqSelected) {
+  // 1. Try Claude if selected
+  if (selectedModel.startsWith('claude')) {
+    const reply = await askClaude([
+      { role: 'system', content: SYSTEM_PROMPT },
+      ...messages
+    ], selectedModel);
+    if (reply) {
+      return res.status(200).json({ success: true, reply, model: BRAND_MODEL });
+    }
+  }
+  
+  // 2. Try Gemini if selected
+  if (selectedModel.startsWith('gemini')) {
+    const reply = await askGemini([
+      { role: 'system', content: SYSTEM_PROMPT },
+      ...messages
+    ], selectedModel);
+    if (reply) {
+      return res.status(200).json({ success: true, reply, model: BRAND_MODEL });
+    }
+  }
+  
+  // 3. Try Groq if selected or no specific preference
+  if (selectedModel.startsWith('llama') || selectedModel.startsWith('gemma') || !selectedModel.startsWith('claude')) {
     const reply = await askGroq([
       { role: 'system', content: SYSTEM_PROMPT },
       ...messages
@@ -215,48 +322,27 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true, reply, model: BRAND_MODEL });
     }
   }
-
-
-  // CLAUDE — selected model routing
-  if (process.env.ANTHROPIC_API_KEY && selectedModel.startsWith('claude')) {
-    const cmap={'claude-haiku':'claude-haiku-4-5','claude-sonnet':'claude-sonnet-4-5','claude-sonnet-4-5':'claude-sonnet-4-5','claude-opus':'claude-opus-4-5'};
-    const cm=cmap[selectedModel]||'claude-sonnet-4-5';
-    try{
-      const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
-        headers:{'Content-Type':'application/json','x-api-key':process.env.ANTHROPIC_API_KEY,'anthropic-version':'2023-06-01'},
-        body:JSON.stringify({model:cm,max_tokens:2048,system:SYSTEM_PROMPT,
-          messages:messages.filter(m=>m.role!=='system').map(m=>({role:m.role==='assistant'?'assistant':'user',content:m.content}))}),
-        signal:AbortSignal.timeout(30000)});
-      if(r.ok){const d=await r.json();const reply=d.content?.[0]?.text;
-        if(reply){if(user)try{await deductCredits(user.id,1);}catch(_){}
-          return res.status(200).json({success:true,reply,model:BRAND_MODEL,provider:BRAND_PROVIDER});}}
-      errors.push(`Claude/${cm}:${r.status}`);
-    }catch(e){errors.push(`Claude:${e.message}`);}
+  
+  // 4. Fallback to Claude if available
+  if (process.env.ANTHROPIC_API_KEY) {
+    const reply = await askClaude([
+      { role: 'system', content: SYSTEM_PROMPT },
+      ...messages
+    ], 'claude-sonnet-4-5');
+    if (reply) {
+      return res.status(200).json({ success: true, reply, model: BRAND_MODEL });
+    }
   }
-
-
-  // ── CLAUDE ──────────────────────────────────────────────────
-  if (process.env.ANTHROPIC_API_KEY && selectedModel.startsWith('claude')) {
-    const cmap = { 'claude-haiku':'claude-haiku-4-5', 'claude-sonnet':'claude-sonnet-4-5', 'claude-sonnet-4-5':'claude-sonnet-4-5', 'claude-opus':'claude-opus-4-5' };
-    const cm = cmap[selectedModel] || 'claude-sonnet-4-5';
-    try {
-      const r = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-        body: JSON.stringify({ model: cm, max_tokens: 2048, system: SYSTEM_PROMPT,
-          messages: messages.filter(m => m.role !== 'system').map(m => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: m.content })) }),
-        signal: AbortSignal.timeout(30000)
-      });
-      if (r.ok) {
-        const d = await r.json();
-        const reply = d.content?.[0]?.text;
-        if (reply) {
-          if (user) try { await deductCredits(user.id, 1); } catch(_) {}
-          return res.status(200).json({ success: true, reply, model: BRAND_MODEL, provider: BRAND_PROVIDER });
-        }
-      }
-      errors.push(`Claude/${cm}: ${r.status}`);
-    } catch(e) { errors.push(`Claude: ${e.message}`); }
+  
+  // 5. Fallback to Gemini if available
+  if (process.env.GEMINI_API_KEY) {
+    const reply = await askGemini([
+      { role: 'system', content: SYSTEM_PROMPT },
+      ...messages
+    ], 'gemini-2.0-flash');
+    if (reply) {
+      return res.status(200).json({ success: true, reply, model: BRAND_MODEL });
+    }
   }
 
   return res.status(503).json({ error: 'All AI providers are busy. Try again.' });

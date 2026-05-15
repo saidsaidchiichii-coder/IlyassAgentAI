@@ -337,6 +337,7 @@ const AI = {
         message,
         files: [],
         mode: this.currentMode,
+        selectedModel: window._mdlId || 'claude-sonnet-4-5',
         timestamp: new Date().toISOString()
       };
 
