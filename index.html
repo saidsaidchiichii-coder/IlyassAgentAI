@@ -406,10 +406,10 @@
 <div class="mode-popup" id="modePopup">
   <div class="mode-popup-title">Select Model</div>
   <button class="mode-option active" data-mode="claude" data-model="claude-sonnet-4-5" onclick="selectMode('claude')">
-    <div class="mode-icon" style="background:rgba(255,107,53,.15);color:#ff6b35;font-size:13px;font-weight:700;">◆◆</div>
+    <div class="mode-icon" style="background:rgba(255,107,53,.15);color:#ff6b35;font-size:13px;font-weight:700;letter-spacing:-1px;">◆◆</div>
     <div class="mode-info">
       <span class="mode-name">Claude</span>
-      <span class="mode-desc">Smart code, analysis &amp; creative tasks</span>
+      <span class="mode-desc">Smart code, analysis &amp; creative</span>
     </div>
     <svg class="mode-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
   </button>
@@ -462,7 +462,7 @@ const INPUT_HTML = `
           </svg>
         </label>
         <button class="mode-trigger icon-action" id="modeTrigger" onclick="toggleModePopup(this)">
-          <span style="font-size:11px;font-weight:700;color:#ff6b35;">◆◆</span>
+          <span style="font-size:11px;font-weight:700;color:#ff6b35;letter-spacing:-1px;">◆◆</span>
           <span id="modeTriggerLabel">Claude</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
@@ -490,6 +490,34 @@ const INPUT_HTML = `
         </button>
 
 
+          <div id="mdlWrap">
+          <button id="mdlBtn" onclick="mdlToggle(this)">
+            <span id="mdlLabel">Sonnet 4.5</span>
+            <svg class="arr" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div id="mdlPanel">
+            <div class="mdl-row" data-model="claude-opus" onclick="mdlPick(this)">
+              <div class="mdl-txt"><strong>Opus 4.7</strong><small>Most capable for ambitious work</small></div>
+              <span class="mdl-badge">Upgrade</span>
+              <div class="mdl-chk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+            </div>
+            <div class="mdl-row selected" data-model="claude-sonnet-4-5" onclick="mdlPick(this)">
+              <div class="mdl-txt"><strong>Claude Sonnet 4.5</strong><small>Smart &amp; responsive</small></div>
+              <div class="mdl-chk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+            </div>
+            <div class="mdl-row" data-model="claude-haiku" onclick="mdlPick(this)">
+              <div class="mdl-txt"><strong>Haiku 4.5</strong><small>Fastest, most efficient</small></div>
+              <div class="mdl-chk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+            </div>
+            <div class="mdl-sep"></div>
+            <div class="mdl-tog" onclick="mdlAdaptive()">
+              <div class="mdl-txt"><strong style="font-size:.87rem;color:#ececec">Adaptive thinking</strong><small>Thinks for more complex tasks</small></div>
+              <div class="sw-track" id="adaptSw"></div>
+            </div>
+            <div class="mdl-sep"></div>
+            <div class="mdl-more" onclick="mdlMore()">More models <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+        </div>
           <button class="send-btn"  id="sendBtn"  onclick="sendMessage()">
           <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M12 2l-7.5 19.5 7.5-4.5 7.5 4.5z"/></svg>
         </button>
@@ -536,10 +564,9 @@ function loadSavedSettings() {
       });
     }
     const savedMode = localStorage.getItem('aiDefaultMode');
-    // Restore saved model
-  const savedModel = localStorage.getItem('ilyass_selectedModel') || 'claude-sonnet-4-5';
-  const modeByModel = { 'claude-sonnet-4-5': 'claude', 'claude-haiku': 'claude', 'claude-opus': 'claude', 'gemini-2.0-flash': 'gemini', 'gemini-1.5-flash': 'gemini', 'llama-3.3-70b': 'groq', 'gemma2-9b': 'groq' };
-  const savedMode = localStorage.getItem('ilyass_currentMode') || modeByModel[savedModel] || 'claude';
+    // Restore saved model → mode mapping
+  const savedModel2 = localStorage.getItem('ilyass_selectedModel');
+  const savedMode = localStorage.getItem('ilyass_currentMode') || (savedModel2 ? (savedModel2.startsWith('gemini') ? 'gemini' : savedModel2.startsWith('llama') || savedModel2.startsWith('gemma') ? 'groq' : 'claude') : 'claude');
   if (savedMode) selectMode(savedMode);
 
     // Restore gallery
@@ -850,25 +877,24 @@ function toggleModePopup(btn) {
 }
 function selectMode(mode) {
   currentMode = mode;
-  // Map mode -> model
-  const modelMap = { claude: 'claude-sonnet-4-5', gemini: 'gemini-2.0-flash', groq: 'llama-3.3-70b' };
-  const selectedModel = modelMap[mode] || 'claude-sonnet-4-5';
-  if (typeof AI !== 'undefined') AI.setModel(selectedModel);
-  try { localStorage.setItem('ilyass_selectedModel', selectedModel); } catch(_){}
-  // Label map
-  const labels = { claude: 'Claude', gemini: 'Gemini', groq: 'Groq' };
-  const icons  = { claude: '◆◆', gemini: '✦', groq: '⚡' };
-  const colors = { claude: '#ff6b35', gemini: '#60a5fa', groq: '#4ade80' };
-  // Update all mode trigger labels & icons
+  // Map mode → model
+  const modelMap  = { claude: 'claude-sonnet-4-5', gemini: 'gemini-2.0-flash', groq: 'llama-3.3-70b' };
+  const labelMap  = { claude: 'Claude', gemini: 'Gemini', groq: 'Groq' };
+  const iconMap   = { claude: '◆◆', gemini: '✦', groq: '⚡' };
+  const colorMap  = { claude: '#ff6b35', gemini: '#60a5fa', groq: '#4ade80' };
+  const selModel  = modelMap[mode] || 'claude-sonnet-4-5';
+  // Set AI model
+  if (typeof AI !== 'undefined') { AI.setModel(selModel); AI.currentMode = mode; }
+  try { localStorage.setItem('ilyass_selectedModel', selModel); localStorage.setItem('ilyass_currentMode', mode); } catch(_){}
+  // Update label text
   document.querySelectorAll('[id^="ml-"],[id="modeTriggerLabel"]').forEach(el => {
-    el.textContent = labels[mode] || mode;
+    el.textContent = labelMap[mode] || mode;
   });
-  // Update trigger icon
-  document.querySelectorAll('#modeTrigger .mode-trigger-icon, #modeTrigger span:first-child').forEach(el => {
-    if (el.tagName === 'SPAN' && el.id !== 'modeTriggerLabel' && !el.className.includes('arr')) {
-      el.textContent = icons[mode] || '◆◆';
-      el.style.color = colors[mode] || '#ff6b35';
-    }
+  // Update trigger icon color/text
+  document.querySelectorAll('#modeTrigger span:first-child, [id^="mt-"] span:first-child').forEach(el => {
+    if (el.id && (el.id.startsWith('ml-') || el.id === 'modeTriggerLabel')) return;
+    el.textContent = iconMap[mode] || '◆◆';
+    el.style.color = colorMap[mode] || '#ff6b35';
   });
   document.querySelectorAll('.mode-option').forEach(o => {
     o.classList.toggle('active', o.dataset.mode === mode);
