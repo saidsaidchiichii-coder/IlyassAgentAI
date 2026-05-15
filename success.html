@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Successful — IlyassAI</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0a0a0f;
+    color: #e2e8f0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .container {
+    text-align: center;
+    padding: 40px 24px;
+    max-width: 500px;
+  }
+  .check-circle {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #4ade80, #22c55e);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 32px;
+    animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+  .check-circle svg { width: 40px; height: 40px; color: #fff; }
+  h1 { font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 12px; }
+  .plan-activated {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(167,139,250,0.1));
+    border: 1px solid rgba(124,58,237,0.4);
+    color: #a78bfa;
+    font-size: 0.875rem;
+    font-weight: 700;
+    padding: 6px 20px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  p { color: #94a3b8; line-height: 1.6; margin-bottom: 32px; }
+  .btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #7c3aed, #9333ea);
+    color: #fff;
+    padding: 14px 36px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+  }
+  .btn:hover { transform: translateY(-2px); background: linear-gradient(135deg, #6d28d9, #7c3aed); }
+  .features-unlocked {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 24px;
+    margin: 28px 0;
+    text-align: left;
+  }
+  .features-unlocked h3 { font-size: 0.875rem; color: #7c3aed; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px; }
+  .feat-item { display: flex; align-items: center; gap: 10px; color: #cbd5e1; font-size: 0.9rem; margin-bottom: 10px; }
+  .feat-item svg { color: #4ade80; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="check-circle">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+  </div>
+
+  <h1>Payment Successful!</h1>
+  <div class="plan-activated" id="planBadge">Plan Activated</div>
+
+  <div class="features-unlocked" id="featuresList">
+    <!-- filled by JS -->
+  </div>
+
+  <p>Your account has been upgraded. All features are now active.</p>
+  <a href="/app" class="btn">Go to IlyassAI →</a>
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const plan = params.get('plan') || 'pro';
+
+  const planBadge = document.getElementById('planBadge');
+  const featuresList = document.getElementById('featuresList');
+
+  const planNames = { free: 'Free', pro: 'Pro', custom: 'Custom' };
+  planBadge.textContent = `✅ ${planNames[plan] || 'Pro'} Plan Activated`;
+
+  const featuresMap = {
+    free: ['100 messages per day', '1 AI model (GPT-3.5)'],
+    pro: ['Unlimited messages', 'GPT-4o & Claude 3.5 models', 'Unlimited image generation', 'Web search integration', 'Memory & context persistence', 'Priority routing (80% faster)'],
+    custom: ['Everything in Pro', 'Your own API key', 'Custom model integrations', 'White-label options', 'Priority support'],
+  };
+
+  const features = featuresMap[plan] || featuresMap.pro;
+  featuresList.innerHTML = `
+    <h3>🎉 Now Unlocked</h3>
+    ${features.map(f => `
+      <div class="feat-item">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        ${f}
+      </div>
+    `).join('')}
+  `;
+</script>
+</body>
+</html>
