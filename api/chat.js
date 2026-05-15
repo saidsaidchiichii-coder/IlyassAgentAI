@@ -92,7 +92,12 @@ async function triggerWorkflow(action_type, file_path, prompt) {
 // 💬 GROQ CHAT
 // ============================================================
 async function askGroq(messages) {
-  const models = ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'gemma2-9b-it'];
+  // If user selected a Groq model specifically, use it first
+  const groqModelMap = {'llama-3.3-70b':'llama-3.3-70b-versatile','gemma2-9b':'gemma2-9b-it'};
+  const groqSpecific = groqModelMap[selectedModel];
+  const models = groqSpecific 
+    ? [groqSpecific, 'llama-3.3-70b-versatile', 'gemma2-9b-it']
+    : ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'gemma2-9b-it'];
   for (const model of models) {
     try {
       const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -196,13 +201,19 @@ export default async function handler(req, res) {
   // ============================================================
   // 💬 NORMAL CHAT
   // ============================================================
-  const reply = await askGroq([
-    { role: 'system', content: SYSTEM_PROMPT },
-    ...messages
-  ]);
-
-  if (reply) {
-    return res.status(200).json({ success: true, reply, model: BRAND_MODEL });
+  // Skip Groq if user explicitly selected a Claude model
+  const isClaudeSelected = selectedModel && selectedModel.startsWith('claude');
+  const isGroqSelected = selectedModel && (selectedModel.startsWith('llama') || selectedModel.startsWith('gemma'));
+  
+  // If groq model selected OR no preference → try groq first (it's free/fast)
+  if (!isClaudeSelected || isGroqSelected) {
+    const reply = await askGroq([
+      { role: 'system', content: SYSTEM_PROMPT },
+      ...messages
+    ]);
+    if (reply) {
+      return res.status(200).json({ success: true, reply, model: BRAND_MODEL });
+    }
   }
 
 
