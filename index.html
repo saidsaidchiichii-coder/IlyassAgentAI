@@ -1,1433 +1,851 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IlyassAI</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>IlyassAI — The Next Generation Autonomous AI Agent</title>
+<meta name="description" content="IlyassAI is an autonomous AI agent platform with Manus-like intelligence. Chat, Create, Build, Deploy — all in one place."/>
+<meta property="og:title" content="IlyassAI — Autonomous AI Agent Platform"/>
+<meta property="og:description" content="The autonomous AI platform built for the future. Think. Act. Build."/>
+<meta property="og:image" content="https://my-webxyu.vercel.app/og.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+/* ================================================================
+   IlyassAI — Grok UI (Pixel Perfect Dark Theme)
+   ================================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
+:root{
+  --bg:#000000;
+  --bg2:#0a0a0a;
+  --bg3:#111111;
+  --surface:rgba(255,255,255,0.04);
+  --surface2:rgba(255,255,255,0.07);
+  --border:rgba(255,255,255,0.07);
+  --border2:rgba(255,255,255,0.13);
+  --text:#ececec;
+  --text2:rgba(236,236,236,0.65);
+  --text3:rgba(236,236,236,0.35);
+  --accent:#ff6b35;
+  --accent2:rgba(255,107,53,0.15);
+  --green:#4ade80;
+  --blue:#60a5fa;
+  --red:#f87171;
+  --r:10px;
+  --r2:16px;
+  --r3:24px;
+}
 
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+a{text-decoration:none;color:inherit}
+img{max-width:100%}
+
+/* ── hide orbs (no more gradient blobs) ── */
+.orb-container{display:none}
+body::before{display:none}
+
+/* ── NAVBAR ── */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:0 28px;height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(0,0,0,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  transition:all .3s;
+}
+.nav.scrolled{background:rgba(0,0,0,0.95)}
+.nav-logo{
+  display:flex;align-items:center;gap:10px;
+  font-weight:700;font-size:17px;letter-spacing:-0.3px;
+}
+.nav-logo-icon{
+  width:30px;height:30px;
+  background:var(--accent);
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;color:#000;
+}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{
+  font-size:14px;font-weight:500;
+  color:var(--text2);transition:color .2s;
+}
+.nav-links a:hover{color:var(--text)}
+.nav-actions{display:flex;align-items:center;gap:10px}
+
+.btn-ghost{
+  padding:7px 16px;border-radius:8px;
+  font-size:14px;font-weight:500;
+  color:var(--text2);
+  border:1px solid var(--border2);
+  cursor:pointer;background:transparent;
+  transition:all .2s;font-family:'Inter',sans-serif;
+}
+.btn-ghost:hover{color:var(--text);background:var(--surface2)}
+
+.btn-primary{
+  padding:8px 20px;border-radius:8px;
+  font-size:14px;font-weight:600;
+  background:var(--text);color:#000;
+  border:none;cursor:pointer;
+  transition:all .2s;font-family:'Inter',sans-serif;
+  white-space:nowrap;
+}
+.btn-primary:hover{background:#cccccc;transform:translateY(-1px)}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding-top:80px;
+}
+.hero-inner{
+  max-width:740px;margin:0 auto;
+  text-align:center;padding:0 24px;
+}
+
+/* hide gradient orb badge */
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:5px 14px;border-radius:999px;
+  background:rgba(255,107,53,0.1);
+  border:1px solid rgba(255,107,53,0.25);
+  font-size:12px;font-weight:600;
+  color:var(--accent);margin-bottom:28px;
+  letter-spacing:.5px;text-transform:uppercase;
+}
+.hero-badge-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--accent);
+  animation:pulse-dot 2s infinite;
+}
+@keyframes pulse-dot{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.5;transform:scale(1.3)}
+}
+
+.hero h1{
+  font-size:clamp(40px,6.5vw,76px);
+  font-weight:800;line-height:1.06;
+  letter-spacing:-2px;margin-bottom:24px;
+  color:var(--text);
+}
+.hero h1 .grad-text{
+  color:var(--accent);
+  -webkit-text-fill-color:var(--accent);
+}
+.hero-sub{
+  font-size:clamp(15px,2vw,18px);
+  color:var(--text2);
+  max-width:520px;margin:0 auto 40px;
+  line-height:1.7;
+}
+.hero-cta{
+  display:flex;align-items:center;
+  justify-content:center;gap:12px;flex-wrap:wrap;
+}
+
+.btn-hero{
+  padding:13px 30px;border-radius:10px;
+  font-size:15px;font-weight:700;
+  background:var(--text);color:#000;
+  border:none;cursor:pointer;
+  transition:all .22s;
+  display:flex;align-items:center;gap:8px;
+  font-family:'Inter',sans-serif;
+}
+.btn-hero:hover{background:#d0d0d0;transform:translateY(-2px)}
+
+.btn-hero-ghost{
+  padding:12px 26px;border-radius:10px;
+  font-size:15px;font-weight:600;
+  background:transparent;color:var(--text);
+  border:1px solid var(--border2);
+  cursor:pointer;transition:all .22s;
+  font-family:'Inter',sans-serif;
+}
+.btn-hero-ghost:hover{background:var(--surface2);transform:translateY(-1px)}
+
+.hero-stats{
+  display:flex;align-items:center;
+  justify-content:center;gap:32px;
+  margin-top:56px;flex-wrap:wrap;
+}
+.stat{text-align:center}
+.stat-num{
+  font-size:28px;font-weight:800;
+  color:var(--accent);letter-spacing:-.5px;
+}
+.stat-label{font-size:12px;color:var(--text3);font-weight:500;margin-top:2px}
+.stat-divider{width:1px;height:36px;background:var(--border2)}
+
+/* ── SECTION BASE ── */
+.section{padding:90px 0}
+.container{max-width:1160px;margin:0 auto;padding:0 28px;position:relative;z-index:2}
+section{position:relative;z-index:2}
+
+.section-label{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:700;
+  color:var(--accent);
+  text-transform:uppercase;letter-spacing:1.5px;
+  margin-bottom:14px;
+}
+.section-title{
+  font-size:clamp(30px,4.5vw,48px);
+  font-weight:800;letter-spacing:-1.5px;
+  line-height:1.1;margin-bottom:14px;
+  color:var(--text);
+}
+.section-sub{font-size:16px;color:var(--text2);max-width:540px;line-height:1.7}
+.section-header{margin-bottom:56px}
+.section-header.center{text-align:center}
+.section-header.center .section-sub{margin:0 auto}
+
+/* ── FEATURES ── */
+.features-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:16px;
+}
+.feature-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r2);
+  padding:26px;
+  transition:all .25s;cursor:default;
+}
+.feature-card:hover{
+  background:var(--surface2);
+  border-color:var(--border2);
+  transform:translateY(-3px);
+}
+.feature-icon{
+  width:40px;height:40px;border-radius:10px;
+  background:rgba(255,107,53,0.1);
+  border:1px solid rgba(255,107,53,0.2);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;font-size:18px;
+}
+.feature-title{font-size:16px;font-weight:700;margin-bottom:8px;letter-spacing:-.3px}
+.feature-desc{font-size:14px;color:var(--text2);line-height:1.65}
+
+/* ── MODELS ── */
+.models-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:14px;
+}
+.model-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:18px;transition:all .22s;
+}
+.model-card:hover{
+  border-color:rgba(255,107,53,0.35);
+  background:rgba(255,107,53,0.05);
+}
+.model-name{font-size:15px;font-weight:700;margin-bottom:4px}
+.model-provider{font-size:12px;color:var(--text3);margin-bottom:10px}
+.model-badge{
+  display:inline-block;padding:3px 10px;border-radius:999px;
+  font-size:11px;font-weight:600;
+}
+.model-badge.free{background:rgba(74,222,128,.1);color:var(--green);border:1px solid rgba(74,222,128,.2)}
+.model-badge.fast{background:rgba(96,165,250,.1);color:var(--blue);border:1px solid rgba(96,165,250,.2)}
+
+/* ── API ── */
+.api-card{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--r2);padding:36px;
+  overflow:hidden;position:relative;
+}
+.api-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+}
+.code-block{
+  background:rgba(0,0,0,0.6);
+  border:1px solid var(--border);
+  border-radius:10px;padding:22px;
+  font-family:'JetBrains Mono','Courier New',monospace;
+  font-size:13px;color:#d4d4d4;
+  overflow-x:auto;position:relative;margin-top:22px;
+}
+.code-block .comment{color:#546e7a;font-style:italic}
+.code-block .key{color:#60a5fa}
+.code-block .string{color:#86efac}
+.code-block .func{color:#e2b96f}
+
+/* ── PRICING ── */
+.pricing-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;max-width:860px;margin:0 auto;
+}
+.price-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r2);padding:28px;
+  transition:all .25s;position:relative;
+}
+.price-card.featured{
+  background:rgba(255,107,53,0.06);
+  border-color:rgba(255,107,53,0.3);
+  transform:scale(1.02);
+}
+.price-card.featured::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--accent);border-radius:var(--r2) var(--r2) 0 0;
+}
+.price-badge{
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+  background:var(--accent);color:#000;
+  font-size:11px;font-weight:700;
+  padding:4px 14px;border-radius:999px;white-space:nowrap;
+}
+.price-name{font-size:16px;font-weight:700;margin-bottom:8px}
+.price-amount{
+  font-size:40px;font-weight:900;
+  letter-spacing:-1.5px;margin:14px 0 4px;
+  color:var(--text);
+}
+.price-amount span{font-size:16px;font-weight:500;color:var(--text2)}
+.price-period{font-size:13px;color:var(--text3);margin-bottom:22px}
+.price-features{list-style:none;margin-bottom:26px;display:flex;flex-direction:column;gap:11px}
+.price-features li{font-size:14px;color:var(--text2);display:flex;align-items:center;gap:10px}
+.price-features li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+
+/* ── TESTIMONIALS ── */
+.testimonials-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:16px;
+}
+.testimonial{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r2);padding:26px;transition:all .25s;
+}
+.testimonial:hover{background:var(--surface2);transform:translateY(-2px)}
+.testimonial-text{
+  font-size:15px;color:var(--text2);line-height:1.7;
+  margin-bottom:18px;font-style:italic;
+}
+.testimonial-text::before{
+  content:'"';font-size:26px;color:var(--accent);
+  line-height:0;vertical-align:-8px;margin-right:4px;
+}
+.testimonial-author{display:flex;align-items:center;gap:12px}
+.author-avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--accent);color:#000;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;flex-shrink:0;
+}
+.author-name{font-size:14px;font-weight:700}
+.author-role{font-size:12px;color:var(--text3)}
+
+/* ── SECURITY ── */
+.security-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.security-item{
+  display:flex;align-items:center;gap:12px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:16px;
+}
+.security-icon{font-size:20px;flex-shrink:0}
+.security-text{font-size:14px;font-weight:500}
+
+/* ── CTA ── */
+.cta-section{text-align:center;padding:100px 0}
+.cta-box{
+  background:rgba(255,107,53,0.06);
+  border:1px solid rgba(255,107,53,0.2);
+  border-radius:var(--r3);padding:72px 36px;
+  position:relative;overflow:hidden;
+}
+.cta-box::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+}
+.cta-box h2{
+  font-size:clamp(30px,4.5vw,50px);
+  font-weight:900;letter-spacing:-1.5px;margin-bottom:14px;
+}
+.cta-box p{
+  font-size:17px;color:var(--text2);
+  max-width:500px;margin:0 auto 34px;
+}
+
+/* ── FOOTER ── */
+.footer{padding:56px 0 28px;border-top:1px solid var(--border)}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:44px}
+.footer-brand{font-size:17px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.footer-desc{font-size:14px;color:var(--text2);line-height:1.7;max-width:220px}
+.footer-col h4{
+  font-size:12px;font-weight:700;color:var(--text3);
+  text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;
+}
+.footer-col a{display:block;font-size:14px;color:var(--text2);margin-bottom:10px;transition:color .2s}
+.footer-col a:hover{color:var(--text)}
+.footer-bottom{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:22px;border-top:1px solid var(--border);
+  font-size:13px;color:var(--text3);
+}
+.footer-bottom-links{display:flex;gap:18px}
+.footer-bottom-links a{color:var(--text3);transition:color .2s}
+.footer-bottom-links a:hover{color:var(--text2)}
+
+/* ── SCROLL ANIMATION ── */
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity .55s ease,transform .55s ease}
+.fade-in.visible{opacity:1;transform:none}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .hero-stats{gap:18px}
+  .stat-divider{display:none}
+  .pricing-grid{grid-template-columns:1fr}
+  .price-card.featured{transform:none}
+  .hero h1{letter-spacing:-1.5px}
+}
+@media(max-width:480px){
+  .nav-actions .btn-ghost{display:none}
+  .container{padding:0 16px}
+  .section{padding:64px 0}
+  .cta-box{padding:48px 20px}
+}
+</style>
 </head>
 <body>
-<canvas id="global-particles" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;opacity:0.4;"></canvas><div style="position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.02) 0%, transparent 80%);z-index:-1;pointer-events:none;"></div>
 
-<!-- ════════════════════════════════════════
-     SIDEBAR
-════════════════════════════════════════ -->
-<aside class="sidebar" id="sidebar">
-
-  <div class="sidebar-header">
-    <button class="sidebar-logo-btn" onclick="goHome()" title="Home">
-      <!-- IlyassAI Logo -->
-      <svg viewBox="0 0 32 32" fill="currentColor" width="26" height="26">
-        <path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm0 3.5c2.006 0 3.89.524 5.522 1.44L7.94 21.522A10.45 10.45 0 0 1 5.5 16C5.5 9.649 10.649 4.5 17 4.5h-1zm0 21c-2.006 0-3.89-.524-5.522-1.44L24.06 10.478A10.45 10.45 0 0 1 26.5 16c0 6.351-5.149 11.5-11.5 11.5h1z"/>
-      </svg>
-    </button>
-
-    <div style="display:flex;align-items:center;gap:4px;">
-      <!-- Collapse button -->
-      <button class="sidebar-collapse-btn" onclick="toggleSidebarCollapse()" title="Collapse sidebar" id="collapseBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
-          <rect x="3" y="3" width="18" height="18" rx="2"/>
-          <line x1="9" y1="3" x2="9" y2="21"/>
-        </svg>
-      </button>
-      <button class="new-chat-btn" onclick="newChat()" title="New chat">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17">
-          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-        </svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- Search -->
-  <div class="sidebar-search">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <input type="text" placeholder="Search conversations" id="convSearch" oninput="filterConvs(this.value)" />
-  </div>
-
-  <!-- Conversations -->
-  <div class="sidebar-conversations" id="conversationsList">
-    <div class="no-conversations">No conversations yet</div>
-  </div>
-
-  <!-- Footer -->
-  <div class="sidebar-footer">
-    <button class="sidebar-footer-btn" onclick="openSettings()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="15" height="15"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      <span>Settings</span>
-    </button>
-    <div class="user-row" id="userRow">
-      <div class="user-avatar" id="userAvatar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      </div>
-      <span class="user-name" id="sidebarUserName">Guest</span>
-      <button class="signin-link" id="signInBtn" onclick="showAuthModal('login')">Sign in</button>
-    </div>
-  </div>
-</aside>
-
-<!-- SIDEBAR OVERLAY (mobile) -->
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-
-<!-- ════════════════════════════════════════
-     MAIN
-════════════════════════════════════════ -->
-<main class="main" id="main">
-
-  <!-- Mobile toggle -->
-  <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleSidebar()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-  </button>
-
-  <!-- TOPBAR WITH TABS -->
-  <div class="topbar" id="topbar">
-    <div class="topbar-tabs">
-      <button class="topbar-tab active" id="tabChat" onclick="switchTab('chat')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        Chat
-      </button>
-      <button class="topbar-tab" id="tabImagine" onclick="switchTab('imagine')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        Imagine
-      </button>
-    </div>
-    <div class="topbar-right">
-      <a href="connectors.html" class="topbar-icon-btn" title="Connectors">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-      </a>
-      <a href="api-dashboard.html" class="topbar-icon-btn" title="API Dashboard">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      </a>
-      <button class="topbar-icon-btn" onclick="newChat()" title="New chat">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      </button>
-      <button class="topbar-icon-btn" onclick="openSettings()" title="Settings">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- ── HOME ── -->
-  <div class="home-view" id="homeView">
-    <div class="home-body">
-      <div class="home-logo">
-        <svg viewBox="0 0 56 56" fill="currentColor" width="52" height="52">
-          <path d="M28 2C13.64 2 2 13.64 2 28s11.64 26 26 26 26-11.64 26-26S42.36 2 28 2zm0 5c3.43 0 6.66.87 9.49 2.4L10.4 37.49A20.93 20.93 0 0 1 7 28C7 15.297 17.297 5 30 5h-2zm0 44c-3.43 0-6.66-.87-9.49-2.4L45.6 18.51A20.93 20.93 0 0 1 49 28C49 40.703 38.703 51 26 51h2z"/>
-        </svg>
-      </div>
-      <h1 class="home-greeting" id="homeGreeting">What do you want to know?</h1>
-      <div class="suggestion-row">
-        <button class="suggestion-pill" onclick="useSuggestion(this)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="13" height="13"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          Write an essay
-        </button>
-        <button class="suggestion-pill" onclick="useSuggestion(this)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="13" height="13"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-          Help me code
-        </button>
-        <button class="suggestion-pill" onclick="useSuggestion(this)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="13" height="13"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          Analyze &amp; research
-        </button>
-        <button class="suggestion-pill" onclick="useSuggestion(this)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="13" height="13"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Summarize text
-        </button>
-        <button class="suggestion-pill" onclick="useSuggestion(this)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="13" height="13"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          Explain a concept
-        </button>
-        <button class="suggestion-pill" onclick="useSuggestion(this)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="13" height="13"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          Plan a trip
-        </button>
-      </div>
-    </div>
-    <div class="input-zone" id="homeInputZone"></div>
-    <p class="input-hint">IlyassAI can make mistakes. Consider checking important information.</p>
-  </div>
-
-  <!-- ── CHAT ── -->
-  <div class="chat-view" id="chatView">
-    <div class="messages-box" id="messagesBox"></div>
-    <button class="scroll-down-btn" id="scrollDownBtn" onclick="AI.scroll()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
-    </button>
-    <div class="input-zone" id="chatInputZone"></div>
-    <p class="input-hint">IlyassAI can make mistakes. Consider checking important information.</p>
-  </div>
-
-  <!-- ── IMAGINE VIEW ── -->
-  <div class="imagine-view" id="imagineView">
-    <div class="imagine-header">
-      <div class="imagine-title">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        Imagine
-      </div>
-      <div class="imagine-style-tabs" id="imagineStyleTabs">
-        <button class="imagine-style-tab active" onclick="setImagineStyle('standard',this)">Standard</button>
-        <button class="imagine-style-tab" onclick="setImagineStyle('realistic',this)">Realistic</button>
-        <button class="imagine-style-tab" onclick="setImagineStyle('artistic',this)">Artistic</button>
-        <button class="imagine-style-tab" onclick="setImagineStyle('anime',this)">Anime</button>
-        <button class="imagine-style-tab imagine-video-tab" onclick="switchImagineMode('video',this)" id="videoModeTab">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-          Video
-        </button>
-      </div>
-    </div>
-
-    <!-- Aspect Ratio Row -->
-    <div class="aspect-ratio-row">
-      <span class="aspect-ratio-label">Ratio:</span>
-      <button class="ar-btn active" data-ar="1:1" onclick="setAspectRatio(this,'1:1',768,768)">1:1</button>
-      <button class="ar-btn" data-ar="16:9" onclick="setAspectRatio(this,'16:9',1280,720)">16:9</button>
-      <button class="ar-btn" data-ar="9:16" onclick="setAspectRatio(this,'9:16',720,1280)">9:16</button>
-      <button class="ar-btn" data-ar="4:3" onclick="setAspectRatio(this,'4:3',1024,768)">4:3</button>
-      <button class="ar-btn" data-ar="3:4" onclick="setAspectRatio(this,'3:4',768,1024)">3:4</button>
-    </div>
-
-    <!-- Input -->
-    <div class="imagine-input-wrap">
-      <div class="input-box" id="imagineInputBox">
-        <div class="input-text-row">
-          <textarea
-            id="imagineTA"
-            class="chat-textarea"
-            placeholder="Describe the image you want to create..."
-            rows="1"
-            onkeydown="imagineKey(event)"
-            oninput="onType(this)"
-          ></textarea>
-        </div>
-      </div>
-      <button class="imagine-generate-btn" onclick="generateImagineImage()">
-        <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        Generate
-      </button>
-    </div>
-
-
-    <!-- VIDEO GENERATION SECTION -->
-    <div class="video-gen-section" id="videoGenSection" style="display:none;padding:0 4px;">
-      <div class="video-gen-inner">
-        <div class="imagine-input-wrap" style="margin-bottom:10px;">
-          <div class="input-box" id="videoInputBox">
-            <div class="input-text-row">
-              <textarea
-                id="videoPromptTA"
-                class="chat-textarea"
-                placeholder="Describe the video you want... (e.g: a beautiful sunset over the ocean)"
-                rows="2"
-                oninput="onType(this)"
-              ></textarea>
-            </div>
-          </div>
-        </div>
-        <div class="aspect-ratio-row" style="margin-bottom:12px;">
-          <span class="aspect-ratio-label">Style:</span>
-          <button class="ar-btn active" id="vstyle-cinematic" onclick="setVideoStyle('cinematic',this)">🎬 Cinematic</button>
-          <button class="ar-btn" id="vstyle-smooth" onclick="setVideoStyle('smooth',this)">✨ Smooth</button>
-          <button class="ar-btn" id="vstyle-dynamic" onclick="setVideoStyle('dynamic',this)">⚡ Dynamic</button>
-          <button class="ar-btn" id="vstyle-slow" onclick="setVideoStyle('slow-motion',this)">🐢 Slow-Mo</button>
-        </div>
-        <button class="imagine-generate-btn" onclick="generateImagineVideo()" id="videoGenBtn"
-          style="background:linear-gradient(135deg,#7c3aed,#4f46e5);border:1.5px solid #7c3aed;width:100%;justify-content:center;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-          Generate Video
-        </button>
-      </div>
-      <div id="videoResultArea" style="display:none;margin-top:18px;">
-        <div class="gallery-section-header">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-          Generated Video
-        </div>
-        <div id="videoOutput" style="margin-top:10px;border-radius:12px;overflow:hidden;background:var(--bg3);"></div>
-      </div>
-    </div>
-
-    <!-- Templates -->
-    <div class="imagine-templates">
-      <div class="templates-label">Templates</div>
-      <div class="templates-scroll" id="templateScroll">
-
-        <div class="template-card" onclick="useTemplate('A breathtaking mountain landscape at golden hour with dramatic clouds','landscape')">
-          <img class="template-img" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=240&h=160&fit=crop&auto=format" alt="Landscape" loading="lazy"/>
-          <div class="template-label">Landscape</div>
-        </div>
-
-        <div class="template-card" onclick="useTemplate('Professional portrait of a person with cinematic lighting and shallow depth of field','portrait')">
-          <img class="template-img" src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=240&h=160&fit=crop&auto=format" alt="Portrait" loading="lazy"/>
-          <div class="template-label">Portrait</div>
-        </div>
-
-        <div class="template-card" onclick="useTemplate('Futuristic cyberpunk city at night with neon lights and rain reflections','cyberpunk')">
-          <img class="template-img" src="https://images.unsplash.com/photo-1555680202-c86f0e12f086?w=240&h=160&fit=crop&auto=format" alt="Cyberpunk" loading="lazy"/>
-          <div class="template-label">Cyberpunk</div>
-        </div>
-
-        <div class="template-card" onclick="useTemplate('Magical fantasy forest with glowing mushrooms and ethereal light beams','fantasy')">
-          <img class="template-img" src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=240&h=160&fit=crop&auto=format" alt="Fantasy" loading="lazy"/>
-          <div class="template-label">Fantasy</div>
-        </div>
-
-        <div class="template-card" onclick="useTemplate('Abstract geometric art with vibrant colors and minimalist composition','abstract')">
-          <img class="template-img" src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=240&h=160&fit=crop&auto=format" alt="Abstract" loading="lazy"/>
-          <div class="template-label">Abstract</div>
-        </div>
-
-        <div class="template-card" onclick="useTemplate('Anime style illustration with detailed character design and soft coloring','anime')">
-          <img class="template-img" src="https://images.unsplash.com/photo-1612487439139-c2d7bac13577?w=240&h=160&fit=crop&auto=format" alt="Anime Style" loading="lazy"/>
-          <div class="template-label">Anime</div>
-        </div>
-
-        <div class="template-card" onclick="useTemplate('Stunning underwater ocean scene with colorful coral reef and tropical fish','ocean')">
-          <img class="template-img" src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=240&h=160&fit=crop&auto=format" alt="Ocean" loading="lazy"/>
-          <div class="template-label">Ocean</div>
-        </div>
-
-        <div class="template-card" onclick="useTemplate('Cozy coffee shop interior with warm lighting, wooden furniture, and rain outside','cozy')">
-          <img class="template-img" src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=240&h=160&fit=crop&auto=format" alt="Cozy" loading="lazy"/>
-          <div class="template-label">Cozy</div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Gallery / Discover -->
-    <div class="imagine-gallery" id="imagineGallery">
-      <div class="gallery-section-header">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        Your creations
-      </div>
-      <div class="gallery-grid" id="galleryGrid">
-        <div class="gallery-empty" id="galleryEmpty">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <p>Your generated images will appear here</p>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /imagine-view -->
-
-</main>
-
-<!-- ════════════════════════════════════════
-     AUTH MODAL
-════════════════════════════════════════ -->
-<div class="auth-overlay" id="authModal">
-  <div class="auth-card">
-    <div class="auth-logo">
-      <svg viewBox="0 0 32 32" fill="currentColor" width="32" height="32">
-        <path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm0 3.5c2.006 0 3.89.524 5.522 1.44L7.94 21.522A10.45 10.45 0 0 1 5.5 16C5.5 9.649 10.649 4.5 17 4.5h-1zm0 21c-2.006 0-3.89-.524-5.522-1.44L24.06 10.478A10.45 10.45 0 0 1 26.5 16c0 6.351-5.149 11.5-11.5 11.5h1z"/>
-      </svg>
-    </div>
-    <h2 class="auth-title" id="authTitle">Welcome back</h2>
-    <p class="auth-subtitle">Continue to IlyassAI</p>
-    <input type="email"    id="authEmail"    class="auth-input" placeholder="Email address"    autocomplete="email" />
-    <input type="password" id="authPassword" class="auth-input" placeholder="Password"         autocomplete="current-password" />
-    <div class="auth-error" id="authError"></div>
-    <button class="auth-submit" onclick="handleAuth()">Continue</button>
-    <button class="auth-cancel" onclick="closeAuthModal()">Cancel</button>
-    <p class="auth-switch">Don't have an account? <span id="authSwitchLink" onclick="toggleAuthMode()">Sign up</span></p>
-  </div>
+<!-- BG ORBS -->
+<div class="orb-container">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
 </div>
 
-<!-- ════════════════════════════════════════
-     SETTINGS PANEL
-════════════════════════════════════════ -->
-<div class="settings-overlay" id="settingsOverlay" onclick="closeSettings()"></div>
-<aside class="settings-panel" id="settingsPanel">
-  <div class="settings-header">
-    <h3>Settings</h3>
-    <button class="settings-close" onclick="closeSettings()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
+<!-- ══════════════════════ NAVBAR ══════════════════════ -->
+<nav class="nav" id="navbar">
+  <div class="nav-logo">
+    <div class="nav-logo-icon">I</div>
+    IlyassAI
   </div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#models">Models</a>
+    <a href="#api">API</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#docs" onclick="return false">Docs</a>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-ghost" onclick="window.location.href='/auth'">Sign In</button>
+    <button class="btn-primary" onclick="window.location.href='/app'">Start Free →</button>
+  </div>
+</nav>
 
-  <div class="settings-section">
-    <div class="settings-label">Appearance</div>
-    <div class="settings-row">
-      <span>Theme</span>
-      <div class="theme-pills">
-        <button class="theme-pill active" onclick="setTheme('dark',this)">Dark</button>
-        <button class="theme-pill" onclick="setTheme('light',this)">Light</button>
+<!-- ══════════════════════ HERO ══════════════════════ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        Autonomous AI · Manus-class Intelligence
       </div>
-    </div>
-  </div>
-
-  <div class="settings-section">
-    <div class="settings-label">Default Mode</div>
-    <div class="settings-row">
-      <span>Response mode</span>
-      <select id="defaultMode" onchange="setDefaultMode(this.value)" class="settings-select">
-        <option value="auto">Auto</option>
-        <option value="fast">Fast</option>
-        <option value="thinking">Think</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="settings-section">
-    <div class="settings-label">Memory</div>
-    <div class="settings-row">
-      <span>Clear all conversations</span>
-      <button class="danger-btn" onclick="clearAllConvs()">Clear</button>
-    </div>
-  </div>
-
-  <div class="settings-section">
-    <div class="settings-label">Integrations</div>
-    <div class="settings-row">
-      <span>Connectors</span>
-      <a href="connectors.html" class="auth-action-btn" style="text-decoration:none;display:flex;align-items:center;gap:4px;">
-        Open
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="9 18 15 12 9 6"/></svg>
-      </a>
-    </div>
-  </div>
-
-  <div class="settings-section">
-    <div class="settings-label">Account</div>
-    <div class="settings-row" id="settingsUserRow">
-      <span id="settingsEmail">Not signed in</span>
-      <button class="auth-action-btn" id="settingsAuthBtn" onclick="showAuthModal('login')">Sign in</button>
-    </div>
-  </div>
-</aside>
-
-<!-- ════════════════════════════════════════
-     MODE POPUP
-════════════════════════════════════════ -->
-<div class="mode-popup" id="modePopup">
-  <div class="mode-popup-title">Select Model</div>
-  <button class="mode-option active" data-mode="claude" data-model="claude-sonnet-4-5" onclick="selectMode('claude')">
-    <div class="mode-icon" style="background:rgba(255,107,53,.15);color:#ff6b35;font-size:13px;font-weight:700;letter-spacing:-1px;">◆◆</div>
-    <div class="mode-info">
-      <span class="mode-name">Claude</span>
-      <span class="mode-desc">Smart code, analysis &amp; creative</span>
-    </div>
-    <svg class="mode-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
-  </button>
-  <button class="mode-option" data-mode="gemini" data-model="gemini-2.0-flash" onclick="selectMode('gemini')">
-    <div class="mode-icon" style="background:rgba(96,165,250,.12);color:#60a5fa;font-size:15px;">✦</div>
-    <div class="mode-info">
-      <span class="mode-name">Gemini</span>
-      <span class="mode-desc">Fast · Multimodal · Image understanding</span>
-    </div>
-    <svg class="mode-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
-  </button>
-  <button class="mode-option" data-mode="groq" data-model="llama-3.3-70b" onclick="selectMode('groq')">
-    <div class="mode-icon" style="background:rgba(74,222,128,.12);color:#4ade80;font-size:15px;">⚡</div>
-    <div class="mode-info">
-      <span class="mode-name">Groq · Free</span>
-      <span class="mode-desc">Ultra fast responses · No cost</span>
-    </div>
-    <svg class="mode-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
-  </button>
-</div>
-
-<!-- TOAST CONTAINER -->
-<div id="toastContainer" class="toast-container"></div>
-
-<!-- ════════════════════════════════════════
-     SCRIPTS
-════════════════════════════════════════ -->
-<script src="firebase.js" type="module"></script>
-<script src="ControleAi.js"></script>
-<script>
-/* ===== INPUT HTML ===== */
-const INPUT_HTML = `
-  <div class="input-box" id="inputBox">
-    <div class="input-text-row">
-      <textarea
-        id="chatTextarea"
-        class="chat-textarea"
-        placeholder="Ask anything"
-        rows="1"
-        onkeydown="onKey(event)"
-        oninput="onType(this)"
-      ></textarea>
-    </div>
-    <div class="input-actions-row">
-      <div class="input-left-actions">
-        <label class="icon-action attach-action" title="Attach files">
-          <input type="file" id="chatFileInput" multiple accept="image/*,.pdf,.txt,.js,.py,.html,.css,.md,.json" style="display:none" onchange="onFilePick(this)" />
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
-            <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
-          </svg>
-        </label>
-        <button class="mode-trigger icon-action" id="modeTrigger" onclick="toggleModePopup(this)">
-          <span style="font-size:11px;font-weight:700;color:#ff6b35;letter-spacing:-1px;">◆◆</span>
-          <span id="modeTriggerLabel">Claude</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="6 9 12 15 18 9"/></svg>
+      <h1>
+        The AI Agent That<br/>
+        <span class="grad-text">Thinks, Acts & Builds</span>
+      </h1>
+      <p class="hero-sub">
+        IlyassAI is a next-generation autonomous agent — it doesn't just chat. It plans complex tasks, writes and deploys code, searches the web, manages projects, and improves itself continuously.
+      </p>
+      <div class="hero-cta">
+        <button class="btn-hero" onclick="window.location.href='/auth'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Launch IlyassAI
+        </button>
+        <button class="btn-hero-ghost" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">
+          See Capabilities
         </button>
       </div>
-      <div class="input-right-actions">
-        <button class="icon-action mic-action" onclick="startVoice()" title="Voice input">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
-            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-            <line x1="12" y1="19" x2="12" y2="23"/>
-            <line x1="8" y1="23" x2="16" y2="23"/>
-          </svg>
-        </button>
-        <button class="img-gen-btn icon-action" id="imgGenBtn" onclick="generateImage()" title="Generate Image">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
-            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
-          </svg>
-        </button>
-        <button class="voice-mode-btn" id="voiceModeBtn" onclick="toggleVoiceMode()" title="Use Voice Mode">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" stroke-linecap="round">
-            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-          </svg>
-          Voice
-        </button>
-
-
-          <div id="mdlWrap">
-          <button id="mdlBtn" onclick="mdlToggle(this)">
-            <span id="mdlLabel">Sonnet 4.5</span>
-            <svg class="arr" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div id="mdlPanel">
-            <div class="mdl-row" data-model="claude-opus" onclick="mdlPick(this)">
-              <div class="mdl-txt"><strong>Opus 4.7</strong><small>Most capable for ambitious work</small></div>
-              <span class="mdl-badge">Upgrade</span>
-              <div class="mdl-chk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
-            </div>
-            <div class="mdl-row selected" data-model="claude-sonnet-4-5" onclick="mdlPick(this)">
-              <div class="mdl-txt"><strong>Claude Sonnet 4.5</strong><small>Smart &amp; responsive</small></div>
-              <div class="mdl-chk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
-            </div>
-            <div class="mdl-row" data-model="claude-haiku" onclick="mdlPick(this)">
-              <div class="mdl-txt"><strong>Haiku 4.5</strong><small>Fastest, most efficient</small></div>
-              <div class="mdl-chk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
-            </div>
-            <div class="mdl-sep"></div>
-            <div class="mdl-tog" onclick="mdlAdaptive()">
-              <div class="mdl-txt"><strong style="font-size:.87rem;color:#ececec">Adaptive thinking</strong><small>Thinks for more complex tasks</small></div>
-              <div class="sw-track" id="adaptSw"></div>
-            </div>
-            <div class="mdl-sep"></div>
-            <div class="mdl-more" onclick="mdlMore()">More models <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
-          </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">15+</div>
+          <div class="stat-label">Free AI Models</div>
         </div>
-          <button class="send-btn"  id="sendBtn"  onclick="sendMessage()">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M12 2l-7.5 19.5 7.5-4.5 7.5 4.5z"/></svg>
-        </button>
-        <button class="stop-btn"  id="stopBtn"  onclick="AI.stop()" style="display:none;" title="Stop generating">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
-        </button>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Autonomous Tasks</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-num">0ms</div>
+          <div class="stat-label">Setup Time</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-num">99.9%</div>
+          <div class="stat-label">Uptime SLA</div>
+        </div>
       </div>
     </div>
-    <div class="file-preview-row" id="filePreviewRow" style="display:none"></div>
   </div>
-`;
+</section>
 
-/* ===== CURRENT STATE ===== */
-let _currentTab = 'chat'; // 'chat' | 'imagine'
-let _imagineWidth = 768, _imagineHeight = 768;
-let _imagineStyle = 'standard';
-let _galleryImages = [];
+<!-- ══════════════════════ FEATURES ══════════════════════ -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-header center fade-in">
+      <div class="section-label">⚡ Core Capabilities</div>
+      <h2 class="section-title">Not Just a Chatbot.<br/>An Autonomous Agent.</h2>
+      <p class="section-sub">IlyassAI combines the best free AI APIs to create a Manus-like experience — intelligent, proactive, and capable of real-world tasks.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card fade-in">
+        <div class="feature-icon">🧠</div>
+        <h3 class="feature-title">Multi-Model Intelligence</h3>
+        <p class="feature-desc">Automatically routes your requests to the best available model — Llama 3.3, DeepSeek, Gemma, Qwen, and more. Always uses the most capable free option.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">🔍</div>
+        <h3 class="feature-title">Real-Time Web Search</h3>
+        <p class="feature-desc">Integrated with DuckDuckGo, Brave Search, and SerpAPI. The agent searches the web in real-time to ground its responses in current, accurate information.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">💻</div>
+        <h3 class="feature-title">Code Generation & Execution</h3>
+        <p class="feature-desc">Write, review, debug, and explain code across any language. The Live Activity Panel shows each step as the agent works through complex programming tasks.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">🚀</div>
+        <h3 class="feature-title">GitHub & Vercel Integration</h3>
+        <p class="feature-desc">Push code to GitHub and trigger Vercel deployments directly from the chat. Build, deploy, and iterate on projects with natural language instructions.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">🖼️</div>
+        <h3 class="feature-title">Image Generation</h3>
+        <p class="feature-desc">Generate stunning images using Pollinations.ai and other free image APIs. From concept art to product mockups — described in plain language.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">🔄</div>
+        <h3 class="feature-title">Self-Improvement Engine</h3>
+        <p class="feature-desc">Continuously discovers and evaluates new free AI APIs. When a better model or tool becomes available, IlyassAI integrates it automatically into its workflow.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">🎤</div>
+        <h3 class="feature-title">Speech Recognition</h3>
+        <p class="feature-desc">Talk to the agent using Whisper-powered transcription. Supports 50+ languages with high accuracy transcription powered by OpenAI's Whisper API.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">📊</div>
+        <h3 class="feature-title">Live Activity Panel</h3>
+        <p class="feature-desc">Watch IlyassAI think in real time. The activity panel on the right shows tool calls, search results, reasoning steps, and API discoveries as they happen.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon">💾</div>
+        <h3 class="feature-title">Persistent Memory</h3>
+        <p class="feature-desc">IlyassAI remembers context across conversations. It builds a knowledge graph of your preferences, past projects, and recurring tasks for personalized assistance.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-/* ===== BOOT ===== */
-document.addEventListener('DOMContentLoaded', () => {
-  AI.init('messagesBox', '/api/chat');
-  injectInput();
-  setGreeting();
-  loadSavedSettings();
+<!-- ══════════════════════ MODELS ══════════════════════ -->
+<section class="section" id="models" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-header center fade-in">
+      <div class="section-label">🤖 Supported Models</div>
+      <h2 class="section-title">15+ Free AI Models,<br/>One Unified Interface</h2>
+      <p class="section-sub">All models are free, automatically updated, and seamlessly integrated. IlyassAI picks the best model for each task.</p>
+    </div>
+    <div class="models-grid fade-in">
+      <div class="model-card"><div class="model-name">Llama 3.3 70B</div><div class="model-provider">Meta · via Groq</div><span class="model-badge free">Free</span> <span class="model-badge fast">Ultra Fast</span></div>
+      <div class="model-card"><div class="model-name">DeepSeek R1</div><div class="model-provider">DeepSeek · via HF</div><span class="model-badge free">Free</span></div>
+      <div class="model-card"><div class="model-name">Gemma 2 27B</div><div class="model-provider">Google · via Groq</div><span class="model-badge free">Free</span> <span class="model-badge fast">Fast</span></div>
+      <div class="model-card"><div class="model-name">Qwen 2.5 72B</div><div class="model-provider">Alibaba · via HF</div><span class="model-badge free">Free</span></div>
+      <div class="model-card"><div class="model-name">Mistral 7B</div><div class="model-provider">Mistral AI</div><span class="model-badge free">Free</span> <span class="model-badge fast">Fast</span></div>
+      <div class="model-card"><div class="model-name">Phi-3.5 Mini</div><div class="model-provider">Microsoft · via HF</div><span class="model-badge free">Free</span></div>
+      <div class="model-card"><div class="model-name">Gemini Flash 2.0</div><div class="model-provider">Google</div><span class="model-badge free">Free Tier</span></div>
+      <div class="model-card"><div class="model-name">Claude 3 Haiku</div><div class="model-provider">Anthropic</div><span class="model-badge fast">Fast</span></div>
+      <div class="model-card"><div class="model-name">GPT-4o Mini</div><div class="model-provider">OpenAI</div><span class="model-badge fast">Reliable</span></div>
+      <div class="model-card"><div class="model-name">Mixtral 8x7B</div><div class="model-provider">Mistral · via Groq</div><span class="model-badge free">Free</span></div>
+      <div class="model-card"><div class="model-name">Llama 3.2 Vision</div><div class="model-provider">Meta · Multimodal</div><span class="model-badge free">Free</span></div>
+      <div class="model-card"><div class="model-name">+ Auto-Discover</div><div class="model-provider">New models weekly</div><span class="model-badge free">Self-Updating</span></div>
+    </div>
+  </div>
+</section>
 
-  // Close mode popup on outside click
-  document.addEventListener('click', e => {
-    const popup    = document.getElementById('modePopup');
-    const triggers = document.querySelectorAll('.mode-trigger');
-    const clickedTrigger = [...triggers].some(t => t.contains(e.target));
-    if (popup && !popup.contains(e.target) && !clickedTrigger) {
-      popup.classList.remove('open');
-    }
-  });
+<!-- ══════════════════════ API SECTION ══════════════════════ -->
+<section class="section" id="api">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center" class="fade-in">
+      <div>
+        <div class="section-label">🔌 Developer API</div>
+        <h2 class="section-title">Build on Top<br/>of IlyassAI</h2>
+        <p class="section-sub" style="margin-bottom:24px">Integrate IlyassAI's intelligence into your own apps. Simple REST API, streaming support, and SDKs for JavaScript and Python.</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;font-size:14px;color:var(--text2)">
+          <li style="display:flex;align-items:center;gap:8px"><span style="color:var(--green);font-weight:700">✓</span> REST API with OpenAI-compatible format</li>
+          <li style="display:flex;align-items:center;gap:8px"><span style="color:var(--green);font-weight:700">✓</span> Real-time streaming via Server-Sent Events</li>
+          <li style="display:flex;align-items:center;gap:8px"><span style="color:var(--green);font-weight:700">✓</span> Automatic model fallback & load balancing</li>
+          <li style="display:flex;align-items:center;gap:8px"><span style="color:var(--green);font-weight:700">✓</span> Built-in rate limiting & abuse protection</li>
+        </ul>
+        <button class="btn-primary" style="margin-top:28px;padding:12px 24px" onclick="window.location.href='api-dashboard.html'">Get API Key →</button>
+      </div>
+      <div class="api-card">
+        <div style="font-size:13px;color:var(--text3);font-weight:600;margin-bottom:4px">QUICKSTART</div>
+        <div style="font-size:20px;font-weight:800;margin-bottom:4px">Connect in 2 Lines</div>
+        <div class="code-block"><pre><span class="comment">// IlyassAI · OpenAI-compatible API</span>
+<span class="key">const</span> <span class="func">response</span> = <span class="key">await</span> fetch(<span class="string">'/api/chat'</span>, {
+  <span class="key">method</span>: <span class="string">'POST'</span>,
+  <span class="key">headers</span>: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> },
+  <span class="key">body</span>: JSON.stringify({
+    <span class="key">model</span>: <span class="string">'auto'</span>,  <span class="comment">// auto-select best model</span>
+    <span class="key">messages</span>: [{ 
+      <span class="key">role</span>: <span class="string">'user'</span>, 
+      <span class="key">content</span>: <span class="string">'Build me a REST API in Node.js'</span>
+    }],
+    <span class="key">stream</span>: <span class="key">true</span>
+  })
 });
 
-function loadSavedSettings() {
-  try {
-    const savedTheme = localStorage.getItem('aiTheme');
-    if (savedTheme) {
-      document.body.setAttribute('data-theme', savedTheme);
-      document.querySelectorAll('.theme-pill').forEach(p => {
-        p.classList.toggle('active', p.textContent.toLowerCase() === savedTheme);
-      });
-    }
-    const savedMode = localStorage.getItem('aiDefaultMode');
-    // Restore saved model → mode mapping
-  const savedModel2 = localStorage.getItem('ilyass_selectedModel');
-  const savedMode = localStorage.getItem('ilyass_currentMode') || (savedModel2 ? (savedModel2.startsWith('gemini') ? 'gemini' : savedModel2.startsWith('llama') || savedModel2.startsWith('gemma') ? 'groq' : 'claude') : 'claude');
-  if (savedMode) selectMode(savedMode);
-
-    // Restore gallery
-    const savedGallery = localStorage.getItem('aiGallery');
-    if (savedGallery) {
-      _galleryImages = JSON.parse(savedGallery);
-      renderGallery();
-    }
-  } catch(e) {}
-}
-
-function injectInput() {
-  const hz = document.getElementById('homeInputZone');
-  const cz = document.getElementById('chatInputZone');
-  const replaceIds = (str, suffix) => str
-    .replace('id="chatTextarea"',    `id="ta-${suffix}"`)
-    .replace('id="chatFileInput"',   `id="fi-${suffix}"`)
-    .replace('id="inputBox"',        `id="ib-${suffix}"`)
-    .replace('id="filePreviewRow"',  `id="fp-${suffix}"`)
-    .replace('id="sendBtn"',         `id="sb-${suffix}"`)
-    .replace('id="stopBtn"',         `id="st-${suffix}"`)
-    .replace('id="imgGenBtn"',       `id="ig-${suffix}"`)
-    .replace('id="modeTrigger"',     `id="mt-${suffix}"`)
-    .replace('id="modeTriggerLabel"',`id="ml-${suffix}"`)
-    .replace('id="voiceModeBtn"',    `id="vm-${suffix}"`);
-
-  if (hz) hz.innerHTML = replaceIds(INPUT_HTML, 'home');
-  if (cz) cz.innerHTML = replaceIds(INPUT_HTML, 'chat');
-}
-
-function setGreeting() {
-  const h = new Date().getHours();
-  const greet = h < 12 ? 'Good morning.' : h < 17 ? 'Good afternoon.' : 'Good evening.';
-  const el = document.getElementById('homeGreeting');
-  if (el) el.textContent = greet;
-}
-
-/* ===== TAB SWITCHING ===== */
-function switchTab(tab) {
-  _currentTab = tab;
-
-  // Update tab buttons
-  document.getElementById('tabChat')?.classList.toggle('active', tab === 'chat');
-  document.getElementById('tabImagine')?.classList.toggle('active', tab === 'imagine');
-
-  // Show/hide views
-  const homeView    = document.getElementById('homeView');
-  const chatView    = document.getElementById('chatView');
-  const imagineView = document.getElementById('imagineView');
-
-  if (tab === 'chat') {
-    if (chatView && chatView.style.display === 'flex') {
-      // Already in chat
-      homeView && (homeView.style.display = 'none');
-      chatView && (chatView.style.display = 'flex');
-    } else {
-      homeView && (homeView.style.display = 'flex');
-      chatView && (chatView.style.display = 'none');
-    }
-    imagineView && (imagineView.style.display = 'none');
-  } else {
-    homeView    && (homeView.style.display    = 'none');
-    chatView    && (chatView.style.display    = 'none');
-    imagineView && (imagineView.style.display = 'flex');
-    imagineView && (imagineView.style.flexDirection = 'column');
-    // Focus the imagine textarea
-    setTimeout(() => document.getElementById('imagineTA')?.focus(), 100);
-  }
-}
-
-/* ===== IMAGINE CONTROLS ===== */
-function setImagineStyle(style, btn) {
-  _imagineStyle = style;
-  document.querySelectorAll('.imagine-style-tab').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-function setAspectRatio(btn, ar, w, h) {
-  _imagineWidth  = w;
-  _imagineHeight = h;
-  document.querySelectorAll('.ar-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-function useTemplate(prompt, style) {
-  const ta = document.getElementById('imagineTA');
-  if (ta) { ta.value = prompt; onType(ta); ta.focus(); }
-  // Highlight the clicked card
-  document.querySelectorAll('.template-card').forEach(c => c.classList.remove('active'));
-  event?.currentTarget?.classList.add('active');
-}
-
-function imagineKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); generateImagineImage(); }
-}
-
-async function generateImagineImage() {
-  const ta = document.getElementById('imagineTA');
-  if (!ta) return;
-  const prompt = ta.value.trim();
-  if (!prompt) { showToast('Write a description for your image'); return; }
-
-  // Style suffix
-  const styleSuffix = {
-    standard:  '',
-    realistic: ', photorealistic, 8k, detailed',
-    artistic:  ', digital art, painterly, vibrant colors',
-    anime:     ', anime style, manga illustration, detailed'
-  }[_imagineStyle] || '';
-
-  const fullPrompt = prompt + styleSuffix;
-
-  // Add to gallery as loading
-  const imgId = 'gimg-' + Date.now();
-  const galleryGrid = document.getElementById('galleryGrid');
-  const galleryEmpty = document.getElementById('galleryEmpty');
-  if (galleryEmpty) galleryEmpty.style.display = 'none';
-
-  const loadItem = document.createElement('div');
-  loadItem.className = 'gallery-item';
-  loadItem.id = imgId;
-  loadItem.innerHTML = `
-    <div class="gallery-loading-placeholder">
-      <div class="gallery-loading-shimmer"></div>
-      <div class="gallery-loading-text">
-        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" class="gallery-loading-icon"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        Generating...
+<span class="comment">// Reads the streaming response</span>
+<span class="key">const</span> reader = response.body.getReader();</pre></div>
       </div>
-    </div>`;
-  galleryGrid.prepend(loadItem);
+    </div>
+  </div>
+</section>
 
-  showToast('Generating image...');
-  ta.value = '';
-  ta.style.height = 'auto';
+<!-- ══════════════════════ PRICING ══════════════════════ -->
+<section class="section" id="pricing" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-header center fade-in">
+      <div class="section-label">💎 Pricing</div>
+      <h2 class="section-title">Start Free.<br/>Scale When Ready.</h2>
+      <p class="section-sub">Every plan gives you access to all free models. Upgrade for premium models and higher limits.</p>
+    </div>
+    <div class="pricing-grid fade-in">
+      <div class="price-card">
+        <div class="price-name">Free</div>
+        <div class="price-amount">$0<span>/mo</span></div>
+        <div class="price-period">Forever free</div>
+        <ul class="price-features">
+          <li>100 messages / day</li>
+          <li>All free AI models</li>
+          <li>Web search integration</li>
+          <li>Image generation (10/day)</li>
+          <li>Code generation</li>
+        </ul>
+        <button class="btn-hero-ghost" style="width:100%;justify-content:center" onclick="window.location.href='/auth'">Get Started Free</button>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge">Most Popular</div>
+        <div class="price-name">Pro</div>
+        <div class="price-amount">$18<span>/mo</span></div>
+        <div class="price-period">Billed monthly</div>
+        <ul class="price-features">
+          <li>Unlimited messages</li>
+          <li>Premium models (GPT-4o, Claude)</li>
+          <li>GitHub & Vercel deploy</li>
+          <li>Unlimited image generation</li>
+          <li>Memory & context persistence</li>
+          <li>Priority model routing</li>
+        </ul>
+        <button class="btn-hero" style="width:100%;justify-content:center" id="btn-upgrade-pro" onclick="handleCheckout('pro')">Upgrade to Pro — $18/mo</button>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Custom</div>
+        <div class="price-amount">$80<span>/mo</span></div>
+        <div class="price-period">Your own API key</div>
+        <ul class="price-features">
+          <li>Unlimited everything</li>
+          <li>Custom model hosting</li>
+          <li>SSO & SAML auth</li>
+          <li>Dedicated infrastructure</li>
+          <li>SLA guarantee</li>
+          <li>Custom integrations</li>
+        </ul>
+        <button class="btn-hero-ghost" style="width:100%;justify-content:center" id="btn-upgrade-custom" onclick="handleCheckout('custom')">Get Custom — $80/mo</button>
+      </div>
+    </div>
+  </div>
 
-  try {
-    const res = await fetch('/api/image', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: fullPrompt, width: _imagineWidth, height: _imagineHeight })
-    });
-    const data = await res.json();
+    <p id="pricing-msg" style="text-align:center;margin-top:20px;font-size:0.85rem;color:#94a3b8;min-height:22px;"></p>
+  </div>
+</section>
 
-    const loadEl = document.getElementById(imgId);
-    if (loadEl) {
-      if (data.imageUrl) {
-        loadEl.innerHTML = `
-          <img src="${data.imageUrl}" alt="${prompt}" loading="lazy"
-               onload="this.style.opacity=1" style="opacity:0;transition:opacity 0.5s;width:100%;display:block;"/>
-          <div class="gallery-item-overlay">
-            <div class="gallery-item-label">${escapeHtml(prompt)}</div>
-            <div class="gallery-item-actions">
-              <a href="${data.imageUrl}" target="_blank" download class="gallery-action-btn" onclick="event.stopPropagation()" title="Download">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Save
-              </a>
-              <button class="gallery-action-btn" onclick="event.stopPropagation();viewGalleryImage('${data.imageUrl}','${escapeHtml(prompt).replace(/'/g,"\'")}')" title="View full">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                View
-              </button>
-            </div>
-          </div>`;
-        loadEl.onclick = () => viewGalleryImage(data.imageUrl, prompt);
-
-        // Save to gallery history
-        _galleryImages.unshift({ url: data.imageUrl, prompt, ts: Date.now() });
-        try { localStorage.setItem('aiGallery', JSON.stringify(_galleryImages.slice(0,50))); } catch(e) {}
-        const clearBtn = document.getElementById('galleryClearBtn');
-        if (clearBtn) clearBtn.style.display = '';
-
-        showToast('✨ Image generated!');
-      } else {
-        loadEl.innerHTML = `<div class="template-img-placeholder" style="height:100px;color:var(--red);font-size:12px;">Failed: ${data.error || 'Unknown error'}</div>`;
-        showToast('Generation failed');
-      }
-    }
-  } catch(err) {
-    const loadEl = document.getElementById(imgId);
-    if (loadEl) loadEl.innerHTML = `<div class="template-img-placeholder" style="height:100px;color:var(--red);font-size:12px;">Error: ${err.message}</div>`;
-    showToast('Network error');
-  }
-}
-
-function renderGallery() {
-  if (!_galleryImages.length) return;
-  const galleryGrid  = document.getElementById('galleryGrid');
-  const galleryEmpty = document.getElementById('galleryEmpty');
-  if (!galleryGrid) return;
-  if (galleryEmpty) galleryEmpty.style.display = 'none';
-  galleryGrid.innerHTML = '';
-  _galleryImages.forEach(img => {
-    const item = document.createElement('div');
-    item.className = 'gallery-item';
-    item.innerHTML = `
-      <img src="${img.url}" alt="${img.prompt}" loading="lazy"
-           style="width:100%;display:block;" />
-      <div class="gallery-item-overlay">
-        <div class="gallery-item-label">${escapeHtml(img.prompt)}</div>
-      </div>`;
-    item.onclick = () => viewGalleryImage(img.url, img.prompt);
-    galleryGrid.appendChild(item);
-  });
-}
-
-function viewGalleryImage(url, prompt) {
-  // Open in new tab / lightbox
-  window.open(url, '_blank');
-}
-
-function escapeHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-/* ===== SEND (CHAT) ===== */
-function sendMessage() {
-  const ta = getTextarea();
-  if (!ta) return;
-  const msg = ta.value.trim();
-  if (!msg) return;
-
-  // Auto-detect image generation
-  const msgLower = msg.toLowerCase();
-  const imgTriggers = ['generate image', 'create image', 'draw ', 'paint ', 'make image', 'image of ', 'picture of ', 'photo of ', '/img ', '/image '];
-  if (imgTriggers.some(t => msgLower.startsWith(t) || msgLower.includes(t))) {
-    return generateImage();
-  }
-
-  document.getElementById('homeView').style.display = 'none';
-  document.getElementById('chatView').style.display = 'flex';
-
-  ta.value = '';
-  ta.style.height = 'auto';
-
-  AI.user(msg);
-  AI.ask(msg, { onComplete: (text) => {
-    if (window.voiceModeActive) speakText(text);
-  }});
-}
-
-function onKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-}
-function onType(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 200) + 'px';
-}
-
-function getTextarea() {
-  const chatView = document.getElementById('chatView');
-  const inChat   = chatView && chatView.style.display === 'flex';
-  if (inChat) return document.getElementById('ta-chat') || document.getElementById('chatTA');
-  return document.getElementById('ta-home') || document.getElementById('homeTA');
-}
-
-/* ===== SUGGESTIONS ===== */
-function useSuggestion(btn) {
-  const ta = getTextarea();
-  if (!ta) return;
-  ta.value = btn.textContent.trim();
-  ta.focus();
-  onType(ta);
-}
-
-/* ===== FILE PICK ===== */
-function onFilePick(input) {
-  const row = input.closest('.input-box')?.querySelector('[id^="fp-"]')
-           || input.closest('.input-box')?.querySelector('.file-preview-row');
-  if (!row) return;
-  if (!input.files.length) { row.style.display = 'none'; return; }
-  row.style.display = 'flex';
-  row.innerHTML = Array.from(input.files).map(f => {
-    const isImg = f.type.startsWith('image/');
-    if (isImg) {
-      const url = URL.createObjectURL(f);
-      return `<div class="file-chip img-chip"><img src="${url}" alt="${f.name}" /></div>`;
-    }
-    return `<div class="file-chip">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      <span>${f.name}</span>
-    </div>`;
-  }).join('');
-}
-
-/* ===== VOICE ===== */
-function startVoice() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { showToast('Voice not supported in this browser'); return; }
-  const r = new SR();
-  r.lang = 'en-US';
-  r.onresult = e => {
-    const ta = getTextarea();
-    if (ta) { ta.value += e.results[0][0].transcript; onType(ta); }
-  };
-  r.onerror = () => showToast('Voice input failed');
-  r.start();
-  showToast('Listening…');
-}
-
-/* ===== MODE ===== */
-let currentMode = 'auto';
-function toggleModePopup(btn) {
-  const popup = document.getElementById('modePopup');
-  if (!popup) return;
-  const rect = btn.getBoundingClientRect();
-  popup.style.bottom = (window.innerHeight - rect.top + 10) + 'px';
-  popup.style.left   = rect.left + 'px';
-  popup.classList.toggle('open');
-}
-function selectMode(mode) {
-  currentMode = mode;
-  // Map mode → model
-  const modelMap  = { claude: 'claude-sonnet-4-5', gemini: 'gemini-2.0-flash', groq: 'llama-3.3-70b' };
-  const labelMap  = { claude: 'Claude', gemini: 'Gemini', groq: 'Groq' };
-  const iconMap   = { claude: '◆◆', gemini: '✦', groq: '⚡' };
-  const colorMap  = { claude: '#ff6b35', gemini: '#60a5fa', groq: '#4ade80' };
-  const selModel  = modelMap[mode] || 'claude-sonnet-4-5';
-  // Set AI model
-  if (typeof AI !== 'undefined') { AI.setModel(selModel); AI.currentMode = mode; }
-  try { localStorage.setItem('ilyass_selectedModel', selModel); localStorage.setItem('ilyass_currentMode', mode); } catch(_){}
-  // Update label text
-  document.querySelectorAll('[id^="ml-"],[id="modeTriggerLabel"]').forEach(el => {
-    el.textContent = labelMap[mode] || mode;
-  });
-  // Update trigger icon color/text
-  document.querySelectorAll('#modeTrigger span:first-child, [id^="mt-"] span:first-child').forEach(el => {
-    if (el.id && (el.id.startsWith('ml-') || el.id === 'modeTriggerLabel')) return;
-    el.textContent = iconMap[mode] || '◆◆';
-    el.style.color = colorMap[mode] || '#ff6b35';
-  });
-  document.querySelectorAll('.mode-option').forEach(o => {
-    o.classList.toggle('active', o.dataset.mode === mode);
-  });
-  document.getElementById('modePopup')?.classList.remove('open');
-}
-
-/* ===== NAVIGATION ===== */
-function goHome() {
-  AI.currentConvId = null;
-  _currentTab = 'chat';
-  document.getElementById('tabChat')?.classList.add('active');
-  document.getElementById('tabImagine')?.classList.remove('active');
-  document.getElementById('homeView').style.display = 'flex';
-  document.getElementById('chatView').style.display = 'none';
-  document.getElementById('imagineView').style.display = 'none';
-  if (AI.messagesBox) AI.messagesBox.innerHTML = '';
-  injectInput();
-  setGreeting();
-}
-function newChat() {
-  goHome();
-  showToast('New conversation');
-}
-function filterConvs(q) {
-  document.querySelectorAll('.conv-item').forEach(el => {
-    const title = el.querySelector('.conv-item-text')?.textContent || '';
-    el.style.display = title.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
-  });
-}
-function toggleSidebar() {
-  const sb  = document.getElementById('sidebar');
-  const ov  = document.getElementById('sidebarOverlay');
-  const open = sb?.classList.toggle('open');
-  ov?.classList.toggle('open', open);
-}
-
-let _sidebarCollapsed = false;
-function toggleSidebarCollapse() {
-  _sidebarCollapsed = !_sidebarCollapsed;
-  document.getElementById('sidebar')?.classList.toggle('collapsed', _sidebarCollapsed);
-  document.getElementById('main')?.classList.toggle('sidebar-collapsed', _sidebarCollapsed);
-  try { localStorage.setItem('sidebarCollapsed', _sidebarCollapsed); } catch(e) {}
-}
-
-/* ===== SETTINGS ===== */
-function openSettings() {
-  document.getElementById('settingsPanel')?.classList.add('open');
-  document.getElementById('settingsOverlay')?.classList.add('open');
-}
-function closeSettings() {
-  document.getElementById('settingsPanel')?.classList.remove('open');
-  document.getElementById('settingsOverlay')?.classList.remove('open');
-}
-function setTheme(t, btn) {
-  document.body.setAttribute('data-theme', t);
-  document.querySelectorAll('.theme-pill').forEach(p => p.classList.remove('active'));
-  btn.classList.add('active');
-  localStorage.setItem('aiTheme', t);
-  showToast(`${t.charAt(0).toUpperCase()+t.slice(1)} theme`);
-}
-function setDefaultMode(mode) {
-  selectMode(mode);
-  localStorage.setItem('aiDefaultMode', mode);
-}
-function clearAllConvs() {
-  if (!confirm('Clear all conversations?')) return;
-  AI.conversations = [];
-  AI._saveToStorage?.();
-  AI._renderSidebar?.();
-  goHome();
-  showToast('All conversations cleared');
-}
-
-/* ===== AUTH ===== */
-let _authMode = 'login';
-function showAuthModal(mode = 'login') {
-  _authMode = mode;
-  window.setAuthMode?.(mode);
-  document.getElementById('authTitle').textContent     = mode === 'login' ? 'Welcome back'   : 'Create account';
-  document.getElementById('authSwitchLink').textContent = mode === 'login' ? 'Sign up'        : 'Sign in';
-  document.getElementById('authModal').classList.add('open');
-  document.getElementById('authError').textContent = '';
-}
-function closeAuthModal() {
-  document.getElementById('authModal').classList.remove('open');
-}
-function toggleAuthMode() {
-  showAuthModal(_authMode === 'login' ? 'signup' : 'login');
-}
-
-/* ===== TOAST ===== */
-function showToast(msg, duration = 2800) {
-  const container = document.getElementById('toastContainer');
-  if (!container) return;
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.textContent = msg;
-  container.appendChild(toast);
-  setTimeout(() => {
-    toast.classList.add('out');
-    setTimeout(() => toast.remove(), 300);
-  }, duration);
-}
-window.showToast = showToast;
-window.generateImage = generateImage;
-window.regenerateImage = regenerateImage;
-window.clearGallery = clearGallery;
-
-/* ===== DRAG & DROP ===== */
-document.addEventListener('dragover', e => e.preventDefault());
-document.addEventListener('drop', e => {
-  e.preventDefault();
-  const files = e.dataTransfer.files;
-  if (!files.length) return;
-  const input = document.querySelector('[id^="fi-"]');
-  if (input) {
-    const dt = new DataTransfer();
-    Array.from(files).forEach(f => dt.items.add(f));
-    input.files = dt.files;
-    onFilePick(input);
-    showToast(`${files.length} file${files.length > 1 ? 's' : ''} attached`);
-  }
-});
-
-/* ===== IMAGE GENERATION (Chat mode) ===== */
-async function generateImage() {
-  const ta = getTextarea();
-  if (!ta) return;
-  const prompt = ta.value.trim();
-  if (!prompt) { showToast('Write a prompt to generate an image'); return; }
-
-  document.getElementById('homeView').style.display = 'none';
-  document.getElementById('chatView').style.display = 'flex';
-
-  ta.value = '';
-  ta.style.height = 'auto';
-
-  // Show user message (without emoji)
-  AI.user('Generate image: ' + prompt);
-
-  const loadId  = 'img-load-' + Date.now();
-  const box     = document.getElementById('messagesBox');
-  if (box) {
-    const loadDiv = document.createElement('div');
-    loadDiv.id    = loadId;
-    loadDiv.className = 'msg-row ai-row-msg';
-    loadDiv.innerHTML = `
-      <div class="msg-wrapper">
-        <div class="ai-avatar">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
-            <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z"/>
-          </svg>
-        </div>
-        <div class="msg-content">
-          <div class="img-loading">
-            <div class="skeleton-loader" style="width:200px">
-              <div class="skeleton-line"></div>
-              <div class="skeleton-line"></div>
-              <div class="skeleton-line"></div>
-              <div class="skeleton-line"></div>
-            </div>
-          </div>
-        </div>
-      </div>`;
-    box.appendChild(loadDiv);
-    box.scrollTop = box.scrollHeight;
-  }
-
-  try {
-    const res  = await fetch('/api/image', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt, width: 768, height: 768 })
-    });
-    const data = await res.json();
-    const loadEl = document.getElementById(loadId);
-    if (loadEl) {
-      if (data.imageUrl) {
-        loadEl.innerHTML = `
-          <div class="msg-wrapper">
-            <div class="ai-avatar">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z"/></svg>
-            </div>
-            <div class="msg-content">
-              <div class="img-prompt-label">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                ${escapeHtml(prompt)}
-              </div>
-              <div class="generated-img-wrap">
-                <img
-                  src="${data.imageUrl}"
-                  alt="${escapeHtml(prompt)}"
-                  class="generated-img"
-                  onload="this.classList.add('loaded')"
-                  onerror="this.parentElement.innerHTML='<p style=color:var(--red)>Failed to load image. Please try again.</p>'"
-                />
-                <div class="img-actions">
-                  <a href="${data.imageUrl}" target="_blank" download class="img-action-btn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Download
-                  </a>
-                  <button onclick="regenerateImage('${escapeHtml(prompt).replace(/'/g,"\\'")}')" class="img-action-btn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-                    Regenerate
-                  </button>
-                </div>
-              </div>
-              <div class="img-credit">Powered by Pollinations.ai</div>
-            </div>
-          </div>`;
-      } else {
-        loadEl.innerHTML = `<div class="msg-wrapper"><div class="msg-content" style="color:var(--red)">Error: ${data.error || 'Unknown error'}</div></div>`;
-      }
-      box.scrollTop = box.scrollHeight;
-    }
-  } catch(err) {
-    const loadEl = document.getElementById(loadId);
-    if (loadEl) loadEl.innerHTML = `<div class="msg-wrapper"><div class="msg-content" style="color:var(--red)">Network error: ${err.message}</div></div>`;
-  }
-}
-
-function regenerateImage(prompt) {
-  const ta = getTextarea();
-  if (ta) { ta.value = prompt; onType(ta); }
-  generateImage();
-}
-
-/* ===== VOICE MODE ===== */
-window.voiceModeActive = false;
-let voiceRecognition = null;
-let isListeningContinuous = false;
-
-function toggleVoiceMode() {
-  const btn = document.querySelectorAll('[id^="vm-"]')[0];
-  window.voiceModeActive = !window.voiceModeActive;
-
-  if (window.voiceModeActive) {
-    document.querySelectorAll('[id^="vm-"]').forEach(b => {
-      b.classList.add('voice-mode-on');
-      b.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg> Live`;
-    });
-    showToast('Voice Mode ON — speak to the AI');
-    startContinuousListening();
-  } else {
-    document.querySelectorAll('[id^="vm-"]').forEach(b => {
-      b.classList.remove('voice-mode-on');
-      b.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg> Voice`;
-    });
-    showToast('Voice Mode OFF');
-    stopContinuousListening();
-    window.speechSynthesis && window.speechSynthesis.cancel();
-  }
-}
-
-function startContinuousListening() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) {
-    showToast('Voice not supported. Use Chrome.');
-    window.voiceModeActive = false;
-    return;
-  }
-  voiceRecognition = new SR();
-  voiceRecognition.continuous = false;
-  voiceRecognition.interimResults = false;
-  voiceRecognition.lang = 'ar-MA';
-  isListeningContinuous = true;
-
-  voiceRecognition.onstart = () => {
-    showToast('Listening...');
-    document.querySelectorAll('[id^="vm-"]').forEach(b => b.classList.add('listening'));
-  };
-  voiceRecognition.onresult = (e) => {
-    const transcript = e.results[0][0].transcript;
-    const ta = getTextarea();
-    if (ta && transcript.trim()) {
-      ta.value = transcript;
-      onType(ta);
-      setTimeout(() => sendMessage(), 500);
+<script type="module">
+  import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+  import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+  const _fbCfg={apiKey:"AIzaSyDWch9gK12sGD7awxmRibU6jBspd-tjr6E",authDomain:"ilyassagentai.firebaseapp.com",projectId:"ilyassagentai",storageBucket:"ilyassagentai.firebasestorage.app",messagingSenderId:"1070041614552",appId:"1:1070041614552:web:your-app-id"};
+  let _user=null;
+  try{const app=getApps().length?getApps()[0]:initializeApp(_fbCfg);onAuthStateChanged(getAuth(app),u=>{_user=u;});}catch(e){}
+  window.handleCheckout=async(plan)=>{
+    const msg=document.getElementById('pricing-msg');
+    const btn=document.getElementById('btn-upgrade-'+plan);
+    if(!_user){if(msg){msg.textContent='Please sign in first';msg.style.color='#f87171';}setTimeout(()=>window.location.href='/auth',1200);return;}
+    if(btn){btn.disabled=true;btn.textContent='Connecting to Stripe...';}
+    if(msg){msg.textContent='Opening secure checkout...';msg.style.color='#a78bfa';}
+    try{
+      const token=await _user.getIdToken();
+      const res=await fetch('/api/create-checkout',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({plan,userId:_user.uid,email:_user.email})});
+      const data=await res.json();
+      if(!res.ok||data.error)throw new Error(data.error||'Checkout failed');
+      window.location.href=data.url;
+    }catch(err){
+      if(msg){msg.textContent='Error: '+err.message;msg.style.color='#f87171';}
+      if(btn){btn.disabled=false;btn.textContent=plan==='pro'?'Upgrade to Pro — $18/mo':'Get Custom — $80/mo';}
     }
   };
-  voiceRecognition.onend = () => {
-    document.querySelectorAll('[id^="vm-"]').forEach(b => b.classList.remove('listening'));
-    if (isListeningContinuous && window.voiceModeActive) {
-      setTimeout(() => {
-        if (window.voiceModeActive && !AI.isStreaming) voiceRecognition?.start();
-      }, 1500);
-    }
-  };
-  voiceRecognition.onerror = (e) => {
-    if (e.error !== 'aborted' && e.error !== 'no-speech') {
-      showToast('Voice error: ' + e.error);
-    }
-    document.querySelectorAll('[id^="vm-"]').forEach(b => b.classList.remove('listening'));
-    if (isListeningContinuous && window.voiceModeActive && e.error === 'no-speech') {
-      setTimeout(() => { if (window.voiceModeActive) voiceRecognition?.start(); }, 1000);
-    }
-  };
-  voiceRecognition.start();
-}
-
-function stopContinuousListening() {
-  isListeningContinuous = false;
-  if (voiceRecognition) {
-    try { voiceRecognition.stop(); } catch(e) {}
-    voiceRecognition = null;
-  }
-}
-
-function speakText(text) {
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const clean = text
-    .replace(/```[\s\S]*?```/g, ' code block ')
-    .replace(/`[^`]+`/g, '')
-    .replace(/[*_#>\-]+/g, '')
-    .replace(/https?:\/\/\S+/g, ' link ')
-    .trim()
-    .substring(0, 500);
-  if (!clean) return;
-  const utt   = new SpeechSynthesisUtterance(clean);
-  utt.rate    = 0.95;
-  utt.pitch   = 1.0;
-  const voices = window.speechSynthesis.getVoices();
-  const arVoice = voices.find(v => v.lang.startsWith('ar'));
-  const enVoice = voices.find(v => v.lang.startsWith('en'));
-  utt.voice   = arVoice || enVoice || null;
-  utt.lang    = arVoice ? 'ar' : 'en-US';
-  utt.onstart = () => showToast('Reading response...');
-  utt.onend   = () => {
-    if (window.voiceModeActive && isListeningContinuous) {
-      setTimeout(() => {
-        if (window.voiceModeActive) {
-          if (voiceRecognition) { try { voiceRecognition.start(); } catch(e) {} }
-          else startContinuousListening();
-        }
-      }, 800);
-    }
-  };
-  window.speechSynthesis.speak(utt);
-}
-
-// Override AI.ask to intercept final response for TTS
-const _origAsk = AI.ask.bind(AI);
-AI.ask = function(msg, opts) {
-  return _origAsk(msg, {
-    ...opts,
-    onComplete: (text) => {
-      opts?.onComplete?.(text);
-      if (window.voiceModeActive) speakText(text);
-    }
-  });
-};
-
-window.speakText       = speakText;
-window.toggleVoiceMode = toggleVoiceMode;
 </script>
+
+<!-- ══════════════════════ TESTIMONIALS ══════════════════════ -->
+<section class="section" id="testimonials">
+  <div class="container">
+    <div class="section-header center fade-in">
+      <div class="section-label">💬 Testimonials</div>
+      <h2 class="section-title">Developers Love<br/>IlyassAI</h2>
+    </div>
+    <div class="testimonials-grid fade-in">
+      <div class="testimonial">
+        <p class="testimonial-text">I replaced 4 different AI tools with IlyassAI. It handles code review, documentation, and even deploys to Vercel. The Live Activity Panel is genius — I can actually see it working.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">AK</div>
+          <div><div class="author-name">Ahmed K.</div><div class="author-role">Full-Stack Developer</div></div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <p class="testimonial-text">The autonomous agent capabilities are unlike anything I've seen for free. It searches the web, writes code, and pushes to GitHub — all from one prompt. Absolutely wild.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">SM</div>
+          <div><div class="author-name">Sara M.</div><div class="author-role">Product Manager at TechCorp</div></div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <p class="testimonial-text">The self-improvement feature is what sold me. Every week there are better models and tools integrated automatically. It feels like the AI is actually getting smarter.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">YB</div>
+          <div><div class="author-name">Youssef B.</div><div class="author-role">AI Researcher</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ SECURITY ══════════════════════ -->
+<section class="section" id="security" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-header center fade-in">
+      <div class="section-label">🛡️ Security & Trust</div>
+      <h2 class="section-title">Enterprise-Grade<br/>Security</h2>
+      <p class="section-sub">Your data is protected by the same standards used by Fortune 500 companies.</p>
+    </div>
+    <div class="security-grid fade-in">
+      <div class="security-item"><span class="security-icon">🔒</span><span class="security-text">End-to-End Encryption</span></div>
+      <div class="security-item"><span class="security-icon">🌐</span><span class="security-text">SOC 2 Type II Ready</span></div>
+      <div class="security-item"><span class="security-icon">🗑️</span><span class="security-text">Data Auto-Deletion</span></div>
+      <div class="security-item"><span class="security-icon">🔑</span><span class="security-text">API Key Rotation</span></div>
+      <div class="security-item"><span class="security-icon">📝</span><span class="security-text">Full Audit Logs</span></div>
+      <div class="security-item"><span class="security-icon">🛡️</span><span class="security-text">Content Moderation AI</span></div>
+      <div class="security-item"><span class="security-icon">🏠</span><span class="security-text">EU Data Residency</span></div>
+      <div class="security-item"><span class="security-icon">✅</span><span class="security-text">GDPR Compliant</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ CTA ══════════════════════ -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-box fade-in">
+      <h2>Ready to Meet Your<br/>Autonomous AI Agent?</h2>
+      <p>Join thousands of developers and creators using IlyassAI to build faster, think smarter, and deploy instantly.</p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+         <button class="btn-hero" onclick="window.location.href='/auth'">
+           🚀 Launch IlyassAI — It's Free
+         </button>
+         <button class="btn-hero-ghost" onclick="window.location.href='/auth'">Watch Demo</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ FOOTER ══════════════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <div class="nav-logo-icon">I</div>
+          IlyassAI
+        </div>
+        <p class="footer-desc">The next-generation autonomous AI agent. Think. Act. Build. Deploy. All from one platform.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="#features">Features</a>
+        <a href="#models">Models</a>
+        <a href="#pricing">Pricing</a>
+        <a href="/app">App</a>
+      </div>
+      <div class="footer-col">
+        <h4>Developers</h4>
+        <a href="#">API Docs</a>
+        <a href="#">SDK</a>
+        <a href="https://github.com/saidsaidchiichii-coder/IlyassAgentAI" target="_blank">GitHub</a>
+        <a href="#">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Blog</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 IlyassAI. All rights reserved.</span>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Status</a>
+      </div>
+    </div>
+  </div>
+</footer>
 
 <script>
-/* ===== VIDEO GENERATION (Imagine tab) ===== */
-let _videoStyle = 'cinematic';
+// Navbar scroll effect
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>40)
+})
 
-function switchImagineMode(mode, btn) {
-  const isVideo = mode === 'video';
-  
-  // Toggle active state on all style tabs
-  document.querySelectorAll('.imagine-style-tab').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  
-  // Show/hide sections
-  const arRow       = document.querySelector('.aspect-ratio-row');
-  const inputWrap   = document.querySelector('.imagine-input-wrap');
-  const templates   = document.querySelector('.imagine-templates');
-  const videoSec    = document.getElementById('videoGenSection');
-  const gallery     = document.getElementById('imagineGallery');
+// Intersection Observer for fade-in animations
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible')}})
+},{threshold:0.1,rootMargin:'0px 0px -40px 0px'})
+document.querySelectorAll('.fade-in').forEach(el=>io.observe(el))
 
-  if (isVideo) {
-    if (arRow)     arRow.style.display     = 'none';
-    if (inputWrap) inputWrap.style.display = 'none';
-    if (templates) templates.style.display = 'none';
-    if (gallery)   gallery.style.display   = 'none';
-    if (videoSec)  videoSec.style.display  = 'block';
-  } else {
-    if (arRow)     arRow.style.display     = '';
-    if (inputWrap) inputWrap.style.display = '';
-    if (templates) templates.style.display = '';
-    if (gallery)   gallery.style.display   = '';
-    if (videoSec)  videoSec.style.display  = 'none';
-    // Also trigger the original setImagineStyle
-    window._imagineStyle = mode;
-  }
-}
-
-function setVideoStyle(style, btn) {
-  _videoStyle = style;
-  document.querySelectorAll('#videoGenSection .ar-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-async function generateImagineVideo() {
-  const ta = document.getElementById('videoPromptTA');
-  if (!ta) return;
-  const prompt = ta.value.trim();
-  if (!prompt) { showToast('اكتب وصفاً للفيديو الذي تريد إنشاءه'); return; }
-
-  const btn = document.getElementById('videoGenBtn');
-  const resultArea = document.getElementById('videoResultArea');
-  const videoOutput = document.getElementById('videoOutput');
-
-  // Loading state
-  btn.disabled = true;
-  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Generating...';
-  
-  resultArea.style.display = 'none';
-  videoOutput.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text2);font-size:13px;">⏳ Generating your video, please wait...</div>';
-  resultArea.style.display = 'block';
-
-  showToast('🎬 Generating video...');
-
-  try {
-    const res = await fetch('/api/video', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt, style: _videoStyle, imageUrl: null })
-    });
-    const data = await res.json();
-
-    if (data.success) {
-      if (data.type === 'video' || data.videoBase64) {
-        // Real video returned
-        const src = data.videoBase64 || data.videoUrl;
-        videoOutput.innerHTML = \`
-          <video controls autoplay loop muted style="width:100%;border-radius:12px;max-height:400px;" src="\${src}">
-            Your browser does not support the video tag.
-          </video>
-          <div style="padding:10px 12px;font-size:12px;color:var(--text2);">
-            🎬 Provider: \${data.provider || 'AI Video'} &nbsp;·&nbsp; 
-            <a href="\${src}" download="video.mp4" style="color:var(--accent);text-decoration:none;">⬇ Download</a>
-          </div>\`;
-        showToast('✅ Video generated!');
-      } else if (data.frames && data.frames.length > 0) {
-        // Animated frames fallback - show as slideshow
-        let frameIdx = 0;
-        videoOutput.innerHTML = \`
-          <div style="position:relative;background:#000;border-radius:12px;overflow:hidden;">
-            <img id="videoFrameImg" src="\${data.frames[0]}" 
-              style="width:100%;max-height:400px;object-fit:contain;display:block;" 
-              alt="Video frame"/>
-            <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.8));padding:12px;font-size:12px;color:rgba(255,255,255,0.7);">
-              🎞 Animated preview (\${data.frames.length} frames) · 
-              <span style="color:var(--accent);">Add HF_API_KEY for real videos</span>
-            </div>
-          </div>
-          <div style="padding:8px 12px;font-size:12px;color:var(--text2);">Provider: \${data.provider}</div>\`;
-        
-        // Animate frames
-        const frameEl = document.getElementById('videoFrameImg');
-        if (frameEl) {
-          setInterval(() => {
-            frameIdx = (frameIdx + 1) % data.frames.length;
-            frameEl.src = data.frames[frameIdx];
-          }, 800);
-        }
-        showToast('🎞 Video preview ready!');
-      }
-    } else {
-      videoOutput.innerHTML = \`<div style="padding:20px;color:var(--red);font-size:13px;">❌ Failed to generate video: \${data.error || 'Unknown error'}</div>\`;
-      showToast('❌ Video generation failed');
-    }
-  } catch (err) {
-    videoOutput.innerHTML = \`<div style="padding:20px;color:var(--red);font-size:13px;">❌ Error: \${err.message}</div>\`;
-    showToast('❌ Error generating video');
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> Generate Video';
-  }
-}
-
-window.switchImagineMode = switchImagineMode;
-window.setVideoStyle     = setVideoStyle;
-window.generateImagineVideo = generateImagineVideo;
+// Smooth scroll for nav links
+document.querySelectorAll('a[href^="#"]').forEach(link=>{
+  link.addEventListener('click',e=>{
+    const target=document.querySelector(link.getAttribute('href'))
+    if(target){e.preventDefault();target.scrollIntoView({behavior:'smooth'})}
+  })
+})
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script><script>
-class GlobalParticles {
-  constructor() {
-    this.canvas = document.getElementById("global-particles");
-    this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, alpha: true });
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.camera.position.z = 5;
-    this.init();
-    this.animate();
-    window.addEventListener("resize", () => this.onResize());
-  }
-  init() {
-    const geometry = new THREE.BufferGeometry();
-    const vertices = [];
-    for (let i = 0; i < 1500; i++) {
-      vertices.push(THREE.MathUtils.randFloatSpread(20));
-      vertices.push(THREE.MathUtils.randFloatSpread(20));
-      vertices.push(THREE.MathUtils.randFloatSpread(20));
-    }
-    geometry.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
-    const material = new THREE.PointsMaterial({ color: 0xffffff, size: 0.015, transparent: true, opacity: 0.3 });
-    this.points = new THREE.Points(geometry, material);
-    this.scene.add(this.points);
-  }
-  onResize() {
-    this.camera.aspect = window.innerWidth / window.innerHeight;
-    this.camera.updateProjectionMatrix();
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-  }
-  animate() {
-    requestAnimationFrame(() => this.animate());
-    this.points.rotation.y += 0.0005;
-    this.points.rotation.x += 0.0002;
-    this.renderer.render(this.scene, this.camera);
-  }
-}
-new GlobalParticles();
-</script>
-<script>
-(function(){
-  var s=localStorage.getItem('ilyass_selectedModel');
-  if(s && typeof AI!=='undefined') setTimeout(function(){AI.setModel(s);},100);
-  document.addEventListener('click',function(e){
-    var w=document.getElementById('modelWrap');
-    if(w&&!w.contains(e.target)){var p=document.getElementById('modelSelectorPanel');if(p)p.style.display='none';}
-  });
-})();
-</script>
-
-
 </body>
 </html>
