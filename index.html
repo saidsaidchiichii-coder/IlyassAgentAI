@@ -9,42 +9,7 @@
   <link rel="stylesheet" href="style.css" />
 
 
-<style id="mdl-css">
-#mdlWrap{position:relative;display:inline-flex;align-items:center;}
-#mdlBtn{display:flex;align-items:center;gap:5px;background:transparent;border:1px solid var(--border,rgba(255,255,255,.08));border-radius:9999px;padding:5px 10px;cursor:pointer;font-size:12.5px;color:var(--text-dim,#8a8f98);white-space:nowrap;transition:all .18s;}
-#mdlBtn:hover{background:var(--surface-2,#1a1a1a);border-color:var(--border-md,rgba(255,255,255,.18));color:var(--text,#ececec);}
-#mdlBtn.open{border-color:var(--border-md,rgba(255,255,255,.18));color:var(--text,#ececec);}
-#mdlBtn svg.arr{opacity:.5;transition:transform .2s;}
-#mdlBtn.open svg.arr{transform:rotate(180deg);}
-#mdlPanel{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--surface,#111111);border:1px solid var(--border-md,rgba(255,255,255,.10));border-radius:20px;padding:6px;min-width:240px;box-shadow:0 8px 32px rgba(0,0,0,.65);z-index:999;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;}
-#mdlPanel.open{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0);}
-.mdl-panel-title{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted,#3e4248);padding:6px 10px 4px;}
-.mdl-section{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted,#3e4248);padding:8px 12px 2px;}
-.mdl-row{display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;border-radius:14px;color:var(--text-dim,#8a8f98);cursor:pointer;padding:9px 10px;text-align:left;transition:background .15s,color .15s;}
-.mdl-row:hover{background:var(--surface-2,#1a1a1a);color:var(--text,#ececec);}
-.mdl-row.selected{background:var(--surface-3,#242424);color:var(--text,#ececec);}
-.mdl-icon{width:28px;height:28px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;}
-.mdl-icon.claude{background:rgba(255,107,53,.15);color:#ff6b35;}
-.mdl-icon.groq{background:rgba(96,165,250,.12);color:#60a5fa;}
-.mdl-icon.gemini{background:rgba(74,222,128,.12);color:#4ade80;}
-.mdl-info{display:flex;flex-direction:column;flex:1;}
-.mdl-name{font-size:13px;font-weight:500;}
-.mdl-desc{font-size:11.5px;color:var(--text-muted,#3e4248);}
-.mdl-chk{opacity:0;color:var(--accent,#ff6b35);flex-shrink:0;transition:opacity .15s;}
-.mdl-chk svg{display:block;}
-.mdl-row.selected .mdl-chk{opacity:1;}
-.mdl-badge{font-size:.67rem;font-weight:600;background:rgba(255,107,53,.12);color:#ff6b35;padding:2px 7px;border-radius:20px;border:1px solid rgba(255,107,53,.25);}
-.mdl-sep{height:1px;background:var(--border,rgba(255,255,255,.06));margin:4px 6px;}
-.mdl-tog{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:14px;cursor:pointer;transition:background .15s;}
-.mdl-tog:hover{background:var(--surface-2,#1a1a1a);}
-.mdl-tog-info{flex:1;}
-.mdl-tog .mdl-name{color:var(--text-dim,#8a8f98);}
-.mdl-tog:hover .mdl-name{color:var(--text,#ececec);}
-.sw-track{width:36px;height:20px;background:var(--surface-3,#242424);border:1px solid var(--border-md,rgba(255,255,255,.10));border-radius:20px;position:relative;transition:background .2s;flex-shrink:0;}
-.sw-track.on{background:var(--accent,#ff6b35);border-color:var(--accent,#ff6b35);}
-.sw-track::after{content:'';position:absolute;top:2px;left:2px;width:15px;height:15px;background:#fff;border-radius:50%;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.3);}
-.sw-track.on::after{left:19px;}
-</style>
+
 </head>
 <body>
 <canvas id="global-particles" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;opacity:0.4;"></canvas><div style="position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.02) 0%, transparent 80%);z-index:-1;pointer-events:none;"></div>
@@ -439,34 +404,28 @@
      MODE POPUP
 ════════════════════════════════════════ -->
 <div class="mode-popup" id="modePopup">
-  <div class="mode-popup-title">Select mode</div>
-  <button class="mode-option active" data-mode="auto"     onclick="selectMode('auto')">
-    <div class="mode-icon auto-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-    </div>
+  <div class="mode-popup-title">Select Model</div>
+  <button class="mode-option active" data-mode="claude" data-model="claude-sonnet-4-5" onclick="selectMode('claude')">
+    <div class="mode-icon" style="background:rgba(255,107,53,.15);color:#ff6b35;font-size:13px;font-weight:700;">◆◆</div>
     <div class="mode-info">
-      <span class="mode-name">Auto</span>
-      <span class="mode-desc">Best model for each task</span>
+      <span class="mode-name">Claude</span>
+      <span class="mode-desc">Smart code, analysis &amp; creative tasks</span>
     </div>
     <svg class="mode-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
   </button>
-  <button class="mode-option" data-mode="fast"      onclick="selectMode('fast')">
-    <div class="mode-icon fast-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-    </div>
+  <button class="mode-option" data-mode="gemini" data-model="gemini-2.0-flash" onclick="selectMode('gemini')">
+    <div class="mode-icon" style="background:rgba(96,165,250,.12);color:#60a5fa;font-size:15px;">✦</div>
     <div class="mode-info">
-      <span class="mode-name">Fast</span>
-      <span class="mode-desc">Quick responses</span>
+      <span class="mode-name">Gemini</span>
+      <span class="mode-desc">Fast · Multimodal · Image understanding</span>
     </div>
     <svg class="mode-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
   </button>
-  <button class="mode-option" data-mode="thinking"  onclick="selectMode('thinking')">
-    <div class="mode-icon think-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-    </div>
+  <button class="mode-option" data-mode="groq" data-model="llama-3.3-70b" onclick="selectMode('groq')">
+    <div class="mode-icon" style="background:rgba(74,222,128,.12);color:#4ade80;font-size:15px;">⚡</div>
     <div class="mode-info">
-      <span class="mode-name">Think</span>
-      <span class="mode-desc">Deep reasoning mode</span>
+      <span class="mode-name">Groq · Free</span>
+      <span class="mode-desc">Ultra fast responses · No cost</span>
     </div>
     <svg class="mode-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
   </button>
@@ -503,8 +462,8 @@ const INPUT_HTML = `
           </svg>
         </label>
         <button class="mode-trigger icon-action" id="modeTrigger" onclick="toggleModePopup(this)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-          <span id="modeTriggerLabel">Auto</span>
+          <span style="font-size:11px;font-weight:700;color:#ff6b35;">◆◆</span>
+          <span id="modeTriggerLabel">Claude</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
       </div>
@@ -531,57 +490,6 @@ const INPUT_HTML = `
         </button>
 
 
-          <div id="mdlWrap">
-          <button id="mdlBtn" onclick="mdlToggle(this)">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
-            <span id="mdlLabel">Sonnet 4.5</span>
-            <svg class="arr" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div id="mdlPanel">
-            <div class="mdl-panel-title">Select Model</div>
-
-            <div class="mdl-section">Claude</div>
-            <button class="mdl-row" data-model="claude-sonnet-4-5" onclick="mdlPick(this)">
-              <div class="mdl-icon claude">◆◆</div>
-              <div class="mdl-info"><span class="mdl-name">Sonnet 4.5</span><span class="mdl-desc">Smart &amp; responsive</span></div>
-              <div class="mdl-chk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
-            </button>
-            <button class="mdl-row" data-model="claude-haiku" onclick="mdlPick(this)">
-              <div class="mdl-icon claude" style="font-size:11px">◆</div>
-              <div class="mdl-info"><span class="mdl-name">Haiku 4.5</span><span class="mdl-desc">Ultra fast</span></div>
-              <div class="mdl-chk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
-            </button>
-            <button class="mdl-row" data-model="claude-opus" onclick="mdlPick(this)">
-              <div class="mdl-icon claude">◆◆◆</div>
-              <div class="mdl-info"><span class="mdl-name">Opus 4.7</span><span class="mdl-desc">Most powerful</span></div>
-              <span class="mdl-badge">Pro</span>
-              <div class="mdl-chk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
-            </button>
-
-            <div class="mdl-sep"></div>
-            <div class="mdl-section">Groq · Free</div>
-            <button class="mdl-row" data-model="llama-3.3-70b" onclick="mdlPick(this)">
-              <div class="mdl-icon groq">🦙</div>
-              <div class="mdl-info"><span class="mdl-name">Llama 3.3 70B</span><span class="mdl-desc">Fast · Free</span></div>
-              <div class="mdl-chk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
-            </button>
-            <button class="mdl-row" data-model="gemma2-9b" onclick="mdlPick(this)">
-              <div class="mdl-icon groq">💎</div>
-              <div class="mdl-info"><span class="mdl-name">Gemma 2 9B</span><span class="mdl-desc">Google · Free</span></div>
-              <div class="mdl-chk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
-            </button>
-
-            <div class="mdl-sep"></div>
-            <div class="mdl-tog" onclick="mdlAdaptive()">
-              <div class="mdl-icon" style="background:rgba(255,255,255,.05);font-size:14px;">🧠</div>
-              <div class="mdl-tog-info">
-                <div class="mdl-name">Adaptive thinking</div>
-                <div class="mdl-desc" style="font-size:11px;color:var(--text-muted)">Thinks harder for complex tasks</div>
-              </div>
-              <div class="sw-track" id="adaptSw"></div>
-            </div>
-          </div>
-        </div>
           <button class="send-btn"  id="sendBtn"  onclick="sendMessage()">
           <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M12 2l-7.5 19.5 7.5-4.5 7.5 4.5z"/></svg>
         </button>
@@ -628,7 +536,11 @@ function loadSavedSettings() {
       });
     }
     const savedMode = localStorage.getItem('aiDefaultMode');
-    if (savedMode) selectMode(savedMode);
+    // Restore saved model
+  const savedModel = localStorage.getItem('ilyass_selectedModel') || 'claude-sonnet-4-5';
+  const modeByModel = { 'claude-sonnet-4-5': 'claude', 'claude-haiku': 'claude', 'claude-opus': 'claude', 'gemini-2.0-flash': 'gemini', 'gemini-1.5-flash': 'gemini', 'llama-3.3-70b': 'groq', 'gemma2-9b': 'groq' };
+  const savedMode = localStorage.getItem('ilyass_currentMode') || modeByModel[savedModel] || 'claude';
+  if (savedMode) selectMode(savedMode);
 
     // Restore gallery
     const savedGallery = localStorage.getItem('aiGallery');
@@ -938,11 +850,25 @@ function toggleModePopup(btn) {
 }
 function selectMode(mode) {
   currentMode = mode;
-  AI.currentMode = mode;
-  const labels = { auto: 'Auto', fast: 'Fast', thinking: 'Think' };
-  // Update all mode trigger labels
+  // Map mode -> model
+  const modelMap = { claude: 'claude-sonnet-4-5', gemini: 'gemini-2.0-flash', groq: 'llama-3.3-70b' };
+  const selectedModel = modelMap[mode] || 'claude-sonnet-4-5';
+  if (typeof AI !== 'undefined') AI.setModel(selectedModel);
+  try { localStorage.setItem('ilyass_selectedModel', selectedModel); } catch(_){}
+  // Label map
+  const labels = { claude: 'Claude', gemini: 'Gemini', groq: 'Groq' };
+  const icons  = { claude: '◆◆', gemini: '✦', groq: '⚡' };
+  const colors = { claude: '#ff6b35', gemini: '#60a5fa', groq: '#4ade80' };
+  // Update all mode trigger labels & icons
   document.querySelectorAll('[id^="ml-"],[id="modeTriggerLabel"]').forEach(el => {
     el.textContent = labels[mode] || mode;
+  });
+  // Update trigger icon
+  document.querySelectorAll('#modeTrigger .mode-trigger-icon, #modeTrigger span:first-child').forEach(el => {
+    if (el.tagName === 'SPAN' && el.id !== 'modeTriggerLabel' && !el.className.includes('arr')) {
+      el.textContent = icons[mode] || '◆◆';
+      el.style.color = colors[mode] || '#ff6b35';
+    }
   });
   document.querySelectorAll('.mode-option').forEach(o => {
     o.classList.toggle('active', o.dataset.mode === mode);
@@ -1476,66 +1402,6 @@ new GlobalParticles();
 })();
 </script>
 
-<script id="mdl-js">
-(function(){
-  /* ── model label map ── */
-  var MDL_LABELS = {
-    'claude-sonnet-4-5':'Sonnet 4.5',
-    'claude-haiku':'Haiku 4.5',
-    'claude-opus':'Opus 4.7',
-    'llama-3.3-70b':'Llama 3.3',
-    'gemma2-9b':'Gemma 2'
-  };
 
-  function mdlClose(){
-    var p=document.getElementById('mdlPanel'),b=document.getElementById('mdlBtn');
-    if(p)p.classList.remove('open');
-    if(b)b.classList.remove('open');
-  }
-
-  window.mdlToggle=function(b){
-    var p=document.getElementById('mdlPanel');
-    var isOpen=p.classList.contains('open');
-    if(isOpen){mdlClose();}else{p.classList.add('open');b.classList.add('open');}
-  };
-
-  window.mdlPick=function(r){
-    /* don't pick if badge-locked */
-    if(r.classList&&r.classList.contains('badge-locked'))return;
-    document.querySelectorAll('#mdlPanel .mdl-row').forEach(function(x){x.classList.remove('selected');});
-    r.classList.add('selected');
-    var m=r.dataset.model;
-    var lbl=MDL_LABELS[m]||r.querySelector('.mdl-name').textContent;
-    document.getElementById('mdlLabel').textContent=lbl;
-    if(typeof AI!=='undefined')AI.setModel(m);
-    try{localStorage.setItem('ilyass_selectedModel',m);}catch(_){}
-    mdlClose();
-  };
-
-  window.mdlAdaptive=function(){
-    var s=document.getElementById('adaptSw');
-    s.classList.toggle('on');
-    if(typeof AI!=='undefined')AI.currentMode=s.classList.contains('on')?'thinking':'auto';
-  };
-
-  /* close on outside click */
-  document.addEventListener('click',function(e){
-    var w=document.getElementById('mdlWrap');
-    if(w&&!w.contains(e.target))mdlClose();
-  });
-
-  /* restore saved model */
-  window.addEventListener('load',function(){
-    var s=localStorage.getItem('ilyass_selectedModel')||'claude-sonnet-4-5';
-    var r=document.querySelector('#mdlPanel .mdl-row[data-model="'+s+'"]');
-    if(r){
-      document.querySelectorAll('#mdlPanel .mdl-row').forEach(function(x){x.classList.remove('selected');});
-      r.classList.add('selected');
-      document.getElementById('mdlLabel').textContent=MDL_LABELS[s]||s;
-      if(typeof AI!=='undefined')AI.setModel(s);
-    }
-  });
-})();
-</script>
 </body>
 </html>

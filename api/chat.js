@@ -198,6 +198,15 @@ async function askGemini(messages, selectedModel) {
   }
 }
 
+// ── Code detection helper ──
+function isCodeRequest(text) {
+  const codeKw = ['code','function','class','script','html','css','javascript','python','component',
+    'api','debug','fix','error','build','create file','write a','generate','implement','module',
+    'sir create','sir fix','sir build','اكتب كود','اصلح','انشئ','برمجة','كود'];
+  const t = text.toLowerCase();
+  return codeKw.some(k => t.includes(k));
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
