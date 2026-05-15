@@ -1,14 +1,5 @@
 {
-  "buildCommand": "echo 'IlyassAI - Real Connectors System'",
   "cleanUrls": true,
-  "functions": {
-    "api/**/*.js": {
-      "maxDuration": 60
-    },
-    "api/github-oauth-callback.js": {
-      "maxDuration": 30
-    }
-  },
   "rewrites": [
     { "source": "/app", "destination": "/app.html" },
     { "source": "/connectors", "destination": "/connectors-real.html" },
