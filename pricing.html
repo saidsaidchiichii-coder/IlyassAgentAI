@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IlyassAI — Pricing</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0a0a0f;
+    color: #e2e8f0;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: sticky;
+    top: 0;
+    background: rgba(10,10,15,0.95);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+  }
+  .logo { font-size: 1.3rem; font-weight: 700; color: #fff; text-decoration: none; }
+  .logo span { color: #7c3aed; }
+  .nav-btns { display: flex; gap: 12px; align-items: center; }
+  .btn-nav {
+    padding: 8px 20px; border-radius: 8px; font-size: 0.875rem;
+    font-weight: 600; cursor: pointer; border: none; transition: all 0.2s;
+  }
+  .btn-nav-outline {
+    background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #e2e8f0;
+  }
+  .btn-nav-outline:hover { border-color: #7c3aed; color: #a78bfa; }
+  .btn-nav-primary { background: #7c3aed; color: #fff; }
+  .btn-nav-primary:hover { background: #6d28d9; }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 80px 20px 60px;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .hero p {
+    font-size: 1.125rem;
+    color: #94a3b8;
+    max-width: 500px;
+    margin: 0 auto 40px;
+  }
+
+  /* TOGGLE */
+  .billing-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 60px;
+  }
+  .toggle-label { font-size: 0.875rem; color: #94a3b8; font-weight: 500; }
+  .toggle-label.active { color: #e2e8f0; }
+  .save-badge {
+    background: linear-gradient(135deg, #7c3aed, #a78bfa);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+  }
+
+  /* PLANS GRID */
+  .plans {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+  }
+
+  .plan-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 36px;
+    position: relative;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+  }
+  .plan-card:hover {
+    border-color: rgba(124,58,237,0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(124,58,237,0.15);
+  }
+  .plan-card.featured {
+    border-color: #7c3aed;
+    background: linear-gradient(135deg, rgba(124,58,237,0.1) 0%, rgba(167,139,250,0.05) 100%);
+    box-shadow: 0 0 0 1px rgba(124,58,237,0.3), 0 20px 60px rgba(124,58,237,0.2);
+  }
+
+  .popular-badge {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #7c3aed, #a78bfa);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 16px;
+    border-radius: 20px;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  .plan-name {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #a78bfa;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .plan-price {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+  .price-amount {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+  }
+  .price-currency {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #94a3b8;
+    align-self: flex-start;
+    padding-top: 8px;
+  }
+  .price-period {
+    font-size: 1rem;
+    color: #64748b;
+  }
+
+  .plan-tagline {
+    font-size: 0.875rem;
+    color: #64748b;
+    margin-bottom: 28px;
+    min-height: 40px;
+  }
+
+  .divider {
+    height: 1px;
+    background: rgba(255,255,255,0.07);
+    margin-bottom: 24px;
+  }
+
+  .features-list {
+    list-style: none;
+    flex: 1;
+    margin-bottom: 32px;
+  }
+  .features-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: #cbd5e1;
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+  .feat-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .feat-icon.yes { color: #4ade80; }
+  .feat-icon.no { color: #475569; }
+  .feat-text.dim { color: #475569; text-decoration: line-through; }
+
+  .plan-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+  .plan-btn-free {
+    background: rgba(255,255,255,0.06);
+    color: #94a3b8;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .plan-btn-free:hover { background: rgba(255,255,255,0.1); color: #e2e8f0; }
+  .plan-btn-pro {
+    background: linear-gradient(135deg, #7c3aed, #9333ea);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+  }
+  .plan-btn-pro:hover { background: linear-gradient(135deg, #6d28d9, #7c3aed); transform: translateY(-1px); }
+  .plan-btn-custom {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #e2e8f0;
+    border: 1px solid rgba(167,139,250,0.3);
+  }
+  .plan-btn-custom:hover { border-color: #a78bfa; color: #a78bfa; }
+
+  .plan-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  /* Loading state */
+  .plan-btn.loading::after {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* FAQ */
+  .faq {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+  }
+  .faq h2 {
+    text-align: center;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 40px;
+  }
+  .faq-item {
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    padding: 20px 0;
+  }
+  .faq-q {
+    font-weight: 600;
+    color: #e2e8f0;
+    margin-bottom: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .faq-a { font-size: 0.9rem; color: #94a3b8; line-height: 1.6; }
+
+  /* TOAST */
+  #toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: #1e293b; border: 1px solid rgba(255,255,255,0.1);
+    color: #e2e8f0; padding: 12px 24px; border-radius: 12px;
+    font-size: 0.875rem; z-index: 9999;
+    opacity: 0; transition: opacity 0.3s;
+    pointer-events: none; white-space: nowrap;
+  }
+  #toast.show { opacity: 1; }
+
+  /* Current plan badge */
+  .current-plan-badge {
+    display: inline-block;
+    background: rgba(74,222,128,0.15);
+    color: #4ade80;
+    border: 1px solid rgba(74,222,128,0.3);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-left: 8px;
+    letter-spacing: 0.05em;
+    vertical-align: middle;
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .plans { grid-template-columns: 1fr; max-width: 400px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/app" class="logo">Ilyass<span>AI</span></a>
+  <div class="nav-btns">
+    <div id="userDisplay" style="font-size:0.875rem;color:#94a3b8;"></div>
+    <button class="btn-nav btn-nav-outline" onclick="window.location='/app'">Back to App</button>
+    <button id="authBtn" class="btn-nav btn-nav-primary" onclick="window.location='/auth'">Sign In</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>Simple, Transparent Pricing</h1>
+  <p>Start free. Upgrade when you need more power. Cancel anytime.</p>
+</div>
+
+<div class="plans">
+
+  <!-- FREE -->
+  <div class="plan-card" id="card-free">
+    <div class="plan-name">Free</div>
+    <div class="plan-price">
+      <span class="price-currency">$</span>
+      <span class="price-amount">0</span>
+      <span class="price-period">/mo</span>
+    </div>
+    <div class="plan-tagline">Forever free. No credit card required.</div>
+    <div class="divider"></div>
+    <ul class="features-list">
+      <li>
+        <svg class="feat-icon yes" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <span>100 messages / day</span>
+      </li>
+      <li>
+        <svg class="feat-icon yes" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <span>1 AI model (GPT-3.5)</span>
+      </li>
+      <li>
+        <svg class="feat-icon no" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+        <span class="feat-text dim">Web search</span>
+      </li>
+      <li>
+        <svg class="feat-icon no" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+        <span class="feat-text dim">Image generation</span>
+      </li>
+      <li>
+        <svg class="feat-icon no" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+        <span class="feat-text dim">Memory & context persistence</span>
+      </li>
+    </ul>
+    <button class="plan-btn plan-btn-free" id="btn-free" onclick="choosePlan('free')">
+      Get Started Free
+    </button>
+  </div>
+
+  <!-- PRO -->
+  <div class="plan-card featured" id="card-pro">
+    <div class="popular-badge">⭐ MOST POPULAR</div>
+    <div class="plan-name">Pro</div>
+    <div class="plan-price">
+      <span class="price-currency">$</span>
+      <span class="price-amount">18</span>
+      <span class="price-period">/mo</span>
+    </div>
+    <div class="plan-tagline">Everything you need for power users.</div>
+    <div class="divider"></div>
+    <ul class="features-list">
+      <li>
+        <svg class="feat-icon yes" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <span><strong>Unlimited</strong> messages</span>
+      </li>
+      <li>
+        <svg class="feat-icon yes" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <span><strong>Premium models</strong> — GPT-4o, Claude 3.5</span>
+      </li>
+      <li>
+        <svg class="feat-icon yes" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <span><strong>Unlimited</strong> image generation</span>
+      </li>
+      <li>
+        <svg class="feat-icon yes" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <span>Web search integration</span>
+      </li>
+      <li>
+        <svg class="feat-icon yes" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <span>Memory &amp; context persistence</span>
+      </li>
+      <li>
+        <svg class="feat-icon yes" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <span>Priority model routing (80% faster)</span>
+      </li>
+    </ul>
+    <button class="plan-btn plan-btn-pro" id="btn-pro" onclick="choosePlan('pro')">
+      Upgrade to Pro — $18/mo
+    </button>
+  </div>
+
+  <!-- CUSTOM -->
+  <div class="plan-card" id="card-custom">
+    <div class="plan-name">Custom</div>
+    <div class="plan-price">
+      <span class="price-currency">$</span>
+      <span class="price-amount">80</span>
+      <span class="price-period">/mo</span>
+    </div>
+    <div class="plan-tagline">Full control. Your own API. White-label ready.</div>
+    <div class="divider"></div>
+    <ul class="features-list">
+      <li>
+        <svg class="feat-icon yes" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <span><strong>Everything in Pro</strong></span>
+      </li>
+      <li>
+        <svg class="feat-icon yes" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <span><strong>Your own API key</strong> (bring your own OpenAI/Anthropic)</span>
+      </li>
+      <li>
+        <svg class="feat-icon yes" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <span>Custom AI model integrations</span>
+      </li>
+      <li>
+        <svg class="feat-icon yes" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <span>White-label &amp; branding options</span>
+      </li>
+      <li>
+        <svg class="feat-icon yes" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <span>Priority support &amp; onboarding</span>
+      </li>
+    </ul>
+    <button class="plan-btn plan-btn-custom" id="btn-custom" onclick="choosePlan('custom')">
+      Get Custom — $80/mo
+    </button>
+  </div>
+
+</div>
+
+<!-- FAQ -->
+<div class="faq">
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-item">
+    <div class="faq-q">Can I cancel anytime?</div>
+    <div class="faq-a">Yes. Cancel anytime from your account settings. You keep Pro access until the end of your billing period.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">What payment methods are accepted?</div>
+    <div class="faq-a">All major credit/debit cards via Stripe. Secure, no card data stored on our servers.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">What's the difference between Pro and Custom?</div>
+    <div class="faq-a">Custom adds your own API key integration (use your OpenAI/Anthropic key directly), custom model connections, white-label options, and priority support.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Is there a free trial for Pro?</div>
+    <div class="faq-a">The Free tier is your trial — use it as long as you like. No time limit.</div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+  import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDWch9gK12sGD7awxmRibU6jBspd-tjr6E",
+    authDomain: "ilyassagentai.firebaseapp.com",
+    projectId: "ilyassagentai",
+    storageBucket: "ilyassagentai.firebasestorage.app",
+    messagingSenderId: "107004161455​2",
+    appId: "1:1070041614552:web:your-app-id"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  let currentUser = null;
+  let currentPlan = 'free';
+
+  // Watch auth state
+  onAuthStateChanged(auth, async (user) => {
+    currentUser = user;
+    const authBtn = document.getElementById('authBtn');
+    const userDisplay = document.getElementById('userDisplay');
+
+    if (user) {
+      authBtn.textContent = 'Sign Out';
+      authBtn.onclick = () => auth.signOut();
+      userDisplay.textContent = user.displayName || user.email || '';
+
+      // Fetch current plan
+      try {
+        const res = await fetch(`/api/subscription-status?userId=${user.uid}`);
+        const data = await res.json();
+        currentPlan = data.plan || 'free';
+        highlightCurrentPlan(currentPlan);
+      } catch(e) {}
+    } else {
+      authBtn.textContent = 'Sign In';
+      authBtn.onclick = () => window.location = '/auth';
+      userDisplay.textContent = '';
+    }
+  });
+
+  function highlightCurrentPlan(plan) {
+    ['free', 'pro', 'custom'].forEach(p => {
+      const btn = document.getElementById(`btn-${p}`);
+      if (p === plan) {
+        btn.textContent = p === 'free' ? '✓ Current Plan' : `✓ Current Plan`;
+        btn.disabled = true;
+        btn.style.opacity = '0.7';
+      }
+    });
+  }
+
+  window.choosePlan = async (plan) => {
+    if (!currentUser) {
+      showToast('Please sign in first');
+      setTimeout(() => window.location = '/auth', 1200);
+      return;
+    }
+
+    if (plan === currentPlan) {
+      showToast('You are already on this plan');
+      return;
+    }
+
+    const btn = document.getElementById(`btn-${plan}`);
+    btn.disabled = true;
+    btn.classList.add('loading');
+    const originalText = btn.textContent;
+    btn.textContent = 'Processing...';
+
+    try {
+      const token = await currentUser.getIdToken();
+      const res = await fetch('/api/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({
+          plan,
+          userId: currentUser.uid,
+          email: currentUser.email,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error || 'Request failed');
+
+      if (plan === 'free') {
+        // Free plan — no redirect needed
+        showToast('✅ Free plan activated!');
+        currentPlan = 'free';
+        highlightCurrentPlan('free');
+        return;
+      }
+
+      if (data.url) {
+        // Redirect to Stripe checkout
+        window.location.href = data.url;
+      } else {
+        throw new Error('No checkout URL returned');
+      }
+    } catch (err) {
+      showToast('❌ ' + err.message);
+      btn.disabled = false;
+      btn.classList.remove('loading');
+      btn.textContent = originalText;
+    }
+  };
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+</script>
+</body>
+</html>
