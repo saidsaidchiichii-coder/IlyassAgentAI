@@ -21,12 +21,12 @@ window.addConnector = async function(platform) {
     }
     
     const userId = window.auth.currentUser.uid;
-    const redirectUri = `${window.location.origin}/api/github-connector?action=callback&userId=${userId}`;
+    const redirectUri = `${window.location.origin}/api/github-oauth-callback`;
     const params = new URLSearchParams({
       client_id: 'Ov23lirMXFp5nCzBIGLz', // GitHub OAuth App ID
       redirect_uri: redirectUri,
       scope: 'repo read:user user:email',
-      state: userId,
+      state: JSON.stringify({ userId, ts: Date.now() }),
     });
     
     showToast('Redirecting to GitHub...');
