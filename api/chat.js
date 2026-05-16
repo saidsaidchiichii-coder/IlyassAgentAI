@@ -268,35 +268,39 @@ export default async function handler(req, res) {
 
   const userText = lastUserMsg.content;
   const isCoding = isCodingRequest(userText);
-  
+
   let reply = null;
   let usedProvider = '';
 
   if (isCoding) {
-    // 🔵 Gemini for CODING
-    reply = await askGemini([{ role: 'user', content: (messages.map(m=>m.content).join('\n')) }]);
+    // 💻 CODING → Gemini, fallback Groq
+    reply = await askGemini(messages);
     usedProvider = 'gemini-coding';
-
     if (!reply) {
-      // Fallback: Groq for coding
       reply = await askGroq([{ role: 'system', content: SYSTEM_PROMPT }, ...messages]);
       usedProvider = 'groq-coding-fallback';
     }
+
   } else {
-    // 🔵 Gemini for CHAT too
-    reply = await askGemini(messages);
-    usedProvider = 'gemini-chat';
+    // 💬 CHAT → Alternating 1 Gemini / 1 Groq / 1 Gemini / 1 Groq...
+    const useGeminiTurn = Math.floor(Date.now() / 1000) % 2 === 0;
 
-    if (!reply) {
-      // Fallback: HuggingFace
-      reply = await askHuggingFace(messages);
-      usedProvider = 'huggingface-fallback';
-    }
-
-    if (!reply) {
-      // Final fallback: Groq
+    if (useGeminiTurn) {
+      // 🔵 This turn → Gemini
+      reply = await askGemini(messages);
+      usedProvider = 'gemini-chat';
+      if (!reply) {
+        reply = await askGroq([{ role: 'system', content: SYSTEM_PROMPT }, ...messages]);
+        usedProvider = 'groq-chat-fallback';
+      }
+    } else {
+      // 🟠 This turn → Groq
       reply = await askGroq([{ role: 'system', content: SYSTEM_PROMPT }, ...messages]);
-      usedProvider = 'groq-final-fallback';
+      usedProvider = 'groq-chat';
+      if (!reply) {
+        reply = await askGemini(messages);
+        usedProvider = 'gemini-chat-fallback';
+      }
     }
   }
 
