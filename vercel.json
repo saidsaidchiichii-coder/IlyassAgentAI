@@ -3,42 +3,123 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "functions": {
-    "api/chat.js": { "maxDuration": 60 },
-    "api/agent.js": { "maxDuration": 60 },
-    "api/image.js": { "maxDuration": 60 },
-    "api/video.js": { "maxDuration": 120 },
-    "api/create-checkout.js": { "maxDuration": 30 },
-    "api/webhook.js": { "maxDuration": 30 },
-    "api/subscription.js": { "maxDuration": 30 },
-    "api/tools.js": { "maxDuration": 30 },
-    "api/utilities.js": { "maxDuration": 60 }
+    "api/chat.js": {
+      "maxDuration": 60
+    },
+    "api/agent.js": {
+      "maxDuration": 60
+    },
+    "api/image.js": {
+      "maxDuration": 60
+    },
+    "api/video.js": {
+      "maxDuration": 120
+    },
+    "api/create-checkout.js": {
+      "maxDuration": 30
+    },
+    "api/webhook.js": {
+      "maxDuration": 30
+    },
+    "api/subscription.js": {
+      "maxDuration": 30
+    },
+    "api/tools.js": {
+      "maxDuration": 30
+    },
+    "api/utilities.js": {
+      "maxDuration": 60
+    }
   },
   "rewrites": [
-    { "source": "/auth", "destination": "/auth-advanced.html" },
-    { "source": "/pricing", "destination": "/pricing.html" },
-    { "source": "/success", "destination": "/success.html" },
-    { "source": "/app", "destination": "/index.html" },
-    { "source": "/connectors", "destination": "/connectors.html" },
-    { "source": "/api/subscription-status", "destination": "/api/subscription?action=status" },
-    { "source": "/api/cancel-subscription", "destination": "/api/subscription?action=cancel" },
-    { "source": "/api/billing-portal", "destination": "/api/subscription?action=portal" },
-    { "source": "/api/search", "destination": "/api/tools?action=search" },
-    { "source": "/api/moderate", "destination": "/api/tools?action=moderate" },
-    { "source": "/api/parse", "destination": "/api/tools?action=parse" },
-    { "source": "/api/video-status", "destination": "/api/video?action=status" },
-    { "source": "/api/generate-video", "destination": "/api/video?action=generate" },
-    { "source": "/api/memory", "destination": "/api/utilities?action=memory" },
-    { "source": "/api/discover", "destination": "/api/utilities?action=discover" },
-    { "source": "/api/transcribe", "destination": "/api/utilities?action=transcribe" }
+    {
+      "source": "/auth",
+      "destination": "/auth-advanced.html"
+    },
+    {
+      "source": "/pricing",
+      "destination": "/pricing.html"
+    },
+    {
+      "source": "/success",
+      "destination": "/success.html"
+    },
+    {
+      "source": "/app",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/connectors",
+      "destination": "/connectors.html"
+    },
+    {
+      "source": "/api/subscription-status",
+      "destination": "/api/subscription?action=status"
+    },
+    {
+      "source": "/api/cancel-subscription",
+      "destination": "/api/subscription?action=cancel"
+    },
+    {
+      "source": "/api/billing-portal",
+      "destination": "/api/subscription?action=portal"
+    },
+    {
+      "source": "/api/search",
+      "destination": "/api/tools?action=search"
+    },
+    {
+      "source": "/api/moderate",
+      "destination": "/api/tools?action=moderate"
+    },
+    {
+      "source": "/api/parse",
+      "destination": "/api/tools?action=parse"
+    },
+    {
+      "source": "/api/video-status",
+      "destination": "/api/video?action=status"
+    },
+    {
+      "source": "/api/generate-video",
+      "destination": "/api/video?action=generate"
+    },
+    {
+      "source": "/api/memory",
+      "destination": "/api/utilities?action=memory"
+    },
+    {
+      "source": "/api/discover",
+      "destination": "/api/utilities?action=discover"
+    },
+    {
+      "source": "/api/transcribe",
+      "destination": "/api/utilities?action=transcribe"
+    }
   ],
   "headers": [
     {
       "source": "/api/(.*)",
       "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET,POST,OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" }
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET,POST,OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        }
       ]
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/github-oauth-callback",
+      "dest": "/api/github-oauth-callback.js"
     }
   ]
 }
