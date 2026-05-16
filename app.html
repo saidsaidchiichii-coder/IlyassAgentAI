@@ -2972,6 +2972,23 @@ window.onUserAuthChange = function(user) {
 };
 
 </script>
+<script>
+// OAuth redirect_uri fix — v3
+(function() {
+  var CORRECT_REDIRECT = window.location.origin + '/api/github-oauth-callback';
+  var _origURLSearchParams = window.URLSearchParams;
+  window.URLSearchParams = function(init) {
+    var params = new _origURLSearchParams(init);
+    if (params.get && params.get('redirect_uri') && 
+        params.get('redirect_uri').indexOf('github-connector') !== -1) {
+      params.set('redirect_uri', CORRECT_REDIRECT);
+    }
+    return params;
+  };
+  window.URLSearchParams.prototype = _origURLSearchParams.prototype;
+  window.__GITHUB_REDIRECT_URI__ = CORRECT_REDIRECT;
+})();
+</script>
 <script src="github-connector.js?v=2"></script>
 
 <!-- ============================================================
