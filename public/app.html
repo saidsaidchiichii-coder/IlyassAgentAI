@@ -6,8 +6,8 @@
   <title>IlyassAI</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/style.css" />
-  <script type="module" src="/firebase.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <script type="module" src="firebase.js"></script>
   <style>
   /* ===== IlyassAI v3.0 - UI Improvements ===== */
 
@@ -1577,7 +1577,6 @@
     <svg class="mode-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
   </button>
 </div>
- 
 
 <!-- TOAST CONTAINER -->
 <div id="toastContainer" class="toast-container"></div>
@@ -1585,8 +1584,8 @@
 <!-- ════════════════════════════════════════
      SCRIPTS
 ════════════════════════════════════════ -->
-<script src="/firebase.js" type="module"></script>
-<script src="/ControleAi.js"></script>
+<script src="firebase.js" type="module"></script>
+<script src="ControleAi.js"></script>
 <script>
 /* ===== INPUT HTML ===== */
 const INPUT_HTML = `
@@ -1614,7 +1613,6 @@ const INPUT_HTML = `
           <span id="modeTriggerLabel">Auto</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
-        <button class="mdl-sel-btn" id="mdlSelBtn" onclick="toggleMdlPopup(event)"><span id="mdlSelLabel">claude-sonnet-4-5</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="9" height="9"><polyline points="6 9 12 15 18 9"/></svg></button>
       </div>
       <div class="input-right-actions">
         <button class="icon-action mic-action" onclick="startVoice()" title="Voice input">
@@ -2055,40 +2053,6 @@ function onFilePick(input) {
   }).join('');
 }
 
-/* ===== MODEL SELECTOR ===== */
-var _mdlId = 'claude-sonnet-4-5';
-function toggleMdlPopup(e) {
-  if(e){ e.stopPropagation(); e.preventDefault(); }
-  var p = document.getElementById('mdlPopup');
-  if(!p) return;
-  if(p.style.display !== 'none'){ p.style.display = 'none'; return; }
-  var mp = document.getElementById('modePopup');
-  if(mp) mp.style.display = 'none';
-  var btn = document.getElementById('mdlSelBtn');
-  p.style.display = 'block';
-  if(btn){
-    var rect = btn.getBoundingClientRect();
-    p.style.left = Math.max(8, rect.left - 60) + 'px';
-    requestAnimationFrame(function(){ p.style.top = (rect.top - p.offsetHeight - 10) + 'px'; });
-  }
-}
-let _mdlId = 'claude-sonnet-4-5';
-function pickMdl(id, btn) {
-  _mdlId = id;
-  var lbl = document.getElementById('mdlSelLabel');
-  if(lbl) lbl.textContent = id.length > 20 ? id.split('-').slice(0,2).join('-') : id;
-  document.querySelectorAll('.mdl-opt').forEach(function(b){ b.classList.remove('active'); });
-  if(btn) btn.classList.add('active');
-  document.getElementById('mdlPopup').classList.remove('open');
-  if(typeof showToast === 'function') showToast('Model: ' + id);
-}
-document.addEventListener('click', function(e){
-  var p = document.getElementById('mdlPopup');
-  var b = document.getElementById('mdlSelBtn');
-  if(p && p.classList.contains('open') && !p.contains(e.target) && b && !b.contains(e.target)){
-    p.classList.remove('open');
-  }
-});
 /* ===== VOICE ===== */
 function startVoice() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -2106,14 +2070,6 @@ function startVoice() {
 
 /* ===== MODE ===== */
 let currentMode = 'auto';
-function toggleModelPopup(btn) {
-  const popup = document.getElementById('mdlPopup');
-  if (!popup) return;
-  const rect = btn.getBoundingClientRect();
-  popup.style.bottom = (window.innerHeight - rect.top + 10) + 'px';
-  popup.style.left   = rect.left + 'px';
-  popup.classList.toggle('open');
-}
 function toggleModePopup(btn) {
   const popup = document.getElementById('modePopup');
   if (!popup) return;
@@ -3728,4 +3684,3 @@ window.onUserAuthChange = function(user) {
 
 </body>
 </html>
-
