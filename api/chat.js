@@ -273,19 +273,19 @@ export default async function handler(req, res) {
   let usedProvider = '';
 
   if (isCoding) {
-    // 🟣 Try Claude first for coding
-    reply = await askClaude([{ role: 'system', content: SYSTEM_PROMPT }, ...messages]);
-    usedProvider = 'claude';
-    
+    // 🔵 Gemini for CODING
+    reply = await askGemini([{ role: 'user', content: (messages.map(m=>m.content).join('\n')) }]);
+    usedProvider = 'gemini-coding';
+
     if (!reply) {
       // Fallback: Groq for coding
       reply = await askGroq([{ role: 'system', content: SYSTEM_PROMPT }, ...messages]);
       usedProvider = 'groq-coding-fallback';
     }
   } else {
-    // 🔵 Try Gemini for chat
+    // 🔵 Gemini for CHAT too
     reply = await askGemini(messages);
-    usedProvider = 'gemini';
+    usedProvider = 'gemini-chat';
 
     if (!reply) {
       // Fallback: HuggingFace
