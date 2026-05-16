@@ -1,3 +1,4 @@
+// v2 - OAuth fix applied
 // ============================================================
 // github-connector.js — Real GitHub OAuth Connector System
 // Enhances the connectors tab with real GitHub OAuth flow
