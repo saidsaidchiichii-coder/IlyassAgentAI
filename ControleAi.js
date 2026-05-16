@@ -15,17 +15,39 @@ const AI = {
      SYNTAX HIGHLIGHT
   ────────────────────────────────────────────── */
   highlight(code) {
-    return code
-      .replace(/&/g,  '&amp;')
-      .replace(/</g,  '&lt;')
-      .replace(/>/g,  '&gt;')
-      .replace(/(\/\/[^\n]*)/g,           '<span class="cmt">$1</span>')
-      .replace(/(#[^\n]*)/g,              '<span class="cmt">$1</span>')
-      .replace(/(["'`])(.*?)\1/g,         '<span class="str">$1$2$1</span>')
-      .replace(/\b(\d+\.?\d*)\b/g,        '<span class="num">$1</span>')
-      .replace(/\b(import|export|from|default|return|if|else|for|while|do|switch|case|break|continue|function|const|let|var|class|new|this|super|extends|async|await|try|catch|finally|throw|typeof|instanceof|in|of|null|undefined|true|false|void|delete)\b/g,
-               '<span class="kw">$1</span>')
-      .replace(/\b([a-zA-Z_$][a-zA-Z0-9_$]*)\s*\(/g, '<span class="fn">$1</span>(');
+    let h = code
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    const spans = [];
+    const ph = (html) => { const i = spans.length; spans.push(html); return '\x00' + i + '\x00'; };
+
+    // Strings FIRST — before comments/keywords so quotes don't bleed into span attributes
+    h = h.replace(/(`[^`\n]*`)/g,              (_, s) => ph('<span class="str">' + s + '</span>'));
+    h = h.replace(/("(?:\\.|[^"\\])*")/g,      (_, s) => ph('<span class="str">' + s + '</span>'));
+    h = h.replace(/('(?:\\.|[^'\\])*')/g,      (_, s) => ph('<span class="str">' + s + '</span>'));
+
+    // Comments
+    h = h.replace(/(\/\/[^\n]*)/g,  (_, s) => ph('<span class="cmt">' + s + '</span>'));
+    h = h.replace(/(#[^\n]*)/g,     (_, s) => ph('<span class="cmt">' + s + '</span>'));
+
+    // Numbers
+    h = h.replace(/\b(\d+\.?\d*)\b/g, (_, s) => ph('<span class="num">' + s + '</span>'));
+
+    // Keywords (JS + C++ + Python)
+    h = h.replace(/\b(import|export|from|default|return|if|else|for|while|do|switch|case|break|continue|function|const|let|var|class|new|this|super|extends|async|await|try|catch|finally|throw|typeof|instanceof|in|of|null|undefined|true|false|void|delete|int|double|char|float|bool|string|public|private|protected|static|include|using|namespace|std|def|print|pass|lambda|with|as|is|not|and|or|elif|except|raise|global|yield|interface|type|enum)\b/g,
+      (_, k) => ph('<span class="kw">' + k + '</span>')
+    );
+
+    // Function calls
+    h = h.replace(/\b([a-zA-Z_$][a-zA-Z0-9_$]*)\s*\(/g,
+      (m, fn) => ph('<span class="fn">' + fn + '</span>(')
+    );
+
+    // Restore placeholders
+    h = h.replace(/\x00(\d+)\x00/g, (_, i) => spans[+i]);
+    return h;
   },
 
   /* ──────────────────────────────────────────────
