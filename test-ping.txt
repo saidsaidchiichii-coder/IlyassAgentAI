@@ -1,1 +1,2 @@
-hello world
+redeploy trigger - OAuth fix applied
+GITHUB_REDIRECT_URI fixed to /api/github-oauth-callback
