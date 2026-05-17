@@ -314,6 +314,8 @@ const AI = {
     const wrapper     = document.createElement('div');
     wrapper.className = 'msg-wrapper ai';
     wrapper._t0       = Date.now();
+    const intent      = this._analyzeIntent(userMessage || '');
+
     wrapper.innerHTML = `
       <div class="ai-avatar">
         <svg viewBox="0 0 32 32" fill="currentColor" width="14" height="14">
@@ -322,8 +324,12 @@ const AI = {
       </div>
       <div class="gl-thinking-live">
         <span class="gl-spin"></span>
-        <span class="gl-think-txt">Thinking…</span>
+        <div class="gl-think-lines">
+          <span class="gl-think-main">Thinking\u2026</span>
+          <span class="gl-think-intent">The user is asking for <em>${intent}</em>\u2026</span>
+        </div>
       </div>`;
+
     this.messagesBox.appendChild(wrapper);
     this.scroll();
     return wrapper;
@@ -353,6 +359,24 @@ const AI = {
         + '<span class="gl-tlabel">Thought for ' + t + '</span>'
         + '</div>';
     }
+  },
+
+  _analyzeIntent(msg) {
+    const m = msg.toLowerCase();
+    if (/code|function|script|debug|bug|python|javascript|html|css|sql|class|method|program/.test(m)) return 'code or programming help';
+    if (/explain|what is|how does|definition|meaning|concept|why|tell me about/.test(m))            return 'an explanation';
+    if (/write|essay|email|letter|story|poem|draft|article|blog|caption/.test(m))                  return 'written content';
+    if (/translate|arabic|english|french|spanish|darija|language/.test(m))                         return 'a translation';
+    if (/summarize|summary|tldr|brief|shorten|condense/.test(m))                                   return 'a summary';
+    if (/compare|difference|vs|versus|pros.*cons|which is better/.test(m))                         return 'a comparison';
+    if (/how to|steps|tutorial|guide|tips|instructions|walk me through/.test(m))                   return 'a step-by-step guide';
+    if (/math|calculate|equation|solve|formula|number|compute/.test(m))                            return 'a calculation';
+    if (/fix|improve|optimize|review|refactor|enhance|update/.test(m))                             return 'code review or improvement';
+    if (/search|find|research|who is|where is|when did|latest/.test(m))                            return 'research & information';
+    if (/image|photo|picture|generate|imagine|draw|design/.test(m))                                return 'image generation';
+    if (/plan|strategy|roadmap|schedule|organize/.test(m))                                         return 'a plan or strategy';
+    const w = msg.trim().split(' ').slice(0, 5).join(' ');
+    return '"' + w + (msg.trim().split(' ').length > 5 ? '\u2026' : '') + '"';
   },
 
 
