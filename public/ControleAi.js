@@ -309,9 +309,12 @@ const AI = {
   /* ──────────────────────────────────────────────
      THINKING INDICATOR
   ────────────────────────────────────────────── */
-  thinking() {
+  /* ── THINKING PANEL ── */
+  thinking(userMessage) {
     const wrapper = document.createElement('div');
     wrapper.className = 'msg-wrapper ai';
+
+    const topic = this._analyzeIntent(userMessage || '');
 
     wrapper.innerHTML = `
       <div class="ai-avatar">
@@ -319,25 +322,63 @@ const AI = {
           <path d="M16 2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14S23.732 2 16 2zm0 3.5c2.006 0 3.89.524 5.522 1.44L7.94 21.522A10.45 10.45 0 0 1 5.5 16C5.5 9.649 10.649 4.5 17 4.5h-1zm0 21c-2.006 0-3.89-.524-5.522-1.44L24.06 10.478A10.45 10.45 0 0 1 26.5 16c0 6.351-5.149 11.5-11.5 11.5h1z"/>
         </svg>
       </div>
-      <div class="thinking-container">
-        <div class="loader-dots"><span></span><span></span><span></span></div>
-        <span class="thinking-text">Thinking…</span>
+      <div class="thinking-panel">
+        <div class="thinking-header">
+          <span class="tpulse"></span>
+          <span class="thinking-label">Thinking</span>
+        </div>
+        <div class="thinking-steps">
+          <div class="tstep tstep-show">
+            <span class="tstep-icon">🔍</span>
+            <span class="tstep-txt">The user is asking me for <em>${topic}</em>&hellip;</span>
+          </div>
+          <div class="tstep" id="ts2_${Date.now()}">
+            <span class="tstep-icon">🧠</span>
+            <span class="tstep-txt">Analyzing context and finding the best approach&hellip;</span>
+          </div>
+          <div class="tstep" id="ts3_${Date.now()}">
+            <span class="tstep-icon">✍️</span>
+            <span class="tstep-txt">Composing a precise, high-quality response&hellip;</span>
+          </div>
+        </div>
       </div>`;
 
     this.messagesBox.appendChild(wrapper);
     this.scroll();
+
+    // Stagger animation
+    const steps = wrapper.querySelectorAll('.tstep:not(.tstep-show)');
+    steps.forEach((s, i) => {
+      setTimeout(() => s.classList.add('tstep-show'), (i + 1) * 550);
+    });
+
     return wrapper;
   },
 
-  /* ──────────────────────────────────────────────
-     ASK  (with AbortController + stop btn)
-  ────────────────────────────────────────────── */
+  _analyzeIntent(msg) {
+    const m = msg.toLowerCase();
+    if (/code|function|script|debug|error|bug|python|javascript|html|css|sql|program|class|method/.test(m)) return 'code or programming help';
+    if (/explain|what is|how does|definition|meaning|concept|why|tell me about/.test(m)) return 'an explanation';
+    if (/write|essay|email|letter|story|poem|text|draft|article|blog|caption/.test(m)) return 'written content';
+    if (/translate|arabic|english|french|spanish|darija|language/.test(m)) return 'a translation';
+    if (/summarize|summary|tldr|brief|shorten|condense/.test(m)) return 'a summary';
+    if (/compare|difference|vs|versus|better|pros.*cons|which is/.test(m)) return 'a comparison';
+    if (/list|steps|how to|tutorial|guide|tips|instructions|walk me through/.test(m)) return 'a step-by-step guide';
+    if (/math|calculate|equation|solve|formula|number|compute/.test(m)) return 'a calculation';
+    if (/search|find|research|who is|where is|when did|latest|news/.test(m)) return 'research & information';
+    if (/fix|improve|optimize|review|refactor|enhance|update/.test(m)) return 'code review or improvement';
+    if (/image|photo|picture|generate|imagine|draw|design/.test(m)) return 'image generation';
+    const words = msg.trim().split(' ').slice(0, 5).join(' ');
+    return '"' + words + (msg.split(' ').length > 5 ? '…' : '') + '"';
+  },
+
+
   async ask(message) {
     this.isStreaming = true;
     this._setStopBtn(true);
 
     this.abortController = new AbortController();
-    const load = this.thinking();
+    const load = this.thinking(message);
 
     try {
       const payload = {
