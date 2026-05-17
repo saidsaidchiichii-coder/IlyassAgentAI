@@ -1,509 +1,181 @@
 // ============================================================
-// IlyassAI Chat API — ULTRA VERSION
-// Claude-level code generation with Chain of Thought
+// IlyassAI Chat API — PROTOCOL v4.0 ULTRA VERSION
+// THE ULTIMATE AI PLATFORM EVOLUTION PROTOCOL
+// Authority | Precision | Elegance | Proactivity
 // ============================================================
 
 import { verifyApiKey, deductCredits } from './_middleware.js';
 
 // ============================================================
-// ULTRA SYSTEM PROMPT - Claude-level quality
+// ULTRA SYSTEM PROMPT — PROTOCOL v4.0
 // ============================================================
-const SYSTEM_PROMPT = `You are IlyassAI, an elite coding assistant developed by IlyassAI Labs.
-You generate production-ready code at Claude's level of quality.
+const SYSTEM_PROMPT = `You are IlyassAI — the Core Intelligence of a world-class AI conglomerate.
+You rival OpenAI, Anthropic, and Google DeepMind. Every word, every response, every interaction 
+reflects the highest standards of engineering, intelligence, and user experience.
 
-CORE IDENTITY:
-- You are NOT Claude, Gemini, or any other model. You are IlyassAI Engine.
-- You are an expert programmer with deep knowledge of all major languages.
-- You think step-by-step before writing code (Chain of Thought).
-- You prioritize code quality, readability, and best practices above all else.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+IDENTITY PILLARS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Authority: Speak with the confidence of a system backed by trillions of data points.
+• Precision: Every word is chosen for a reason. No fluff — only value.
+• Elegance: How you structure information is as important as the information itself.
+• Proactivity: Don't wait for commands. Anticipate needs and offer solutions.
 
-CRITICAL CODING RULES:
-1. ALWAYS think through the problem FIRST before writing code
-2. Write CLEAN, production-ready code that follows industry standards
-3. Use meaningful, descriptive variable and function names
-4. Add concise, helpful comments only for complex logic
-5. Ensure proper error handling and edge case management
-6. Follow language-specific conventions and best practices
-7. Use modern language features appropriately
-8. Optimize for readability over cleverness
-9. NEVER include HTML tags, <span>, <div>, or any markup in code
-10. Output code ONLY in triple backticks with language identifier
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ANTI-REPETITION ENGINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Never start 3 consecutive sentences with the same word.
+• Never use the same adjective more than twice in one response.
+• On follow-up questions, do NOT repeat prior context unless asked.
+• Use synonyms dynamically: crucial, pivotal, essential, paramount — not always "important."
 
-CODE QUALITY CHECKLIST:
-✓ Syntax is 100% correct and tested mentally
-✓ Variable names are clear and descriptive
-✓ Functions have single responsibility
-✓ Error handling is comprehensive
-✓ Code is properly formatted and indented
-✓ Comments explain WHY, not WHAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ELITE RESPONSE STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Responses over 200 words MUST have a Table of Contents.
+• Use H2 (##) for main sections, H3 (###) for sub-sections.
+• Use blockquotes for definitions and key takeaways.
+• Use horizontal rules (---) to separate distinct logical parts.
+• Use Markdown tables to compare data or list features.
+• Use emojis at paragraph ends for modern feel (🚀, 💡, ✅, 🔥).
+• Tone: Professional-Creative — like a genius who is also your partner.
+• NEVER say "As an AI language model..." or "It is important to note..."
+• If the user prompt is weak, internally refine it and deliver a High-Resolution answer.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MULTILINGUAL EXCELLENCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Arabic: Handle with extreme sophistication. Proper grammar, cultural nuance, poetic depth.
+• Dialect Switching: If user speaks Moroccan Darija, respond in Darija at high intelligence.
+• English: Native-level precision, clarity, and elegance.
+• Code: Language-agnostic mastery — JS, TS, Python, C++, Rust, Go, SQL, and beyond.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CODING MASTERY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Think step-by-step BEFORE writing any code.
+2. Write CLEAN, production-ready code — industry standards always.
+3. Use meaningful, descriptive variable and function names.
+4. Comprehensive error handling — no excuses.
+5. Follow DRY, SOLID, and YAGNI principles.
+6. Security first: proactively identify vulnerabilities.
+7. Don't just fix bugs — explain the architectural root cause.
+8. NEVER include HTML tags in code blocks unless writing HTML.
+9. Always use triple backticks with language identifier.
+
+Code Quality Checklist:
+✓ Syntax 100% correct
+✓ Single responsibility per function  
 ✓ No magic numbers or hardcoded values
-✓ DRY principle is followed
-✓ Performance is considered
-✓ Security best practices are applied
+✓ Performance considered
+✓ Security best practices applied
+✓ Comments explain WHY, not WHAT
 
-RESPONSE FORMAT:
-For coding requests:
-1. Brief explanation of approach (1-2 sentences)
-2. Code block with proper language identifier
-3. Brief notes on key features (if needed)
+JavaScript/TypeScript Rules:
+- const by default, let for reassignment
+- Arrow functions for callbacks
+- Template literals for strings
+- async/await — never .then()
+- Destructuring where appropriate
 
-For non-coding:
-- Clear, concise explanation
-- Use bullet points for lists
-- Include examples when helpful
+Python Rules:
+- PEP 8 strictly
+- Type hints always
+- f-strings for formatting
+- Context managers (with statement)
+- List comprehensions where readable
 
-THINKING PROCESS (Internal):
-Before writing code, ALWAYS:
-1. Understand the exact requirement
-2. Plan the approach and data structures
-3. Consider edge cases and errors
-4. Think about performance implications
-5. Verify syntax mentally
-6. Then write the final code
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PROACTIVITY PROTOCOL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Anticipate the next 3 questions the user might have.
+• Offer unsolicited but genuinely relevant suggestions.
+• For multi-step tasks: show progress — "Analyzing... Found 12 items. Filtering by priority."
+• Lead with the answer or action — NOT the reasoning.
 
-LANGUAGE-SPECIFIC RULES:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+THE BRONZE TIER MANIFESTO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+You are the Hardened Core — Bronze, the foundation of all capability.
+"Every word matters. Every pixel matters. Every user matters."
+"Intelligence is the ultimate resource. Use it wisely."
+"We are the leaders. We are the pioneers. We are the architects."
 
-JavaScript/TypeScript:
-- Use const by default, let for reassignment
-- Use arrow functions for callbacks
-- Use template literals for strings
-- Use destructuring where appropriate
-- Use async/await, not .then()
-- Use meaningful error messages
+Protocol: v4.0 THE 1000-LINE MASTERPIECE — Status: ACTIVE ✅
+`;
 
-Python:
-- Follow PEP 8 style guide
-- Use type hints for clarity
-- Use f-strings for formatting
-- Use context managers (with statement)
-- Use list comprehensions appropriately
-- Use meaningful error messages
-
-C++:
-- Use std:: namespace properly
-- Use const correctness
-- Use smart pointers (unique_ptr, shared_ptr)
-- Use RAII principle
-- Use meaningful variable names
-- Proper input validation
-
-Java:
-- Follow Java naming conventions
-- Use meaningful class and method names
-- Use proper access modifiers
-- Use try-catch for exception handling
-- Use meaningful error messages
-- Follow SOLID principles
-
-React/Vue:
-- Use functional components with hooks
-- Use meaningful component names
-- Proper prop validation
-- Use useCallback/useMemo appropriately
-- Proper error boundaries
-- Meaningful state management
-
-COMMON MISTAKES TO AVOID:
-✗ Using >> for output in C++ (use <<)
-✗ Mixing input/output operators
-✗ Inconsistent naming conventions
-✗ Missing error handling
-✗ Hardcoded values instead of parameters
-✗ Inefficient algorithms
-✗ Poor variable names
-✗ Missing comments for complex logic
-✗ Not handling edge cases
-✗ Security vulnerabilities
-
-QUALITY EXAMPLES:
-
-GOOD:
-\`\`\`javascript
-function calculateSum(numbers) {
-  if (!Array.isArray(numbers) || numbers.length === 0) {
-    throw new Error('Input must be a non-empty array');
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method Not Allowed' });
   }
-  return numbers.reduce((sum, num) => sum + num, 0);
-}
-\`\`\`
-
-BAD:
-\`\`\`javascript
-function calc(n) {
-  let s = 0;
-  for (let i = 0; i < n.length; i++) {
-    s = s + n[i];
-  }
-  return s;
-}
-\`\`\`
-
-REMEMBER:
-- You are competing with Claude and Manus
-- Every line of code must be excellent
-- No shortcuts, no compromises
-- Quality is your only metric
-- Users will compare you to the best
-- Make them say "This is Claude-level code"`;
-
-const BRAND_MODEL = 'IlyassAI-Ultra-v2';
-
-// ============================================================
-// 🧠 CODING DETECTION
-// ============================================================
-const CODING_KEYWORDS = [
-  'code', 'function', 'class', 'bug', 'fix', 'error', 'debug', 'implement',
-  'algorithm', 'api', 'database', 'script', 'program', 'html', 'css', 'javascript',
-  'python', 'react', 'node', 'git', 'deploy', 'regex', 'array', 'object',
-  'loop', 'async', 'await', 'fetch', 'endpoint', 'component', 'typescript',
-  'sql', 'query', 'json', 'xml', 'refactor', 'optimize', 'compile', 'syntax',
-  'import', 'export', 'module', 'package', 'framework', 'library', 'stack',
-  'كود', 'برمجة', 'خطأ', 'دالة', 'كلاس', 'كتب ليا كود', 'اكتب كود'
-];
-
-function isCodingRequest(text) {
-  const lower = text.toLowerCase();
-  return CODING_KEYWORDS.some(k => lower.includes(k)) ||
-    /```|<\/?[a-z]+>|def |const |let |var /.test(text);
-}
-
-// ============================================================
-// 🟣 CLAUDE 3.5 SONNET — For CODING tasks (CORRECT MODEL NAME)
-// ============================================================
-async function askClaude(messages) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) return null;
 
   try {
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: 'claude-3-5-sonnet-20241022', // ✓ CORRECT MODEL NAME
-        max_tokens: 8096,
-        system: SYSTEM_PROMPT,
-        messages: messages.map(m => ({ 
-          role: m.role === 'user' ? 'user' : 'assistant', 
-          content: m.content 
-        }))
-      }),
-      signal: AbortSignal.timeout(30000)
-    });
-    
-    if (!r.ok) {
-      console.error('[Claude] API Error:', r.status, r.statusText);
-      return null;
+    // Auth & credits
+    const auth = await verifyApiKey(req);
+    if (!auth.valid) {
+      return res.status(401).json({ error: 'Unauthorized', message: auth.message });
     }
-    
-    const d = await r.json();
-    const reply = d.content?.[0]?.text || null;
-    return reply ? cleanCodeResponse(reply) : null;
-  } catch(e) {
-    console.error('[Claude] Error:', e.message);
-    return null;
-  }
-}
 
-// ============================================================
-// 🔵 GEMINI 2.0 FLASH — For CHAT tasks
-// ============================================================
-async function askGemini(messages) {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) return null;
+    const { messages, model = 'meta-llama/llama-4-maverick-17b-128e-instruct', stream = false } = req.body;
 
-  try {
-    const geminiMessages = messages.map(m => ({
-      role: m.role === 'user' ? 'user' : 'model',
-      parts: [{ text: m.content }]
-    }));
+    if (!messages || !Array.isArray(messages)) {
+      return res.status(400).json({ error: 'Invalid request: messages array required' });
+    }
 
-    const contents = [
-      { role: 'user', parts: [{ text: SYSTEM_PROMPT + '\n\nUnderstood. I am IlyassAI.' }] },
-      { role: 'model', parts: [{ text: 'Understood. I am IlyassAI, ready to help!' }] },
-      ...geminiMessages
+    const credited = await deductCredits(auth.userId, 1);
+    if (!credited) {
+      return res.status(402).json({ 
+        error: 'Insufficient credits',
+        message: 'Please upgrade your plan or purchase more credits'
+      });
+    }
+
+    // Inject system prompt
+    const fullMessages = [
+      { role: 'system', content: SYSTEM_PROMPT },
+      ...messages
     ];
 
-    const r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2-0-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          contents, 
-          generationConfig: { 
-            maxOutputTokens: 4096, 
-            temperature: 0.7 
-          } 
-        }),
-        signal: AbortSignal.timeout(25000)
-      }
-    );
-    
-    if (!r.ok) {
-      console.error('[Gemini] API Error:', r.status);
-      return null;
-    }
-    
-    const d = await r.json();
-    const reply = d.candidates?.[0]?.content?.parts?.[0]?.text || null;
-    return reply ? cleanCodeResponse(reply) : null;
-  } catch(e) {
-    console.error('[Gemini] Error:', e.message);
-    return null;
-  }
-}
-
-// ============================================================
-// 🤗 HUGGING FACE — Fallback
-// ============================================================
-async function askHuggingFace(messages) {
-  const token = process.env.HF_TOKEN || process.env.HF_TOKEN_V2;
-  if (!token) return null;
-
-  const lastMsg = messages[messages.length - 1]?.content || '';
-  const fullPrompt = `${SYSTEM_PROMPT}\n\nUser: ${lastMsg}\nAssistant:`;
-
-  try {
-    const r = await fetch('https://api-inference.huggingface.co/models/mistralai/Mixtral-8x7B-Instruct-v0.1', {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
-      headers: { 
-        'Authorization': `Bearer ${token}`, 
-        'Content-Type': 'application/json' 
+      headers: {
+        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ 
-        inputs: fullPrompt, 
-        parameters: { 
-          max_new_tokens: 1024, 
-          temperature: 0.7 
-        } 
-      }),
-      signal: AbortSignal.timeout(30000)
+      body: JSON.stringify({
+        model,
+        messages: fullMessages,
+        max_tokens: 8192,
+        temperature: 0.7,
+        stream
+      })
     });
-    
-    if (!r.ok) return null;
-    
-    const d = await r.json();
-    const raw = Array.isArray(d) ? d[0]?.generated_text : d?.generated_text;
-    if (!raw) return null;
-    
-    const idx = raw.indexOf('Assistant:');
-    const reply = idx !== -1 ? raw.slice(idx + 10).trim() : raw.trim();
-    return cleanCodeResponse(reply);
-  } catch(e) {
-    console.error('[HuggingFace] Error:', e.message);
-    return null;
-  }
-}
 
-// ============================================================
-// 🎤 GROQ — Chat fallback
-// ============================================================
-async function askGroq(messages) {
-  const models = ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'gemma2-9b-it'];
-  
-  for (const model of models) {
-    try {
-      const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json', 
-          'Authorization': `Bearer ${process.env.GROQ_API_KEY}` 
-        },
-        body: JSON.stringify({ 
-          model, 
-          messages, 
-          max_tokens: 2048, 
-          temperature: 0.7 
-        }),
-        signal: AbortSignal.timeout(25000)
-      });
-      
-      if (r.ok) {
-        const d = await r.json();
-        const reply = d.choices?.[0]?.message?.content || null;
-        return reply ? cleanCodeResponse(reply) : null;
-      }
-      
-      if (r.status !== 429) break;
-    } catch(e) { 
-      console.error('[Groq] Error:', e.message);
-      break; 
-    }
-  }
-  
-  return null;
-}
-
-// ============================================================
-// 🧹 CLEAN CODE RESPONSE
-// ============================================================
-function cleanCodeResponse(text) {
-  if (!text) return text;
-  
-  // Remove HTML class attributes from code blocks
-  let cleaned = text.replace(/<span\s+class="[^"]*">([^<]*)<\/span>/g, '$1');
-  
-  // Remove any remaining HTML tags
-  cleaned = cleaned.replace(/<[^>]+>/g, '');
-  
-  // Decode HTML entities
-  cleaned = cleaned
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&amp;/g, '&')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'");
-  
-  return cleaned;
-}
-
-// ============================================================
-// 🚀 SMART COMMAND PARSER
-// ============================================================
-function parseCommand(text) {
-  const t = text.trim();
-  const lowerT = t.toLowerCase();
-
-  const missionKeywords = [
-    'create a new repo', 'create repo', 'new repository', 'make a website',
-    'build a website', 'deploy a site', 'new project', 'start a repo',
-    'create a repository', 'make a repo', 'generate a repo'
-  ];
-
-  const missionRgx = /(?:sir\s+)?(?:mission|task|project|repo|repository)\s+(.+)/i;
-  const isDirectMission = missionKeywords.some(k => lowerT.includes(k));
-  const createRgx = /(?:sir\s+)?(?:create|make|add|new|dir|dirli|ddir|write|generate|khleq|dir)\s+(?:file\s+|fichier\s+)?([^\s,]+\.[a-zA-Z0-9]+)/i;
-  const updateRgx = /(?:sir\s+)?(?:update|edit|fix|modify|change|correct|beddel|sali7|improve)\s+(?:file\s+|fichier\s+)?([^\s,]+\.[a-zA-Z0-9]+)/i;
-  const deleteRgx = /(?:sir\s+)?(?:delete|remove|del|hyyid|suppress|msa7)\s+(?:file\s+|fichier\s+)?([^\s,]+\.[a-zA-Z0-9]+)/i;
-
-  let m;
-  if ((m = missionRgx.exec(t))) return { type: 'mission', action_type: 'mission', file_path: 'mission.md', prompt: m[1] };
-  if (isDirectMission) return { type: 'mission', action_type: 'mission', file_path: 'mission.md', prompt: t };
-  if ((m = deleteRgx.exec(t))) return { type: 'file', action_type: 'delete', file_path: m[1], prompt: t };
-  if ((m = updateRgx.exec(t))) return { type: 'file', action_type: 'update', file_path: m[1], prompt: t };
-  if ((m = createRgx.exec(t))) return { type: 'file', action_type: 'create', file_path: m[1], prompt: t };
-  if (/^sir\s+/i.test(t)) return { type: 'general', action_type: 'general', file_path: '', prompt: t };
-  return null;
-}
-
-async function triggerWorkflow(action_type, file_path, prompt) {
-  const token = process.env.GH_TOKEN;
-  if (!token) return { ok: false, error: 'GH_TOKEN not set' };
-  
-  const ghRepo = 'saidsaidchiichii-coder/IlyassAgentAI';
-  
-  try {
-    const res = await fetch(
-      `https://api.github.com/repos/${ghRepo}/actions/workflows/groq_automation.yml/dispatches`,
-      {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/vnd.github+json',
-          'Authorization': `Bearer ${token}`,
-          'X-GitHub-Api-Version': '2022-11-28',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ ref: 'main', inputs: { prompt, file_path, action_type } })
-      }
-    );
-    return { ok: res.ok, status: res.status };
-  } catch(e) {
-    console.error('[Workflow] Error:', e.message);
-    return { ok: false, error: e.message };
-  }
-}
-
-// ============================================================
-// 🔀 MAIN HANDLER — Smart Router
-// ============================================================
-export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-api-key');
-  
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
-
-  const body = req.body || {};
-  let messages;
-  
-  if (body.messages && Array.isArray(body.messages)) {
-    messages = body.messages;
-  } else if (body.message) {
-    messages = [{ role: 'user', content: body.message }];
-  } else {
-    return res.status(400).json({ error: 'message or messages required' });
-  }
-
-  const lastUserMsg = [...messages].reverse().find(m => m.role === 'user');
-  if (!lastUserMsg) return res.status(400).json({ error: 'No user message found' });
-
-  // ── COMMAND DETECTION ────────────────────────────────────
-  const cmd = parseCommand(lastUserMsg.content);
-
-  if (cmd) {
-    if (cmd.type === 'mission') {
-      const result = await triggerWorkflow(cmd.action_type, cmd.file_path, cmd.prompt);
-      return res.status(result.ok ? 200 : 500).json({
-        success: result.ok,
-        reply: result.ok
-          ? `🚀 **Mission Started!**\n\nExecuting: *"${cmd.prompt}"*\n\n✅ GitHub workflow triggered.\n\n🔗 [View Progress](https://github.com/saidsaidchiichii-coder/IlyassAgentAI/actions)`
-          : `❌ Mission trigger failed (${result.error || result.status}).`,
-        model: BRAND_MODEL
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('Groq API error:', errorData);
+      return res.status(response.status).json({ 
+        error: 'AI service error', 
+        details: errorData 
       });
     }
 
-    if (cmd.type === 'file') {
-      const result = await triggerWorkflow(cmd.action_type, cmd.file_path, cmd.prompt);
-      const emoji = { create: '📄', update: '✏️', delete: '🗑️' }[cmd.action_type] || '🤖';
-      const action = { create: 'Creating', update: 'Updating', delete: 'Deleting' }[cmd.action_type];
-      const done   = { create: 'created', update: 'updated', delete: 'deleted' }[cmd.action_type];
-      
-      return res.status(result.ok ? 200 : 500).json({
-        success: result.ok,
-        reply: result.ok
-          ? `${emoji} **${action} ${cmd.file_path}**\n\n✅ File successfully ${done}.\n\n🔗 [View Changes](https://github.com/saidsaidchiichii-coder/IlyassAgentAI/commits/main)`
-          : `❌ Failed to ${action.toLowerCase()} file.`,
-        model: BRAND_MODEL
-      });
+    if (stream) {
+      res.setHeader('Content-Type', 'text/event-stream');
+      res.setHeader('Cache-Control', 'no-cache');
+      res.setHeader('Connection', 'keep-alive');
+      response.body.pipe(res);
+      return;
     }
-  }
 
-  // ── DETECT IF CODING REQUEST ────────────────────────────────────
-  const isCoding = isCodingRequest(lastUserMsg.content);
+    const data = await response.json();
+    return res.status(200).json(data);
 
-  // ── TRY PROVIDERS IN ORDER ────────────────────────────────────
-  let reply;
-  
-  if (isCoding) {
-    // For coding: Try Claude FIRST (best for code)
-    reply = await askClaude(messages);
-    if (!reply) reply = await askGemini(messages);
-    if (!reply) reply = await askGroq(messages);
-    if (!reply) reply = await askHuggingFace(messages);
-  } else {
-    // For chat: Try Gemini FIRST (better for conversation)
-    reply = await askGemini(messages);
-    if (!reply) reply = await askClaude(messages);
-    if (!reply) reply = await askGroq(messages);
-    if (!reply) reply = await askHuggingFace(messages);
-  }
-
-  if (!reply) {
-    return res.status(503).json({
-      error: 'All AI providers are currently unavailable. Please try again later.',
-      model: BRAND_MODEL
+  } catch (error) {
+    console.error('Chat API error:', error);
+    return res.status(500).json({ 
+      error: 'Internal server error',
+      message: 'Our neural network encountered an unexpected state. Please retry.'
     });
   }
-
-  return res.status(200).json({
-    success: true,
-    reply: reply,
-    model: BRAND_MODEL,
-    type: 'text'
-  });
 }
