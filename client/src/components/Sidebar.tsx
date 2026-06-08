@@ -7,6 +7,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ConversationList } from "@/components/ConversationList";
+import { SkillPicker } from "@/components/SkillPicker";
 import { trpc } from "@/lib/trpc";
 import {
   Plus,
@@ -23,9 +25,11 @@ import { useState } from "react";
 
 interface SidebarProps {
   user: User | null;
+  selectedSkill?: string;
+  onSkillChange?: (skill: string) => void;
 }
 
-export function Sidebar({ user }: SidebarProps) {
+export function Sidebar({ user, selectedSkill, onSkillChange }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const logout = trpc.auth.logout.useMutation();
 
@@ -80,27 +84,27 @@ export function Sidebar({ user }: SidebarProps) {
           </button>
         ))}
 
-        {/* Projects Section */}
+        {/* Recent Conversations */}
         {!isCollapsed && (
           <div className="pt-4 mt-4 border-t border-gray-200">
             <h3 className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Projects
+              Recent
             </h3>
-            <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors text-sm">
-              <Plus className="w-4 h-4" />
-              <span>New project</span>
-            </button>
+            <ConversationList isCollapsed={isCollapsed} />
           </div>
         )}
+
+        {/* Skills Section */}
+        {!isCollapsed && <SkillPicker value={selectedSkill} onChange={onSkillChange} />}
       </nav>
 
       {/* User Profile */}
-      <div className="p-3 border-t border-gray-200">
+      <div className="p-3 border-t border-gray-200 bg-gray-100">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors">
-              <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-xs font-semibold text-gray-700">
+            <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm">
+                <span className="text-xs font-bold text-white">
                   {user?.name?.[0]?.toUpperCase() || "U"}
                 </span>
               </div>

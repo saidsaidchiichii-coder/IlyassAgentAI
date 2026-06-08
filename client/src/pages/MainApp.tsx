@@ -5,9 +5,12 @@ import { ChatArea } from "@/components/ChatArea";
 import { TopBar } from "@/components/TopBar";
 import { getLoginUrl } from "@/const";
 import { Loader2 } from "lucide-react";
+import { useState } from "react";
 
 export default function MainApp() {
   const { user, loading, isAuthenticated } = useAuth();
+  const [selectedSkill, setSelectedSkill] = useState<string | undefined>();
+
 
   if (loading) {
     return (
@@ -43,7 +46,11 @@ export default function MainApp() {
   return (
     <div className="flex h-screen bg-white">
       {/* Sidebar */}
-      <Sidebar user={user} />
+      <Sidebar 
+        user={user} 
+        selectedSkill={selectedSkill}
+        onSkillChange={setSelectedSkill}
+      />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">

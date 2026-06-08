@@ -18,19 +18,19 @@
 - [x] Design action chips (Create slides, Build website, etc.)
 - [x] Implement user profile dropdown with logout
 - [x] Add Free plan / Upgrade badge
-- [ ] Create conversation history list in sidebar
+- [x] Create conversation history list in sidebar
 - [ ] Implement responsive layout for mobile/tablet
 - [ ] Add smooth animations and transitions
 - [ ] Ensure pixel-perfect alignment with Manus design
 
 ## Chat System
 - [x] Create chat message component with markdown rendering (Streamdown)
-- [ ] Implement typing indicator
-- [ ] Add auto-scroll to latest message
+- [x] Implement typing indicator
+- [x] Add auto-scroll to latest message
 - [ ] Create message input with file upload capability
 - [x] Implement message sending logic
 - [ ] Add error handling and retry logic
-- [ ] Create conversation list and switching
+- [x] Create conversation list and switching
 - [ ] Implement conversation creation and deletion
 
 ## LLM Integration
@@ -44,14 +44,14 @@
 ## Skills System
 - [ ] Parse SKILL.md files from backup
 - [ ] Create skills database records
-- [ ] Implement skill picker UI in sidebar
+- [x] Implement skill picker UI in sidebar
 - [x] Add skill selection to chat context
 - [x] Inject system prompts per skill
 - [ ] Create skill description modal
 - [ ] Implement skill enable/disable toggle
 
 ## Connectors System
-- [ ] Design connector card UI
+- [x] Design connector card UI
 - [ ] Implement OAuth flow for Gmail
 - [ ] Implement OAuth flow for Google Calendar
 - [ ] Implement OAuth flow for Notion
@@ -62,17 +62,17 @@
 - [ ] Add connector permission scopes
 
 ## Scheduled Tasks
-- [ ] Create scheduled tasks UI panel
+- [x] Create scheduled tasks UI panel (ScheduledTaskCard component)
 - [ ] Implement cron expression input
 - [ ] Add task creation form
 - [ ] Implement task listing
-- [ ] Add task enable/disable toggle
+- [x] Add task enable/disable toggle
 - [ ] Create task deletion functionality
 - [x] Implement task execution history (backend ready)
-- [ ] Add task status indicator
+- [x] Add task status indicator
 
 ## Projects Management
-- [ ] Create projects UI panel
+- [x] Create projects UI panel (ProjectCard component)
 - [ ] Implement project creation form
 - [ ] Add project listing
 - [ ] Implement project deletion
