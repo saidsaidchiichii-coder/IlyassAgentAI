@@ -47,8 +47,6 @@ export function ChatArea({ user }: ChatAreaProps) {
         const result = await createConversationMutation.mutateAsync({
           title: "New Conversation",
         });
-        // Get the created conversation ID from the result
-        // For now, we'll use a placeholder ID - in production, the mutation should return the ID
         setConversationId(1);
         return 1;
       } catch (error) {
@@ -68,10 +66,8 @@ export function ChatArea({ user }: ChatAreaProps) {
       textareaRef.current.style.height = "auto";
     }
 
-    // Add user message to UI
     setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
 
-    // Initialize conversation if needed
     let convId = conversationId;
     if (!convId) {
       convId = await initializeConversation();
@@ -87,7 +83,6 @@ export function ChatArea({ user }: ChatAreaProps) {
         skillName: selectedSkill,
       });
 
-      // Add assistant message
       setMessages((prev) => [...prev, { role: "assistant", content: response.message }]);
     } catch (error) {
       console.error("Failed to send message:", error);
@@ -127,63 +122,73 @@ export function ChatArea({ user }: ChatAreaProps) {
   ];
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden">
+    <div className="flex-1 flex flex-col overflow-hidden bg-white">
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto px-6 py-8">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full">
-            <h1 className="text-6xl font-serif text-gray-700 mb-16 tracking-tight leading-tight">What can I do for you?</h1>
+            {/* Main Title */}
+            <h1 className="text-6xl font-serif text-gray-800 mb-16 tracking-tight leading-tight">
+              What can I do for you?
+            </h1>
 
-            {/* Chat Input */}
+            {/* Chat Input Container */}
             <div className="w-full max-w-2xl mb-8">
-              <div className="bg-white border border-gray-200 rounded-3xl shadow-sm hover:shadow-md transition-shadow">
-                  <Textarea
-                    ref={textareaRef}
-                    value={message}
-                    onChange={handleTextareaChange}
-                    onKeyDown={handleKeyDown}
-                    placeholder="Type your message..."
-                    className="w-full border-0 resize-none focus:ring-0 p-4 text-sm placeholder:text-gray-500 bg-white"
-                    rows={2}
-                  />
+              <div className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200">
+                {/* Textarea */}
+                <Textarea
+                  ref={textareaRef}
+                  value={message}
+                  onChange={handleTextareaChange}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Type your message..."
+                  className="w-full border-0 resize-none focus:ring-0 focus:outline-none p-4 text-sm placeholder:text-gray-500 bg-white rounded-t-2xl"
+                  rows={2}
+                  style={{
+                    boxShadow: "none",
+                  }}
+                />
+                
+                {/* Input Footer with Icons */}
                 <div className="flex items-center justify-between px-4 pb-3 pt-2 border-t border-gray-100">
                   <div className="flex items-center gap-3">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-6 w-6 p-0 text-gray-400 hover:text-gray-600 transition-colors"
+                    {/* Plus Icon Button */}
+                    <button
+                      className="h-6 w-6 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors duration-150 hover:bg-gray-50 rounded"
                       title="Add file"
                     >
                       <Plus className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-6 w-6 p-0 text-gray-400 hover:text-gray-600 transition-colors"
+                    </button>
+                    
+                    {/* At Icon Button */}
+                    <button
+                      className="h-6 w-6 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors duration-150 hover:bg-gray-50 rounded"
                       title="Mention"
                     >
                       <AtSign className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-6 w-6 p-0 text-gray-400 hover:text-gray-600 transition-colors"
+                    </button>
+                    
+                    {/* Paperclip Icon Button */}
+                    <button
+                      className="h-6 w-6 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors duration-150 hover:bg-gray-50 rounded"
                       title="Upload"
                     >
                       <Paperclip className="w-4 h-4" />
-                    </Button>
+                    </button>
                   </div>
-                  <Button
+                  
+                  {/* Send Button */}
+                  <button
                     onClick={handleSendMessage}
                     disabled={!message.trim() || isLoading}
-                    className={`h-6 w-6 p-0 rounded-full transition-all ${
+                    className={`h-6 w-6 flex items-center justify-center rounded transition-all duration-150 ${
                       message.trim() && !isLoading
-                        ? "text-blue-500 hover:text-blue-600"
-                        : "text-gray-300"
+                        ? "text-blue-500 hover:text-blue-600 hover:bg-blue-50 active:scale-95"
+                        : "text-gray-300 cursor-not-allowed"
                     }`}
                   >
                     <Send className="w-4 h-4" />
-                  </Button>
+                  </button>
                 </div>
               </div>
             </div>
@@ -191,14 +196,13 @@ export function ChatArea({ user }: ChatAreaProps) {
             {/* Action Chips */}
             <div className="flex flex-wrap justify-center gap-3 max-w-2xl">
               {actionChips.map((chip) => (
-                <Button
+                <button
                   key={chip.label}
-                  variant="outline"
-                  className="rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 gap-2 px-4 py-2 text-sm transition-colors"
+                  className="px-4 py-2 border border-gray-200 text-gray-600 text-sm rounded-lg hover:bg-gray-50 active:scale-95 transition-all duration-150 flex items-center gap-2 hover:border-gray-300"
                 >
                   <chip.icon className="w-4 h-4" />
                   <span>{chip.label}</span>
-                </Button>
+                </button>
               ))}
             </div>
           </div>
@@ -223,37 +227,38 @@ export function ChatArea({ user }: ChatAreaProps) {
       {messages.length > 0 && (
         <div className="border-t border-gray-200 bg-white px-6 py-4">
           <div className="max-w-2xl mx-auto">
-            <div className="bg-white border border-gray-200 rounded-2xl shadow-sm">
+            <div className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-200">
               <Textarea
                 value={message}
                 onChange={handleTextareaChange}
                 onKeyDown={handleKeyDown}
                 placeholder="Type a message..."
-                className="w-full border-0 resize-none focus:ring-0 p-3 text-sm placeholder:text-gray-400"
+                className="w-full border-0 resize-none focus:ring-0 focus:outline-none p-3 text-sm placeholder:text-gray-500 bg-white rounded-t-xl"
                 rows={1}
                 disabled={isLoading}
+                style={{
+                  boxShadow: "none",
+                }}
               />
               <div className="flex items-center justify-between px-3 pb-2 pt-1 border-t border-gray-100">
                 <div className="flex items-center gap-1">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-7 w-7 p-0 text-gray-400 hover:text-gray-600"
+                  <button
+                    className="h-6 w-6 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors duration-150 hover:bg-gray-50 rounded"
                   >
                     <Paperclip className="w-4 h-4" />
-                  </Button>
+                  </button>
                 </div>
-                <Button
+                <button
                   onClick={handleSendMessage}
                   disabled={!message.trim() || isLoading}
-                  className={`h-7 w-7 p-0 rounded-full transition-all ${
+                  className={`h-6 w-6 flex items-center justify-center rounded transition-all duration-150 ${
                     message.trim() && !isLoading
-                      ? "bg-gray-900 hover:bg-gray-800 text-white"
-                      : "bg-gray-100 text-gray-300"
+                      ? "text-blue-500 hover:text-blue-600 hover:bg-blue-50 active:scale-95"
+                      : "text-gray-300 cursor-not-allowed"
                   }`}
                 >
                   <Send className="w-3 h-3" />
-                </Button>
+                </button>
               </div>
             </div>
           </div>
