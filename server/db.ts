@@ -1,6 +1,15 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import {
+  InsertUser,
+  users,
+  conversations,
+  messages,
+  skills,
+  connectors,
+  projects,
+  scheduledTasks,
+} from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +98,94 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Conversation queries
+export async function createConversation(userId: number, title: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.insert(conversations).values({ userId, title });
+  return result;
+}
+
+export async function getConversations(userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(conversations).where(eq(conversations.userId, userId));
+}
+
+export async function getConversationById(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.select().from(conversations).where(eq(conversations.id, id)).limit(1);
+  return result[0];
+}
+
+// Message queries
+export async function addMessage(conversationId: number, role: string, content: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(messages).values({ conversationId, role, content });
+}
+
+export async function getMessages(conversationId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(messages).where(eq(messages.conversationId, conversationId));
+}
+
+// Skills queries
+export async function getSkills() {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(skills).where(eq(skills.enabled, 1));
+}
+
+export async function getSkillByName(name: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.select().from(skills).where(eq(skills.name, name)).limit(1);
+  return result[0];
+}
+
+// Connector queries
+export async function getConnectors(userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(connectors).where(eq(connectors.userId, userId));
+}
+
+export async function createConnector(userId: number, type: string, status: string = "disconnected") {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(connectors).values({ userId, type, status });
+}
+
+// Project queries
+export async function getProjects(userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(projects).where(eq(projects.userId, userId));
+}
+
+export async function createProject(userId: number, name: string, description?: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(projects).values({ userId, name, description });
+}
+
+// Scheduled Tasks queries
+export async function getScheduledTasks(userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.select().from(scheduledTasks).where(eq(scheduledTasks.userId, userId));
+}
+
+export async function createScheduledTask(
+  userId: number,
+  name: string,
+  cronExpression: string,
+  taskData?: string
+) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return db.insert(scheduledTasks).values({ userId, name, cronExpression, taskData });
+}
