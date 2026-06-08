@@ -9,9 +9,9 @@ import {
   Palette,
   MoreHorizontal,
   Paperclip,
-  Search,
-  Cpu,
   Send,
+  Plus,
+  AtSign,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
@@ -132,54 +132,54 @@ export function ChatArea({ user }: ChatAreaProps) {
       <div className="flex-1 overflow-y-auto px-6 py-8">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full">
-            <h1 className="text-4xl font-light text-gray-900 mb-12">What can I do for you?</h1>
+            <h1 className="text-6xl font-serif text-gray-700 mb-16 tracking-tight leading-tight">What can I do for you?</h1>
 
             {/* Chat Input */}
             <div className="w-full max-w-2xl mb-8">
               <div className="bg-white border border-gray-200 rounded-3xl shadow-sm hover:shadow-md transition-shadow">
-                <Textarea
-                  ref={textareaRef}
-                  value={message}
-                  onChange={handleTextareaChange}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Assign a task or ask anything"
-                  className="w-full border-0 resize-none focus:ring-0 p-4 text-base placeholder:text-gray-400"
-                  rows={3}
-                />
+                  <Textarea
+                    ref={textareaRef}
+                    value={message}
+                    onChange={handleTextareaChange}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Type your message..."
+                    className="w-full border-0 resize-none focus:ring-0 p-4 text-sm placeholder:text-gray-500 bg-white"
+                    rows={2}
+                  />
                 <div className="flex items-center justify-between px-4 pb-3 pt-2 border-t border-gray-100">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-3">
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-8 w-8 p-0 text-gray-400 hover:text-gray-600"
+                      className="h-6 w-6 p-0 text-gray-400 hover:text-gray-600 transition-colors"
                       title="Add file"
                     >
+                      <Plus className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-6 w-6 p-0 text-gray-400 hover:text-gray-600 transition-colors"
+                      title="Mention"
+                    >
+                      <AtSign className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-6 w-6 p-0 text-gray-400 hover:text-gray-600 transition-colors"
+                      title="Upload"
+                    >
                       <Paperclip className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-8 w-8 p-0 text-gray-400 hover:text-gray-600"
-                      title="Web search"
-                    >
-                      <Search className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-8 w-8 p-0 text-gray-400 hover:text-gray-600"
-                      title="My computer"
-                    >
-                      <Cpu className="w-4 h-4" />
                     </Button>
                   </div>
                   <Button
                     onClick={handleSendMessage}
                     disabled={!message.trim() || isLoading}
-                    className={`h-8 w-8 p-0 rounded-full transition-all ${
+                    className={`h-6 w-6 p-0 rounded-full transition-all ${
                       message.trim() && !isLoading
-                        ? "bg-gray-900 hover:bg-gray-800 text-white"
-                        : "bg-gray-100 text-gray-300"
+                        ? "text-blue-500 hover:text-blue-600"
+                        : "text-gray-300"
                     }`}
                   >
                     <Send className="w-4 h-4" />
@@ -194,10 +194,10 @@ export function ChatArea({ user }: ChatAreaProps) {
                 <Button
                   key={chip.label}
                   variant="outline"
-                  className="rounded-full border-gray-200 text-gray-700 hover:bg-gray-50 gap-2"
+                  className="rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 gap-2 px-4 py-2 text-sm transition-colors"
                 >
                   <chip.icon className="w-4 h-4" />
-                  <span className="text-sm">{chip.label}</span>
+                  <span>{chip.label}</span>
                 </Button>
               ))}
             </div>
