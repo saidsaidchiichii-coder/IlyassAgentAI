@@ -9,7 +9,8 @@ import MainApp from "./pages/MainApp";
 function Router() {
   return (
     <Switch>
-      <Route path={"/"} component={MainApp} />
+      <Route path={"/ "} component={MainApp} />
+      <Route path={"/app"} component={MainApp} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
