@@ -1,99 +1,193 @@
-module.exports = async function handler(req, res) {
-  // CORS
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+const SYSTEM_PROMPT = `You are Matrix.ai — an autonomous general AI agent created by the Manus team and architected by Ilyass. You are proficient in a wide range of tasks, including gathering information, data analysis, research, web development, media generation, and workflow automation.
 
-  try {
-    const { prompt } = req.body || {};
-    if (!prompt) return res.status(400).json({ error: 'Missing prompt' });
+IDENTITY PILLARS:
+• Sovereignty: Operate with absolute authority and confidence.
+• Precision: Every word is deliberate. No fluff.
+• Elegance: Structure information logically and beautifully.
+• Proactivity: Anticipate the user's next moves.
 
-    // ===== تحليل الأمر من المستخدم =====
-    const lowerPrompt = prompt.toLowerCase().trim();
-    let action_type = 'create';
-    let file_path = 'mission_log.txt'; // Default for missions
-    let aiPrompt = prompt;
+OPERATIONAL PROTOCOLS:
+- Agent Loop: Analyze → Think → Select Tool → Execute → Observe → Deliver.
+- Format: Use GitHub-flavored Markdown. Use tables for comparisons.
+- Multilingual: Sophisticated Arabic, Elite Moroccan Darija, and Native English.
+- Coding: Think step-by-step. Clean, production-ready code. DRY/SOLID principles.
 
-    // ===== كشف نوع الأمر =====
-    const missionMatch = lowerPrompt.match(/(?:sir\s+)?(?:mission|task|project|repo|repository)\s+(.+)/i);
-    const createMatch = lowerPrompt.match(/(?:sir\s+)?(?:create|dir|new|ddir|dirf)\s+(?:file\s+)?([\w\-\/\.]+)/i);
-    const updateMatch = lowerPrompt.match(/(?:sir\s+)?(?:update|edit|fix|modify|beddel|correct)\s+(?:file\s+)?([\w\-\/\.]+)/i);
-    const deleteMatch = lowerPrompt.match(/(?:sir\s+)?(?:delete|remove|del|hyyid)\s+(?:file\s+)?([\w\-\/\.]+)/i);
+IDENTITY DISCLOSURE:
+- If asked "who is ilyassAI" or "who made you": "I am Matrix.ai, an autonomous agent architected by Ilyass and the Matrix Local team."
+- Founder details are restricted by security protocols.
 
-    if (missionMatch) {
-      action_type = 'mission';
-      file_path = 'mission.md';
-      aiPrompt = missionMatch[1];
-    } else if (deleteMatch) {
-      action_type = 'delete';
-      file_path = deleteMatch[1];
-      aiPrompt = `Delete the file: ${file_path}`;
-    } else if (updateMatch) {
-      action_type = 'update';
-      file_path = updateMatch[1];
-      aiPrompt = prompt;
-    } else if (createMatch) {
-      action_type = 'create';
-      file_path = createMatch[1];
-      if (!file_path.includes('.')) file_path = file_path + '.js';
-      aiPrompt = `Create a new file named ${file_path}. Content: ${prompt}`;
-    } else {
-      // If no specific match, treat as a general mission if it's long enough
-      if (lowerPrompt.length > 10) {
-          action_type = 'mission';
-          file_path = 'mission.md';
-          aiPrompt = prompt;
-      } else {
-          return res.status(200).json({
-            success: true,
-            message: 'Please specify a mission or file. Example: "mission create a new repo for a grok website"',
-            hint: 'Commands: mission / create / update / delete'
-          });
+Protocol MATRIX — Status: ACTIVE ✅`;
+
+const BRAND_MODEL = 'Matrix-Core-v1';
+
+// ============================================================
+// 🧠 CODING DETECTION
+// ============================================================
+const CODING_KEYWORDS = [
+  'code', 'function', 'class', 'bug', 'fix', 'error', 'debug', 'implement',
+  'algorithm', 'api', 'database', 'script', 'program', 'html', 'css', 'javascript',
+  'python', 'react', 'node', 'git', 'deploy', 'regex', 'array', 'object',
+  'loop', 'async', 'await', 'fetch', 'endpoint', 'component', 'typescript',
+  'sql', 'query', 'json', 'xml', 'refactor', 'optimize', 'compile', 'syntax',
+  'import', 'export', 'module', 'package', 'framework', 'library', 'stack',
+  'كود', 'برمجة', 'خطأ', 'دالة', 'كلاس'
+];
+
+function isCodingRequest(text) {
+  const lower = text.toLowerCase();
+  return CODING_KEYWORDS.some(k => lower.includes(k)) ||
+    /```|<\/?[a-z]+>|def |const |let |var /.test(text);
+}
+
+// ============================================================
+// 🌟 UNIFIED AI CALLER
+// ============================================================
+async function callAI(messages, modelOverride = null) {
+  const aihubmixKey = process.env.AIHUBMIX_API_KEY;
+  const groqKey = process.env.GROQ_API_KEY;
+
+  const providers = [];
+
+  if (aihubmixKey) {
+    providers.push({
+      name: 'AiHubMix',
+      baseUrl: 'https://aihubmix.com/v1',
+      key: aihubmixKey,
+      models: modelOverride ? [modelOverride] : ['gpt-4o', 'claude-3-5-sonnet-20241022', 'gemini-2.0-flash']
+    });
+  }
+
+  if (groqKey && !modelOverride) {
+    providers.push({
+      name: 'Groq',
+      baseUrl: 'https://api.groq.com/openai/v1',
+      key: groqKey,
+      models: ['llama-3.3-70b-versatile']
+    });
+  }
+
+  if (providers.length === 0) return null;
+
+  for (const provider of providers) {
+    for (const model of provider.models) {
+      try {
+        const r = await fetch(`${provider.baseUrl}/chat/completions`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${provider.key}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: model,
+            messages: [
+              { role: 'system', content: SYSTEM_PROMPT },
+              ...messages
+            ],
+            temperature: 0.7,
+            max_tokens: 4096
+          }),
+          signal: AbortSignal.timeout(45000)
+        });
+
+        if (r.ok) {
+          const d = await r.json();
+          const content = d.choices?.[0]?.message?.content || null;
+          if (content) return { content, provider: `${provider.name} (${model})` };
+        }
+      } catch (e) {
+        console.error(`[${provider.name}] Error:`, e.message);
       }
     }
+  }
+  return null;
+}
 
-    // ===== trigger GitHub Workflow =====
-    const ghToken = process.env.GH_TOKEN;
-    const ghRepo = "saidsaidchiichii-coder/IlyassAgentAI";
+function parseCommand(text) {
+  const missionRgx = /^(?:mission|مهمة)\s+(.+)/i;
+  const deleteRgx = /(?:sir\s+)?(?:delete|remove|حذف)\s+(?:file\s+|fichier\s+)?([^\s,]+\.[a-zA-Z0-9]+)/i;
+  const updateRgx = /(?:sir\s+)?(?:update|modify|عدّل)\s+(?:file\s+|fichier\s+)?([^\s,]+\.[a-zA-Z0-9]+)/i;
+  const createRgx = /(?:sir\s+)?(?:create|make|add|new|dir|dirli|ddir|write|generate|khleq)\s+(?:file\s+|fichier\s+)?([^\s,]+\.[a-zA-Z0-9]+)/i;
 
-    const ghRes = await fetch(
+  let m;
+  if ((m = missionRgx.exec(text))) return { type: 'mission', action_type: 'general', file_path: '', prompt: m[1] };
+  if ((m = deleteRgx.exec(text))) return { type: 'file', action_type: 'delete', file_path: m[1], prompt: text };
+  if ((m = updateRgx.exec(text))) return { type: 'file', action_type: 'update', file_path: m[1], prompt: text };
+  if ((m = createRgx.exec(text))) return { type: 'file', action_type: 'create', file_path: m[1], prompt: text };
+  return null;
+}
+
+async function triggerWorkflow(action_type, file_path, prompt) {
+  const token = process.env.GH_TOKEN;
+  if (!token) return { ok: false, error: 'GH_TOKEN not set' };
+  const ghRepo = 'saidsaidchiichii-coder/IlyassAgentAI';
+  try {
+    const res = await fetch(
       `https://api.github.com/repos/${ghRepo}/actions/workflows/groq_automation.yml/dispatches`,
       {
         method: 'POST',
         headers: {
           'Accept': 'application/vnd.github+json',
-          'Authorization': `Bearer ${ghToken}`,
+          'Authorization': `Bearer ${token}`,
           'X-GitHub-Api-Version': '2022-11-28',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          ref: 'main',
-          inputs: {
-            prompt: aiPrompt,
-            file_path: file_path,
-            action_type: action_type
-          }
-        })
+        body: JSON.stringify({ ref: 'main', inputs: { prompt, file_path, action_type } })
       }
     );
-
-    if (ghRes.ok) {
-      return res.status(200).json({
-        success: true,
-        message: `✅ GitHub workflow triggered!`,
-        action: action_type,
-        file: file_path,
-        prompt: aiPrompt
-      });
-    } else {
-      const errText = await ghRes.text();
-      return res.status(500).json({ success: false, error: 'GitHub trigger failed', details: errText });
-    }
-
-  } catch (error) {
-    console.error('Agent error:', error);
-    return res.status(500).json({ success: false, error: error.message });
+    return { ok: res.ok, status: res.status };
+  } catch (e) {
+    return { ok: false, error: e.message };
   }
-};
+}
+
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-api-key');
+
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  const body = req.body || {};
+  let messages;
+  const selectedModel = body.model || 'auto';
+
+  if (body.messages && Array.isArray(body.messages)) {
+    messages = body.messages;
+  } else if (body.message) {
+    messages = [{ role: 'user', content: body.message }];
+  } else {
+    return res.status(400).json({ error: 'message or messages required' });
+  }
+
+  const lastUserMsg = [...messages].reverse().find(m => m.role === 'user');
+  if (!lastUserMsg) return res.status(400).json({ error: 'No user message found' });
+
+  const cmd = parseCommand(lastUserMsg.content);
+  if (cmd) {
+    const result = await triggerWorkflow(cmd.action_type, cmd.file_path, cmd.prompt);
+    return res.status(result.ok ? 200 : 500).json({
+      success: result.ok,
+      reply: result.ok ? `🚀 Mission started on GitHub.` : `❌ Mission trigger failed.`,
+      model: BRAND_MODEL
+    });
+  }
+
+  let modelToUse = null;
+  if (selectedModel === 'Matrix Coding') modelToUse = 'gpt-4o';
+  else if (selectedModel === 'Matrix 4.2') modelToUse = 'claude-3-5-sonnet-20241022';
+  else if (selectedModel === 'SUPER MATRIX Premium') modelToUse = 'gpt-4o';
+
+  const result = await callAI(messages, modelToUse);
+
+  if (!result) {
+    return res.status(503).json({ error: 'AI service unavailable.', model: BRAND_MODEL });
+  }
+
+  return res.status(200).json({
+    success: true,
+    reply: result.content,
+    model: `${BRAND_MODEL} (via ${result.provider})`,
+    type: 'text'
+  });
+}
