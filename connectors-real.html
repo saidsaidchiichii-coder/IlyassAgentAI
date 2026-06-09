@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الاتصالات - IlyassAI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ════════════════════════════════════════
+       CONNECTORS PAGE REAL OAUTH SYSTEM
+    ════════════════════════════════════════ */
+
+    .connectors-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .connectors-header {
+      padding: 32px 40px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .connectors-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+
+    .connectors-subtitle {
+      font-size: 15px;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    .connectors-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--surface-3) transparent;
+    }
+
+    .connectors-content::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .connectors-content::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .connectors-content::-webkit-scrollbar-thumb {
+      background: var(--surface-3);
+      border-radius: 3px;
+    }
+
+    /* ── CONNECTORS GRID ── */
+    .connectors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+      max-width: 1400px;
+    }
+
+    /* ── ADD CONNECTOR CARD ── */
+    .add-connector-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 48px 32px;
+      background: linear-gradient(135deg, var(--surface-2) 0%, var(--surface) 100%);
+      border: 2px dashed var(--border-md);
+      border-radius: var(--r-xl);
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .add-connector-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,107,53,0.1) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .add-connector-card:hover {
+      background: linear-gradient(135deg, var(--surface-3) 0%, var(--surface-2) 100%);
+      border-color: var(--accent);
+      box-shadow: 0 0 20px rgba(255,107,53,0.1);
+    }
+
+    .add-connector-card:hover::before {
+      opacity: 1;
+    }
+
+    .add-icon {
+      font-size: 40px;
+      color: var(--accent);
+      font-weight: 300;
+      transition: transform var(--transition);
+    }
+
+    .add-connector-card:hover .add-icon {
+      transform: scale(1.1) rotate(90deg);
+    }
+
+    .add-connector-card span {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── CONNECTOR CARD ── */
+    .connector-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      transition: all var(--transition);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .connector-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform var(--transition);
+    }
+
+    .connector-card:hover {
+      background: var(--surface-2);
+      border-color: var(--border-md);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      transform: translateY(-2px);
+    }
+
+    .connector-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .connector-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .connector-card-logo {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface-2);
+      border-radius: var(--r-md);
+      flex-shrink: 0;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .connector-card-logo svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .connector-card-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: rgba(74, 222, 128, 0.1);
+      border: 1px solid rgba(74, 222, 128, 0.3);
+      border-radius: var(--r-full);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--green);
+    }
+
+    .connector-card-status::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+    }
+
+    .connector-card-info {
+      flex: 1;
+    }
+
+    .connector-card-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .connector-card-desc {
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .connector-card-details {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px;
+      background: rgba(255,107,53,0.05);
+      border-radius: var(--r-md);
+      border: 1px solid rgba(255,107,53,0.1);
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .connector-card-detail-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .connector-card-detail-item strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .connector-card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .connector-btn {
+      flex: 1;
+      padding: 10px 16px;
+      border: none;
+      border-radius: var(--r-md);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .connector-btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .connector-btn-primary:hover {
+      background: #ff5a1f;
+      box-shadow: 0 4px 12px rgba(255,107,53,0.3);
+    }
+
+    .connector-btn-danger {
+      background: rgba(248,113,113,0.1);
+      color: var(--red);
+      border: 1px solid rgba(248,113,113,0.2);
+    }
+
+    .connector-btn-danger:hover {
+      background: rgba(248,113,113,0.2);
+      border-color: rgba(248,113,113,0.3);
+    }
+
+    .connector-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* ════════════════════════════════════════
+       MODAL & OVERLAY
+    ════════════════════════════════════════ */
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border-md);
+      border-radius: var(--r-xl);
+      padding: 40px;
+      width: 90%;
+      max-width: 500px;
+      animation: slideUp 0.3s ease-out;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      border-radius: var(--r-md);
+      transition: all var(--transition);
+      font-family: inherit;
+      font-size: 20px;
+    }
+
+    .modal-close:hover {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+
+    .modal-icon {
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface-2);
+      border-radius: var(--r-lg);
+      margin: 0 auto 20px;
+      border: 1px solid var(--border);
+    }
+
+    .modal-icon svg {
+      width: 32px;
+      height: 32px;
+      color: var(--accent);
+    }
+
+    .modal-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .modal-desc {
+      font-size: 14px;
+      color: var(--text-dim);
+      margin-bottom: 28px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .modal-button {
+      width: 100%;
+      padding: 12px 24px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: var(--r-md);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .modal-button:hover {
+      background: #ff5a1f;
+      box-shadow: 0 8px 20px rgba(255,107,53,0.3);
+      transform: translateY(-2px);
+    }
+
+    .modal-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .modal-button svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ════════════════════════════════════════
+       LOADING & STATES
+    ════════════════════════════════════════ */
+
+    .loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 60px 40px;
+      text-align: center;
+    }
+
+    .empty-state-icon {
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface-2);
+      border-radius: var(--r-lg);
+      border: 1px solid var(--border);
+      font-size: 40px;
+    }
+
+    .empty-state-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .empty-state-desc {
+      font-size: 14px;
+      color: var(--text-dim);
+      max-width: 300px;
+    }
+
+    /* ════════════════════════════════════════
+       TOAST NOTIFICATIONS
+    ════════════════════════════════════════ */
+
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .toast {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border-md);
+      border-radius: var(--r-md);
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      animation: slideUp 0.3s ease-out;
+      max-width: 320px;
+    }
+
+    .toast.success {
+      background: rgba(74, 222, 128, 0.1);
+      border-color: rgba(74, 222, 128, 0.3);
+      color: var(--green);
+    }
+
+    .toast.error {
+      background: rgba(248, 113, 113, 0.1);
+      border-color: rgba(248, 113, 113, 0.3);
+      color: var(--red);
+    }
+
+    /* ════════════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════════════ */
+
+    @media (max-width: 768px) {
+      .connectors-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .connectors-header {
+        padding: 24px;
+      }
+
+      .connectors-content {
+        padding: 24px;
+      }
+
+      .modal {
+        width: 95%;
+        padding: 28px;
+      }
+
+      .connectors-title {
+        font-size: 24px;
+      }
+
+      .toast-container {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+      }
+
+      .toast {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="connectors-container">
+  <!-- Header -->
+  <div class="connectors-header">
+    <h1 class="connectors-title">🔗 الاتصالات</h1>
+    <p class="connectors-subtitle">قم بربط أدواتك المفضلة واترك IlyassAI يعمل معها بسلاسة</p>
+  </div>
+
+  <!-- Content -->
+  <div class="connectors-content">
+    <div class="connectors-grid" id="connectorsGrid">
+      <!-- Connectors will be rendered here -->
+    </div>
+  </div>
+</div>
+
+<!-- Add Connector Modal -->
+<div class="modal-overlay" id="addConnectorModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeAddConnectorModal()">×</button>
+    <div class="modal-icon" id="modalIcon"></div>
+    <h2 class="modal-title" id="modalTitle">اختر منصة</h2>
+    <p class="modal-desc" id="modalDesc">اختر المنصة التي تريد ربطها مع حسابك</p>
+    <button class="modal-button" id="modalButton" onclick="confirmAddConnector()">
+      <span id="modalButtonText">ربط الآن</span>
+    </button>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+  // ════════════════════════════════════════
+  // CONNECTORS DATA
+  // ════════════════════════════════════════
+
+  const CONNECTORS = {
+    github: {
+      name: 'GitHub',
+      desc: 'إدارة المستودعات وتتبع التغييرات في الكود',
+      icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.042-1.416-4.042-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>',
+      color: '#333'
+    },
+    gmail: {
+      name: 'Gmail',
+      desc: 'الوصول إلى رسائلك وإدارتها',
+      icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L12 9.573l8.073-6.08c1.618-1.214 3.927-.059 3.927 1.964z"/></svg>',
+      color: '#EA4335'
+    },
+    calendar: {
+      name: 'Google Calendar',
+      desc: 'إدارة جدولك الزمني والأحداث',
+      icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="2"/><line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="2"/><line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2"/></svg>',
+      color: '#4285F4'
+    },
+    slack: {
+      name: 'Slack',
+      desc: 'إرسال الرسائل وإدارة الإشعارات',
+      icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.528 2.528 0 0 1 2.523 2.52v6.312A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.523v-6.312zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.523 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.523 2.521 2.527 2.527 0 0 1-2.523 2.521H2.522A2.527 2.527 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.52-2.521A2.528 2.528 0 0 1 24 8.834a2.527 2.527 0 0 1-2.522 2.521h-2.52V8.834zM17.686 8.834a2.527 2.527 0 0 1-2.521-2.521 2.528 2.528 0 0 1 2.521-2.521h6.312A2.528 2.528 0 0 1 24 6.313a2.528 2.528 0 0 1-2.523 2.521h-6.312zM15.165 18.956a2.528 2.528 0 0 1 2.521 2.52A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.521-2.522v-2.52h2.521zM15.165 17.686a2.527 2.527 0 0 1-2.521-2.523 2.528 2.528 0 0 1 2.521-2.521h6.312a2.528 2.528 0 0 1 2.523 2.521 2.528 2.528 0 0 1-2.523 2.523h-6.312z"/></svg>',
+      color: '#36C5F0'
+    },
+    notion: {
+      name: 'Notion',
+      desc: 'الوصول إلى قاعدة البيانات الخاصة بك',
+      icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M4.459 4.208c.746.944 1.108 1.89 1.108 4.272v12.02c0 .904-.255 1.712-.684 2.04-.429.328-.887.04-1.562-.585L2.6 20.584c-.312-.304-.546-.683-.546-1.088V7.91c0-1.31.584-2.716 1.405-3.702zM21.3 5.684c0-.904-.255-1.712-.684-2.04-.429-.328-.887-.04-1.562.585l-1.321 1.136c-.312.304-.546.683-.546 1.088v12.604c0 1.31.584 2.716 1.405 3.702.746.944 1.108 1.89 1.108 4.272v-12.02c0-.904.255-1.712.684-2.04.429-.328.887-.04 1.562.585l1.321-1.136c.312-.304.546-.683.546-1.088V5.684z"/></svg>',
+      color: '#000000'
+    },
+    twitter: {
+      name: 'Twitter',
+      desc: 'نشر التغريدات وإدارة حسابك',
+      icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2s9 5 20 5a9.5 9.5 0 00-9-5.5c4.75 2.25 7-7 7-7s1.1 5.2-5.1 8.3a9.5 9.5 0 01-14-9" stroke="currentColor" stroke-width="2" fill="none"/></svg>',
+      color: '#1DA1F2'
+    }
+  };
+
+  let connectedPlatforms = [];
+  let currentConnector = null;
+  let currentUser = null;
+
+  // ════════════════════════════════════════
+  // INITIALIZATION
+  // ════════════════════════════════════════
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initializeConnectors();
+  });
+
+  async function initializeConnectors() {
+    // Wait for Firebase to be ready
+    if (typeof window.auth === 'undefined') {
+      setTimeout(initializeConnectors, 500);
+      return;
+    }
+
+    // Get current user
+    if (window.auth.currentUser) {
+      currentUser = window.auth.currentUser;
+      loadConnectorsFromFirebase();
+    } else {
+      showEmptyState();
+    }
+  }
+
+  // ════════════════════════════════════════
+  // FIREBASE OPERATIONS
+  // ════════════════════════════════════════
+
+  async function loadConnectorsFromFirebase() {
+    if (!currentUser) return;
+
+    try {
+      const { doc, getDoc } = window.FirebaseFirestore;
+      const userDoc = await getDoc(doc(window.db, 'users', currentUser.uid));
+
+      if (userDoc.exists()) {
+        const data = userDoc.data();
+        connectedPlatforms = [];
+
+        // Load GitHub connector
+        if (data.github && data.github.token) {
+          connectedPlatforms.push({
+            id: 'github',
+            ...CONNECTORS.github,
+            connected: true,
+            username: data.github.username,
+            repos_count: data.github.repos_count,
+            token: data.github.token
+          });
+        }
+
+        // Load other connectors
+        if (data.connectors && Array.isArray(data.connectors)) {
+          data.connectors.forEach(connector => {
+            if (!connectedPlatforms.find(p => p.id === connector.platform)) {
+              connectedPlatforms.push({
+                id: connector.platform,
+                ...CONNECTORS[connector.platform],
+                connected: true,
+                linkedAt: connector.linkedAt
+              });
+            }
+          });
+        }
+      }
+
+      renderConnectors();
+    } catch (error) {
+      console.error('Error loading connectors:', error);
+      showToast('خطأ في تحميل الاتصالات', 'error');
+    }
+  }
+
+  // ════════════════════════════════════════
+  // RENDER FUNCTIONS
+  // ════════════════════════════════════════
+
+  function renderConnectors() {
+    const grid = document.getElementById('connectorsGrid');
+    grid.innerHTML = '';
+
+    // Add connector card
+    const addCard = document.createElement('button');
+    addCard.className = 'add-connector-card';
+    addCard.onclick = showAddConnectorModal;
+    addCard.innerHTML = `
+      <div class="add-icon">+</div>
+      <span>إضافة اتصال جديد</span>
+    `;
+    grid.appendChild(addCard);
+
+    // Connected connectors
+    connectedPlatforms.forEach(connector => {
+      const card = document.createElement('div');
+      card.className = 'connector-card';
+      
+      let detailsHTML = '';
+      if (connector.id === 'github' && connector.username) {
+        detailsHTML = `
+          <div class="connector-card-details">
+            <div class="connector-card-detail-item">
+              <strong>👤 المستخدم:</strong> ${connector.username}
+            </div>
+            <div class="connector-card-detail-item">
+              <strong>📦 المستودعات:</strong> ${connector.repos_count || 0}
+            </div>
+          </div>
+        `;
+      }
+
+      card.innerHTML = `
+        <div class="connector-card-header">
+          <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+            <div class="connector-card-logo">${connector.icon}</div>
+            <div class="connector-card-info">
+              <div class="connector-card-name">${connector.name}</div>
+              <div class="connector-card-desc">${connector.desc}</div>
+            </div>
+          </div>
+          <div class="connector-card-status">متصل</div>
+        </div>
+        ${detailsHTML}
+        <div class="connector-card-actions">
+          <button class="connector-btn connector-btn-primary" onclick="viewConnectorDetails('${connector.id}')">
+            <span>عرض التفاصيل</span>
+          </button>
+          <button class="connector-btn connector-btn-danger" onclick="disconnectConnector('${connector.id}')">
+            <span>قطع الاتصال</span>
+          </button>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    if (connectedPlatforms.length === 0) {
+      showEmptyState();
+    }
+  }
+
+  function showEmptyState() {
+    const grid = document.getElementById('connectorsGrid');
+    grid.innerHTML = `
+      <div style="grid-column: 1 / -1;">
+        <div class="empty-state">
+          <div class="empty-state-icon">🔌</div>
+          <div class="empty-state-title">لم يتم ربط أي اتصالات بعد</div>
+          <div class="empty-state-desc">ابدأ بربط أدواتك المفضلة لتحسين إنتاجيتك مع IlyassAI</div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ════════════════════════════════════════
+  // MODAL FUNCTIONS
+  // ════════════════════════════════════════
+
+  function showAddConnectorModal() {
+    const availablePlatforms = Object.keys(CONNECTORS).filter(
+      p => !connectedPlatforms.find(c => c.id === p)
+    );
+
+    if (availablePlatforms.length === 0) {
+      showToast('تم ربط جميع الاتصالات المتاحة بالفعل', 'error');
+      return;
+    }
+
+    currentConnector = availablePlatforms[0];
+    const connector = CONNECTORS[currentConnector];
+
+    document.getElementById('modalIcon').innerHTML = connector.icon;
+    document.getElementById('modalTitle').textContent = `ربط ${connector.name}`;
+    document.getElementById('modalDesc').textContent = connector.desc;
+    document.getElementById('modalButtonText').textContent = `ربط ${connector.name}`;
+
+    document.getElementById('addConnectorModal').classList.add('active');
+  }
+
+  function closeAddConnectorModal() {
+    document.getElementById('addConnectorModal').classList.remove('active');
+    currentConnector = null;
+  }
+
+  function confirmAddConnector() {
+    if (!currentConnector) return;
+
+    const button = document.getElementById('modalButton');
+    button.disabled = true;
+    button.innerHTML = '<span class="loading"></span>';
+
+    if (currentConnector === 'github') {
+      initiateGitHubOAuth();
+    } else {
+      connectOtherPlatform();
+    }
+  }
+
+  // ════════════════════════════════════════
+  // OAUTH FUNCTIONS
+  // ════════════════════════════════════════
+
+  function initiateGitHubOAuth() {
+    if (!currentUser) {
+      showToast('يرجى تسجيل الدخول أولاً', 'error');
+      return;
+    }
+
+    const clientId = 'Ov23liMCXvJJNqMbVvqN';
+    const redirectUri = `${window.location.origin}/app?github_callback=true`;
+    const scope = 'repo read:user user:email';
+    const state = currentUser.uid;
+
+    const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}&state=${state}`;
+
+    window.location.href = authUrl;
+  }
+
+  async function connectOtherPlatform() {
+    if (!currentUser) {
+      showToast('يرجى تسجيل الدخول أولاً', 'error');
+      return;
+    }
+
+    try {
+      const { doc, setDoc, arrayUnion } = window.FirebaseFirestore;
+      await setDoc(
+        doc(window.db, 'users', currentUser.uid),
+        {
+          connectors: arrayUnion({
+            platform: currentConnector,
+            linkedAt: new Date().toISOString()
+          })
+        },
+        { merge: true }
+      );
+
+      showToast(`تم ربط ${CONNECTORS[currentConnector].name} بنجاح`, 'success');
+      closeAddConnectorModal();
+      loadConnectorsFromFirebase();
+    } catch (error) {
+      console.error('Error connecting platform:', error);
+      showToast('فشل ربط المنصة، يرجى المحاولة مجدداً', 'error');
+    }
+  }
+
+  // ════════════════════════════════════════
+  // CONNECTOR MANAGEMENT
+  // ════════════════════════════════════════
+
+  async function disconnectConnector(platformId) {
+    if (!confirm(`هل تريد فعلاً قطع اتصال ${CONNECTORS[platformId].name}؟`)) {
+      return;
+    }
+
+    if (!currentUser) return;
+
+    try {
+      const { doc, getDoc, setDoc } = window.FirebaseFirestore;
+      const userRef = doc(window.db, 'users', currentUser.uid);
+      const userDoc = await getDoc(userRef);
+
+      if (userDoc.exists()) {
+        const data = userDoc.data();
+
+        if (platformId === 'github') {
+          // Remove GitHub connector
+          await setDoc(userRef, { github: null }, { merge: true });
+        } else {
+          // Remove from connectors array
+          const updatedConnectors = (data.connectors || []).filter(
+            c => c.platform !== platformId
+          );
+          await setDoc(userRef, { connectors: updatedConnectors }, { merge: true });
+        }
+      }
+
+      showToast(`تم قطع اتصال ${CONNECTORS[platformId].name}`, 'success');
+      loadConnectorsFromFirebase();
+    } catch (error) {
+      console.error('Error disconnecting:', error);
+      showToast('فشل قطع الاتصال، يرجى المحاولة مجدداً', 'error');
+    }
+  }
+
+  function viewConnectorDetails(platformId) {
+    const connector = connectedPlatforms.find(c => c.id === platformId);
+    if (connector && connector.id === 'github') {
+      showToast(`GitHub متصل - ${connector.username} (${connector.repos_count} مستودع)`, 'success');
+    } else {
+      showToast(`${CONNECTORS[platformId].name} متصل بنجاح`, 'success');
+    }
+  }
+
+  // ════════════════════════════════════════
+  // TOAST NOTIFICATIONS
+  // ════════════════════════════════════════
+
+  function showToast(message, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    
+    let icon = '💬';
+    if (type === 'success') icon = '✅';
+    if (type === 'error') icon = '❌';
+    
+    toast.innerHTML = `<span>${icon}</span><span>${message}</span>`;
+    container.appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.animation = 'fadeOut 0.3s ease-out forwards';
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
+
+  // ════════════════════════════════════════
+  // GITHUB CALLBACK HANDLER
+  // ════════════════════════════════════════
+
+  window.handleGitHubCallback = async function() {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    const state = params.get('state');
+
+    if (code && state) {
+      try {
+        // Exchange code for token
+        const response = await fetch('/api/github-oauth-callback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code, state })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          showToast('✅ تم ربط GitHub بنجاح!', 'success');
+          
+          // Clean up URL
+          window.history.replaceState({}, document.title, window.location.pathname);
+          
+          // Reload connectors
+          setTimeout(() => {
+            loadConnectorsFromFirebase();
+          }, 500);
+        } else {
+          showToast('فشل ربط GitHub', 'error');
+        }
+      } catch (error) {
+        console.error('GitHub callback error:', error);
+        showToast('حدث خطأ أثناء ربط GitHub', 'error');
+      }
+    }
+  };
+
+  // Check for GitHub callback on load
+  if (window.location.search.includes('code=')) {
+    handleGitHubCallback();
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IlyassAI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    #global-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.4;
+    }
+    
+    /* Smooth background glow */
+    .bg-glow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 50%, rgba(255, 107, 53, 0.05) 0%, transparent 80%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Enhanced sidebar and main content for premium feel */
+    .sidebar {
+      backdrop-filter: blur(10px);
+      background: rgba(10, 10, 10, 0.8) !important;
+    }
+    
+    .main {
+      background: transparent !important;
+    }
+    
+    .home-view {
+      background: transparent !important;
+    }
+  </style>
+</head>
+<body>
+<canvas id="global-particles"></canvas>
+<div class="bg-glow"></div>
+
+<!-- Sidebar and other content from original index.html will be injected here -->
+<!-- For now, I will keep the original structure but add the particles -->
+
+<script type="module">
+    // Global Particle System
+    class GlobalParticles {
+      constructor() {
+        this.canvas = document.getElementById('global-particles');
+        this.scene = new THREE.Scene();
+        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, alpha: true });
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.camera.position.z = 5;
+        this.init();
+        this.animate();
+        window.addEventListener('resize', () => this.onResize());
+      }
+      init() {
+        const geometry = new THREE.BufferGeometry();
+        const vertices = [];
+        for (let i = 0; i < 1500; i++) {
+          vertices.push(THREE.MathUtils.randFloatSpread(20));
+          vertices.push(THREE.MathUtils.randFloatSpread(20));
+          vertices.push(THREE.MathUtils.randFloatSpread(20));
+        }
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        const material = new THREE.PointsMaterial({ color: 0xffffff, size: 0.015, transparent: true, opacity: 0.3 });
+        this.points = new THREE.Points(geometry, material);
+        this.scene.add(this.points);
+      }
+      onResize() {
+        this.camera.aspect = window.innerWidth / window.innerHeight;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+      animate() {
+        requestAnimationFrame(() => this.animate());
+        this.points.rotation.y += 0.0005;
+        this.points.rotation.x += 0.0002;
+        this.renderer.render(this.scene, this.camera);
+      }
+    }
+    new GlobalParticles();
+</script>

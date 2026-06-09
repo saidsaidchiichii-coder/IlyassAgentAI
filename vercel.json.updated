@@ -1,0 +1,31 @@
+{
+  "buildCommand": "echo 'IlyassAI - Real Connectors System'",
+  "cleanUrls": true,
+  "functions": {
+    "api/**/*.js": {
+      "maxDuration": 60
+    },
+    "api/github-oauth-callback.js": {
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    { "source": "/app", "destination": "/app.html" },
+    { "source": "/connectors", "destination": "/connectors-real.html" },
+    { "source": "/auth", "destination": "/auth.html" },
+    { "source": "/pricing", "destination": "/pricing.html" },
+    { "source": "/api/repos", "destination": "/api/github.js" },
+    { "source": "/api/ai-github", "destination": "/api/github.js" },
+    { "source": "/api/files", "destination": "/api/github.js" },
+    { "source": "/api/github-oauth-callback", "destination": "/api/github-oauth-callback.js" },
+    { "source": "/api/chat", "destination": "/api/chat.js" },
+    { "source": "/api/image", "destination": "/api/image.js" },
+    { "source": "/api/video", "destination": "/api/video.js" },
+    { "source": "/api/video-status", "destination": "/api/video-status.js" },
+    { "source": "/api/transcribe", "destination": "/api/transcribe.js" },
+    { "source": "/api/search", "destination": "/api/search.js" },
+    { "source": "/api/discover", "destination": "/api/discover.js" },
+    { "source": "/api/billing", "destination": "/api/billing-portal.js" },
+    { "source": "/api/webhook", "destination": "/api/webhook.js" }
+  ]
+}
