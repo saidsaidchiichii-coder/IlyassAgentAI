@@ -56,60 +56,60 @@
       "destination": "/connectors.html"
     },
     {
-      "source": "/api/subscription-status",
-      "destination": "/api/subscription?action=status"
+      "source": "/api/subscription.js-status",
+      "destination": "/api/subscription.js?action=status"
     },
     {
       "source": "/api/cancel-subscription",
-      "destination": "/api/subscription?action=cancel"
+      "destination": "/api/subscription.js?action=cancel"
     },
     {
       "source": "/api/billing-portal",
-      "destination": "/api/subscription?action=portal"
+      "destination": "/api/subscription.js?action=portal"
     },
     {
       "source": "/api/search",
-      "destination": "/api/tools?action=search"
+      "destination": "/api/tools.js?action=search"
     },
     {
       "source": "/api/moderate",
-      "destination": "/api/tools?action=moderate"
+      "destination": "/api/tools.js?action=moderate"
     },
     {
       "source": "/api/parse",
-      "destination": "/api/tools?action=parse"
+      "destination": "/api/tools.js?action=parse"
     },
     {
-      "source": "/api/video-status",
-      "destination": "/api/video?action=status"
+      "source": "/api/video.js-status",
+      "destination": "/api/video.js?action=status"
     },
     {
       "source": "/api/generate-video",
-      "destination": "/api/video?action=generate"
+      "destination": "/api/video.js?action=generate"
     },
     {
       "source": "/api/memory",
-      "destination": "/api/utilities?action=memory"
+      "destination": "/api/utilities.js?action=memory"
     },
     {
       "source": "/api/discover",
-      "destination": "/api/utilities?action=discover"
+      "destination": "/api/utilities.js?action=discover"
     },
     {
       "source": "/api/transcribe",
-      "destination": "/api/utilities?action=transcribe"
+      "destination": "/api/utilities.js?action=transcribe"
     },
     {
-      "source": "/api/github-oauth-callback",
-      "destination": "/api/github?action=oauth-callback"
+      "source": "/api/github.js-oauth-callback",
+      "destination": "/api/github.js?action=oauth-callback"
     },
     {
-      "source": "/api/agent-orchestrator",
-      "destination": "/api/agent?action=orchestrate"
+      "source": "/api/agent.js-orchestrator",
+      "destination": "/api/agent.js?action=orchestrate"
     },
     {
       "source": "/api/reasoning-engine",
-      "destination": "/api/agent?action=reason"
+      "destination": "/api/agent.js?action=reason"
     }
   ],
   "headers": [
